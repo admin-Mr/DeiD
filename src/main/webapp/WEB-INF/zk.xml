@@ -1,0 +1,28 @@
+<zk>
+
+	<library-property>
+	    <name>org.zkoss.util.label.web.charset</name>
+	    <value>UTF-8</value>
+	</library-property>
+
+	<device-config>
+		<device-type>ajax</device-type>
+		<timeout-uri>/timeout.zul</timeout-uri>
+	</device-config>
+	
+	<language-config>
+		<addon-uri>/resource/css/ZKAddon.xml</addon-uri>
+	</language-config>
+	
+	<!-- 套用下載的breeze主體 -->
+ 	<library-property>
+	   <name>org.zkoss.theme.preferred</name>
+	   <value>breeze</value>
+	</library-property>
+	<!-- ZK8.5版後Listbox forzen smooth 預設從fasle改為true 但因我們有套用bootstrap 會導致滾動list時顯示會有問題
+		 所以把預設改為false 之後如果拿掉bootstrap後即可開啟此功能 -->
+	<library-property>
+		<name>org.zkoss.zul.frozen.smooth</name>
+		<value>false</value>
+	</library-property>
+</zk>

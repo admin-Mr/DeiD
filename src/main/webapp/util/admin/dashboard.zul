@@ -1,0 +1,3 @@
+<zk>
+	<include id="main" self="@define(content)" src="/ds/common/dashboard.zul"/>
+</zk>

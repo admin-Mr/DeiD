@@ -1,0 +1,8 @@
+<!-- JasperReport view -->
+<zk>
+	<window id="winPreview" title="${labels.COMM.PREVIEW}" border="none" width="100%" height="100%"
+		apply="util.admin.ReportView" mode="modal"
+		maximizable="false" closable="true">
+		<iframe id="iframe" width="100%" height="100%"/>
+	</window>
+</zk>

@@ -1,0 +1,38 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./ammeterWin" ?>
+<window width="100%" border="none" id="ammeterWin" apply="ds.dshr.program.DSHR_EmpDirect_Controller">
+	
+	<!-- Header -->
+	<div sclass="page-header">
+    	<label value="直間工人員數量"/>
+    	<a label="overview &amp; stats" iconSclass="z-icon-angle-double-right" sclass="subtitle"/>
+  	</div>
+  	
+	<!-- 排版用的 -->
+	<separator spacing="20px" />
+	<hlayout width="50%">
+		<label value="月份" sclass="sectionTitleLabel" />
+		<datebox id="years" width="130px" mold="rounded" format="yyyyMM"/>
+
+		<div style="float:right">
+			<button label="${labels.COMM.QRY}" mold="trendy"
+				id="btnQuery" sclass="mybutton button blue small" />
+		</div>
+	</hlayout>
+	<separator spacing="20px" />
+
+	<!-- 資料列表 -->
+	<listbox id="dataListbox" emptyMessage="${labels.PUBLIC.MSG0065}">
+		<!-- 欄位表頭名稱 -->
+		<listhead sizable="true">
+			<listheader width="10%" label="日期" />
+			<listheader width="10%" label="MC總電表" />
+			<listheader width="10%" label="電錶6#裁準針" />
+			<listheader width="10%" label="電表7#成型" />
+			<listheader width="10%" label="電表8#組底" />
+			<listheader width="10%" label="空壓機電表" />
+			<listheader width="10%" label="汽體流量計" />
+		</listhead>
+	</listbox>
+	<separator />
+	
+</window>

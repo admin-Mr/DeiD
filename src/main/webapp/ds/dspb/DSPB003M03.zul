@@ -1,0 +1,137 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div id="detail2" apply="ds.dspb.program.DSPB003M_Controller03">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnCreateDetail2" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+			</div>
+		</div>
+
+		<div height="225px">
+			<listbox id="detail2Listbox" sclass="mylist"
+				multiple="false" emptyMessage="${labels.PUBLIC.MSG0026}">
+				<listhead sizable="true">
+					<listheader width="70px"
+						label="${labels.COMM.OPERATE}" />
+					<listheader width="400px"
+						label="${labels.DSPB.DSPB01_GRP.PB_ID}" />
+					<listheader width="70px"
+						label="${labels.DSPB.DSPB01_GRP.PB_RH01}" />
+					<listheader width="70px"
+						label="${labels.DSPB.DSPB01_GRP.PB_RH02}" />
+					<listheader width="70px"
+						label="${labels.DSPB.DSPB01_GRP.PB_RH03}" />
+					<listheader width="70px"
+						label="${labels.DSPB.DSPB01_GRP.PB_RH04}" />
+					<listheader width="70px"
+						label="${labels.DSPB.DSPB01_GRP.PB_RH08}" />
+					<listheader width="70px"
+						label="${labels.DSPB.DSPB01_GRP.PB_RH09}" />
+					<listheader width="70px"
+						label="${labels.DSPB.DSPB01_GRP.PB_RH10}" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell>
+							<hbox
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								spacing="10px">
+								<image visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=detail2Listbox.onUpdate" sclass="fimage">
+								</image>
+								<image visible="${sessionScope.DAuth }"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DEL}"
+									forward="onClick=detail2Listbox.onDelete" sclass="fimage">
+								</image>
+							</hbox>
+							<hbox
+								if="${each.ISEDIT == true or each.ISADD == true}"
+								spacing="10px">
+								<image
+									src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"
+									tooltiptext="${labels.COMM.SAVE}"
+									forward="onClick=detail2Listbox.onSave" />
+								<image
+									src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+									tooltiptext="${labels.COMM.CANCEL}"
+									forward="onClick=detail2Listbox.onCancel" />
+							</hbox>
+						</listcell>
+						<listcell>
+							<label if="${each.ISADD == false}"
+								value="${c:l(each.DSPB00_NEW.PB_LANGTAG)}" />
+							<textbox if="${each.ISADD == true}" width="345px"
+								id="txtPB_ID" mold="rounded" readonly="true" />
+							<button if="${each.ISADD == true}" 
+								id="btnPB_ID" sclass="btn-warning" iconSclass="mdi mdi-magnify"
+								forward="onClick=detail2Listbox.onPBID" />
+						</listcell>
+						<listcell>
+							<checkbox
+								if="${each.ISEDIT == false and each.ISADD == false }"
+								checked="${each.PB_RH01=='Y'}" disabled="true" />
+							<checkbox
+								if="${each.ISEDIT == true or each.ISADD == true }"
+								id="chkPB_RH01" checked="${each.PB_RH01=='Y'}" disabled="false" />
+						</listcell>
+						<listcell>
+							<checkbox
+								if="${each.ISEDIT == false and each.ISADD == false }"
+								checked="${each.PB_RH02=='Y'}" disabled="true" />
+							<checkbox
+								if="${each.ISEDIT == true or each.ISADD == true }"
+								id="chkPB_RH02" checked="${each.PB_RH02=='Y'}" disabled="false" />
+						</listcell>
+						<listcell>
+							<checkbox
+								if="${each.ISEDIT == false and each.ISADD == false }"
+								checked="${each.PB_RH03=='Y'}" disabled="true" />
+							<checkbox
+								if="${each.ISEDIT == true or each.ISADD == true }"
+								id="chkPB_RH03" checked="${each.PB_RH03=='Y'}" disabled="false" />
+						</listcell>
+						<listcell>
+							<checkbox
+								if="${each.ISEDIT == false and each.ISADD == false }"
+								checked="${each.PB_RH04=='Y'}" disabled="true" />
+							<checkbox
+								if="${each.ISEDIT == true or each.ISADD == true }"
+								id="chkPB_RH04" checked="${each.PB_RH04=='Y'}" disabled="false" />
+						</listcell>
+						<listcell>
+							<checkbox
+								if="${each.ISEDIT == false and each.ISADD == false }"
+								checked="${each.PB_RH08=='Y'}" disabled="true" />
+							<checkbox
+								if="${each.ISEDIT == true or each.ISADD == true }"
+								id="chkPB_RH08" checked="${each.PB_RH08=='Y'}" disabled="false" />
+						</listcell>
+						<listcell>
+							<checkbox
+								if="${each.ISEDIT == false and each.ISADD == false }"
+								checked="${each.PB_RH09=='Y'}" disabled="true" />
+							<checkbox
+								if="${each.ISEDIT == true or each.ISADD == true }"
+								id="chkPB_RH09" checked="${each.PB_RH09=='Y'}" disabled="false" />
+						</listcell>
+						<listcell>
+							<checkbox
+								if="${each.ISEDIT == false and each.ISADD == false }"
+								checked="${each.PB_RH10=='Y'}" disabled="true" />
+							<checkbox
+								if="${each.ISEDIT == true or each.ISADD == true }"
+								id="chkPB_RH10" checked="${each.PB_RH10=='Y'}" disabled="false" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="pagingDetail2Course"></paging>
+		</div>
+	</div>
+</zk>

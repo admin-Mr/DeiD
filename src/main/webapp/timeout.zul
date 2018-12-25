@@ -1,0 +1,15 @@
+<?page title="DeiD | System"?>
+
+<!-- Load Bootstrap  -->
+<?link href="/resource/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"?>
+
+<!-- Google Open Sans font -->
+<!-- Load fonts from local -->
+<?link href="/resource/css/fonts.css" rel="stylesheet" type="text/css"?>
+
+<?link href="/resource/less/index.css.dsp" rel="stylesheet" type="text/css"?>
+<zk>
+	<hbox>
+		<apply templateURI="/util/admin/login.zul" />
+	</hbox>
+</zk>

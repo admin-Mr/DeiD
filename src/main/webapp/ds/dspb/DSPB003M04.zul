@@ -1,0 +1,92 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<window title="${labels.COMM.QRY}" id="windowQuery" border="normal"
+		width="700px" height="540px" apply="ds.dspb.program.DSPB003M_Controller04"
+		maximizable="false" closable="true" sclass="mymodal" mode="modal">
+		<hlayout width="100%">
+			<label value="${labels.RoleMaster.PB_GROUPNA}"
+				sclass="sectionTitleLabel" />
+			<combobox id="cboRole" width="150px" mold="rounded">
+				<template name="model">
+					<comboitem label="${each.PB_GROUPNA}"
+						value="${each.PB_GROUPID}" />
+				</template>
+			</combobox>
+		</hlayout>
+		<div style="clear: both;"></div>
+		<div sclass="sectionSeperator"></div>
+		<panel width="100%">
+			<panelchildren style="overflow:auto;">
+				<separator />
+				<listbox id="queryListBox" checkmark="false"
+					multiple="false" sclass="mylist"
+					emptyMessage="${labels.PUBLIC.MSG0026}">
+					<listhead sizable="true">
+						<listheader
+							label="${labels.DSPB.DSPB00_NEW.OPNAME}" />
+						<listheader width="10%"
+							label="${labels.DSPB.DSPB01_GRP.PB_RH01}" />
+						<listheader width="10%"
+							label="${labels.DSPB.DSPB01_GRP.PB_RH02}" />
+						<listheader width="10%"
+							label="${labels.DSPB.DSPB01_GRP.PB_RH03}" />
+						<listheader width="10%"
+							label="${labels.DSPB.DSPB01_GRP.PB_RH04}" />
+						<listheader width="10%"
+							label="${labels.DSPB.DSPB01_GRP.PB_RH08}" />
+						<listheader width="10%"
+							label="${labels.DSPB.DSPB01_GRP.PB_RH09}" />
+						<listheader width="10%"
+							label="${labels.DSPB.DSPB01_GRP.PB_RH10}" />
+					</listhead>
+					<template name="model">
+						<listitem
+							forward="onDoubleClick=onDoubleClickedPersonItem">
+							<listcell
+								label="${c:l(each.DSPB00_NEW.PB_LANGTAG)}" />
+							<listcell>
+								<checkbox checked="${each.PB_RH01=='Y'}"
+									disabled="true" />
+							</listcell>
+							<listcell>
+								<checkbox checked="${each.PB_RH02=='Y'}"
+									disabled="true" />
+							</listcell>
+							<listcell>
+								<checkbox checked="${each.PB_RH03=='Y'}"
+									disabled="true" />
+							</listcell>
+							<listcell>
+								<checkbox checked="${each.PB_RH04=='Y'}"
+									disabled="true" />
+							</listcell>
+							<listcell>
+								<checkbox checked="${each.PB_RH08=='Y'}"
+									disabled="true" />
+							</listcell>
+							<listcell>
+								<checkbox checked="${each.PB_RH09=='Y'}"
+									disabled="true" />
+							</listcell>
+							<listcell>
+								<checkbox checked="${each.PB_RH10=='Y'}"
+									disabled="true" />
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+				<paging id="pagingCourse"></paging>
+			</panelchildren>
+		</panel>
+		<separator />
+		<separator />
+		<div align="center">
+			<button id="btnConfirm" label="${labels.COMM.CFM}"
+				mold="trendy" iconSclass="mdi mdi-checkbox-marked-circle"
+				sclass="btn-success" />
+			<button id="btnCancel" label="${labels.COMM.CANCEL}"
+				mold="trendy" iconSclass="mdi mdi-close-circle" sclass="btn-danger" />
+		</div>
+		<separator />
+	</window>
+</zk>

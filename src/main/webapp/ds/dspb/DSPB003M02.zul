@@ -1,0 +1,50 @@
+<zk>
+	<div id="detail1" apply="ds.dspb.program.DSPB003M_Controller02">
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnCreateDetail" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+			</div>
+		</div>
+		<div height="225px">
+			<listbox id="detailListbox" sclass="mylist"
+				multiple="false" emptyMessage="${labels.PUBLIC.MSG0026}">
+				<listhead sizable="true">
+					<listheader width="70px"
+						label="${labels.COMM.OPERATE}" />
+					<listheader
+						label="${labels.DSPB.DSPB03.PB_GROUPID}" />
+				</listhead>
+				<template name="model">
+					<listitem >
+						<listcell>
+							<hbox if="${each.ISADD == false}" spacing="10px">
+								<image
+									visible="${sessionScope.DAuth }"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DEL}"
+									forward="onClick=detailListbox.onDelete"
+									sclass="fimage">
+								</image>
+							</hbox>
+							<hbox if="${each.ISADD == true}" spacing="10px">
+									<image src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"										
+										tooltiptext="${labels.COMM.SAVE}" forward="onClick=detailListbox.onSave" />								
+									<image src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+										tooltiptext="${labels.COMM.CANCEL}" forward="onClick=detailListbox.onCancel" />										
+							</hbox>										
+						</listcell>
+						<listcell>
+						 	<label if="${each.ISADD == false}" value="${each.DSPB03.PB_GROUPNA}" />
+							<textbox if="${each.ISADD == true}" id="txtPB_GROUPID" mold="rounded" readonly="true" />
+							<button if="${each.ISADD == true}" id="btnPB_GROUPID" sclass="btn-warning" iconSclass="mdi mdi-magnify" 
+								forward="onClick=detailListbox.onGroupID"/>
+						</listcell>	
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="pagingDetailCourse"></paging>
+		</div>
+	</div>
+</zk>

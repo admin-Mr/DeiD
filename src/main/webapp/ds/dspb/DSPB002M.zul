@@ -1,0 +1,108 @@
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSPB000}" />
+			<label value="${labels.MENU.DSPB002M} (DSPB002M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dspb.program.DSPB002M_Controller01">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+			</div>
+		</div>
+
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<label value="${labels.DSPB.DSPB03.PB_GROUPNA}"
+					sclass="sectionTitleLabel" />
+				<textbox id="txtGROUPNAME" mold="rounded" />
+			</hlayout>
+
+		</groupbox>
+		<div height="230px">
+		<listbox id="masterListbox" sclass="mylist" autopaging="true"
+			emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false">
+			<listhead sizable="true">
+				<listheader width="75px" label="${labels.COMM.OPERATE}" />
+				<listheader width="400px" label="${labels.DSPB.DSPB03.PB_GROUPNA}" />
+                <listheader width="300px" label="${labels.DSPB.DSPB47.PB_DASHBOARD}" />
+			</listhead>
+			<template name="model">
+				<listitem if="${each.ISEDIT == false and each.ISADD == false}">
+					<listcell>
+						<hbox spacing="10px">
+							<image visible="${sessionScope.UAuth}"
+								src="/resource/imgs/icons/btn_edit2_16x16.gif"
+								tooltiptext="${labels.COMM.EDIT}"
+								forward="onClick=masterListbox.onUpdate" sclass="fimage">
+							</image>
+						</hbox>
+					</listcell>
+					<listcell>
+						<label value="${each.PB_GROUPNA}" />
+					</listcell>
+                    <listcell>
+                        <label value="${c:l(each.DSPB47.DSPB00_NEW.PB_LANGTAG)}" />
+					</listcell>
+                </listitem>
+				
+				<listitem if="${each.ISEDIT == true or each.ISADD == true}">
+				    <listcell>
+						<hbox spacing="10px">
+							<image
+								src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"
+								tooltiptext="${labels.COMM.SAVE}"
+								forward="onClick=masterListbox.onSave" />
+							<image
+								src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+								tooltiptext="${labels.COMM.CANCEL}"
+								forward="onClick=masterListbox.onCancel" />
+						</hbox>				
+				    </listcell>
+					<listcell>
+						<textbox id="txtPB_GROUPNA" value="${each.PB_GROUPNA}" mold="rounded"
+							hflex="1"/>
+					</listcell>
+					<listcell>
+						<textbox id="txtPB_DASHBOARD" value="${c:l(each.DSPB47.DSPB00_NEW.PB_LANGTAG)}" mold="rounded" hflex="1" readonly="true"/>	
+						<button id="btnDashBoard" sclass="btn-warning" iconSclass="mdi mdi-magnify" mold="trendy" forward="onClick=masterListbox.onQryDashBoard"/>
+						<button id="btnDashBoardClear" mold="trendy" iconSclass="mdi mdi-broom" sclass="btn-danger"	forward="onClick=masterListbox.onQryDashBoardClear" />
+					</listcell>
+				</listitem>
+			</template>
+		</listbox>
+		<paging id="pagingCourse"></paging>
+		</div>
+		<separator spacing="15px" />
+		<tabbox id="tabDetai1">
+			<tabs>
+				<tab id="tabDetail1" label="${labels.DSPB.DSPB03.Tab1}" />
+			</tabs>
+			<tabpanels>
+				<tabpanel id="panDetail1"></tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

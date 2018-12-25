@@ -1,0 +1,249 @@
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSPB000}" />
+			<label value="${labels.MENU.DSPB003M} (DSPB003M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dspb.program.DSPB003M_Controller01">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+			</div>
+		</div>
+
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<vlayout width="35px">
+					<label value="${labels.DSPB.DSPB02.PB_CODE}"
+						sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="txtPB_EMUSERQ" width="120px"
+						mold="rounded" />
+				</vlayout>
+				<vlayout width="35px">
+					<label value="${labels.DSPB.DSPB02.PB_NAME}"
+						sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="txtPB_NAMEQ" width="120px"
+						mold="rounded" />
+				</vlayout>
+				<vlayout width="70px">
+					<label value="${labels.DSPB.DSPB02.PB_USERID}"
+						sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="txtPB_USERIDQ" width="120px"
+						mold="rounded" />
+				</vlayout>
+				
+				
+			</hlayout>
+		</groupbox>
+		<div height="230px">
+			<zscript><![CDATA[
+	private void doBlur_Code() {
+		if (!txtPB_EMUSER.getValue().trim().isEmpty()) {
+			if (!txtPB_EMUSER.getValue().matches("^[A-Za-z0-9]+$")) {
+				alert(org.zkoss.util.resource.Labels.getLabel("DSPB.DSPB02.PB_EMUSER") + " "
+						+ org.zkoss.util.resource.Labels.getLabel("PUBLIC.MSG0085"));
+				txtPB_EMUSER.setValue("");
+			}
+		}
+	}
+	private void doBlur_UserID() {
+		if (!txtUSERID.getValue().trim().isEmpty()) {
+			if (!txtUSERID.getValue().matches("^[A-Za-z0-9._]*$")) {
+				alert(org.zkoss.util.resource.Labels.getLabel("DSPB.DSPB02.PB_USERID") + " "
+						+ org.zkoss.util.resource.Labels.getLabel("PUBLIC.MSG0005"));
+				txtUSERID.setValue("");
+			}
+		}
+	}
+	private void doBlur_Pass() {
+		if (!txtPASS.getValue().trim().isEmpty()) {
+			if (!txtPASS.getValue().matches("^[A-Za-z0-9._!@#$%^&*]*$")) {
+				alert(org.zkoss.util.resource.Labels.getLabel("DSPB.DSPB02.PB_PASS") + " "
+						+ org.zkoss.util.resource.Labels.getLabel("PUBLIC.MSG0085"));
+				txtPASS.setValue("");
+			}
+		}
+	}
+	private void doBlur_EMail() {
+		if (!txtPB_EMAIL.getValue().trim().isEmpty()) {
+			if (!txtPB_EMAIL.getValue().trim()
+					.matches("[A-Za-z0-9]+[._-]?[A-Za-z0-9]+@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+)*.[A-Za-z]+$")) {
+				alert(org.zkoss.util.resource.Labels.getLabel("DSPB.DSPB02.PB_EMAIL") + " "
+						+ org.zkoss.util.resource.Labels.getLabel("PUBLIC.MSG0005"));
+				txtPB_EMAIL.setValue("");
+			}
+		}
+	}
+]]></zscript>
+			<listbox id="masterListbox" sclass="mylist"
+				emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false">
+				<listhead sizable="true">
+					<listheader width="75px"
+						label="${labels.COMM.OPERATE}" />
+					<listheader width="6%"
+						label="${labels.DSPB.DSPB02.PB_CODE}" sort="auto" />
+					<listheader width="10%"
+						label="${labels.DSPB.DSPB02.PB_NAME}" />
+					<listheader width="10%"
+						label="${labels.DSPB.DSPB02.PB_FANO}" />
+					<listheader width="12%" label="${labels.DSPB.DSPB02.PB_EMAIL}" />
+					<listheader width="10%"
+						label="${labels.DSPB.DSPB02.PB_USERID}" />
+					<listheader width="10%"
+						label="${labels.DSPB.DSPB02.PB_PASS}" />
+					<listheader width="5%"
+						label="${labels.DSPB.DSPB02.PB_LOCK}" />
+				    <listheader width="12%" 
+				        label="${labels.DSPB.DSPB48.PB_DASHBOARD}" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell>
+							<hbox
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								spacing="10px">
+								<image visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+							</hbox>
+							<hbox
+								if="${each.ISEDIT == true or each.ISADD == true}"
+								spacing="10px">
+								<image
+									src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"
+									tooltiptext="${labels.COMM.SAVE}"
+									forward="onClick=masterListbox.onSave" />
+								<image
+									src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+									tooltiptext="${labels.COMM.CANCEL}"
+									forward="onClick=masterListbox.onCancel" />
+							</hbox>
+						</listcell>
+						<listcell>
+							<label
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								value="${each.PB_EMUSER}" />
+							<textbox
+								if="${each.ISEDIT == true or each.ISADD == true}"
+								id="txtPB_EMUSER" value="${each.PB_EMUSER}" mold="rounded"
+								onBlur="doBlur_Code()" width="100%" />
+						</listcell>
+						<listcell>
+							<label
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								value="${each.PB_NAME}" />
+							<textbox
+								if="${each.ISEDIT == true or each.ISADD == true}"
+								id="txtPB_NAME" value="${each.PB_NAME}" mold="rounded"
+								width="100%" />
+						</listcell>
+						
+						<listcell>
+							<label
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								value="${each.PB_FANO}" />
+							<textbox
+								if="${each.ISEDIT == true or each.ISADD == true}"
+								id="txtPB_FANO" value="${each.PB_FANO}" mold="rounded"
+								width="100%" />
+						</listcell>
+						
+						<listcell>
+							<label
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								value="${each.PB_EMAIL}" />
+							<textbox
+								if="${each.ISEDIT == true or each.ISADD == true}"
+								id="txtPB_EMAIL" value="${each.PB_EMAIL}" mold="rounded"
+								onBlur="doBlur_EMail()" width="100%" />
+						</listcell>
+						<listcell>
+							<label
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								value="${each.PB_USERID}" />
+							<textbox if="${each.ISADD == true }"
+								id="txtUSERID" mold="rounded" onBlur="doBlur_UserID()"
+								width="100%" />
+							<textbox if="${each.ISEDIT == true}"
+								id="txtUSERID" value="${each.PB_USERID}" mold="rounded"
+								readonly="true" width="100%" />
+						</listcell>
+						<listcell>
+							<label
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								value="****" />
+							<textbox
+								if="${each.ISEDIT == true or each.ISADD == true}" id="txtPASS"
+								value="${each.PB_PASS}" mold="rounded" onBlur="doBlur_Pass()"
+								width="100%" type="password" />
+						</listcell>
+						<listcell>
+							<checkbox
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								checked="${each.PB_LOCK == 'Y'}" disabled="true" />
+							<checkbox
+								if="${each.ISEDIT == true or each.ISADD == true}"
+								id="chkPB_LOCK" checked="${each.PB_LOCK == 'Y'}"
+								disabled="false" />
+						</listcell>
+						<listcell>
+							<label
+								if="${each.ISEDIT == false and each.ISADD == false}"
+								value="${c:l(each.DSPB48.DSPB00_NEW.PB_LANGTAG)}" />
+							<textbox
+								if="${each.ISEDIT == true or each.ISADD == true}"
+								id="txtPB_DASHBOARD" value="${c:l(each.DSPB48.DSPB00_NEW.PB_LANGTAG)}" mold="rounded"
+								hflex="1" readonly="true" />
+							<button if="${each.ISEDIT == true or each.ISADD == true}" 
+								id="btnDashBoard" sclass="btn-warning" iconSclass="mdi mdi-magnify" mold="trendy" forward="onClick=masterListbox.onQryDashBoard"/>
+                            <button if="${each.ISEDIT == true or each.ISADD == true}" 
+                            	id="btnDashBoardClear" mold="trendy" iconSclass="mdi mdi-broom" sclass="btn-danger"	forward="onClick=masterListbox.onQryDashBoardClear" />
+						</listcell>						
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="pagingCourse"></paging>
+		</div>
+		<separator spacing="15px" />
+		<tabbox id="tabDetail">
+			<tabs>
+				<tab id="tabDetail1" label="${labels.DSPB.DSPB02.Tab1}" />
+				<tab id="tabDetail2" label="${labels.DSPB.DSPB02.Tab2}" />
+			</tabs>
+			<tabpanels>
+				<tabpanel id="panDetail1"></tabpanel>
+				<tabpanel id="panDetail2"></tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

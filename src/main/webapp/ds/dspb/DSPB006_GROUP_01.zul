@@ -1,0 +1,143 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dspb.program.DSPB006_GROUP_01">
+		<!-- window內綁定.java -->
+
+
+		<!-- 查詢、新增 -->
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+			</div>
+		</div>
+
+		<!-- 查詢 -->
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<!-- 群組編號 -->
+				<label value="${labels.RETHINKDB.GROUP.GROUP_ID}"
+					sclass="sectionTitlelabel" />
+				<textbox id="txtQGROUP_ID" mold="rounded" width="200px" />
+				<!-- 廠別 -->
+				<label value="${labels.RETHINKDB.GROUP.FACTORY}"
+					sclass="sectionTitlelabel" />
+				<textbox id="txtQFACTORY" mold="rounded" width="200px" />
+				<!-- 群組名稱 -->
+				<label value="${labels.RETHINKDB.GROUP.GROUP_NAME}"
+					sclass="sectionTitlelabel" />
+				<textbox id="txtQGROUP_NAME" mold="rounded"
+					width="200px" />
+			</hlayout>
+		</groupbox>
+
+		<separator />
+
+		<!-- listbox -->
+		<div>
+			<listbox id="masterListbox" sclass="mylist"
+				autopaging="false" emptyMessage="${labels.PUBLIC.MSG0026}"
+				multiple="false" mold="paging" rows="5" pageSize="5">
+				<!-- 空的顯示查無資料-->
+				<listhead sizable="true">
+					<listheader width="75px"
+						label="${labels.COMM.OPERATE}" />
+					<listheader width="200px"
+						label="${labels.RETHINKDB.GROUP.GROUP_ID}" />
+					<listheader width="200px"
+						label="${labels.RETHINKDB.GROUP.FACTORY}" />
+					<listheader width="200px"
+						label="${labels.RETHINKDB.GROUP.GROUP_NAME}" />
+					<listheader width="200px"
+						label="${labels.RETHINKDB.GROUP.UP_DATE}" />
+					<listheader width="100px"
+						label="${labels.RETHINKDB.GROUP.UP_USER}" />
+				</listhead>
+				<template name="model">
+					<!-- 檢視模式 顯示修改&更新 -->
+					<listitem
+						if="${each.ISEDIT == false and each.ISADD == false}">
+						<listcell><!-- 操作 -->
+							<hbox spacing="10px">
+								<image visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+								<image visible="${sessionScope.DAuth }"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DEL}"
+									forward="onClick=masterListbox.onDelete" sclass="fimage">
+								</image>
+							</hbox>
+						</listcell>
+
+						<listcell>
+							<label value="${each.GROUP_ID}" />
+						</listcell>
+						<listcell>
+							<label value="${each.FACTORY}" />
+						</listcell>
+						<listcell>
+							<label value="${each.GROUP_NAME}" />
+						</listcell>
+						<listcell>
+							<label value="${each.UP_DATE}" />
+						</listcell>
+						<listcell>
+							<label value="${each.UP_USER}" />
+						</listcell>
+					</listitem>
+
+					<!-- 如果按下編輯按鈕  就變 V儲存 & X取消 -->
+					<listitem
+						if="${each.ISEDIT == true or each.ISADD == true}">
+						<listcell>
+							<hbox spacing="10px">
+								<image
+									src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"
+									tooltiptext="${labels.COMM.SAVE}"
+									forward="onClick=masterListbox.onSave" />
+								<image
+									src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+									tooltiptext="${labels.COMM.CANCEL}"
+									forward="onClick=masterListbox.onCancel" />
+							</hbox>
+						</listcell>
+						<listcell>
+							<textbox id="txtGROUP_ID"
+								value="${each.GROUP_ID}" mold="rounded" width="100%" />
+						</listcell>
+						<listcell>
+							<textbox id="txtFACTORY"
+								value="${each.FACTORY}" mold="rounded" width="100%" />
+						</listcell>
+						<listcell>
+							<textbox id="txtGROUP_NAME"
+								value="${each.GROUP_NAME}" mold="rounded" width="100%" />
+						</listcell>
+						<listcell>
+							<label id="labUP_DATE"
+								value="${each.UP_DATE}" />
+						</listcell>
+						<listcell>
+							<label id="labUP_USER"
+								value="${each.UP_USER}" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+
+			<!--<paging id="pagingMaster"></paging>   分頁 -->
+
+		</div>
+	</window>
+</zk>

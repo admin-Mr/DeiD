@@ -1,0 +1,33 @@
+<?page title="DeiD | System"?>
+
+<!-- Load Bootstrap  -->
+<?link href="/resource/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"?>
+
+<!-- Load Material Design Icons -->
+<?link href="/resource/materialdesign/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css"?>
+
+<!-- Google Open Sans font -->
+<!-- Load fonts from local -->
+<?link href="/resource/css/fonts.css" rel="stylesheet" type="text/css"?>
+
+<?link href="/resource/less/index.css.dsp" rel="stylesheet" type="text/css"?>
+
+<?init class="ds.common.services.AuthenticationInit"?>  <!-- protect page by the authentication init  -->
+
+<!-- 登入後的版面排版 -->
+<zk xmlns:n="native" if="${not sessionScope.userCredential.anonymous}"
+			viewModel="@id('vm') @init('util.admin.BookmarkChangeViewModel')" 
+ 			onBookmarkChange="@command('onBookmarkNavigate', bookmark=event.bookmark)">
+	<include src="/util/admin/layout/banner.zul"/>             
+	<hlayout id="main" spacing="0">
+		<include src="/util/admin/layout/sidebar.zul"/>    
+		<vlayout spacing="0" hflex="1">
+			<!-- <include src="/util/admin/layout/breadcrumbs.zul"/> -->
+			<include src="/util/admin/layout/mainContent.zul"/>
+		</vlayout>
+	</hlayout>
+	<!-- <include src="/util/admin/layout/footer.zul"/> -->
+	<div if="${sessionScope.userCredential.anonymous}">
+		Redirect to login page.....
+	</div>
+</zk>

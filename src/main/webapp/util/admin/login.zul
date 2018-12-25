@@ -1,0 +1,68 @@
+<!-- Load Bootstrap  -->
+<?link href="/resource/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"?>
+
+<!-- Load Material Design Icons -->
+<?link href="/resource/materialdesign/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css"?>
+
+<!-- Google Open Sans font -->
+<!-- Load fonts from local -->
+<?link href="/resource/css/fonts.css" rel="stylesheet" type="text/css"?>
+
+<?link href="/resource/less/index.css.dsp" rel="stylesheet" type="text/css"?>
+
+<!-- it is a login page, no authentication protection and use anonymous template -->
+<?init class="org.zkoss.zk.ui.util.Composition" arg0="/util/admin/layout/template-anonymous.zul"?>
+<zk>
+	<hbox self="@define(content)" vflex="1" hflex="1" align="center" pack="center" spacing="20px">
+		<panel border="normal" sclass="traffic">
+			<caption iconSclass="glyphicon glyphicon-check" label="${labels.COMM.LOGIN_WINDOW}" sclass="small" />
+			<panelchildren>
+				<vlayout>
+					<window id="loginWin" apply="util.admin.LoginController" border="none" sclass="panel-success" hflex="min">
+						<vbox hflex="min" align="center">
+							<grid hflex="min">
+								<columns>
+									<column hflex="min" align="right" />
+									<column />
+								</columns>
+								<rows>
+									<row>
+										<div
+											class="input-group input-group-sm">
+											<span class="input-group-addon"> ${labels.COMM.USER_ID} </span>
+											<textbox class="form-control input-sm" placeholder="Username" id="account" />
+										</div>
+									</row>
+									<row>
+										<div
+											class="input-group input-group-sm">
+											<span class="input-group-addon"> ${labels.COMM.PASSWORD} </span>
+											<textbox class="form-control input-sm" placeholder="Password" id="password" type="password" />
+										</div>
+									</row>
+									<row>
+										<div>
+											<span class="label label-default"> ${labels.COMM.LANGUAGE} </span>
+											<selectbox id="selLanguage" width="200px" />
+										</div>
+									</row>
+									<row>
+										<div>
+											<span class="label label-default"> ${labels.COMM.COMPANY} </span>
+											<selectbox id="selCompany" width="200px"/>
+										</div>
+									</row>
+								</rows>
+							</grid>
+							<label id="message" sclass="warn" value="&#160;" />
+							<hlayout>
+								<button id="login" label="${labels.COMM.LOGIN}" iconSclass="mdi mdi-checkbox-marked-circle" sclass="btn-success" />
+								<button id="logout" label="${labels.COMM.CANCEL}" iconSclass="mdi mdi-close-circle" sclass="btn-danger" apply="util.admin.LogoutController" />
+							</hlayout>
+						</vbox>
+					</window>
+				</vlayout>
+			</panelchildren>
+		</panel>
+	</hbox>
+</zk>

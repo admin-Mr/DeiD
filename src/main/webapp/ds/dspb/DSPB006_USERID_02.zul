@@ -1,0 +1,60 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="${labels.COMM.QRY}" id="windowQuery"
+		apply="ds.dspb.program.DSPB006_USERID_02" border="normal"
+		width="700px" height="530px" maximizable="false" closable="true"
+		sclass="mymodal" mode="modal">
+
+		<hlayout width="100%">
+			<label value="${labels.COMM.CONDITION}"
+				sclass="sectionTitleLabel" />
+			<combobox id="cboColumn" width="150px" mold="rounded" />
+			<combobox id="cboCondition" width="80px" mold="rounded" />
+			<textbox id="txtQuery" width="150px" mold="rounded" />
+			<div style="float:right">
+				<button id="btnSearch" label="${labels.COMM.QUERY}"
+					mold="trendy" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+			</div>
+		</hlayout>
+		<div style="clear: both;" />
+		<div sclass="sectinSeperator" />
+		<panel width="100%">
+			<panelchildren style="overflow:auto;">
+				<separator />
+				<listbox id="queryListBox" checkmark="true"
+					multiple="false" sclass="mylist"
+					emptyMessage="${labels.PUBLIC.MSG0026}">
+					<listhead sizable="true">
+						<listheader width="30%"
+							label="${labels.RETHINKDB.GROUP.GROUP_ID}" />
+						<listheader width="30%"
+							label="${labels.RETHINKDB.GROUP.GROUP_NAME}" />
+						<listheader width="40%"
+							label="${labels.RETHINKDB.GROUP.FACTORY}" />
+					</listhead>
+					<template name="model">
+						<listitem
+							forward="onDoubleClick=onDoubleClickedPersonItem">
+							<listcell label="${each.GROUP_ID}" />
+							<listcell label="${each.GROUP_NAME}" />
+							<listcell label="${each.FACTORY}" />
+						</listitem>
+					</template>
+				</listbox>
+				<paging id="pagingOperation" />
+			</panelchildren>
+		</panel>
+
+		<separator />
+		<separator />
+
+		<div align="center">
+			<button id="btnConfirm" label="${labels.COMM.CFM}"
+				mold="trendy" iconSclass="mdi mdi-checkbox-marked-circle"
+				sclass="btn-success" />
+			<button id="btnCancel" label="${labels.COMM.CANCEL}"
+				mold="trendy" iconSclass="mdi mdi-close-circle" sclass="btn-danger" />
+		</div>
+		<separator />
+	</window>
+</zk>

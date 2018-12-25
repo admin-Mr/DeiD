@@ -1,0 +1,36 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<div sclass="breadcrumbs"><!-- 顯示在頁面上面的title -->
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSPB000}" /><!-- 根目錄的語系 -->
+			<label value="${labels.MENU.RETHINKDB} (DSPB005_01)" />
+			<!-- 子目錄(自己)的語系 -->
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+
+	<window width="100%" border="none">
+		<tabbox>
+			<tabs>
+				<tab
+					label="${labels.RETHINKDB.CATEGORY.$} (DSPB005_CATEGORY_01)" />
+				<tab
+					label="${labels.RETHINKDB.GROUP.$} (DSPB006_GROUP_01)" />
+				<tab
+					label="${labels.RETHINKDB.USERID.$} (DSPB006_USERID_01)" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<include src="/ds/dspb/DSPB005_CATEGORY_01.zul" />
+				</tabpanel>
+				<tabpanel>
+					<include src="/ds/dspb/DSPB006_GROUP_01.zul" />
+				</tabpanel>
+				<tabpanel>
+					<include src="/ds/dspb/DSPB006_USERID_01.zul" />
+				</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+</zk>

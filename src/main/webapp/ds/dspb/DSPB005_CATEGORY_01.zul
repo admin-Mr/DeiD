@@ -1,0 +1,113 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dspb.program.DSPB005_CATEGORY_01">
+		<!-- window內綁定.java -->
+
+
+		<!-- 查詢、新增 -->
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+			</div>
+		</div>
+		
+		<!-- 查詢 -->
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" >
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<!-- 類別代碼 -->
+				<label value="${labels.RETHINKDB.CATEGORY.CA_ID}"
+					sclass="sectionTitlelabel" />
+				<textbox id="txtQCA_ID" mold="rounded" width="200px" />
+				<!-- 類別名稱 -->
+				<label value="${labels.RETHINKDB.CATEGORY.CA_NAME}"
+					sclass="sectionTitlelabel" />
+				<textbox id="txtQCA_NAME" mold="rounded" width="200px" />
+			</hlayout>
+		</groupbox>
+
+		<separator />
+
+		<!-- listbox -->
+		<div>
+			<listbox id="masterListbox" sclass="mylist"
+				autopaging="false" emptyMessage="${labels.PUBLIC.MSG0026}"
+				multiple="false" mold="paging" rows="5" pageSize="5">
+				<!-- 空的顯示查無資料-->
+				<listhead sizable="true">
+					<listheader width="75px"
+						label="${labels.COMM.OPERATE}" />
+					<listheader width="200px"
+						label="${labels.RETHINKDB.CATEGORY.CA_ID}" />
+					<listheader width="400px"
+						label="${labels.RETHINKDB.CATEGORY.CA_NAME}" />
+				</listhead>
+				<template name="model">
+					<!-- 檢視模式 顯示修改&更新 -->
+					<listitem
+						if="${each.ISEDIT == false and each.ISADD == false}">
+						<listcell><!-- 操作 -->
+							<hbox spacing="10px">
+								<image visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+								<image visible="${sessionScope.DAuth}"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DEL}"
+									forward="onClick=masterListbox.onDelete" sclass="fimage">
+								</image>
+							</hbox>
+						</listcell>
+
+						<listcell>
+							<label value="${each.CA_ID}" />
+						</listcell>
+
+						<listcell>
+							<label value="${each.CA_NAME}" />
+						</listcell>
+					</listitem>
+
+					<!-- 如果按下編輯按鈕  就變 V儲存 & X取消 -->
+					<listitem
+						if="${each.ISEDIT == true or each.ISADD == true}">
+						<listcell>
+							<hbox spacing="10px">
+								<image
+									src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"
+									tooltiptext="${labels.COMM.SAVE}"
+									forward="onClick=masterListbox.onSave" />
+								<image
+									src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+									tooltiptext="${labels.COMM.CANCEL}"
+									forward="onClick=masterListbox.onCancel" />
+							</hbox>
+						</listcell>
+						<listcell>
+							<textbox id="txtCA_ID" value="${each.CA_ID}"
+								mold="rounded" width="100%" />
+						</listcell>
+
+						<listcell>
+							<textbox id="txtCA_NAME"
+								value="${each.CA_NAME}" mold="rounded" width="100%" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+
+			<!--<paging id="pagingMaster"></paging>   分頁 -->
+
+		</div>
+	</window>
+</zk>

@@ -1,0 +1,172 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSPB000}" />
+			<label value="${labels.MENU.DSPB001M} (DSPB001M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dspb.program.DSPB001M_Controller01">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+			</div>
+		</div>
+
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="false">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<label value="${labels.DSPB.DSPB00_NEW.PB_PRGNAME}"
+					sclass="sectionTitlelabel" />
+				<textbox id="txtPRGNAME" mold="rounded" width="200px" />
+			</hlayout>
+		</groupbox>
+
+		<separator />
+
+		<groupbox>
+			<caption label="${labels.COMM.EDIT}" sclass="mdi mdi-filter"
+				style="font-size:10pt" />
+			<grid>
+				<columns>
+					<column width="120px" />
+					<column width="360px" />
+					<column width="120px" />
+					<column />
+				</columns>
+				<rows>
+					<row>
+						<label
+							value="${labels.DSPB.DSPB00_NEW.PB_LANGTAG}"
+							sclass="sectionTitleLabel" />
+						<cell colspan="2">
+							<textbox id="txtPB_LANGTAG" mold="rounded"
+								width="250px" />
+							<space />
+							<label id="lblOPName" />
+						</cell>
+					</row>
+					<row>
+						<label
+							value="${labels.DSPB.DSPB00_NEW.PB_MUITEM}"
+							sclass="sectionTitleLabel" />
+						<textbox id="txtPB_MUITEM" mold="rounded"
+							width="100px" />
+						<label
+							value="${labels.DSPB.DSPB00_NEW.PB_MUNODE}"
+							sclass="sectionTitleLabel" />
+						<div>
+							<textbox id="txtPB_MUNODE" mold="rounded"
+								width="100px" />
+							<button id="btnPB_MUNODE"
+								iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+							<button id="btnClear"
+								iconSclass="mdi mdi-broom" sclass="btn-danger" />
+							<checkbox id="chkPB_ADMIN"
+								label="${labels.DSPB.DSPB00_NEW.PB_ADMIN}"
+								sclass="sectionTitleLabel" />
+						</div>
+					</row>
+					<row>
+						<label
+							value="${labels.DSPB.DSPB00_NEW.PB_FILEPATH}"
+							sclass="sectionTitleLabel" />
+						<textbox id="txtPB_FILEPATH" mold="rounded"
+							width="300px" />
+						<label
+							value="${labels.DSPB.DSPB00_NEW.PB_PRGNAME}"
+							sclass="sectionTitleLabel" />
+						<textbox id="txtPB_PRGNAME" mold="rounded"
+							width="300px" />
+					</row>
+					<row>
+						<label
+							value="${labels.DSPB.DSPB00_NEW.PB_ICONPATH}"
+							sclass="sectionTitleLabel" />
+						<textbox id="txtPB_ICONPATH" mold="rounded"
+							width="300px" />
+						<label
+							value="${labels.DSPB.DSPB00_NEW.PB_ICONSCLASS}"
+							sclass="sectionTitleLabel" />
+						<textbox id="txtPB_ICONSCLASS" mold="rounded"
+							width="200px" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+		<div>
+			<listbox id="masterListbox" sclass="mylist"
+				autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+				multiple="false">
+				<listhead sizable="true">
+					<listheader width="7%"
+						label="${labels.COMM.OPERATE }" />
+					<listheader width="15%"
+						label="${labels.DSPB.DSPB00_NEW.OPNAME}" />
+					<listheader width="20%"
+						label="${labels.DSPB.DSPB00_NEW.PB_LANGTAG}" />
+					<listheader width="20%"
+						label="${labels.DSPB.DSPB00_NEW.PB_PRGNAME}" />
+					<listheader width="25%"
+						label="${labels.DSPB.DSPB00_NEW.PB_FILEPATH}" />
+					<listheader width="5%"
+						label="${labels.DSPB.DSPB00_NEW.PB_MUNODE}" />
+					<listheader
+						label="${labels.DSPB.DSPB00_NEW.PB_MUITEM}" />
+				</listhead>
+				<template name="model">
+					<listitem
+						forward="onDoubleClick=onDoubleClickedPersonItem">
+						<listcell>
+							<hbox spacing="10px">
+								<image visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+								<image visible="${sessionScope.DAuth}"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DEL}"
+									forward="onClick=masterListbox.onDelete" sclass="fimage">
+								</image>
+							</hbox>
+						</listcell>
+						<listcell label="${c:l(each.PB_LANGTAG)}" />
+						<listcell label="${each.PB_LANGTAG}" />
+						<listcell label="${each.PB_PRGNAME}" />
+						<listcell label="${each.PB_FILEPATH}" />
+						<listcell label="${each.PB_MUNODE}" />
+						<listcell label="${each.PB_MUITEM}" />
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="pagingCourse"></paging>
+		</div>
+	</window>
+</zk>

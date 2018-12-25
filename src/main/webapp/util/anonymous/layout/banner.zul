@@ -1,0 +1,32 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./anonymous_banner" ?>
+<zk apply="util.MultilingualController">
+<div sclass="navbar" apply="util.NavbarComposer" id="anonymous_banner">
+	<!-- Brand Logo -->
+	<a label=" ${labels.PROJECT.NAME}" sclass="pull-left navbar-brand" image="/resource/imgs/logo_ds.png"/>
+	<!-- Navbar -->
+	<hlayout sclass="nav-user pull-right" spacing="0" apply="util.admin.LogoutController">
+
+		<!-- User menu -->
+		<menubar sclass="user-menu grey">
+			<menu tooltiptext="UserCredential" label="${labels.COMM.WELCOME}">
+				<menupopup>
+					<menu label="${labels.COMM.LANGUAGE}" iconSclass="z-icon-cog">
+						<menupopup>
+							<menuitem label="${labels.COMM.LANGUAGE_zh_tw}" iconSclass="z-icon-cog"/>
+							<menuitem label="${labels.COMM.LANGUAGE_zh_cn}" iconSclass="z-icon-cog"/>						
+							<!-- <menuitem label="${labels.COMM.LANGUAGE_en_us}" iconSclass="z-icon-cog"/>
+							<menuitem label="${labels.COMM.LANGUAGE_in_ID}" iconSclass="z-icon-cog"/>
+							<menuitem label="${labels.COMM.LANGUAGE_zh_cn}" iconSclass="z-icon-cog"/>
+							<menuitem label="${labels.COMM.LANGUAGE_zh_tw}" iconSclass="z-icon-cog"/>
+							<menuitem label="${labels.COMM.LANGUAGE_vi_VN}" iconSclass="z-icon-cog"/>
+							 -->
+						</menupopup>
+					</menu>
+					<menuseparator />
+					<menuitem label="Login" iconSclass="z-icon-off" href="/util/admin/login.zul"/>
+				</menupopup>
+			</menu>
+		</menubar>
+	</hlayout>
+</div>
+</zk>

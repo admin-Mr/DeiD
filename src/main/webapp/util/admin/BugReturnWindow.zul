@@ -1,0 +1,71 @@
+<zk>
+	<window contentStyle="overflow:auto;" title="問題回報單" id="bugList"
+		border="normal" width="40%" height="50%" mode="modal"
+		maximizable="false" closable="true" sclass="mymodal"
+		apply="util.function.BugReturnWinPane">
+
+		<panel width="100%">
+			<panelchildren>
+				<div width="100%" id="divCreate">
+					<separator />
+					<vlayout>
+						<hlayout width="50%">
+							<label value="作業名稱"
+								sclass="sectionTitleLabel" />
+							<textbox id="BugText" readonly="true"
+								hflex="1" mold="rounded" />
+						</hlayout>
+						
+						<hlayout width="70%">
+							<label value="問題類別" sclass="sectionTitleLabel" />
+							<combobox id="IssueItem_combobox"
+								width="220px" model="@{controller.itemInfos}">
+								<comboitem self="@{each='a'}"
+									label="@{a.ITEM}" value="@{a.ITEM}" />
+							</combobox>
+						</hlayout>
+						
+						<hlayout width="50%">
+							<label value="問題主旨"
+								sclass="sectionTitleLabel" />
+							<textbox id="IssueMain" hflex="1" mold="rounded" />
+						</hlayout>
+						
+						<hlayout width="100%">
+							<label value="問題描述"
+								sclass="sectionTitleLabel" />
+							<textbox id="IssueDetail" hflex="1"  rows="5" mold="rounded" />
+						</hlayout>
+						
+						<hlayout width="70%">
+							<label value="提出單位" sclass="sectionTitleLabel" />
+							<combobox id="ProposeUnit_combobox" width="150px" model="@{controller.UnitInfos}">
+						<comboitem self="@{each='c'}" label="@{c.UNIT}" value="@{c.UNIT}" />
+							</combobox>
+						</hlayout>
+						
+						<hlayout width="50%">
+							<label value="提出人員"
+								sclass="sectionTitleLabel" />
+							<textbox id="Proposer" hflex="1" mold="rounded" />
+						</hlayout>
+						
+						<hlayout width="25%">
+							<label value="聯絡分機"
+								sclass="sectionTitleLabel" />
+							<decimalbox id="Extension" hflex="1" mold="rounded" />
+						</hlayout>
+					</vlayout>
+					<div style="float:left">
+						<button label="送出" mold="trendy"
+							id="searchQuery" sclass="mybutton button blue small" />
+					</div>
+					<separator />
+				</div>
+			</panelchildren>
+		</panel>
+		<div style="clear: both;"></div>
+		<div sclass="sectionSeperator"></div>
+		<separator />
+	</window>
+</zk>

@@ -1,0 +1,321 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./admin_navbar" ?>
+
+<zk apply="util.MultilingualController" xmlns:ca="client/attribute" xmlns:x="xhtml">
+	<!-- switchbutton -->
+	<style>
+			.switch{
+				margin-top: -14px;
+	    		position: absolute;
+			}
+			.switch input {
+				position: absolute;
+				//not show checkbox
+				margin-left: -9999px;
+				visibility: hidden;
+			}
+			.switch label {
+				display: inline-block;
+				position: relative;
+				width: 50px;
+				height: 25px;
+				background-color: #dddddd;
+				border-radius: 30px;
+			}
+			
+			.switch label:before,
+			.switch label:after {
+				display: block;
+				position: absolute;
+				top: 1px;
+				left: 1px;
+				bottom: 1px;
+				content: "";
+			}
+			.switch label:before {
+				right: 1px;
+				background-color: #f2f2f2;
+				border-radius: 50px;
+				transition: background 0.4s;
+			}
+			.switch label:after {
+				width: 25px;
+				background-color: #f2f2f2;
+				border-radius: 100%;
+				box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+				transition: margin 0.4s;
+			}
+			.switch input:checked + label:before {
+				background-color: #0fdd00;
+			}
+			.switch input:checked + label:after {
+				margin-left: 25px;
+			}
+	</style>
+
+	<zscript><![CDATA[
+		import org.zkoss.util.resource.Labels;
+		public void isFinish(Checkbox ck) {
+			if (ck.isChecked()) {
+				ck.setTooltiptext(Labels.getLabel("COMM.FINISHED"));
+			} else if (!ck.isChecked()) {
+				ck.setTooltiptext(Labels.getLabel("COMM.UNFINISHED"));
+			}
+		}
+	]]></zscript>
+	
+	<div sclass="navbar" apply="util.NavbarComposer" id="admin_navbar">
+		<!-- Brand Logo -->
+		<a label="${labels.PROJECT.NAME}" sclass="pull-left navbar-brand" image="/resource/imgs/logo_ds.png" href="../admin/index.zul"/>
+		<!-- Navbar -->
+		<hlayout sclass="nav-user pull-right" spacing="0" apply="util.admin.LogoutController">
+			<a id="atask" iconSclass="z-icon-tasks" popup="taskpp, position=after_end, type=toggle" sclass="grey">
+				<label id="askCount" sclass="badge badge-grey"/>
+			</a>
+			<a id="anoti" iconSclass="z-icon-bell" popup="notipp, position=after_end, type=toggle" sclass="purple">
+				<label id="anotiCount" sclass="badge badge-important"/>
+			</a>
+	<!-- 		<a id="amsg" iconSclass="z-icon-envelope" popup="msgpp, position=after_end, type=toggle" sclass="green"> -->
+	<!-- 			<label value="5" sclass="badge badge-success"/> -->
+	<!-- 		</a> -->
+			
+			<!-- User menu -->
+			<menubar sclass="user-menu grey">
+				<menu tooltiptext="UserCredential" label="${labels.COMM.WELCOME}, ${sessionScope.userCredential.name}" if="${not sessionScope.userCredential.anonymous}">
+					<menupopup>
+						<menu label="${labels.COMM.LANGUAGE}" iconSclass="z-icon-cog">
+							<menupopup>
+								<menuitem label="${labels.COMM.LANGUAGE_en_us}" image="/resource/imgs/flags/USA.png" id="eng" apply="util.BannerMultilingualController"/>
+								<menuitem label="${labels.COMM.LANGUAGE_vi_VN}" image="/resource/imgs/flags/VIETNAM.png" id="viet" apply="util.BannerMultilingualController"/>
+								<menuitem label="${labels.COMM.LANGUAGE_zh_cn}" image="/resource/imgs/flags/CHINA.png" id="sc" apply="util.BannerMultilingualController"/>
+								<menuitem label="${labels.COMM.LANGUAGE_zh_tw}" image="/resource/imgs/flags/TAIWAN.png" id="tc" apply="util.BannerMultilingualController"/>
+								<menuitem label="${labels.COMM.LANGUAGE_in_ID}" image="/resource/imgs/flags/INDONESIA.png" id="indo" apply="util.BannerMultilingualController"/>
+							</menupopup>
+						</menu>
+						<menuitem label="${labels.COMM.CHANGEPASSWORD}" iconSclass="z-icon-user" id="changePass"/>
+						<menuseparator />
+						<menuitem id="logout" label="${labels.COMM.LOGOUT}" iconSclass="z-icon-off" if="${not sessionScope.userCredential.anonymous}"/>
+					</menupopup>
+				</menu>
+			</menubar>
+		</hlayout>
+		
+		<!-- Popups of navbar -->
+		<popup id="taskpp" sclass="menu" width="300px">
+			<hlayout sclass="header" >			
+				<div id="divHeaderTodo">
+					<hlayout>
+						<div width="250px">
+							<a id="taskppCount" iconSclass="z-icon-check"/>
+						</div>
+						<div id="divInsert" align="right">
+							<image id="imgInsert"  src="/resource/imgs/icons8-add-property.png" tooltiptext="${labels.COMM.NEW_LIST}" sclass="MouseOver"/>
+						</div>
+					</hlayout>
+				</div>
+				<div id="divHeaderToDoEdit" visible="false">
+					<hlayout>
+						<div id="divReturn" width="250px" visible="false">
+							<image id="imgReturn" src="/resource/imgs/icons8-reply-all-arrow.png" tooltiptext="${labels.COMM.RETURN}" sclass="MouseOver"/>
+						</div>
+						<div id="divUpdate" align="right" visible="false">
+							<image id="imgUpdate" src="/resource/imgs/icons8-edit-property.png" tooltiptext="${labels.COMM.EDIT}" sclass="MouseOver"/>
+						</div>
+						<div id="divSave" align="right" visible="false">
+							<image id="imgSave" src="/resource/imgs/icons8-save-as.png" tooltiptext="${labels.COMM.SAVE}" sclass="MouseOver"/>
+						</div>
+					</hlayout>
+				</div>
+			</hlayout>
+	
+			<div id="divTodoList">
+				<listbox id="lsbTodoList" >
+					<listhead>
+						<listheader width="55px" style="padding-top:20px" />
+						<listheader width="35px" />
+						<listheader width="140px" />
+						<listheader />
+					</listhead>
+					<template name="model">
+						<listitem if="${each.FINISH_USER eq '' or each.FINISH_USER eq sessionScope.userCredential.email}" forward="onClick=lsbTodoList.onView">
+							<listcell>
+								<checkbox sclass="switch" checked="${each.FLAG eq 'Y' ? true : false}" 
+									forward="onCheck=lsbTodoList.onCheck" onCreate="isFinish(self)"/>
+							</listcell>
+							<listcell>
+								<a if="${each.URL ne ''}" forward="onClick=lsbTodoList.onLink" tooltiptext="${each.URL}" iconSclass="mdi mdi-launch" style="font-size: 25px"/>
+							</listcell>
+							<listcell label="${each.CONTENT}" tooltiptext="${each.CONTENT}">
+							</listcell>
+							<listcell>
+								<div ca:data-easypiechart="true" ca:data-size="40" ca:data-percent="${each.SCHEDULE}" tooltiptext="${each.SCHEDULE}%">
+									<label if="${each.COUNTSDOWN_DAYS eq null}" value="${each.COUNTSDOWN_DAYS}" />
+									<label if="${each.COUNTSDOWN_DAYS ne null}" value="${each.COUNTSDOWN_DAYS}${labels.COMM.DAY}" />
+								</div>
+							</listcell>
+						</listitem>
+						
+						<listitem if="${each.FINISH_USER ne '' and  each.FINISH_USER ne sessionScope.userCredential.email}" forward="onClick=lsbTodoList.onView" disabled="true">
+							<listcell>
+								<checkbox sclass="switch" checked="${each.FLAG eq 'Y' ? true : false}"
+									forward="onCheck=lsbTodoList.onCheck" disabled="true" onCreate="isFinish(self)"/>
+							</listcell>
+							<listcell label="${each.CONTENT}" tooltiptext="${each.CONTENT}"/>
+							<listcell>
+								<div ca:data-easypiechart="true" ca:data-size="40" ca:data-percent="${each.SCHEDULE}" tooltiptext="${each.SCHEDULE}%">
+									<label value="${each.COUNTSDOWN_DAYS}${labels.COMM.DAY}" />
+								</div>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</div>
+			
+			<div id="divTodoMessage" visible="false">
+				<grid id="gdMessage">
+					<columns>
+						<column width="80px"/>
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label value="${labels.COMM.CREATE_USER}" />
+							<textbox id="txtCreateUser" readonly="true"
+								mold="rounded" width="200px"/>
+						</row>
+						<row>
+							<label value="${labels.COMM.CREATE_DATE}" />
+							<datebox id="dtCreateDate" disabled="true" width="200px"
+								mold="rounded" />
+						</row>
+						<row>
+							<label value="${labels.COMM.ESTIMATED_DATE}" />
+							<datebox id="dtEstimatedDate" disabled="true" width="200px"
+								mold="rounded" />
+						</row>
+						<row>
+							<label value="${labels.COMM.FINISH_USER}" />
+							<textbox id="txtFinishUser" readonly="true" width="200px"
+								mold="rounded" />
+						</row>
+						<row>
+							<label value="${labels.COMM.FINISH_DATE}" />
+							<datebox id="dtFinishDate" disabled="true" width="200px"
+								mold="rounded" />
+						</row>
+						<row>
+							<label value="${labels.COMM.CONTENT}" />
+							<textbox id="txtContent" multiline="true"
+								width="200px" height="100px" readonly="true" mold="rounded"
+								style="resize:none;" />
+						</row>
+					</rows>
+				</grid>
+			</div>
+		</popup>
+		
+		<popup id="notipp" sclass="menu menu-pink" width="240px">
+			<hlayout sclass="header" >			
+				<div id="divHeaderCategory">
+					<hlayout>
+						<div width="210px">
+							<a id="notippCount" iconSclass="z-icon-exclamation-triangle"/>
+						</div>
+					</hlayout>
+				</div>
+				<div id="divHeaderNoticeList" visible="false">
+					<hlayout>
+						<div id="divReturnNotice" width="210px">
+							<image id="imgReturnNotice" src="/resource/imgs/icons8-reply-all-arrow.png" tooltiptext="${labels.COMM.RETURN}" sclass="MouseOver"/>
+							<label id="labReturnNotice"/>
+						</div>
+						
+					</hlayout>
+				</div>
+			</hlayout>
+			
+			<div id="divCategory" visible="true">		
+				<listbox id="lsbCategory" autopaging="true">
+					<listhead>
+						<listheader label="" width="38px" align="center"/>
+						<listheader label=""/>
+						<listheader label="" width="46px" align="right"/>
+					</listhead>
+					<template name="model">
+						<listitem forward="onClick=lsbCategory.onView">
+							<listcell>
+								<hlayout valign="middle">
+									<a iconSclass="btn btn-xs no-hover btn-info z-icon-envelope"/>
+								</hlayout>
+							</listcell>
+							<listcell>
+								<hlayout valign="middle">
+									<label value="${each.CA_NAME}" />
+								</hlayout>
+							</listcell>
+							<listcell >
+								<hlayout valign="middle">
+									<label value="${each.NOTICE_COUNT}" class="badge badge-info pull-right"/>
+								</hlayout>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</div>
+			
+			<div id="divNoticeList" visible="false">
+				<listbox id="lsbNoticeList" >
+					<listhead>
+						<listheader width="160px" style="padding-top:20px" />
+						<listheader/>
+					</listhead>
+					<template name="model">
+						<listitem height="47px">
+							<listcell label="${each.CONTENT}" tooltiptext="${each.CONTENT}"/>
+							<listcell>
+								<checkbox sclass="switch"
+									checked="${each.FLAG eq 'Y' ? true : false}" forward="onCheck=lsbNoticeList.onCheck"/>
+							</listcell>
+						</listitem>
+					</template>
+				</listbox>
+			</div>
+		</popup>
+		
+		<popup id="msgpp" sclass="menu" width="240px">
+			<a label="5 Messages" sclass="header" iconSclass="z-icon-envelope-o"/>
+			<vlayout spacing="0">
+				<a href="#">
+					<image tooltiptext="Alex's Avatar" src="assets/avatars/avatar.png" sclass="msg-photo"/>
+					<span sclass="msg-body">
+						<span sclass="msg-title">
+							<label value="Alex:" sclass="blue"/>
+							Ciao sociis natoque penatibus et auctor ...
+						</span>
+						<span sclass="msg-time"><span class="z-icon-clock-o"/>a moment ago</span>
+					</span>
+				</a>
+				<a href="#">
+					<image tooltiptext="Susan's Avatar" src="assets/avatars/avatar3.png" sclass="msg-photo"/>
+					<span class="msg-body">
+						<span class="msg-title">
+							<label value="Susan:" sclass="blue"/>
+							Vestibulum id ligula porta felis euismod ...
+						</span>
+						<span sclass="msg-time"><span class="z-icon-clock-o"/>20 minutes ago</span>
+					</span>
+				</a>
+				<a href="#">
+					<image tooltiptext="Bob's Avatar" src="assets/avatars/avatar4.png" sclass="msg-photo"/>
+					<span class="msg-body">
+						<span class="msg-title">
+							<label value="Bob:" sclass="blue"/>
+							Nullam quis risus eget urna mollis ornare ...
+						</span>
+						<span sclass="msg-time"><span class="z-icon-clock-o"/>3:15 pm</span>
+					</span>
+				</a>
+				<a label="See all messages" href="#"><span class="z-icon-arrow-right"/></a>
+			</vlayout>
+		</popup>
+	</div>
+</zk>

@@ -1,0 +1,26 @@
+<?page title="DeiD | System"?>
+
+<!-- Load Bootstrap  -->
+<?link href="/resource/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"?>
+
+<!-- Load Material Design Icons -->
+<?link href="/resource/materialdesign/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css"?>
+
+
+<!-- Google Open Sans font -->
+<!-- Load fonts from local -->
+<?link href="/resource/css/fonts.css" rel="stylesheet" type="text/css"?>
+
+<?link href="/resource/less/index.css.dsp" rel="stylesheet" type="text/css"?>
+
+<zk xmlns:n="native">
+<!-- 	<include src="/util/anonymous/layout/banner.zul"/>              -->
+<!-- 	<hlayout id="mainIncludeWeb" spacing="0"> -->
+<!-- 		<include src="/util/anonymous/layout/sidebar.zul"/>     -->
+<!-- 		<vlayout spacing="0" hflex="1"> -->
+			<!-- <include src="/util/anonymous/layout/breadcrumbs.zul"/> -->
+			<include src="/util/anonymous/layout/mainContent.zul"/>
+<!-- 		</vlayout> -->
+<!-- 	</hlayout> -->
+	<!-- <include src="/util/anonymous/layout/footer.zul"/> -->
+</zk>

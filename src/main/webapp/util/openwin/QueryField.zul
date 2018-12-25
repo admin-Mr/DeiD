@@ -1,0 +1,56 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+
+<zk>
+
+	<window title="${labels.COMM.QRY}" id="windowQuery" border="normal"
+		width="${arg.WindoWidth}" height="${arg.WindoHeight}" apply="util.openwin.QueryField_Controller"
+		maximizable="${arg.Maximizable}" closable="${arg.Closable}" mode="modal" 
+		sizable="${arg.Sizable}" vflex="min" >
+
+		<hlayout width="100%">
+			<label width="10%" value="${labels.COMM.CONDITION}"
+				sclass="sectionTitleLabel" vflex="min" />
+			<combobox id="cboColumn" width="150px" mold="rounded" />
+			<combobox id="cboCondition" width="80px" mold="rounded"  />
+			<textbox id="txtQueryFrom" width="100px" mold="rounded"  />
+			<textbox id="txtQueryTo" width="100px" mold="rounded"  />
+			<div style="float:right">
+				<button id="btnSearch" label="${labels.COMM.QUERY}"
+					mold="trendy" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+			</div>
+		</hlayout>
+
+		<div style="clear: both;" />
+		<div sclass="sectinSeperator" />
+
+		<panel width="100%">
+			<panelchildren style="overflow:auto;" >
+				<separator />
+				<listbox id="queryListBox" checkmark="true" autopaging="${arg.Autopaging ne null ? arg.Autopaging :true }" rows="${arg.PageSize ne null ? arg.PageSize: 10 }" 
+					multiple="true" sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}" >
+					<listhead id="queryListhead" sizable="true" vflex="max" >
+					</listhead>
+					<template name="model"  >
+						<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+							<listcell  if="${forEachStatus.index le (ColumnSize eq 1 ? 1 :ColumnSize-1)}" label="${each}" tooltiptext="${each}" vflex="max"
+							
+							 forEach="${each}" />
+							 
+						</listitem>
+					</template>
+				</listbox>
+				<paging id="pagingMenuNode"></paging>
+			</panelchildren>
+		</panel>
+		<separator />
+		<separator />
+		<div align="center">
+			<button id="btnConfirm" label="${labels.COMM.CFM}"
+				mold="trendy" iconSclass="mdi mdi-checkbox-marked-circle"
+				sclass="btn-success" />
+			<button id="btnCancel" label="${labels.COMM.CANCEL}"
+				mold="trendy" iconSclass="mdi mdi-close-circle" sclass="btn-danger" />
+		</div>
+		<separator />
+	</window>
+</zk>

@@ -1,0 +1,5 @@
+<zk>
+	<include id="mainInclude"
+		viewModel="@id('vm') @init('util.admin.AdminNavigationViewModel')" 
+		src="@load(vm.includeSrc)" />
+</zk>

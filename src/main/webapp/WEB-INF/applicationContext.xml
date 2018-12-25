@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-4.2.xsd
+           http://www.springframework.org/schema/tx
+                   http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+	<bean id="hibernateStringEncryptor"
+	      class="org.jasypt.hibernate4.encryptor.HibernatePBEStringEncryptor">
+	    <property name="registeredName" value="strongHibernateStringEncryptor"/>
+	    <property name="algorithm" value="PBEWithMD5AndTripleDES"/>
+	    <property name="password" value="D@nsh0es2018"/>
+	</bean>
+	
+	<!-- The LocalEntityManagerFactoryBean creates an EntityManagerFactory suitable 
+		for environments which solely use JPA for data access. The factory bean will 
+		use the JPA PersistenceProvider autodetection mechanism (according to JPA's 
+		Java SE bootstrapping) and, in most cases, requires only the persistence 
+		unit name to be specified: -->
+
+	<bean id="company01" class="util.info.CompanyInfo">
+		<!-- Company ID -->
+		<property name="companyID" value="DeiD"/>		
+		<!-- 顯示名稱 -->
+		<property name="companyName" value="DeiD"/>		
+		<!-- CRUDService名稱 -->
+		<property name="connectionName" value="CRUDService"/>	
+	</bean>
+
+<!-- 	<bean id="company02" class="util.info.CompanyInfo"> -->
+<!-- 		<property name="companyID" value="DeiD1"/>	 -->
+<!-- 		<property name="companyName" value="DeiD1"/>	 -->
+<!-- 		<property name="connectionName" value="CRUDService1"/>	 -->
+<!-- 	</bean> -->
+
+	<!-- 多廠下拉選項清單 -->
+	<bean id="systemInfo" class="util.info.SystemInfo">
+		<property name="companies">
+			<list>
+				<ref bean="company01"/>
+<!-- 				<ref bean="company02"/> -->
+			</list>
+		</property>
+	</bean>
+
+	<!-- 規則emf+persistenceUnitName做為id -->
+	<bean id="emfDeiD"
+		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="DeiD" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emfDeiD" /> <!-- ref entityManagerFactory bean id -->
+	</bean>
+	
+<!-- 	<bean id="emfDeiD1" -->
+<!-- 		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean"> -->
+<!-- 		<property name="persistenceUnitName" value="DeiD1" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="transactionManager1" class="org.springframework.orm.jpa.JpaTransactionManager"> -->
+<!-- 		<property name="entityManagerFactory" ref="emfDeiD1" /> -->
+<!-- 	</bean> -->
+
+	<!-- tell spring to use annotation based congfigurations -->
+	<!-- It allow us to use @Autowire, @Required and @Qualifier annotations. -->
+
+	<context:annotation-config />
+
+	<!-- tell spring where to find the beans -->
+	<!-- tells Spring to scan the code for injectable beans under the package 
+		(and all its subpackages) specified. -->
+	<!-- It allow @Component, @Service, @Controller, etc.. annotations. -->
+	<context:component-scan base-package="DeiD" />
+
+	<tx:annotation-driven/>
+
+	<!-- This will ensure that hibernate or jpa exceptions are automatically 
+		translated into Spring's generic DataAccessException hierarchy for those 
+		classes annotated with Repository -->
+
+	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<!-- 以persistence-unit為連線DB資訊-->
+	<bean id="CRUDService" class="ds.common.services.CRUDServiceImpl" />
+	<bean id="CRUDDao" class="util.dao.CRUDDaoImpl" />
+	
+<!-- 	<bean id="CRUDService1" class="ds.common.services.CRUDService1Impl" /> -->
+<!-- 	<bean id="CRUDDao1" class="util.dao.CRUDDao1Impl" /> -->
+
+</beans>

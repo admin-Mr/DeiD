@@ -1,0 +1,755 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.deanshoes.zk</groupId>
+	<artifactId>DeiD</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<properties>
+		<!-- <zk.version>8.0.2.2-Eval</zk.version> a b c 1 2 3 456 bugfixed -->
+		<zkfree.version>8.5.1.2</zkfree.version>
+		<zk.version>8.5.1.2</zk.version>
+		<zkckez.version>4.4.6.2</zkckez.version>
+		<zkgmapsz.version>3.0.4</zkgmapsz.version>
+		<zkcharts>2.1.1</zkcharts>
+		<zkcalendar.version>2.1.5</zkcalendar.version>
+		<zkflashchart.version>1.0</zkflashchart.version>
+		<zkgraphics.version>0.8.0</zkgraphics.version>
+		<zkpivottable.version>2.3.0</zkpivottable.version>
+		<zktimeplotz.version>1.1_50</zktimeplotz.version>
+		<zktimelinez.version>2.3.1_50</zktimelinez.version>
+		<zuljsp.version>2.6.0</zuljsp.version>
+		<zats.version>2.0.0</zats.version>
+		<zkeasypiechart>1.0.0</zkeasypiechart>
+		<spring.version>4.2.4.RELEASE</spring.version>
+		<hibernate.version>5.0.6.Final</hibernate.version>
+		<commons-io>2.4</commons-io>
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+		<packname>-${project.version}-FL-${maven.build.timestamp}</packname>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<tomcat7.version>2.2</tomcat7.version> <!-- 目前使用這個 -->
+		<tomcat8.version>3.0-r1756463</tomcat8.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<java.compilerversion>1.8</java.compilerversion>
+	</properties>
+	<packaging>war</packaging>
+	<name>The ${projectname} Project</name>
+	<description>The ${projectname} Project</description>
+	<licenses>
+		<license>
+			<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<repositories>
+		<!-- =============== ZK自己的repository ====================================================== -->
+		<repository>
+			<id>ZK_CE</id>
+			<name>ZK CE Repository</name>
+			<url>http://mavensync.zkoss.org/maven2</url>
+		</repository>
+		<!-- <repository> <id>ZK_Evaluation</id> <name>ZK Evaluation Repository</name> 
+			<url>http://mavensync.zkoss.org/eval</url> </repository> -->
+		<!-- <repository> <id>ZK_EE</id> <url>https://maven.zkoss.org/repo/zk/ee</url> 
+			</repository> -->
+		<!-- =============== 不用maven的，有自己的repository =========================================== -->
+		<!-- <repository> <id>jasper</id> <url>http://jasperreports.sourceforge.net/maven2/</url> 
+			<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
+			</snapshots> </repository> -->
+
+		<!-- <repository> <id>jasper1</id> <url>http://jaspersoft.artifactoryonline.com/jaspersoft/jr-ce-snapshots</url> 
+			<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> 
+			</snapshots> </repository> -->
+
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>zkmaven</id>
+			<name>ZK Maven Plugin Repository</name>
+			<url>http://mavensync.zkoss.org/maven2/</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<dependencies>
+
+		<!-- JPA(Hibernate) and HSQL dependencies -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<!-- JTA -->
+		<dependency>
+			<groupId>org.codehaus.btm</groupId>
+			<artifactId>btm</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+		
+		<!-- 為符合舊版本，單獨指定1.7.5 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<!-- JSR 303 with Hibernate Validator: 4.0.2.GA 就會包含此jar -->
+		<!-- <dependency> <groupId>javax.validation</groupId> <artifactId>validation-api</artifactId> 
+			<version>1.0.0.GA</version> </dependency> -->
+
+		<!-- jaxb-core 2.2.11太新了 降一些，即可解決。但不知對org.apache.chemistry.opencmis，有何影響。 -->
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.1.14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.chemistry.opencmis</groupId>
+			<artifactId>chemistry-opencmis-client-impl</artifactId>
+			<version>1.0.0</version>
+			<!-- <exclusions> <exclusion> <groupId>com.sun.xml.bind</groupId> <artifactId>jaxb-core</artifactId> 
+				</exclusion> </exclusions> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.0.2.GA</version>
+		</dependency>
+
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-simple</artifactId> 
+			<version>1.7.5</version> <scope>test</scope> </dependency> -->
+
+		<!-- <version>0.9.2.1</version> -->
+		<!-- <dependency> <groupId>com.mchange</groupId> <artifactId>c3p0</artifactId> 
+			<version>0.9.5</version> </dependency> -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.2.6</version>
+		</dependency>
+		<!-- Spring 3 dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Apache Commons DBCP -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>eclipse</groupId>
+			<artifactId>jdtcore</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+		<!-- ==========commons-lang要在barcode4j之前===================================================== -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.barcode4j</groupId>
+			<artifactId>barcode4j</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<!-- ============================================================================================ -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.transaction</groupId>
+			<artifactId>jboss-transaction-api_1.2_spec</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging-annotations</artifactId>
+			<version>1.2.0.Beta1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Jackson JSON Processor -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.5.1</version>
+		</dependency>
+
+		<!-- File Upload -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io}</version>
+		</dependency>
+		<!-- Joda Time Library -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-fonts</artifactId>
+			<version>6.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-functions</artifactId>
+			<version>6.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0.3</version>
+		</dependency>
+		<!-- ZK Begin 00 01 02************************************************************************************** -->
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkbind</artifactId>
+			<version>${zkfree.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkmax</artifactId>
+			<version>${zk.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zuti</artifactId>
+			<version>${zk.version}</version>
+		</dependency>
+		<!-- ZK Calendar -->
+		<dependency>
+			<groupId>org.zkoss.calendar</groupId>
+			<artifactId>calendar</artifactId>
+			<version>${zkcalendar.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zkplus</artifactId>
+			<version>${zkfree.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zhtml</artifactId>
+			<version>${zkfree.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zk</groupId>
+			<artifactId>zuljsp</artifactId>
+			<version>${zuljsp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zkforge</groupId>
+			<artifactId>ckez</artifactId>
+			<version>${zkckez.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.zkforge</groupId>
+			<artifactId>gmapsz</artifactId>
+			<version>${zkgmapsz.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.zkoss.addon</groupId>
+			<artifactId>flashchart</artifactId>
+			<version>${zkflashchart.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zkoss.graphics</groupId>
+			<artifactId>graphics</artifactId>
+			<version>${zkgraphics.version}</version>
+			<!-- <exclusions> <exclusion> <groupId>com.phloc</groupId> <artifactId>phloc-css</artifactId> 
+				</exclusion> </exclusions> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.zkoss.pivot</groupId>
+			<artifactId>pivottable</artifactId>
+			<version>${zkpivottable.version}</version>
+		</dependency>
+		<!-- 因為用到zktheme-8.5.1，此jar檔，並未包含在由enterprise帳號所下載的檔案之中。故暫用8.5.0版本。 -->
+		<!-- <dependency> <groupId>org.zkoss.theme</groupId> <artifactId>sapphire</artifactId> 
+			<version>8.5.0</version> </dependency> <dependency> <groupId>org.zkoss.theme</groupId> 
+			<artifactId>silvertail</artifactId> <version>8.5.0</version> </dependency> -->
+		<!-- 因ZK8.5版以上預設主題從原本的breeze更改為ice blue 所以需下載回原本breeze主題否則會跑版 -->
+		<dependency>
+			<groupId>org.zkoss.theme</groupId>
+			<artifactId>breeze</artifactId>
+			<version>8.5.0</version>
+		</dependency>
+		<!-- ZK Timeplot -->
+		<dependency>
+			<groupId>org.zkoss.zkforge</groupId>
+			<artifactId>timeplotz</artifactId>
+			<version>${zktimeplotz.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.zkoss.common</groupId>
+					<artifactId>zcommon</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.zkoss.common</groupId>
+					<artifactId>zweb</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.zkoss.zk</groupId>
+					<artifactId>zk</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.zkoss.zk</groupId>
+					<artifactId>zul</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.zkoss.zkforge</groupId>
+					<artifactId>timelinez</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- ZK Timeline -->
+		<dependency>
+			<groupId>org.zkoss.zkforge</groupId>
+			<artifactId>timelinez</artifactId>
+			<version>${zktimelinez.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.zkoss.common</groupId>
+					<artifactId>zcommon</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.zkoss.common</groupId>
+					<artifactId>zweb</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.zkoss.zk</groupId>
+					<artifactId>zk</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.zkoss.zk</groupId>
+					<artifactId>zul</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.zkoss.chart/zkcharts -->
+		<dependency>
+			<groupId>org.zkoss.chart</groupId>
+			<artifactId>zkcharts</artifactId>
+			<version>${zkcharts}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zkoss.zats</groupId>
+			<artifactId>zats-mimic-ext7</artifactId>
+			<version>${zats.version}</version> <!-- 1.2.1.FL.20160301 -->
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.zkoss</groupId>
+			<artifactId>datahandler-easypiechart</artifactId>
+			<version>${zkeasypiechart}</version>
+		</dependency>
+		<!-- ZK End ************************************************************************************** -->
+		<!-- https://mvnrepository.com/artifact/org.dbunit/dbunit -->
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.5.4</version>
+			<exclusions>
+				<!-- 排除 poi-ooxml 3.14, poi-ooxml-schemas 3.14 版本, 使用poi圖表時使用3.13版本 -->
+				<exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.poi</groupId>
+					<artifactId>poi-ooxml-schemas</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>6.2.1.jre8</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.39</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-parser</artifactId>
+			<version>1.6.1</version>
+			<exclusions>
+				<!-- 排除batik-parser模塊中關於xml-apis的依賴 : batik-parser依賴的xml-apis，其版本已改為1.0.b2。 
+					然而，dom4j，剛好有依賴1.0.b2。 -->
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml</groupId>
+			<artifactId>classmate</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jta_1.1_spec</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jgroups</groupId>
+			<artifactId>jgroups</artifactId>
+			<version>3.6.2.Final</version>
+		</dependency>
+		<!-- ================================================================================================================================== 
+			maven沒有，只好手動放在local repository(而且有修改各自的local poms，才會保留dependencies。) 手動放在local 
+			repository : mvn install:install-file -Dfile=jodconverter-2.2.2.jar -DgroupId=com.artofsolving 
+			-DartifactId=jodconverter -Dversion=2.2.2 -Dpackaging=jar -->
+
+		<!-- jasperreports pdf要用的字型========================================================================================================= 
+			===> mvn install:install-file -Dfile=msjh-1.0.jar -DgroupId=dsit.font.msjh 
+			-DartifactId=msjh -Dversion=1.0 -Dpackaging=jar -->
+		<dependency>
+			<groupId>dsit.font.msjh</groupId>
+			<artifactId>msjh</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!--在import excel時，ooxml-schemas.jar相依的xmlbeans-2.3.0.jar會與poi-ooxml-schemas.jar相依的xmlbeans2.6.0衝突.jar，需移除 -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>ooxml-schemas</artifactId>
+			<version>1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.xmlbeans</groupId>
+					<artifactId>xmlbeans</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.13-20150929</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-examples</artifactId>
+			<version>3.13-20150929</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-excelant</artifactId>
+			<version>3.13-20150929</version>
+		</dependency>
+		<dependency>
+			<groupId>com.artofsolving</groupId>
+			<artifactId>jodconverter</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.artofsolving</groupId>
+			<artifactId>jodconverter-cli</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<!-- ================================================================================================================================== -->
+		<dependency>
+			<groupId>jaxen</groupId>
+			<artifactId>jaxen</artifactId>
+			<version>1.1-beta-4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.ext.tomcat</groupId>
+			<artifactId>juli</artifactId>
+			<version>7.0.23.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
+		</dependency>
+		<dependency>
+			<groupId>oro</groupId>
+			<artifactId>oro</artifactId>
+			<version>2.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox-app</artifactId>
+			<version>2.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>proxool</groupId>
+			<artifactId>proxool</artifactId>
+			<version>0.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.6</version>
+		</dependency>
+		<!--在import excel時，xbean_xpath.jar相依的xbean-2.2.0.jar會與poi-ooxml-schemas.jar相依的xmlbeans2.6.0.jar衝突，需移除 -->
+		<dependency>
+			<groupId>xmlbeans</groupId>
+			<artifactId>xbean_xpath</artifactId>
+			<version>2.1.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xmlbeans</groupId>
+					<artifactId>xbean</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.barbecue</groupId>
+			<artifactId>barbecue</artifactId>
+			<version>1.5-beta1</version>
+		</dependency>
+		<!-- https://inswave.com/confluence/display/DB/WebSquare+.jar+Maven+Down -->
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>fop</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<!-- QR Code core-3.3.0, javase-3.3.0 -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+		<!-- webDav -->
+		<dependency>
+			<groupId>com.github.lookfirst</groupId>
+			<artifactId>sardine</artifactId>
+			<version>5.8</version>
+		</dependency>
+		<!-- RethinkDB -->
+		<dependency>
+			<groupId>com.rethinkdb</groupId>
+			<artifactId>rethinkdb-driver</artifactId>
+			<version>2.3.3</version>
+		</dependency>
+		<!-- RethinkDB API -->
+		<dependency>
+			<groupId>rethinkdb_api</groupId>
+			<artifactId>rethinkdb_api</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- Web Service Client Lib -->
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>2.27</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.inject</groupId>
+			<artifactId>jersey-hk2</artifactId>
+			<version>2.27</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.5</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jasypt</groupId>
+		    <artifactId>jasypt</artifactId>
+		    <version>1.9.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jasypt</groupId>
+		    <artifactId>jasypt-spring31</artifactId>
+		    <version>1.9.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.jasypt</groupId>
+		    <artifactId>jasypt-hibernate4</artifactId>
+		    <version>1.9.2</version>
+		</dependency>
+		
+		<!-- 以下，尚未處理。================================================================================================================================== -->
+		<dependency>
+			<groupId>org.json</groupId>		<!-- 有這個jar。 -->
+			<artifactId>json</artifactId>
+			<version>20170516</version>
+		</dependency>
+		<!-- <dependency> java-json.jar 以Search檢查，應該沒有直接使用。 <groupId>org.json</groupId> 
+			<artifactId>json</artifactId> <version>20090211</version> </dependency> <dependency> 
+			java-json-schema.jar 找不到對應，但是以Search檢查，應該沒有直接使用。 <groupId>org.json</groupId> 
+			<artifactId>json-schema</artifactId> <version>20090211</version> </dependency> -->
+
+		<!-- 以下，放到最後，不然會錯。================================================================================================================================== -->
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+			<version>2.10.5</version>
+			<type>pom</type>
+		</dependency>
+
+		<!-- deeco專案 特有api。================================================================================================================================== -->
+		<dependency>
+			<groupId>com.datastax.cassandra</groupId>
+			<artifactId>cassandra-driver-core</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.20</version>
+		</dependency>
+
+		<!-- dsgbi、dsghris專案 特有api。================================================================================================================================== -->
+		<!-- <dependency> <groupId>org.zkoss.poi</groupId> <artifactId>zpoi</artifactId> 
+			<version>3.8.1</version> </dependency> -->
+
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<!-- <plugin> <groupId>org.sonarsource.scanner.maven</groupId> <artifactId>sonar-maven-plugin</artifactId> 
+				<version>3.2</version> </plugin> -->
+			<!-- Run with Jetty -->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>7.6.8.v20121106</version>
+				<configuration>
+					<webAppConfig>
+						<contextPath>/${project.artifactId}</contextPath>
+						<allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
+					</webAppConfig>
+					<scanIntervalSeconds>5</scanIntervalSeconds>
+					<stopKey>shutdown</stopKey>
+					<stopPort>9966</stopPort>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>${tomcat7.version}</version>
+				<configuration>
+					<useBodyEncodingForURI>true</useBodyEncodingForURI>
+					<path>/</path>
+				</configuration>
+			</plugin>
+			<!-- Compile java -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<compilerArgs>
+						<arg>-XDignore.symbol.file</arg>
+						<!-- extdirs>lib</extdirs> 引入外部jar包 : 編譯階段指定外部lib -->
+					</compilerArgs>
+					<fork>true</fork>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<compilerVersion>${java.compilerversion}</compilerVersion>
+				</configuration>
+			</plugin>
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-resources-plugin</artifactId> 
+				<version>3.0.2</version> <configuration> <encoding>客製編碼</encoding> </configuration> 
+				</plugin> -->
+			<!-- Build war -->
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<version>2.1.1</version>
+			</plugin>
+			<!-- Pack zips -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<id>webapp</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>${projectname}${packname}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
+								<descriptor>src/main/assembly/webapp.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- <plugin> <groupId>org.sonarsource.scanner.maven</groupId> <artifactId>sonar-maven-plugin</artifactId> 
+				<version>3.4.0.905</version> </plugin> -->
+
+		</plugins>
+	</build>
+</project>

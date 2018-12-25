@@ -1,0 +1,14 @@
+<language-addon>
+	<addon-name>myaddon</addon-name>
+	<language-name>xul/html</language-name>>
+	<!--  ZK按鈕， 防止 多次 點擊 -->
+	 <component>
+        <component-name>button</component-name>
+        <extends>button</extends>
+        <property>
+            <property-name>autodisable</property-name>
+            <property-value>self</property-value>
+        </property>
+    </component>
+	
+</language-addon>

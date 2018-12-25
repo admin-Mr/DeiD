@@ -1,0 +1,56 @@
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./userList" ?>
+<window width="100%" border="none" id="userList"
+	apply="ds.common.program.UserListContrroller">
+	<separator />
+	<separator />
+	<div width="100%">
+		<div sclass="sectionTitle">
+			<separator />
+			<label value="${labels.DSPB02.USERLIST}" sclass="sectionTitleLabel" />
+			<separator />
+		</div>
+		<div style="float:right">
+			<button label="${labels.DSPB02.CREATEUSER}" mold="trendy" id="btnNew"
+				sclass="mybutton button blue small" />
+		</div>
+		<div style="clear: both;"></div>
+		<div sclass="sectionSeperator"></div>
+	</div>
+	<separator />
+	<listbox id="UserListbox" model="@{controller.appUsersList}"
+		sclass="mylist" selectedItem="@{controller.selectedUser}"
+		multiple="false" emptyMessage="No User found in the database">
+		<listhead sizable="true">
+			<listheader label="User ID" sort="auto" />
+			<listheader label="Last Name" sort="auto" />
+			<listheader label="First Name" sort="auto" />
+			<listheader label="Action" />
+		</listhead>
+
+		<listitem self="@{each='users'}" value="@{users}"
+			forward="onDoubleClick=onDoubleClickedPersonItem">
+			<listcell label="@{users.userID}" />
+			<listcell label="@{users.lastName}" />
+			<listcell label="@{users.firstName}" />
+			<listcell>
+				<hbox spacing="20px">
+
+					<image src="/imgs/icons/btn_view_16x16.gif"
+						tooltiptext="${labels.COMM.EXAMINE}" forward="onClick=UserListbox.onView"
+						sclass="fimageView">
+					</image>
+
+					<image src="/imgs/icons/btn_edit2_16x16.gif"
+						tooltiptext="${labels.COMM.EDIT}" forward="onClick=UserListbox.onEdit"
+						sclass="fimage">
+					</image>
+
+					<image src="/imgs/icons/btn_delete2_16x16.gif"
+						tooltiptext="${labels.COMM.DELETE}" forward="onClick=UserListbox.onDelete"
+						sclass="fimage">
+					</image>
+				</hbox>
+			</listcell>
+		</listitem>
+	</listbox>
+</window>
