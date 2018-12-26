@@ -1,0 +1,36 @@
+<!-- 返修登記 -->
+<zk>
+	<window border="normal" id="Arrangewindow" title="返修登記"
+		apply="ds.dsid.program.ReadIDPic03" closable="true" mode= "modal" width="250px" height="300px">
+
+		<div id="Fanxiu" width="250px" height="300px">
+			<div>
+				<hlayout width="100%" height="40px" > 
+					<textbox id="Barcode" mold="rounded" width="160px" />
+				<!-- <button id="btnSwitch" sclass="btn-primary" label="測試按鈕" mold="trendy" /> -->
+				</hlayout>
+			</div>
+			
+			<div>
+				<label value="返修原因" style="font-size:15px;font-weight:bold;display:inline-block;width:100%;" />
+			</div>
+			
+			<radiogroup id="sv1" onCheck="choice.value = self.selectedItem.label" />
+			
+			<grid>
+				<rows>
+					<row><radio id="fx" label="返修" radiogroup="sv1"/></row>
+					<row><radio id="ql" label="缺料" radiogroup="sv1"/></row>
+					<row><radio id="dd" label="待定" radiogroup="sv1"/></row>
+					<row><radio id="dd1" label="待定" radiogroup="sv1"/></row>
+				</rows>
+			</grid>
+			
+			<hlayout> 
+				<!-- 選擇狀態顯示  已隱藏 -->
+				<textbox id="choice"  mold="rounded" width="160px"/>
+			</hlayout>
+
+		</div>
+	</window>
+</zk>

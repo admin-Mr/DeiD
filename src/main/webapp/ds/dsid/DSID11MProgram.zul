@@ -1,0 +1,151 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.DSID30}" />
+			<label value="配色分析基礎檔(DSID11M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID11MProgram">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning" iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}" mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary" iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}" mold="trendy" />
+				<!-- 編輯Edit 按鈕 -->
+				<button id="btnEditMaster" sclass="btn-primary" iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}" mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success" iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}" mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger" iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}" mold="trendy" disabled="true" />
+
+				<!-- 刪除 -->
+				<button id="btnDeleteMaster" sclass="btn-danger" iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}" mold="trendy" />
+				<button id="btnImport" sclass="btn-default" iconSclass="mdi mdi-watch-import" label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+				<button id="btnExport" sclass="btn-default" iconSclass="mdi mdi-watch-export" label="${labels.COMM.EXPORT}" mold="trendy" />
+
+			</div>
+		</div>
+
+<!-- 		<groupbox id="filterMaster" width="100%" sclass="main z-demo-config" open="false">
+			<caption id="filter" label="${labels.COMM.FILTER}" sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<label value="型體" sclass="sectionTitlelabel" />
+				<textbox id="query_sh_aritcle" mold="rounded" width="200px" />
+				做成查詢窗口
+			</hlayout>
+		</groupbox> -->
+
+		<borderlayout height="580px">
+			<west open="true" splittable="false" width="100%">
+				<div width="100%" height="400px">
+					<div>
+
+						<vlayout width="100%" id="grid1">
+							<hlayout width="100%" height="28px">
+								<!-- 窗口 -->
+								<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:45px;" />
+								<textbox id="txtMODEL_NA" mold="rounded" width="300px" />
+							</hlayout>
+							<hlayout width="100%" height="28px">								
+								<label value="分段Type1" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<textbox id="txtType_1" mold="rounded" width="75px" />
+								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+								
+								<label value="分段Type2" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<textbox id="txtType_2" mold="rounded" width="75px" />
+								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+								
+								<label value="分段Type3" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<textbox id="txtType_3" mold="rounded" width="75px" />
+								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+								
+								<label value="分段Type4" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<textbox id="txtType_4" mold="rounded" width="75px" />
+								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+								
+							</hlayout><hlayout>
+								
+								<label value="分段Type5" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<textbox id="txtType_5" mold="rounded" width="75px" />
+								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+								
+								<label value="分段Type6" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<textbox id="txtType_6" mold="rounded" width="75px" />
+								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+								
+								<label value="分段Type7" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<textbox id="txtType_7" mold="rounded" width="75px" />
+								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+								
+								<label value="分段Type8" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<textbox id="txtType_8" mold="rounded" width="75px" />
+								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+							</hlayout>
+						</vlayout>
+					</div>
+
+					<div>
+						<listbox id="masterListbox" sclass="mylist"
+							autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+							multiple="false" rows="10">
+							<listhead sizable="true">
+								<listheader width="25%" label="型體" />
+								<listheader label="Type1" />
+								<listheader label="Type2" />
+								<listheader label="Type3" />
+								<listheader label="Type4" />
+								<listheader label="Type5" />
+								<listheader label="Type6" />
+								<listheader label="Type7" />
+								<listheader label="Type8" />
+								<listheader label="異動人員" />
+								<listheader label="異動日期" />
+							</listhead>
+
+							<template name="model">
+								<listitem
+									forward="onDoubleClick=onDoubleClickedPersonItem">
+									<listcell label="${each.MODEL_NA}" />
+									<listcell label="${each.BLOCK1}" />
+									<listcell label="${each.BLOCK2}" />
+									<listcell label="${each.BLOCK3}" />
+									<listcell label="${each.BLOCK4}" />
+									<listcell label="${each.BLOCK5}" />
+									<listcell label="${each.BLOCK6}" />
+									<listcell label="${each.BLOCK7}" />
+									<listcell label="${each.BLOCK8}" />
+									<listcell label="${each.UP_USER}" />
+									<listcell label="${each.UP_DATE}" />
+								</listitem>
+							</template>
+						</listbox>
+						<paging id="pagingCourse"></paging>
+					</div>
+				</div>
+			</west>
+
+		</borderlayout>
+		<separator spacing="5px" />
+		<tabbox id="tabDetail">
+			<tabs>
+				<tab id="tabDetail1" label="前面片" />
+				<tab id="tabDetail2" label="鞋帶分段" />
+				<tab id="tabDetail3" label="前掌氣墊" />
+				<tab id="tabDetail4" label="後掌氣墊" />
+				<tab id="tabDetail5" label="港寶" />
+				<tab id="tabDetail6" label="布標" />
+			</tabs>
+			<tabpanels>
+				<tabpanel id="Detail1"></tabpanel>
+				<tabpanel id="Detail2"></tabpanel>
+				<tabpanel id="Detail3"></tabpanel>
+				<tabpanel id="Detail4"></tabpanel>
+				<tabpanel id="Detail5"></tabpanel>
+				<tabpanel id="Detail6"></tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+
+</zk>

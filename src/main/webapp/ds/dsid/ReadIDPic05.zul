@@ -1,0 +1,45 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<!-- 派工目標未達成詳單 -->
+<zk>
+	<window border="normal" id="Unfinished" title="今日目標未完成詳單"
+		apply="ds.dsid.program.ReadIDPic05" closable="true" mode= "modal" width="1100px" height="600px">
+
+	<div sclass="breadcrumbs" height="100%">
+		<div>
+			<hlayout width="100%" height="40px">
+				<button id="btnSearch" sclass="btn-primary" label="刷新" mold="trendy"/>
+			</hlayout>
+			
+			<div>
+				<listbox id="queryListBox" checkmark="false" multiple="false" sclass="mylist" rows="8"
+		    			emptyMessage="${labels.PUBLIC.MSG0026}" >
+        		<listhead>
+        			<listheader label="訂單號" align="center" width="16%"/>
+            		<listheader label="派工日" align="center"/>
+            		<listheader label="型體" align="center" width="20%"/>
+            		<listheader label="裁準掃描" align="center"/>
+            		<listheader label="針車掃描" align="center"/>
+            		<listheader label="成型掃描" align="center"/>
+            		<listheader label="組底掃描" align="center"/>   
+            		<listheader label="QC掃描" align="center"/> 
+            		<listheader label="返修狀態" align="center"/>          		
+        		</listhead>
+        		<template name="model">
+        		<listitem >
+        			<listcell label="${each.WORK_ORDER_ID}"/>
+        			<listcell label="${each.PG_DATE}"/>
+        			<listcell label="${each.MODEL_NA}"/>
+        			<listcell label="${each.DECIDE_DATE}"/>
+        			<listcell label="${each.SEWING_DATE}"/>
+        			<listcell label="${each.FORMING_DATE}"/>
+        			<listcell label="${each.BOTTOM_TIME}"/>
+        			<listcell label="${each.SCAN_DATE}"/>
+				</listitem>
+			  </template>		
+			</listbox>
+			</div>
+		  <paging id="paging" ></paging>					
+		</div>				
+	</div>
+	</window>
+</zk>

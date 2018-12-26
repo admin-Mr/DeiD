@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
-	version="2.0">
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
-	<persistence-unit name="DeiD">
+	<persistence-unit name="DeID">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
-<!-- 			<property name="hibernate.connection.provider_class"  value="util.EncryptedPasswordC3P0ConnectionProvider"/> -->
-			<property name="hibernate.connection.encryptor_registered_name" value="strongHibernateStringEncryptor"/>
+			<!-- <property name="hibernate.connection.provider_class" value="util.EncryptedPasswordC3P0ConnectionProvider"/> -->
+			<property name="hibernate.connection.encryptor_registered_name" value="strongHibernateStringEncryptor" />
 			<property name="hibernate.dialect" value="util.CustomOracleDialect" />
 			<property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
- 			<property name="hibernate.connection.url" value="jdbc:oracle:thin:@10.1.1.91:1521:VMDB01" /> 
- 			<property name="hibernate.connection.username" value="DSOD"/>
- 			<property name="hibernate.connection.password" value="DSOD" />
-<!-- 			<property name="hibernate.connection.password" value="ENC(5IBI8UIlSQM5LSGRGRxsAg==)" /> -->
-
+			<property name="hibernate.connection.url" value="jdbc:oracle:thin:@10.8.1.28:1521:FTLDDB01" />
+			<property name="hibernate.connection.username" value="DSOD" />
+			<property name="hibernate.connection.password" value="RUNNING2011" />
 			<!-- c3p0 config http://www.hibernate.org/214.html -->
 			<!-- Pool -->
-			<property name="connection.provider_class"
-				value="org.hibernate.connection.C3P0ConnectionProvider" />
+			<property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="60" />
 			<property name="hibernate.c3p0.min_size" value="1" />
@@ -27,14 +23,42 @@
 			<property name="hibernate.c3p0.acquireRetryAttempts" value="30" />
 			<property name="hibernate.c3p0.acquireRetryDelay" value="1000" />
 
-			<!-- Cache -->	
-			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider"/>
-    		<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory"/>
-			<property name="hibernate.cache.use_second_level_cache" value="false"/>
-			<property name="hibernate.cache.use_query_cache" value="false"/>
+			<!-- Cache -->
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
+			<property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory" />
+			<property name="hibernate.cache.use_second_level_cache" value="false" />
+			<property name="hibernate.cache.use_query_cache" value="false" />
 
 			<property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JDBCTransactionFactory" />
 			<property name="hibernate.current_session_context_class" value="thread" />
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="FTLDB01">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
+			<property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
+			<property name="hibernate.connection.url" value="jdbc:oracle:thin:@10.8.1.32:1521:FTLDB1" />
+			<property name="hibernate.connection.username" value="DSOD" />
+			<property name="hibernate.connection.password" value="ora@it2013" />
+			<!-- c3p0 config http://www.hibernate.org/214.html -->
+			<property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
+			<property name="hibernate.c3p0.acquire_increment" value="1" />
+			<property name="hibernate.c3p0.idle_test_period" value="60" />
+			<property name="hibernate.c3p0.min_size" value="1" />
+			<property name="hibernate.c3p0.max_size" value="2" />
+			<property name="hibernate.c3p0.max_statements" value="50" />
+			<property name="hibernate.c3p0.timeout" value="0" />
+			<property name="hibernate.c3p0.acquireRetryAttempts" value="1" />
+			<property name="hibernate.c3p0.acquireRetryDelay" value="250" />
+
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.use_sql_comments" value="true" />
+
+			<property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JDBCTransactionFactory" />
+			<property name="hibernate.current_session_context_class" value="thread" />
+
 		</properties>
 	</persistence-unit>
 

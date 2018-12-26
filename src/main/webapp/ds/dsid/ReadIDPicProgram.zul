@@ -1,0 +1,183 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.ReadIDPic}" />
+			<label value="ID線製程掃描(ReadIDPic)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.ReadIDPicProgram">
+
+		<borderlayout height="750px">
+			<west open="true" splittable="false" width="100%">
+			
+				<div ><!-- style="background:#8fbc8b" -->
+					<div width="64%" height="100%" style=" float:right"><!--  ; Border:1px dashed #000 -->
+						<hbox>
+							<div style="margin: -15% 0% 0% -4%">
+								<hlayout>
+									<div style="margin: 0% 0% 0% -8%">
+										<image id="image0" width="500px" height="500px"/>
+									</div>
+									<div style="margin: 0% 0% 0% -20%">
+										<image id="image1" width="500px" height="500px"/>
+									</div>
+								</hlayout>
+							</div>
+						</hbox><hbox>
+							<div style="margin: -15% 0% 0% -4%">
+								<hlayout>
+								<div style="margin: 2% 0% 0% -13%">
+									<image id="image2" width="650px" height="650px"/>
+								</div>
+								<div style="margin: 2% 0% 0% -47%">
+									<image id="image3" width="650px" height="650px"/>
+								</div>
+								</hlayout>
+							</div>
+						</hbox>
+						
+						<image id="imageMax" width="800px" height="800px" style="margin: -95% 5% 10% 4%"/>
+
+					</div>
+
+					<!-- 頭部填寫Barcode -->
+					<div width="100%" height="750px" >
+						<hlayout><label/> </hlayout>
+						<hlayout>
+							<label value="" style="display:inline-block;width:30px;"/>
+							<label value="請輸入Barcode" sclass="sectionTitleLabel" style="display:inline-block;width:100px;color:#ed1c24" />
+							<datebox id="BarcodeDate" width="100px" format="yyyy/MM/dd" />
+							<textbox id="Barcode" mold="rounded" width="140px"/>
+						<!-- <zscript><![CDATA[Barcode.requestFocus();]]></zscript> -->
+						
+						</hlayout>
+						<hlayout><label/> </hlayout>
+
+						<!-- 訂單咨詢 -->
+						<div width="420px" height="178px" style="border:1px solid #8fbc8b">
+							<hlayout>
+								<label value="訂單資訊" sclass="sectionTitleLabel" style="font-size:15px;display:inline-block;width:100%;" />
+							</hlayout><hlayout>
+								<label value="   訂單號碼" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="Odno" mold="rounded" width="160px" style="font-size:16px"/>
+								<button id="btnFx" sclass="btn-default" label="返修登記" mold="trendy" />
+							</hlayout><hlayout>
+								<label value="   訂單日期" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="OdDate" mold="rounded" width="160px" style="font-size:16px"/>
+							</hlayout><hlayout>
+								<label value="   型體編碼" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="ModelM" mold="rounded" width="160px" style="font-size:16px"/>
+								<button id="btnPt" sclass="btn-default" label="組底針車可否配套" mold="trendy"/>
+							</hlayout><hlayout>
+								<label value="   左腳碼數" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="LeftSize" mold="rounded" width="160px" style="font-size:16px"/>
+							</hlayout><hlayout>
+								<label value="   Ship Group ID" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="ShGroupID" mold="rounded" width="160px" style="font-size:16px"/>
+							</hlayout><hlayout>
+								<label value="   Work Order ID" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="WorkID" mold="rounded" width="220px" style="font-size:16px"/>
+							</hlayout>
+						</div>
+
+						<div width="420px" height="10px"> </div>
+
+						<!-- 警示資訊 -->
+						<div width="420px" height="206px" style="border:1px solid #8fbc8b">
+							<hlayout>
+								<label value="警示資訊 " sclass="sectionTitleLabel" style="font-size:15px;display:inline-block;width:100%;" />
+							</hlayout><hlayout>
+								<label value="   是否配齊" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="WTNot_Neat" mold="rounded" width="160px" style="font-size:16px;color:red;"/>
+								<button id="Networkimg" sclass="btn-default" label="網絡圖片" mold="trendy"/>
+							</hlayout><hlayout>
+								<label value="   是否取消" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="WTNot_Cancel" mold="rounded" width="160px" style="font-size:16px;color:red;"/>
+							</hlayout><hlayout>
+								<label value="   是否重做" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="WTNot_Redo" mold="rounded" width="160px" style="font-size:16px;color:red;"/>
+								<button id="Serverimg" sclass="btn-default" label="服務器圖片" mold="trendy"/>
+								
+							</hlayout><hlayout>
+								<label value="   是否返修" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="WTNot_Repair" mold="rounded" width="160px" style="font-size:16px;color:red;"/>
+							</hlayout><hlayout>
+								<label value="   VIP" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="VIP_ID" mold="rounded" width="160px" style="font-size:16px;color:red;"/>
+							</hlayout><hlayout>
+								<label value="   組底掃描日期" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="Scnin_Date" mold="rounded" width="160px" style="font-size:16px;color:red;"/>
+							</hlayout><hlayout>
+								<label value="   當前掃描時間" sclass="sectionTitleLabel" pre="true" style="display:inline-block;width:100px;" />
+								<textbox id="SMdate" mold="rounded" width="160px" style="font-size:16px;color:red;"/>
+							</hlayout>
+						</div>
+						
+						<div width="36%" height="10px"></div>
+						
+						<!-- 第三節明細 -->
+						<div width="420px" height="185px" style="border:1px solid #8fbc8b">
+							<hlayout>
+								<label style="padding-right:10px;"/>
+								<button id="Dayscanning" label="今日掃描詳單"/> <label style="padding-right:30px;"/>
+								<button id="Anumberof" label="派工目標未達成詳單" /> <label style="padding-right:30px;"/>	
+								<button id="Sumowe" label="總欠數" />
+							</hlayout>
+							<hlayout>
+								<label style="padding-right:65px;"/>
+								<label value="今日掃描數" style="padding-right:20px;" />
+								<label value="派工已達成數" style="padding-right:20px;"/>
+								<label value="派工未達成數" style="padding-right:20px;"/>
+								<label value="總欠數" style="padding-right:20px;"/>							
+							</hlayout>
+							<hlayout>
+								<label value="裁準完成數"/> <label style="padding-right:2px;"/>
+								<textbox id="Cz1" style="width:50px"/> <label style="padding-right:36px;"/>
+								<textbox id="Cz2" style="width:50px"/> <label style="padding-right:42px;"/>
+								<textbox id="Cz3" style="width:50px"/> <label style="padding-right:24px;"/>
+								<textbox id="Cz4" style="width:50px"/>
+							</hlayout>
+							<hlayout>
+								<label value="針車完成數"/> <label style="padding-right:2px;"/>
+								<textbox id="Zc1" style="width:50px"/> <label style="padding-right:36px;"/>
+								<textbox id="Zc2" style="width:50px"/> <label style="padding-right:42px;"/>
+								<textbox id="Zc3" style="width:50px"/> <label style="padding-right:24px;"/>
+								<textbox id="Zc4" style="width:50px"/>
+							</hlayout>
+							<hlayout>
+								<label value="成型完成數"/> <label style="padding-right:2px;"/>
+								<textbox id="Cx1" style="width:50px"/> <label style="padding-right:36px;"/>
+								<textbox id="Cx2" style="width:50px"/> <label style="padding-right:42px;"/>
+								<textbox id="Cx3" style="width:50px"/> <label style="padding-right:24px;"/>
+								<textbox id="Cx4" style="width:50px"/>
+							</hlayout>
+							<hlayout>
+								<label value="組底完成數"/> <label style="padding-right:2px;"/>
+								<textbox id="Zd1" style="width:50px"/> <label style="padding-right:36px;"/>
+								<textbox id="Zd2" style="width:50px"/> <label style="padding-right:42px;"/>
+								<textbox id="Zd3" style="width:50px"/> <label style="padding-right:24px;"/>
+								<textbox id="Zd4" style="width:50px"/>
+							</hlayout>
+							<hlayout>
+								<label value="出貨完成數"/> <label style="padding-right:2px;"/>
+								<textbox id="Ch1" style="width:50px"/> <label style="padding-right:36px;"/>
+								<textbox id="Ch2" style="width:50px"/> <label style="padding-right:42px;"/>
+								<textbox id="Ch3" style="width:50px"/> <label style="padding-right:24px;"/>
+								<textbox id="Ch4" style="width:50px"/>
+							</hlayout>
+							<hlayout>
+								<label style="padding-right:353px;"/>
+								<button id="btnRefresh" sclass="btn-default" label="刷新" mold="trendy" />
+							</hlayout>
+						</div>
+					</div>
+					<paging id="pagingCourse"></paging>
+				</div>
+			</west>
+		</borderlayout>
+	</window>
+</zk>

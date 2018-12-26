@@ -1,0 +1,117 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSID21}" />
+			<label value="配色百分比(DSID21M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID21MProgram">
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb" >
+				<!-- 查詢 按鈕 -->
+				<button id="btnQuery" sclass="btn-warning" iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}" mold="trendy" />
+ 				<!-- 新增  按鈕 -->
+ 				<button id="btnCreateMaster" sclass="btn-primary" iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}" mold="trendy" />				
+				<!-- 編輯 按鈕 -->
+ 				<button id="btnEditMaster" sclass="btn-primary" iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}" mold="trendy" />
+				<!-- 保存 按鈕 -->
+				<button id="btnSaveMaster" sclass="btn-success" iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}" mold="trendy" disabled="true" />
+				<!-- 取消 按鈕 -->
+				<button id="btnCancelMaster" sclass="btn-danger" iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}" mold="trendy" disabled="true" />
+				<!-- 刪除 -->	
+ 				<button id="btnDelete" sclass="btn-danger" iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}" mold="trendy" />
+				<!-- 匯入 -->
+				<button id="btnImport" sclass="btn-default" iconSclass="mdi mdi-watch-import" label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" /> 
+				<!-- 匯出 -->
+				<button id="btnExport" sclass="btn-default" iconSclass="mdi mdi-watch-export" label="${labels.COMM.EXPORT}" mold="trendy" /> 
+				<button id="btnCustomExr" sclass="btn-default" label="百分比匯出" mold="trendy" /> 
+			</div>
+		</div>
+		
+		<groupbox id="filterMaster" width="100%" sclass="main z-demo-config" open="false">
+			<caption id="filter" label="${labels.COMM.FILTER}" sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>		
+				<label value="型體" sclass="sectionTitlelabel" />
+				<textbox id="Query_Model_na" mold="rounded" width="200px" />
+				<!-- 做成查詢窗口 -->
+			</hlayout>
+		</groupbox>
+		
+		<borderlayout height="580px">	
+ 			 <west  open="true" splittable="false" width="100%" >
+	 			<div width="100%" height="400px">
+	 				<div>
+						<vlayout width="100%" id="grid1" >
+							<hlayout width="100%" height="28px" >
+							<!-- 窗口 -->
+								<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+								<textbox id="txtModel_na" mold="rounded" width="300px" />		
+								<label style="display:inline-block;width:30px;"/>	
+								<label value="序號" sclass="sectionTitleLabel" style="display:inline-block;width:30px;"/>								
+								<textbox id="txtItems" mold="rounded" width="100px" />
+								<label style="display:inline-block;width:30px;"/>
+								<label value="Size分段" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<textbox id="txtSize_fd"  mold="rounded" width="300px" />	
+								
+							</hlayout>
+ 							<hlayout width="100%" height="28px">
+ 								<label value="部位" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<textbox id="txtGr_no"  mold="rounded" width="100px" readonly="true"/>														
+								<label style="display:inline-block;width:30px;"/>
+								<label value="部位名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<textbox id="txtGr_na"  mold="rounded" width="270px" readonly="true"/>	
+								<label style="display:inline-block;width:30px;"/>	
+								<label value="顏色" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+								<textbox id="txtColor" mold="rounded" width="100px" readonly="true"/>	
+								
+							</hlayout>
+							<hlayout>
+								<label value="材料編號" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<textbox id="txtEl_no"  mold="rounded" width="100px" readonly="true"/>
+								<label style="display:inline-block;width:30px;"/>													
+								<label value="材料名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<textbox id="txtEl_na"  mold="rounded" width="270px" readonly="true"/>	
+						 		<label style="display:inline-block;width:30px;"/>	
+						 		<label value="備註" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<textbox id="txtNote"  mold="rounded" width="100px" readonly="true"/>	
+								
+							</hlayout>
+						</vlayout>		
+					</div>
+					<div>
+						<listbox id="masterListbox" sclass="mylist" autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="10">
+							<listhead sizable="true">
+ 								<listheader width="20%" label="型體" />							
+								<listheader width="5%" label="序號" />
+								<listheader width="10%" label="材料編號" />
+								<listheader label="Size分段" />
+								<listheader width="10%" label="顏色" />	
+								<listheader label="備註" />
+								<listheader width="5%" label="更新人員" />	
+								<listheader width="8%" label="更新日期" />	 																			
+							</listhead>
+
+							<template name="model">
+								<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+ 									<listcell label="${each.MODEL_NA}"/>				
+									<listcell label="${each.ITEMS}"/>	
+									<listcell label="${each.EL_NO}"/>
+									<listcell label="${each.SIZE_FD}"/>	
+									<listcell label="${each.COLOR}"/>					
+									<listcell label="${each.NOTE}" />	
+									<listcell label="${each.UP_USER}"/>
+									<listcell label="${each.UP_DATE}"/>													
+								</listitem>
+							</template>	
+						</listbox>
+						<paging id="pagingCourse"></paging>
+					</div>
+				</div>
+			</west>
+		</borderlayout>
+		<separator spacing="5px" />
+	</window>
+</zk>

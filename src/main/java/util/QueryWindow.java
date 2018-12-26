@@ -625,4 +625,10 @@ public abstract class QueryWindow extends SelectorComposer<Component> {
 	protected int getPageSize() {
 		return 0;
 	}
+	public CRUDService getCRUDService() {
+		return CRUDService;
+	}
+	public void setCRUDService(CRUDService cRUDService) {
+		CRUDService = cRUDService;
+	}
 }

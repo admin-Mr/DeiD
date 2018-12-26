@@ -1,0 +1,15 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window border="normal" id="windowMaster" title="資料整理"
+		apply="ds.dsid.program.DSID21MImport" closable="true" mode= "modal" width="400px" height="100px">
+        
+        <div align="center">
+        	<!-- 匯入 -->
+			<fileupload id="btnImport2" sclass="btn-default" mold="trendy"
+				iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.IMPORT}" />
+			<!-- 取消 -->
+			<button id="btnCancelabc" label="${labels.COMM.CANCEL}" mold="trendy" 
+				iconSclass="mdi mdi-close-circle" sclass="btn-danger" />	
+		</div>
+	</window>
+</zk>

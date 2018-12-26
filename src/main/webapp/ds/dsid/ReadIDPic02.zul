@@ -1,0 +1,46 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<!-- 可否配到查詢 -->
+<zk>
+	<window title="是否組底" id="windowQuery" border="normal" width="90%"
+		height="80%" apply="ds.dsid.program.ReadIDPic02" maximizable="false"
+		closable="true" sclass="mymodal" mode="modal">
+		<div style="clear: both;" />
+		<div sclass="sectinSeperator" />
+		<div sclass="breadcrumbs" height="100%">
+			<hlayout width="100%" height="40px">
+				<datebox id="Querydate1" width="100px" format="yyyy/MM/dd" />
+				<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+				<datebox id="Querydate2" width="100px" format="yyyy/MM/dd" />
+				<button id="btnSearch" sclass="btn-primary" label="查詢" mold="trendy"/>
+				
+			</hlayout>
+			<div>
+				<listbox id="queryListBox" checkmark="false" multiple="false" sclass="mylist" rows="10">
+					<listhead sizable="true">
+						<listheader label="派工日" width="10%"/>
+						<listheader label="型體" width="30%"/>
+						<listheader label="流水號" width="10%"/>
+						<listheader label="輪次號" width="10%"/>
+						<listheader label="TOOLING_SIZE" width="10%"/>
+						<listheader label="針車掃描" width="10%"/>
+						<listheader label="組底掃描" width="10%"/>
+						<listheader label="可否配套" width="10%"/>
+					</listhead>
+						<template name="model">
+						<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+							<listcell label="${each.PG_DATE}" />
+							<listcell label="${each.MODEL_NA}" />
+							<listcell label="${each.URL1}" />
+							<listcell label="${each.ROUND}" />
+							<listcell label="${each.TOOLING_SIZE}" />
+							<listcell label="${each.SEWING_DATE}" />
+							<listcell label="${each.BOTTOM_TIME}" />
+							<listcell label="${each.BOO}" />
+						</listitem>
+					</template>
+				</listbox>
+				<paging id="pagingOperation" />
+			</div>
+		</div>
+	</window>
+</zk>

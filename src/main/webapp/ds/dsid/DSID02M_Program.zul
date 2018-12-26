@@ -1,0 +1,147 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.ZKTEST}" />
+			<label value="${labels.MENU.ZKTEST} (ABC_aaBK)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dsid.program.DSID02M_Program">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+			</div>
+		</div>
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<vlayout width="70px">
+					<label value="${labels.DSID02.EL_NO}"
+						sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="txt_EL_NOSQL" width="120px"
+						mold="rounded" />
+				</vlayout>
+
+			</hlayout>
+		</groupbox>
+
+		<borderlayout height="450px">
+			<north size="40%" open="true" splittable="true"
+				collapsible="true">
+				<div width="100%">
+					<separator spacing="20px" />
+					<vlayout width="100%">
+						<hlayout width="100%" height="32px">
+							<label value="${labels.DSID02.UNIQUEID}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_UNIQUEID" mold="rounded"
+								width="300px" />
+							<label value="${labels.DSID02.EL_NO}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_EL_NO" mold="rounded"
+								width="300px" />
+							<label value="${labels.DSID02.EL_MODEL}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_EL_MODEL" mold="rounded"
+								width="300px" />
+						</hlayout>
+						<hlayout width="100%" height="32px">
+							<label value="${labels.DSID02.PART_NAME}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_PART_NAME" mold="rounded"
+								width="300px" />
+							<label value="${labels.DSID02.COLOR}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_COLOR" mold="rounded"
+								width="200px" />
+							<label value="${labels.DSID02.STATUS}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_STATUS" mold="rounded"
+								width="200px" />
+						</hlayout>
+					</vlayout>
+				</div>
+			</north>
+			<center>
+				<div>
+					<listbox id="masterListbox" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false">
+						<listhead sizable="true">
+							<listheader width="7%"
+								label="${labels.COMM.OPERATE }" />
+							<listheader width="10%"
+								label="${labels.DSID02.UNNIQUEID }" />
+							<listheader width="10%"
+								label="${labels.DSID02.EL_NO }" />
+							<listheader width="43%"
+								label="${labels.DSID02.EL_MODEL}" />
+							<listheader width="10%"
+								label="${labels.DSID02.PART_NAME}" />
+							<listheader width="20%"
+								label="${labels.DSID02.COLOR}" />
+							<listheader width="10%"
+								label="${labels.DSID02.STATUS}" />
+						</listhead>
+						<template name="model">
+							<listitem
+								forward="onDoubleClick=onDoubleClickedPersonItem">
+								<listcell>
+									<hbox spacing="10px">
+										<image
+											visible="${sessionScope.UAuth}"
+											src="/resource/imgs/icons/btn_edit2_16x16.gif"
+											tooltiptext="${labels.COMM.EDIT}"
+											forward="onClick=masterListbox.onUpdate" sclass="fimage">
+										</image>
+										<image
+											visible="${sessionScope.DAuth}"
+											src="/resource/imgs/icons/btn_delete2_16x16.gif"
+											tooltiptext="${labels.COMM.DEL}"
+											forward="onClick=masterListbox.onDelete" sclass="fimage">
+										</image>
+									</hbox>
+								</listcell>
+								<listcell label="${each.UNIQUEID}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.EL_MODEL}" />
+								<listcell label="${each.PART_NAME}" />
+								<listcell label="${each.COLOR}" />
+								<listcell label="${each.STATUS}" />
+							</listitem>
+						</template>
+					</listbox>
+					<paging id="pagingCourse"></paging>
+				</div>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

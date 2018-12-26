@@ -1,0 +1,38 @@
+<zk>
+	<window border="normal" id="windowMaster" title="配色分析報表"
+		apply="ds.dsid.program.DSID20MRExcel" closable="true" mode="modal"
+		width="500px" height="250px">
+
+		<div sclass="breadcrumbs" height="100%">
+
+
+			<hlayout width="100%" height="35px">
+				<label value="日期選擇" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+				<datebox id="txtorder_date1"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
+				
+				<label value="~" sclass="sectionTitleLabel" style="display:inline-block;width:30px;" />
+				<datebox id="txtorder_date2"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
+			</hlayout>
+			
+			<hlayout width="100%" height="35px">
+				<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+				<textbox id="Model_no" mold="rounded" width="300px" />
+		
+			</hlayout>
+			
+			<hlayout width="100%" height="35px">
+				<label value="鞋帶Group_na" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+				<textbox id="Group_na" mold="rounded" width="300px" value = "Group4" />
+		
+			</hlayout>
+
+			<hlayout><!-- 按鈕指向 處理類 說明 -->
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-watch-export" label="${labels.COMM.EXPORT}"
+					mold="trendy" />
+
+			</hlayout>
+
+		</div>
+	</window>
+</zk>

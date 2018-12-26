@@ -501,4 +501,27 @@ public class Common {
 			}
 		}
 	}
+	/**
+	 * 2018-8-23 添加隆發廠DB01 連接
+	 */
+	public static Connection getDB01Conn() {
+
+		Connection conn = null;
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+		String user = "DSOD";
+		String pwd = "ora@it2013";
+		try {
+			Class.forName(driver);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			conn = DriverManager.getConnection(url, user, pwd);
+			System.err.println(">>>鏈接DB01數據庫");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return conn;
+	}
 }

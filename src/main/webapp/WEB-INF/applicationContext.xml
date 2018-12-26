@@ -25,9 +25,9 @@
 
 	<bean id="company01" class="util.info.CompanyInfo">
 		<!-- Company ID -->
-		<property name="companyID" value="DeiD"/>		
+		<property name="companyID" value="FTLID"/>		
 		<!-- 顯示名稱 -->
-		<property name="companyName" value="DeiD"/>		
+		<property name="companyName" value="FTL"/>		
 		<!-- CRUDService名稱 -->
 		<property name="connectionName" value="CRUDService"/>	
 	</bean>
@@ -49,23 +49,21 @@
 	</bean>
 
 	<!-- 規則emf+persistenceUnitName做為id -->
-	<bean id="emfDeiD"
+	<bean id="emfDeID"
 		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="DeiD" />
+		<property name="persistenceUnitName" value="DeID" />
 	</bean>
-
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="emfDeiD" /> <!-- ref entityManagerFactory bean id -->
+		<property name="entityManagerFactory" ref="emfDeID" /> <!-- ref entityManagerFactory bean id -->
 	</bean>
 	
-<!-- 	<bean id="emfDeiD1" -->
-<!-- 		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean"> -->
-<!-- 		<property name="persistenceUnitName" value="DeiD1" /> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="transactionManager1" class="org.springframework.orm.jpa.JpaTransactionManager"> -->
-<!-- 		<property name="entityManagerFactory" ref="emfDeiD1" /> -->
-<!-- 	</bean> -->
+	<bean id="emfFTLDB01"
+		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="FTLDB01" />
+	</bean>
+	<bean id="transactionManager1" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emfFTLDB01" />
+	</bean>
 
 	<!-- tell spring to use annotation based congfigurations -->
 	<!-- It allow us to use @Autowire, @Required and @Qualifier annotations. -->
@@ -76,7 +74,7 @@
 	<!-- tells Spring to scan the code for injectable beans under the package 
 		(and all its subpackages) specified. -->
 	<!-- It allow @Component, @Service, @Controller, etc.. annotations. -->
-	<context:component-scan base-package="DeiD" />
+	<context:component-scan base-package="DeID" />
 
 	<tx:annotation-driven/>
 
@@ -90,7 +88,7 @@
 	<bean id="CRUDService" class="ds.common.services.CRUDServiceImpl" />
 	<bean id="CRUDDao" class="util.dao.CRUDDaoImpl" />
 	
-<!-- 	<bean id="CRUDService1" class="ds.common.services.CRUDService1Impl" /> -->
-<!-- 	<bean id="CRUDDao1" class="util.dao.CRUDDao1Impl" /> -->
+	<bean id="CRUDService1" class="ds.common.services.CRUDServiceImpl1" />
+	<bean id="CRUDDao1" class="util.dao.CRUDDaoImpl1" />
 
 </beans>

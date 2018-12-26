@@ -1,0 +1,174 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.ZKTEST}" />
+			<label value="${labels.MENU.ZKTEST} (DSID10M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dsid.program.DSIDN10M_Program">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<!--  	
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+					-->
+					
+					
+					
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+					<!--  
+				<button id="aaa" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="測試"
+					mold="trendy" />-->
+				
+			</div>
+		</div>
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<vlayout width="70px">
+					<label value="${labels.DSIDN10.MODEL_NA}" sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="txt_MODEL_NA" width="120px" mold="rounded" />
+				</vlayout>
+				<hlayout>
+						<label value="接單日期"  />
+						<datebox id="querystartdate" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
+						<label value="~" />
+						<datebox id="queryenddate" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
+			</hlayout>
+			</hlayout>
+			
+		</groupbox>
+		
+		<borderlayout height="450px">
+			<north size="10%" open="true" splittable="true"
+				collapsible="true">
+				<!--  <div width="100%">
+				
+					<separator spacing="20px" />
+					<vlayout width="100%">
+						<hlayout width="100%" height="32px">
+							<label
+								value="${labels.DSID03.UNIQUEID}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_UNIQUEID" mold="rounded"
+								width="100px" />
+							<label
+								value="${labels.DSID03.FU_ID}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_FU_ID" mold="rounded"
+								width="300px" />
+							<label
+								value="${labels.DSID03.MU}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_MU" mold="rounded"
+								width="300px" />
+						</hlayout>
+						<hlayout width="100%" height="32px">
+							<label
+								value="${labels.DSID03.PART_NAME}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_PART_NAME" mold="rounded"
+								width="300px" />
+							<label
+								value="${labels.DSID03.VENDOR}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_VENDOR"
+								mold="rounded" width="200px" />
+							<label
+								value="${labels.DSID03.CP_NAME}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_CP_NAME"
+								mold="rounded" width="200px" />
+						</hlayout>
+						<hlayout width="100%" height="32px">
+							<label
+								value="${labels.DSID03.EL_NAME}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_EL_NAME" mold="rounded"
+								width="450px" />
+							<label
+								value="${labels.DSID03.COLOR_CODE}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_COLOR_CODE"
+								mold="rounded" width="200px" />
+							<label
+								value="${labels.DSID03.STATUS}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_STATUS"
+								mold="rounded" width="200px" />
+						</hlayout>
+						<hlayout width="100%" height="32px">
+							<label
+								value="形體"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_MODEL_NAME" mold="rounded"
+								width="450px" />
+							<label
+								value="用量"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_YIELD"
+								mold="rounded" width="200px" />
+						</hlayout>
+					</vlayout>
+					
+				</div>-->
+			</north>
+			<center>
+				<div>
+					<listbox id="masterListbox" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false">
+						<listhead sizable="true">
+							<listheader width="20%"
+								label="${labels.DSIDN10.MODEL_NA}" />
+							<listheader width="10%"
+								label="${labels.DSIDN10.EL_NO}" />
+							<listheader width="60%"
+								label="${labels.DSIDN10.EL_CNAME}" />
+							<listheader width="10%"
+								label="${labels.DSIDN10.MT_QTY}" />
+						</listhead>
+						<template name="model">
+							<listitem
+								forward="onDoubleClick=onDoubleClickedPersonItem">
+								<listcell label="${each.MODEL_NA}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.EL_CNAME}" />
+								<listcell label="${each.MT_QTY}" />
+							</listitem>
+						</template>
+					</listbox>
+					<paging id="pagingCourse"></paging>
+				</div>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

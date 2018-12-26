@@ -1,0 +1,135 @@
+<zk>
+	<div id="detail1" apply="ds.dsid.program.DSID10MDetail1">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb" >
+<!-- 				<button  sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy"  forward="onClick=masterListbox.onQuery"/> -->
+ 				<button id="btnCreateDetail" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<!-- 編輯Edit 按鈕 -->
+ 				<button id="btnEditDetail" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
+					mold="trendy" />
+				<button id="btnSaveDetail" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelDetail" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />	
+				<!-- 刪除 -->	
+ 				<button id="btnDeleteDetail" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+					mold="trendy" />
+			</div>
+		</div>
+
+		<groupbox id="filterDetail" width="100%"
+			sclass="main z-demo-config" open="false">
+			<caption label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>		
+				<label value="GROUP" sclass="sectionTitlelabel" />
+				<textbox id="query_group" mold="rounded" width="120px" />
+				<label value="原始信息" sclass="sectionTitlelabel" />
+				<textbox id="query_info" mold="rounded" width="120px" />							
+			</hlayout>
+		</groupbox> 
+
+		<borderlayout height="400px">	
+ 			 <north size="40%" open="true" splittable="true" >
+	 			<div width="100%" height="150px">
+					<separator spacing="5px" />
+										
+					<vlayout width="100%">
+						<hlayout width="100%" height="25px" >
+							<!-- 窗口 -->
+							<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+							<textbox id="txtnike_sh_aritcle1" mold="rounded" width="300px" />		
+							
+							<label value="項次" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+							<textbox id="txtseq" mold="rounded" width="100px" />		
+							
+														
+							<label value="GROUP_NO" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>							
+							
+							<zscript><![CDATA[         
+							      String[] pid_group = {"GROUP1","GROUP2","GROUP3","GROUP4","GROUP5","GROUP6","GROUP7","GROUP8"
+							    		  ,"GROUP9","GROUP10","GROUP11","GROUP12"};     
+							]]></zscript> 							
+							
+							<combobox id="Com_pid1" width="100px" readonly="true">
+								<comboitem label="${each}" forEach="${pid_group}" value="${each}"/>
+							</combobox>
+							
+							<label value="原始信息" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+							<textbox id="txtori_info" mold="rounded" width="100px" />	
+						</hlayout>						 
+						<hlayout>	
+							<checkbox id="rep_check" />
+							<label value="翻譯" sclass="sectionTitleLabel"  style="display:inline-block;width:30px;"/>
+								
+							<label value="翻譯后的信息" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
+							<textbox id="txtrep_info" mold="rounded" width="100px" />														
+						</hlayout>						
+						<hlayout>
+							<checkbox id="spl_check" />
+							<label value="拆分" sclass="sectionTitleLabel"  style="display:inline-block;width:30px;"/>
+							
+							<label value="原GROUP信息" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
+							<textbox id="txtspl_info1" mold="rounded" width="100px" />		
+
+							<label value="拆分后GROUP" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
+							<combobox id="Com_Spid" width="100px" readonly="true">
+								<comboitem label="${each}" forEach="${pid_group}" value="${each}"/>
+							</combobox>							
+
+							<label value="拆分后信息" sclass="sectionTitleLabel" style="display:inline-block;width:75px;"/>								
+							<textbox id="txtspl_info2" mold="rounded" width="100px" />														
+						</hlayout>								
+																						
+					</vlayout>		
+				</div>
+			</north>
+						  
+			<center>			
+				<div>
+					<listbox id="detailListbox" sclass="mylist" autopaging="true" 
+					emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="5">
+						<listhead sizable="true">
+							<!-- <listheader width="7%"  label="${labels.COMM.OPERATE }" /> -->
+							<listheader width="25%" label="型體" />
+							<listheader width="5%" label="項次" />
+							<listheader width="10%" label="GROUP" />	
+							<listheader width="10%" label="原始值" />	
+							<listheader width="5%" label="翻譯" />	
+							<listheader width="10%" label="替換後的信息" />	
+							<listheader width="5%" label="拆分" />	
+							<listheader width="10%" label="拆分后的信息1" />	
+							<listheader width="10%" label="拆分后的GROUP" />	
+							<listheader width="10%" label="拆分后的信息2" />																												
+						</listhead>
+
+				<template name="model">
+				<listitem>
+				<listcell label="${each.NIKE_SH_ARITCLE}" />
+				<listcell label="${each.SEQ}" />
+				<listcell label="${each.GROUP_NO}" />	
+				<listcell label="${each.ORI_INFO}" />
+				<listcell label="${each.IS_REP}" />			
+				<listcell label="${each.REP_INFO}" />
+				<listcell label="${each.IS_SPL}" />		
+				<listcell label="${each.SPL_INFO1}" />	
+				<listcell label="${each.SPL_GROUP}" />	
+				<listcell label="${each.SPL_INFO2}" />																						
+				</listitem>
+				</template>	
+					</listbox>
+					<paging id="pagingDetailCourse"></paging>
+				</div>
+			</center>
+		</borderlayout>
+	</div>
+</zk>

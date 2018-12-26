@@ -1,0 +1,54 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<window width="100%" border="none" id="windowQuery" apply="ds.dsid.program.DSID02M_Import01" mode="modal" >
+		
+		<!--  style="background-color:#38B9F8;"  -->
+		<div sclass="breadcrumbs"  style="color:blue;" >
+			<div >
+				<label>上傳文件</label>
+			</div>
+		</div>
+		<div>.</div>
+		請選擇文件：
+		<button width="80px" label="瀏覽..."  id="btnUpload" upload="true"/>
+        
+        <div>.</div>
+        <div  style="color:blue;">.
+        	<label id="showfilename" ></label>
+        </div>
+         <div>.
+        	<label id="showcount" ></label>
+        </div>
+        
+        <div align="center">
+			<button id="btnConfirmabc" label="${labels.COMM.CFM}" mold="trendy" 
+				iconSclass="mdi mdi-checkbox-marked-circle" sclass="btn-success" />
+			<button id="btnCancelabc" label="${labels.COMM.CANCEL}" mold="trendy" 
+				iconSclass="mdi mdi-close-circle" sclass="btn-danger" />	
+		</div>
+		
+		
+		<!--  
+		<div height="230px">
+			<listbox id="abclist" sclass="mylist"
+				autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+				multiple="false">
+				<listhead sizable="true">
+					<listheader label="${labels.DSPB.DSPB03.PB_GROUPNA}" />
+				</listhead>
+				<template name="model">
+					<listitem>
+						<listcell>
+							<label  value="${each.ZK_ID}" />
+							<textbox  value="${each.ZK_ID}"
+								mold="rounded" width="200px" />
+						</listcell>
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="pagingCourse"></paging>
+		</div>
+		-->
+		
+	</window>
+</zk>

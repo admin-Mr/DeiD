@@ -1,0 +1,134 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk >
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.DSID30}" />
+			<label value="採購報表資料主檔(DSID04M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+		
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dsid.program.DSID04MProgram" >
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb" >
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+ 				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />				
+				<!-- 編輯Edit 按鈕 -->
+ 				<button id="btnEditMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+					
+					
+				<!-- 刪除 -->	
+ 				<button id="btnDelete" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+					mold="trendy" />
+					
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-watch-import"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" /> 
+					
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-watch-export"
+					label="${labels.COMM.EXPORT}" mold="trendy" /> 
+					
+					
+			</div>
+		</div>
+
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="false">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>		
+				<label value="型體" sclass="sectionTitlelabel" />
+				<textbox id="query_sh_aritcle" mold="rounded" width="200px" />
+				<!-- 做成查詢窗口 -->
+			</hlayout>
+		</groupbox>
+
+		<borderlayout height="580px">	
+ 			 <west  open="true" splittable="false" width="100%" >
+	 			<div width="100%" height="400px">
+	 				<div>
+				
+					<vlayout width="100%" id="grid1" >
+						<hlayout width="100%" height="28px" >
+							<!-- 窗口 -->
+							<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+							<textbox id="txtMODEL_NA" mold="rounded" width="300px" />		
+							<label value="型體上線日期" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<datebox id="txtLA_DATE"  mold="rounded" width="100px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
+ 							<label value="型體下線日期" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<datebox id="txtDR_DATE"  mold="rounded" width="100px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
+ 						</hlayout>
+ 						<hlayout width="100%" height="28px">
+ 							<label value="型體UPD" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txtMODEL_UPD"  mold="rounded" width="100px" readonly="true"/>														
+							<label value="前面片UPD" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txtVAMP_UPD"  mold="rounded" width="100px" readonly="true"/>													
+						 	<label value="是否已下線" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txtIS_DROP"  mold="rounded" width="100px" readonly="true"/>													
+						 	
+						</hlayout>
+						
+																						
+					</vlayout>		
+					</div>
+					
+					<div>
+					<listbox id="masterListbox" sclass="mylist" autopaging="true" 
+					emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="5">
+						<listhead sizable="true">
+							<listheader width="25%" label="型體" />							
+							<listheader label="型體上線日期" />
+							<listheader label="型體下線日期" />
+							<listheader label="型體UPD" />	
+							<listheader label="前面片UPD" />
+							<listheader label="是否已下線" />																					
+						</listhead>
+
+				<template name="model">
+				<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+				<listcell label="${each.MODEL_NA}" />				
+				<listcell label="${each.LA_DATE}" />	
+				<listcell label="${each.DR_DATE}" />						
+				<listcell label="${each.MODEL_UPD}" />	
+				<listcell label="${each.VAMP_UPD}" />
+				<listcell label="${each.IS_DROP}" />														
+				</listitem>
+				</template>	
+				</listbox>
+					<paging id="pagingCourse"></paging>
+				</div>
+				</div>
+			</west>
+						  
+		</borderlayout>
+		<separator spacing="5px" />
+		<tabbox id="tabDetail">
+			<tabs>
+				<tab id="tabDetail1" label="材料檔" />
+				<!-- <tab id="tabDetail2" label="前面片" /> -->
+			</tabs>
+			<tabpanels>
+				<tabpanel id="Detail1"></tabpanel>
+				<!-- <tabpanel id="Detail2"></tabpanel> -->
+			</tabpanels>
+         </tabbox>
+	</window>
+
+</zk>

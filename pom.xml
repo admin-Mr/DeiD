@@ -324,6 +324,11 @@
 			<artifactId>breeze</artifactId>
 			<version>8.5.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.zkoss.poi</groupId>
+		    <artifactId>zpoi</artifactId>
+		    <version>3.8.2</version>
+		</dependency>
 		<!-- ZK Timeplot -->
 		<dependency>
 			<groupId>org.zkoss.zkforge</groupId>

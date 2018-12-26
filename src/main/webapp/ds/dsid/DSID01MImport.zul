@@ -1,0 +1,36 @@
+<zk>
+	<window border="normal" id="windowMaster" title="Xml文件導入"
+		apply="ds.dsid.program.DSID01MImport" closable="true" mode= "modal" width="500px" height="250px">
+
+			<div sclass="breadcrumbs" height="100%">
+				
+				<!-- 訂單類型 -->
+				<radiogroup id="type_Radiogroup">
+                    <hlayout width="100%" height="28px" >
+                    	<label value="訂單類型" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+                        <radio id="N_radioButton" label="普通訂單"
+                            selected="${not win$composer.car.autoTransmission}" />
+                        <radio id="S_radioButton" label="特殊訂單"
+                            selected="${win$composer.car.autoTransmission}" />
+ <!--                        <radio id="T_radioButton" label="測試訂單"
+                            selected="${win$composer.car.autoTransmission}" /> -->
+                    </hlayout>
+                </radiogroup>
+				
+				<hlayout width="100%" height="35px" >
+					<label value="接單日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<datebox id="txtorder_date"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
+				</hlayout>
+				
+				<hlayout>
+					<fileupload id="btnImport2" sclass="btn-default" mold="trendy"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.IMPORT}" />
+					
+				</hlayout>
+				
+				<hlayout>
+                    <label id="ShowResult"/>
+				</hlayout>
+			</div>
+	</window>
+</zk>

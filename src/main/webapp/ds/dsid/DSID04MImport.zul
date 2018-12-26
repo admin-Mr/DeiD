@@ -1,0 +1,23 @@
+<zk>
+	<window border="normal" id="windowMaster" title="採購報表導入"
+		apply="ds.dsid.program.DSID04MImport" closable="true" mode= "modal" width="500px" height="250px">
+
+			<div sclass="breadcrumbs" height="100%">
+				
+
+				
+				<hlayout width="100%" height="35px" >
+					<label value="型體" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<textbox id="txtMODEL_NA" mold="rounded" width="300px" />		
+
+				</hlayout>
+				
+				<hlayout>
+					<fileupload id="btnImport2" sclass="btn-default" mold="trendy"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.IMPORT}" />
+					
+				</hlayout>
+				
+			</div>
+	</window>
+</zk>

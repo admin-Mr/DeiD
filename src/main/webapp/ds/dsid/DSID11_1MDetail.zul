@@ -1,0 +1,115 @@
+<zk>
+	<div id="detail1" apply="ds.dsid.program.DSID11_1MDetail">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnCreateDetail1" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<!-- 編輯Edit 按鈕 -->
+				<button id="btnEditDetail1" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
+					mold="trendy" />
+				<button id="btnSaveDetail1" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelDetail1" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+				<!-- 刪除 -->
+				<button id="btnDeleteDetail1" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+					mold="trendy" />
+			</div>
+		</div>
+
+		<borderlayout height="400px">
+			<north size="40%" open="true" splittable="true">
+				<div width="100%" height="150px">
+					<separator spacing="5px" />
+
+					<vlayout width="100%">
+						<hlayout width="100%" height="25px">
+							<!-- 窗口 -->
+							<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+							<textbox id="txtModel_na1" mold="rounded" width="300px" />
+						</hlayout>
+
+						<hlayout>
+							<label value="序號" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+							<textbox id="txtSeq1" mold="rounded" width="60px" />
+							<label   style="display:inline-block;width:105px;"/>
+							<label value="分段數量" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+							<textbox id="txtPoints1" mold="rounded" width="60px" />
+							<label   style="display:inline-block;width:105px;"/>
+							<label value="男女鞋型Ms/Ws" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+							<textbox id="txtGender1" mold="rounded" width="60px" />
+						</hlayout>
+
+						<hlayout>
+							<label value="分段1" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_1" mold="rounded" width="250px" />
+							<label   style="display:inline-block;width:100px;"/>
+							<label value="分段2" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_2" mold="rounded" width="250px" />
+							<label   style="display:inline-block;width:100px;"/>
+							<label value="分段3" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_3" mold="rounded" width="250px" />
+						</hlayout>
+						<hlayout>
+							<label value="分段4" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_4" mold="rounded" width="250px" />
+							<label   style="display:inline-block;width:100px;"/>
+							<label value="分段5" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_5" mold="rounded" width="250px" />
+							<label   style="display:inline-block;width:100px;"/>
+							<label value="分段6" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_6" mold="rounded" width="250px" />
+						</hlayout>
+						<hlayout>
+							<label value="分段7" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_7" mold="rounded" width="250px" />
+							<label   style="display:inline-block;width:100px;"/>
+							<label value="分段8" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_8" mold="rounded" width="250px" />
+							<label   style="display:inline-block;width:100px;"/>
+							<label value="分段9" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<textbox id="txtPeriod1_9" mold="rounded" width="250px" />
+						</hlayout>
+
+					</vlayout>
+				</div>
+			</north>
+
+			<center>
+				<div>
+					<listbox id="detailListbox1" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}" 
+						multiple="false" rows="5">
+						<listhead sizable="true">
+							<!-- <listheader width="7%"  label="${labels.COMM.OPERATE }" /> -->
+							<listheader width="25%" label="型體" />
+							<listheader width="18.75%" label="序號" />
+							<listheader width="18.75%" label="分段數" />
+							<listheader width="18.75%" label="異動人員" />
+							<listheader width="18.75%" label="異動日期" />
+							
+						</listhead>
+
+						<template name="model">
+							<listitem>
+								<listcell label="${each.MODEL_NA}" />
+								<listcell label="${each.EL_SEQ}" />
+								<listcell label="${each.POINTS_NB}" />
+								<listcell label="${each.UP_USER}" />
+								<listcell label="${each.UP_DATE}" />
+
+							</listitem>
+						</template>
+					</listbox>
+					<paging id="pagingDetailCourse1"></paging>
+				</div>
+			</center>
+		</borderlayout>
+	</div>
+</zk>

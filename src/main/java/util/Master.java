@@ -782,7 +782,7 @@ public abstract class Master extends SelectorComposer<Component> {
 
 	/** 儲存鈕(新增/編輯), 會先檢查再做存檔 */
 	@Listen("onClick = #btnSaveMaster,#btnSaveMaster2,#btnSaveMaster3,#btnSaveMaster4,#btnSaveMaster5,#btnSaveMaster6,#btnSaveMaster7,#btnSaveMaster8,#btnSaveMaster9,#btnSaveMaster10,#btnSaveMaster11,#btnSaveMaster12,#btnSaveMaster13,#btnSaveMaster14,#btnSaveMaster15,#btnSaveMaster16,#btnSaveMaster17,#btnSaveMaster18,#btnSaveMaster19,#btnSaveMaster20")
-	public boolean onClickbtnSaveMaster(Event event) {
+	public boolean onClickbtnSaveMaster(Event event) throws Exception {
 		return onSaveMasterListbox(null);
 	}
 	
@@ -1484,4 +1484,11 @@ public abstract class Master extends SelectorComposer<Component> {
 		MY_PAGE_SIZE = mY_PAGE_SIZE;
 	}
 
+	public CRUDService getCRUDService() {
+		return CRUDService;
+	}
+
+	public void setCRUDService(CRUDService cRUDService) {
+		CRUDService = cRUDService;
+	}
 }

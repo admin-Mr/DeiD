@@ -1,0 +1,20 @@
+<zk>
+	<window border="normal" id="windowMaster" title="訂單資料轉移到舊系統"
+		apply="ds.dsid.program.DSID01MOrder" closable="true" mode= "modal" width="300px" height="150px">
+
+			<div sclass="breadcrumbs" height="100%">
+				
+
+				<hlayout width="100%" height="35px" >
+					<label value="接單日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<datebox id="txtorder_date"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" />
+				</hlayout>
+				
+				<button  id="btnOrder" sclass="btn-default" iconSclass="mdi mdi-delete" label="整理" mold="trendy"/> 
+				
+				<hlayout>
+                    <label id="ShowResult"/>
+				</hlayout>
+			</div>
+	</window>
+</zk>
