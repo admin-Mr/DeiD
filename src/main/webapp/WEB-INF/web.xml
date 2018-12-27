@@ -4,19 +4,19 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
          http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	metadata-complete="true">
-	<description>DeiD</description>
-	<display-name>DeiD</display-name>
+	<description>DeID</description>
+	<display-name>DeID</display-name>
 	
 	<context-param>
 		<param-name>projectID</param-name>
-		<param-value>DeiD</param-value>
+		<param-value>DeID</param-value>
 	</context-param>
 	
 	<!-- log4j begin -->
 	<context-param>
 		<!-- log4j.properties FilePath -->
 		<param-name>webAppRootKey</param-name>
-		<param-value>DeiD</param-value>
+		<param-value>DeID</param-value>
 	</context-param>
 	
 	<context-param>
@@ -47,7 +47,7 @@
 	
 	<!-- 第一個廠區設定emfDeiD1 -->
 	<filter>
-		<filter-name>OEMIVF_DeiD</filter-name>
+		<filter-name>OEMIVF_DeID</filter-name>
 		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
 		<async-supported>true</async-supported>
 		<init-param>  
@@ -58,7 +58,7 @@
 	</filter>
 	
 	<filter-mapping>
-		<filter-name>OEMIVF_DeiD</filter-name>
+		<filter-name>OEMIVF_DeID</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
