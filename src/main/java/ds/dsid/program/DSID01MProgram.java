@@ -375,7 +375,7 @@ public class DSID01MProgram extends Master{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
+	protected boolean doCustomSave(Connection conn) {
 		// TODO Auto-generated method stub
 		return true;
 	}

@@ -1,5 +1,6 @@
 package ds.dsid.program;
 
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -356,7 +357,7 @@ public class DSID01MProgram2 extends Master{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
+	protected boolean doCustomSave(Connection conn) {
 		// TODO Auto-generated method stub
 		return true;
 	}

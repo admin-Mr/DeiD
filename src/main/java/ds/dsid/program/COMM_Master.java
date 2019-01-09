@@ -1,5 +1,6 @@
 package ds.dsid.program;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -145,7 +146,7 @@ public class COMM_Master extends Master{
 	 * 此方法必須要返回TRUE才能保存成功
 	 */
 	@Override
-	protected boolean doCustomSave() {
+	protected boolean doCustomSave(Connection conn) {
 		return true;
 	}
 

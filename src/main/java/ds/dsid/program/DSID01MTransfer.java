@@ -489,7 +489,7 @@ public class DSID01MTransfer extends OpenWinCRUD{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
+	protected boolean doCustomSave(Connection conn) {
 		// TODO Auto-generated method stub
 		return false;
 	}

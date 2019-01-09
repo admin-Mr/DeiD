@@ -555,7 +555,7 @@ public class DSID01MOrder extends OpenWinCRUD{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
+	protected boolean doCustomSave(Connection conn) {
 		// TODO Auto-generated method stub
 		return false;
 	}

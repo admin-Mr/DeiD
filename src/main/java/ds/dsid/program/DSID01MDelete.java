@@ -187,7 +187,7 @@ public class DSID01MDelete extends OpenWinCRUD{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
+	protected boolean doCustomSave(Connection conn) {
 		// TODO Auto-generated method stub
 		return false;
 	}
