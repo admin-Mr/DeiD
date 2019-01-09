@@ -12,8 +12,8 @@
                             selected="${not win$composer.car.autoTransmission}" />
                         <radio id="S_radioButton" label="特殊訂單"
                             selected="${win$composer.car.autoTransmission}" />
- <!--                        <radio id="T_radioButton" label="測試訂單"
-                            selected="${win$composer.car.autoTransmission}" /> -->
+<!--                          <radio id="V_radioButton" label="虛擬訂單"
+                            selected="${win$composer.car.autoTransmission}" />  -->
                     </hlayout>
                 </radiogroup>
 				

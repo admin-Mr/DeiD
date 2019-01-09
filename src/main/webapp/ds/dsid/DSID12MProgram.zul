@@ -1,0 +1,167 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSIDN12M}" />
+			<label value="${labels.MENU.DSIDN12M} (DSID12M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID12MProgram">
+	<div sclass="breadcrumbs">
+			<div sclass="breadcrumb" >
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+ 				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />				
+				<!-- 編輯Edit 按鈕 -->
+ 				<button id="btnEditMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+				<!-- 刪除 -->	
+ 				<button id="btnDeleteMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+					mold="trendy" />
+			</div>
+		</div>
+	 <groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>
+				<vlayout width="70px">
+					<label value="${labels.DSID12.MODEL_NA}" sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="TMODEL_NONA" width="120px" mold="rounded" />
+				</vlayout>
+			</hlayout>
+	</groupbox>
+	<borderlayout height="450px">
+			<north size="40%" open="true" splittable="true"
+				collapsible="true">
+				<div width="100%">
+					<separator spacing="20px" />
+					<vlayout width="100%">
+						<hlayout width="100%" height="32px">
+						<label
+								value="${labels.DSID12.MODEL_NA}"
+								sclass="sectionTitleLabel" />
+							<textbox id="TMODEL_NA" mold="rounded"
+								width="160px" />
+							<label
+								value="${labels.DSID12.SH_STYLENO}"
+								sclass="sectionTitleLabel" />
+							<textbox id="TSH_STYLENO" mold="rounded"
+								width="90px" />
+							<label
+								value="${labels.DSID12.SH_LAST}"
+								sclass="sectionTitleLabel" />
+							<textbox id="TSH_LAST" mold="rounded"
+								width="90px" />
+						</hlayout>
+						<hlayout width="100%" height="32px">
+							<label
+								value="${labels.DSID12.SH_TYPE}"
+								sclass="sectionTitleLabel" />
+							<textbox id="TSH_TYPE" mold="rounded"
+								width="90px" />
+							<label
+								value="${labels.DSID12.SH_COLOR}"
+								sclass="sectionTitleLabel" />
+							<textbox id="TSH_COLOR"
+								mold="rounded" width="90px" />
+							<label
+								value="${labels.DSID12.SH_REMARK}"
+								sclass="sectionTitleLabel" />
+							<textbox id="TSH_REMARK"
+								mold="rounded" width="90px" />
+						</hlayout>
+						<hlayout  width="100%" height="32px">
+							<label
+								value="${labels.DSID12.UPPER_CLASS}"
+								sclass="sectionTitleLabel" />
+							<textbox id="TUPPER_CLASS"
+								mold="rounded" width="90px" />
+							<label
+								value="${labels.DSID12.SOLE_CLASS}"
+								sclass="sectionTitleLabel" />
+							<textbox id="TSOLE_CLASS"
+								mold="rounded" width="90px" />
+						</hlayout>
+					</vlayout>
+				</div>
+			</north>
+			<center>
+				<div>
+					<listbox id="masterListbox" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false">
+						<listhead sizable="true">
+							<listheader width="7%"
+								label="${labels.COMM.OPERATE }" />
+							<listheader width="25%"
+								label="${labels.DSID12.MODEL_NA }" />
+							<listheader width="10%"
+								label="${labels.DSID12.SH_STYLENO }" />
+							<listheader width="10%"
+								label="${labels.DSID12.SH_LAST}" />
+							<listheader width="10%"
+								label="${labels.DSID12.SH_TYPE}" />
+							<listheader width="10%"
+								label="${labels.DSID12.SH_COLOR}" />
+							<listheader width="10%"
+								label="${labels.DSID12.SH_REMARK}" />
+							<listheader width="10%"
+								label="${labels.DSID12.UPPER_CLASS}" />
+							<listheader width="10%"
+								label="${labels.DSID12.SOLE_CLASS}" />
+						</listhead>
+						<template name="model">
+							<listitem
+								forward="onDoubleClick=onDoubleClickedPersonItem">
+								<listcell>
+									<hbox spacing="10px">
+										<image
+											visible="${sessionScope.UAuth}"
+											src="/resource/imgs/icons/btn_edit2_16x16.gif"
+											tooltiptext="${labels.COMM.EDIT}"
+											forward="onClick=masterListbox.onUpdate"
+											sclass="fimage">
+										</image>
+										<image
+											visible="${sessionScope.DAuth}"
+											src="/resource/imgs/icons/btn_delete2_16x16.gif"
+											tooltiptext="${labels.COMM.DEL}"
+											forward="onClick=masterListbox.onDelete"
+											sclass="fimage">
+										</image>
+									</hbox>
+								</listcell>
+								<listcell label="${each.MODEL_NA}" />
+								<listcell label="${each.SH_STYLENO}" />
+								<listcell label="${each.SH_LAST}" />
+								<listcell label="${each.SH_TYPE}" />
+								<listcell label="${each.SH_COLOR}" />
+								<listcell label="${each.SH_REMARK}" />
+								<listcell label="${each.UPPER_CLASS}" />
+								<listcell label="${each.SOLE_CLASS}" />
+							</listitem>
+						</template>
+					</listbox>
+					<paging id="pagingCourseqq"></paging>
+				</div>
+			</center>
+		</borderlayout>
+	</window>
+</zk>

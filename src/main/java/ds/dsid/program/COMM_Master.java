@@ -141,6 +141,13 @@ public class COMM_Master extends Master{
 		return 0;
 	}
 
+	/**
+	 * 此方法必須要返回TRUE才能保存成功
+	 */
+	@Override
+	protected boolean doCustomSave() {
+		return true;
+	}
 
 	@SuppressWarnings("rawtypes")
 	@Override

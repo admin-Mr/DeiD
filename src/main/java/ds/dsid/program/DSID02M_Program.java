@@ -83,6 +83,7 @@ public class DSID02M_Program extends COMM_Master {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
+	
 	protected Class getEntityClass() {
 		return DSID02.class;
 	}
@@ -115,7 +116,6 @@ public class DSID02M_Program extends COMM_Master {
 		masterKeyValue.add(entity.getUNIQUEID());
 		return masterKeyValue;
 	}
-
 	/**
 	 * 必須複寫方法八
 	 */
@@ -142,7 +142,6 @@ public class DSID02M_Program extends COMM_Master {
  */
 	@Override
 	protected void resetEditAreaMaster(Object entityMaster) {
-		
 		System.out.println("=========onclick=Editor===========");
 		DSID02 entity = (DSID02) entityMaster;
 		System.out.println(entity==null);
@@ -158,8 +157,7 @@ public class DSID02M_Program extends COMM_Master {
 	 * 新增，編輯保存后時作業
 	 */
 	@Override
-	public void masterReadMode(HashMap<String, Object> mapButton){
-		
+	public void masterReadMode(HashMap<String, Object> mapButton){	
 		System.out.println("========readDate====================");
 		mapButton = new HashMap<String, Object>();
 		mapButton.put("btncreatemaster", btnCreateMaster);
@@ -169,7 +167,7 @@ public class DSID02M_Program extends COMM_Master {
 		btnCancelMaster.setDisabled(true);
 		txt_UNIQUEID.setReadonly(true);
 		txt_EL_NO.setReadonly(true);
-		txt_EL_MODEL.setReadonly(true);
+		txt_EL_MODEL.setReadonly(true); 
 		txt_PART_NAME.setReadonly(true);
 		txt_COLOR.setReadonly(true);
 		txt_STATUS.setReadonly(true);/**/

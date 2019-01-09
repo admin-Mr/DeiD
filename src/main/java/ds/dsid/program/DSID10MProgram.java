@@ -416,6 +416,12 @@ public class DSID10MProgram extends Master{
 	}
 
 	@Override
+	protected boolean doCustomSave() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
 	protected List getCustList() {
 		// TODO Auto-generated method stub
 		return null;
@@ -535,7 +541,6 @@ public class DSID10MProgram extends Master{
 		txtgroup18.setReadonly(false);
 		txtgroup19.setReadonly(false);
 		txtgroup20.setReadonly(false);		
-		Com_pid.setReadonly(false);
-		
+		Com_pid.setReadonly(false);		
 	}
 }

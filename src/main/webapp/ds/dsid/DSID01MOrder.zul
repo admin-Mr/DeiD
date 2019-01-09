@@ -1,5 +1,5 @@
 <zk>
-	<window border="normal" id="windowMaster" title="訂單資料轉移到舊系統"
+	<window border="normal" id="windowMaster" title="訂單信息整理"
 		apply="ds.dsid.program.DSID01MOrder" closable="true" mode= "modal" width="300px" height="150px">
 
 			<div sclass="breadcrumbs" height="100%">

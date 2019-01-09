@@ -2,6 +2,8 @@ package ds.dsid.program;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -51,6 +53,7 @@ import ds.common.services.UserCredential;
 import ds.dsid.domain.DSIDN06;
 import ds.dsid.domain.DSIDN08;
 import ds.dsid.domain.DSIDN08_T;
+import util.DBManger;
 import util.OperationMode;
 
 public class DSIDN09M_Program extends COMM_Master {
@@ -112,7 +115,7 @@ public DSIDN08 getD08() {
 	@Override
 	public ComponentInfo doBeforeCompose(Page page, Component parent, ComponentInfo compInfo) {
 		System.out.println("==doBeforeCompose==");
-		d06 = getNewMessage();
+		d06 = getNewMessage02();//getNewMessage();
 		aaa="doBeforeCompose";
 		d08 = new DSIDN08();
 		d08.setEL_NO("哈哈哈哈哈dsid087");
@@ -708,10 +711,9 @@ public DSIDN08 getD08() {
 	 * 取消鈕(新增/編輯),把狀態回復到瀏覽狀態(READ_MODE)
 	 * 
 	 * @param event
-	 * @throws Exception 
 	 */
 	@Listen("onClick = #btnCancelMaster")
-	public void masterCancel(Event event) throws Exception {
+	public void masterCancel(Event event) {
 		Add=false;
 		super.executeQuery();
 		super.masterCancel(event);
@@ -957,11 +959,11 @@ public DSIDN08 getD08() {
 	}
 	@Listen("onClick = #btnSaveMaster")
 	@Override
-	public boolean onClickbtnSaveMaster(Event event) throws Exception {
+	public void onClickbtnSaveMaster(Event event) {
 		boolean isok = false;
 		if(!Add){
 			super.onClickbtnSaveMaster(event);
-			return false;
+			return;
 		}
 		
 		CRUDService CRUDServicetemp = (CRUDService) SpringUtil.getBean("CRUDService");
@@ -1063,7 +1065,7 @@ public DSIDN08 getD08() {
 		}
 		if(!isok){
 			//Messagebox.show(Labels.getLabel("DSIDN08.MSG0008"), "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
-			return false;
+			return ;
 		}
 		if(templist!= null){
 			for(int x =0;x<templist.size();x++){
@@ -1092,7 +1094,6 @@ public DSIDN08 getD08() {
 		abcListboxd.setModel(emptyModel);
 		Add = false;
 		txt_PO_NOa.setText("");
-		return true;
 	}
 	
 	@Listen("onClick = #btnCreateMaster")
@@ -1230,7 +1231,6 @@ public DSIDN08 getD08() {
 	        	imageupdate.setTooltip(Labels.getLabel("COMM.EDIT"));
 	        	imageupdate.addForward("onClick", masterListbox, "onUpdate");
 	        	imageupdate.setSclass("fimage");
-	        	
 	        	Image imagedelete = new Image();
 	        	imagedelete.setVisible(prgAuth.getAuthDelete());
 	        	imagedelete.setSrc("/resource/imgs/icons/btn_delete2_16x16.gif");
@@ -1486,6 +1486,209 @@ public DSIDN08 getD08() {
 			if(index==34)dt06.setH3(value);
 			if(index==35)dt06.setH4(value);
 			if(index==36)dt06.setH5(value);
+		}
+		private void initValue02(DSIDN06 dt06,String PLACE,String MOLDE_NA){
+			switch(PLACE){
+				case "A1":
+					dt06.setA1(MOLDE_NA);
+				break;
+				case "A2":
+					dt06.setA2(MOLDE_NA);
+				break;
+				case "A3":
+					dt06.setA3(MOLDE_NA);
+				break;
+				
+				case "B1":
+					dt06.setB1(MOLDE_NA);
+				break;
+				case "B2":
+					dt06.setB2(MOLDE_NA);
+				break;
+				case "B3":
+					dt06.setB3(MOLDE_NA);
+				break;
+				case "B4":
+					dt06.setB4(MOLDE_NA);
+				break;
+				case "B5":
+					dt06.setB5(MOLDE_NA);
+				break;
+				case "B6":
+					dt06.setB6(MOLDE_NA);
+				break;
+				case "B7":
+					dt06.setB7(MOLDE_NA);
+				break;
+				case "B8":
+					dt06.setB8(MOLDE_NA);
+				break;
+				case "B9":
+					dt06.setB9(MOLDE_NA);
+				break;
+				case "B10":
+					dt06.setB10(MOLDE_NA);
+				break;
+				case "B11":
+					dt06.setB11(MOLDE_NA);
+				break;
+				case "B12":
+					dt06.setB12(MOLDE_NA);
+				break;
+				
+				case "C1":
+					dt06.setC1(MOLDE_NA);
+				break;
+				case "C2":
+					dt06.setC2(MOLDE_NA);
+				break;
+				case "C3":
+					dt06.setC3(MOLDE_NA);
+				break;
+				
+				
+				case "D1":
+					dt06.setD1(MOLDE_NA);
+				break;
+				case "D2":
+					dt06.setD2(MOLDE_NA);
+				break;
+				case "D3":
+					dt06.setD3(MOLDE_NA);
+				break;
+				
+				
+				case "E1":
+					dt06.setE1(MOLDE_NA);
+				break;
+				case "E2":
+					dt06.setE2(MOLDE_NA);
+				break;
+				case "E3":
+					dt06.setE3(MOLDE_NA);
+				break;
+				
+				case "F1":
+					dt06.setF1(MOLDE_NA);
+				break;
+				case "F2":
+					dt06.setF2(MOLDE_NA);
+				break;
+				case "F3":
+					dt06.setF3(MOLDE_NA);
+				break;
+				
+				case "G1":
+					dt06.setG1(MOLDE_NA);
+				break;
+				case "G2":
+					dt06.setG2(MOLDE_NA);
+				break;
+				case "G3":
+					dt06.setG3(MOLDE_NA);
+				break;
+				case "G4":
+					dt06.setG4(MOLDE_NA);
+				break;
+				case "G5":
+					dt06.setG5(MOLDE_NA);
+				break;
+				
+				case "H1":
+					dt06.setH1(MOLDE_NA);
+				break;
+				case "H2":
+					dt06.setH2(MOLDE_NA);
+				break;
+				case "H3":
+					dt06.setH3(MOLDE_NA);
+				break;
+				case "H4":
+					dt06.setH4(MOLDE_NA);
+				break;
+				case "H5":
+					dt06.setH5(MOLDE_NA);
+				break;
+				
+				
+			}
+			System.out.println(dt06+"=="+PLACE+"=="+MOLDE_NA);
+
+			/*
+			if("A1".equals(PLACE))dt06.setA1(MOLDE_NA);
+			if("A2".equals(PLACE))dt06.setA2(MOLDE_NA);
+			if("A3".equals(PLACE))dt06.setA3(MOLDE_NA);
+			
+			if("B1".equals(PLACE))dt06.setB1(MOLDE_NA);
+			if("B2".equals(PLACE))dt06.setB2(MOLDE_NA);
+			if("B3".equals(PLACE))dt06.setB3(MOLDE_NA);
+			if("B4".equals(PLACE))dt06.setB4(MOLDE_NA);
+			if("B5".equals(PLACE))dt06.setB5(MOLDE_NA);
+			if("B6".equals(PLACE))dt06.setB6(MOLDE_NA);
+			if("B7".equals(PLACE))dt06.setB7(MOLDE_NA);
+			if("B8".equals(PLACE))dt06.setB8(MOLDE_NA);
+			if("B9".equals(PLACE))dt06.setB9(MOLDE_NA);
+			if("B10".equals(PLACE))dt06.setB10(MOLDE_NA);
+			if("B11".equals(PLACE))dt06.setB11(MOLDE_NA);
+			if("B12".equals(PLACE))dt06.setB12(MOLDE_NA);
+			
+			if("C1".equals(PLACE))dt06.setC1(MOLDE_NA);
+			if("C2".equals(PLACE))dt06.setC2(MOLDE_NA);
+			if("C3".equals(PLACE))dt06.setC3(MOLDE_NA);
+			
+			if("D1".equals(PLACE))dt06.setD1(MOLDE_NA);
+			if("D2".equals(PLACE))dt06.setD2(MOLDE_NA);
+			if("D3".equals(PLACE))dt06.setD3(MOLDE_NA);
+			
+			if("E1".equals(PLACE))dt06.setE1(MOLDE_NA);
+			if("E2".equals(PLACE))dt06.setE2(MOLDE_NA);
+			if("E3".equals(PLACE))dt06.setE3(MOLDE_NA);
+
+			if("F1".equals(PLACE))dt06.setF1(MOLDE_NA);
+			if("F2".equals(PLACE))dt06.setF2(MOLDE_NA);
+			if("F3".equals(PLACE))dt06.setF3(MOLDE_NA);
+			
+			if("G1".equals(PLACE))dt06.setG1(MOLDE_NA);
+			if("G2".equals(PLACE))dt06.setG2(MOLDE_NA);
+			if("G3".equals(PLACE))dt06.setG3(MOLDE_NA);
+			if("G4".equals(PLACE))dt06.setG4(MOLDE_NA);
+			if("G5".equals(PLACE))dt06.setG5(MOLDE_NA);
+			
+			if("H1".equals(PLACE))dt06.setH1(MOLDE_NA);
+			if("H2".equals(PLACE))dt06.setH2(MOLDE_NA);
+			if("H3".equals(PLACE))dt06.setH3(MOLDE_NA);
+			if("H4".equals(PLACE))dt06.setH4(MOLDE_NA);
+			if("H5".equals(PLACE))dt06.setH5(MOLDE_NA);*/
+		}
+		
+		private DSIDN06 getNewMessage02() {
+			Connection conn = DBManger.getConnectionDB1();
+			DSIDN06 d06 = new DSIDN06();
+			PreparedStatement pst = null;
+			ResultSet rs   = null;
+			String sql = "select MODEL_NA,PLACE from ( "
+						+" select abc.*,d1.place from ( "
+						+" select dsid77.MODEL_NA,dsid77.el_no,dsel00.el_cname from dsid77 "
+						+ " join  dsel00  on dsid77.el_no=dsel00.el_no   where is_hide is null  ) abc "
+						+" left join  DSIDN06_01  d1 on abc.el_no = d1.el_no"
+						+ " and abc.model_na = d1.model_na ) def "
+						+ " where PLACE IS NOT NULL GROUP BY MODEL_NA,PLACE "; 
+			try {
+				pst = conn.prepareStatement(sql);
+				System.out.println(sql);
+				rs = pst.executeQuery();
+				while(rs.next()){
+					System.out.println("rs.next");
+					String MODEL_NA = rs.getString("MODEL_NA");
+					String PLACE = rs.getString("PLACE");
+					initValue02(d06,PLACE,MODEL_NA);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			} finally {
+				DBManger.closeConnection(pst, conn, rs);
+			}
+			return d06;
 		}
 
 }

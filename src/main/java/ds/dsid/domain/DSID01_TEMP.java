@@ -1,380 +1,380 @@
 package ds.dsid.domain;
-
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import ds.dsid.domain.pk.DSID01_TEMP_PK;
-
-
-
+import javax.persistence.Transient;
+import javax.persistence.Column;
+/**
+* 系統主檔
+**/
 @Entity
-@Table(name="DSID01_TEMP")
-@SuppressWarnings("serial")
-@IdClass(DSID01_TEMP_PK.class)
-public class DSID01_TEMP implements Serializable, Comparable<DSID01_TEMP>{
+@Table(name = "DSID01_TEMP")
+public class DSID01_TEMP {
+    private java.lang.String OD_NO;	
+    private java.util.Date ORDER_DATE;	
+    private java.lang.String TYPE;	
+    private java.lang.String STATUS;	
+    private java.lang.String SHIP_GROUP_ID;	
+    private java.lang.String WORK_ORDER_ID;	
+    private java.lang.String ORDER_ID;	
+    private java.lang.String SH_LAST;	
+    private java.lang.String SH_STYLENO;	
+    private java.lang.String ORDER_NUM;	
+    private java.lang.String LEFT_SIZE_RUN;	
+    private java.lang.String RIGHT_SIZE_RUN;	
+    private java.lang.String TOOLING_SIZE;	
+    private java.lang.String PID01;	
+    private java.lang.String PID02;	
+    private java.lang.String PID03;	
+    private java.lang.String PID04;	
+    private java.lang.String GROUP1;	
+    private java.lang.String GROUP2;
+	private java.lang.String GROUP3;	
+    private java.lang.String GROUP4;	
+    private java.lang.String GROUP5;	
+    private java.lang.String GROUP6;	
+    private java.lang.String GROUP7;	
+    private java.lang.String GROUP8;	
+    private java.lang.String GROUP9;
+    private java.lang.String GROUP10;	
+    private java.lang.String GROUP11;	
+    private java.lang.String GROUP12;	
+    private java.lang.String NIKE_SH_ARITCLE;	
+    private java.lang.String MODEL_NA;
+    private java.util.Date PG_DATE;	
+    private java.lang.String ROUND;	
+    private java.util.Date SHIPING_DATE;  
+    private java.lang.String REGION;
+    
+    private java.lang.String UP_USER;	//異動人員
+    private java.util.Date UP_DATE;	//異動日期
+    
+	private boolean ISADD;
+	private boolean ISEDIT;
 
-	private Date ORDER_DATE; 		// 接單日期
-	private String WORK_ORDER_ID; 	// 客戶訂單ID
-	private String TYPE; 			// 訂單類型
-	private String SHIP_GROUP_ID;
-	private String ORDER_ID;
-	private String NIKE_SH_ARITCLE; // nike型體名稱
-	private String MODEL_NA; 		// 型體顏色
-	private String SH_STYLENO; 		// 配色
-	private String ORDER_NUM; 		// 訂單數
-	private String LEFT_SIZE_RUN; 	// 左腳碼數
-	private String RIGHT_SIZE_RUN; 	// 右腳碼數
-	private Date SHIPING_DATE; 		// 出貨日期
-	private String REGION; 			// 出貨地區
-	private String EXP_QTY; 		// 出貨數量
-	private String EXP_STATUS; 		// 出貨狀態
-	private String COUNTRY; 		// 國假
-	private String ITEMNUMBER;		// 項目號
-	private String PRIORITY; 		// 優先度
-	private Date FACTACCPDATE; 		// 工廠接受日期
-	private Date REQUSHIPDATE; 		// 重新裝運日期
-	private String EXOTIC; 			// 是否外來
-	private String REMAKE; 			// 是否再制
-	private String SHIPPER; 		// 托運人
-	private String BILLTOREGION; 	// 匯票到地區
-	private String SHIPTOSTUDIO; 
-	private String POSTALCODE; 		// 郵寄編碼
-	private String URL1; 
-	private String URL2; 
-	private String URL3; 
-	private String URL4; 
-	private String URL5; 
-	private String URL6; 
-	private String URL7; 
-	private String URL8; 
-	private String URL9;
-	private String URL10; 
-
-	private String UP_USER; 		// 更新人員
-	private Date UP_DATE; 			// 更新日期
-	
     @Id
-    @Column(name = "ORDER_DATE")
+    @Column(name = "OD_NO")
+    public java.lang.String getOD_NO() {
+        return OD_NO;
+    }
+    public void setOD_NO(java.lang.String OD_NO) {
+        this.OD_NO = OD_NO;
+    }
+    
     @Temporal(TemporalType.DATE)
-	public Date getORDER_DATE() {
-		return ORDER_DATE;
-	}
-	public void setORDER_DATE(Date oRDER_DATE) {
-		ORDER_DATE = oRDER_DATE;
-	}
-	
-    @Id
-    @Column(name = "WORK_ORDER_ID")
-	public String getWORK_ORDER_ID() {
-		return WORK_ORDER_ID;
-	}
-	public void setWORK_ORDER_ID(String wORK_ORDER_ID) {
-		WORK_ORDER_ID = wORK_ORDER_ID;
-	}
-	
+    @Column(name = "ORDER_DATE")
+    public java.util.Date getORDER_DATE() {
+        return ORDER_DATE;
+    }
+
+    public void setORDER_DATE(java.util.Date ORDER_DATE) {
+        this.ORDER_DATE = ORDER_DATE;
+    }
+
+
     @Column(name = "TYPE")
-	public String getTYPE() {
-		return TYPE;
-	}
-	public void setTYPE(String tYPE) {
-		TYPE = tYPE;
-	}
-	
+    public java.lang.String getTYPE() {
+        return TYPE;
+    }
+
+    public void setTYPE(java.lang.String TYPE) {
+        this.TYPE = TYPE;
+    }
+    
+    @Column(name = "STATUS")
+    public java.lang.String getSTATUS() {
+        return STATUS;
+    }
+
+    public void setSTATUS(java.lang.String STATUS) {
+        this.STATUS = STATUS;
+    }
+    
     @Column(name = "SHIP_GROUP_ID")
-	public String getSHIP_GROUP_ID() {
-		return SHIP_GROUP_ID;
+    public java.lang.String getSHIP_GROUP_ID() {
+        return SHIP_GROUP_ID;
+    }
+    public void setSHIP_GROUP_ID(java.lang.String SHIP_GROUP_ID) {
+        this.SHIP_GROUP_ID = SHIP_GROUP_ID;
+    }
+    
+    @Column(name = "WORK_ORDER_ID")
+    public java.lang.String getWORK_ORDER_ID() {
+        return WORK_ORDER_ID;
+    }
+    public void setWORK_ORDER_ID(java.lang.String WORK_ORDER_ID) {
+        this.WORK_ORDER_ID = WORK_ORDER_ID;
+    }
+    
+    @Column(name = "ORDER_ID")
+    public java.lang.String getORDER_ID() {
+        return ORDER_ID;
+    }
+    public void setORDER_ID(java.lang.String ORDER_ID) {
+        this.ORDER_ID = ORDER_ID;
+    }
+    
+    @Column(name = "SH_LAST")
+    public java.lang.String getSH_LAST() {
+        return SH_LAST;
+    }
+    public void setSH_LAST(java.lang.String SH_LAST) {
+        this.SH_LAST = SH_LAST;
+    }
+    
+    @Column(name = "SH_STYLENO")
+    public java.lang.String getSH_STYLENO() {
+        return SH_STYLENO;
+    }
+    public void setSH_STYLENO(java.lang.String SH_STYLENO) {
+        this.SH_STYLENO = SH_STYLENO;
+    }
+    
+    @Column(name = "ORDER_NUM")
+    public java.lang.String getORDER_NUM() {
+        return ORDER_NUM;
+    }
+    public void setORDER_NUM(java.lang.String ORDER_NUM) {
+        this.ORDER_NUM = ORDER_NUM;
+    }
+    
+    @Column(name = "LEFT_SIZE_RUN")
+    public java.lang.String getLEFT_SIZE_RUN() {
+        return LEFT_SIZE_RUN;
+    }
+    public void setLEFT_SIZE_RUN(java.lang.String LEFT_SIZE_RUN) {
+        this.LEFT_SIZE_RUN = LEFT_SIZE_RUN;
+    }
+    
+    @Column(name = "RIGHT_SIZE_RUN")
+    public java.lang.String getRIGHT_SIZE_RUN() {
+        return RIGHT_SIZE_RUN;
+    }
+    public void setRIGHT_SIZE_RUN(java.lang.String RIGHT_SIZE_RUN) {
+        this.RIGHT_SIZE_RUN = RIGHT_SIZE_RUN;
+    }
+    
+    @Column(name = "NIKE_SH_ARITCLE")
+    public java.lang.String getNIKE_SH_ARITCLE() {
+        return NIKE_SH_ARITCLE;
+    }
+    public void setNIKE_SH_ARITCLE(java.lang.String NIKE_SH_ARITCLE) {
+        this.NIKE_SH_ARITCLE = NIKE_SH_ARITCLE;
+    }
+    
+    @Column(name = "MODEL_NA")
+    public java.lang.String getMODEL_NA() {
+        return MODEL_NA;
+    }
+    public void setMODEL_NA(java.lang.String MODEL_NA) {
+        this.MODEL_NA = MODEL_NA;
+    }
+    
+    @Column(name = "TOOLING_SIZE")
+    public java.lang.String getTOOLING_SIZE() {
+		return TOOLING_SIZE;
 	}
-	public void setSHIP_GROUP_ID(String sHIP_GROUP_ID) {
-		SHIP_GROUP_ID = sHIP_GROUP_ID;
+	public void setTOOLING_SIZE(java.lang.String tOOLING_SIZE) {
+		TOOLING_SIZE = tOOLING_SIZE;
 	}
 	
-	@Column(name = "ORDER_ID")
-	public String getORDER_ID() {
-		return ORDER_ID;
+	@Column(name = "PID01")
+	public java.lang.String getPID01() {
+		return PID01;
 	}
-	public void setORDER_ID(String oRDER_ID) {
-		ORDER_ID = oRDER_ID;
-	}
-	
-	@Column(name = "NIKE_SH_ARITCLE")
-	public String getNIKE_SH_ARITCLE() {
-		return NIKE_SH_ARITCLE;
-	}
-	public void setNIKE_SH_ARITCLE(String nIKE_SH_ARITCLE) {
-		NIKE_SH_ARITCLE = nIKE_SH_ARITCLE;
+	public void setPID01(java.lang.String pID01) {
+		PID01 = pID01;
 	}
 	
-	@Column(name = "MODEL_NA")
-	public String getMODEL_NA() {
-		return MODEL_NA;
+	 @Column(name = "PID02")
+	public java.lang.String getPID02() {
+		return PID02;
 	}
-	public void setMODEL_NA(String mODEL_NA) {
-		MODEL_NA = mODEL_NA;
-	}
-	
-	@Column(name = "SH_STYLENO")
-	public String getSH_STYLENO() {
-		return SH_STYLENO;
-	}
-	public void setSH_STYLENO(String sH_STYLENO) {
-		SH_STYLENO = sH_STYLENO;
+	public void setPID02(java.lang.String pID02) {
+		PID02 = pID02;
 	}
 	
-	@Column(name = "ORDER_NUM")
-	public String getORDER_NUM() {
-		return ORDER_NUM;
+	 @Column(name = "PID03")
+	public java.lang.String getPID03() {
+		return PID03;
 	}
-	public void setORDER_NUM(String oRDER_NUM) {
-		ORDER_NUM = oRDER_NUM;
-	}
-	
-	@Column(name = "LEFT_SIZE_RUN")
-	public String getLEFT_SIZE_RUN() {
-		return LEFT_SIZE_RUN;
-	}
-	public void setLEFT_SIZE_RUN(String lEFT_SIZE_RUN) {
-		LEFT_SIZE_RUN = lEFT_SIZE_RUN;
+	public void setPID03(java.lang.String pID03) {
+		PID03 = pID03;
 	}
 	
-	@Column(name = "RIGHT_SIZE_RUN")
-	public String getRIGHT_SIZE_RUN() {
-		return RIGHT_SIZE_RUN;
+	 @Column(name = "PID04")
+	public java.lang.String getPID04() {
+		return PID04;
 	}
-	public void setRIGHT_SIZE_RUN(String rIGHT_SIZE_RUN) {
-		RIGHT_SIZE_RUN = rIGHT_SIZE_RUN;
+	public void setPID04(java.lang.String pID04) {
+		PID04 = pID04;
 	}
 	
-	@Column(name = "SHIPING_DATE")
-	@Temporal(TemporalType.DATE)
-	public Date getSHIPING_DATE() {
+	 @Column(name = "GROUP1")
+	public java.lang.String getGROUP1() {
+		return GROUP1;
+	}
+	public void setGROUP1(java.lang.String gROUP1) {
+		GROUP1 = gROUP1;
+	}
+	
+	 @Column(name = "GROUP2")
+	public java.lang.String getGROUP2() {
+		return GROUP2;
+	}
+	public void setGROUP2(java.lang.String gROUP2) {
+		GROUP2 = gROUP2;
+	}
+	
+	 @Column(name = "GROUP3")
+	public java.lang.String getGROUP3() {
+		return GROUP3;
+	}
+	public void setGROUP3(java.lang.String gROUP3) {
+		GROUP3 = gROUP3;
+	}
+	
+	 @Column(name = "GROUP4")
+	public java.lang.String getGROUP4() {
+		return GROUP4;
+	}
+	public void setGROUP4(java.lang.String gROUP4) {
+		GROUP4 = gROUP4;
+	}
+	
+	 @Column(name = "GROUP5")
+	public java.lang.String getGROUP5() {
+		return GROUP5;
+	}
+	public void setGROUP5(java.lang.String gROUP5) {
+		GROUP5 = gROUP5;
+	}
+	
+	 @Column(name = "GROUP6")
+	public java.lang.String getGROUP6() {
+		return GROUP6;
+	}
+	public void setGROUP6(java.lang.String gROUP6) {
+		GROUP6 = gROUP6;
+	}
+	
+	 @Column(name = "GROUP7")
+	public java.lang.String getGROUP7() {
+		return GROUP7;
+	}
+	public void setGROUP7(java.lang.String gROUP7) {
+		GROUP7 = gROUP7;
+	}
+	
+	 @Column(name = "GROUP8")
+	public java.lang.String getGROUP8() {
+		return GROUP8;
+	}
+	public void setGROUP8(java.lang.String gROUP8) {
+		GROUP8 = gROUP8;
+	}
+	
+	 @Column(name = "GROUP9")
+	public java.lang.String getGROUP9() {
+		return GROUP9;
+	}
+	public void setGROUP9(java.lang.String gROUP9) {
+		GROUP9 = gROUP9;
+	}
+	
+	 @Column(name = "GROUP10")
+	public java.lang.String getGROUP10() {
+		return GROUP10;
+	}
+	public void setGROUP10(java.lang.String gROUP10) {
+		GROUP10 = gROUP10;
+	}
+	
+	 @Column(name = "GROUP11")
+	public java.lang.String getGROUP11() {
+		return GROUP11;
+	}
+	public void setGROUP11(java.lang.String gROUP11) {
+		GROUP11 = gROUP11;
+	}
+	
+	 @Column(name = "GROUP12")
+	public java.lang.String getGROUP12() {
+		return GROUP12;
+	}
+	public void setGROUP12(java.lang.String gROUP12) {
+		GROUP12 = gROUP12;
+	}
+	
+    @Temporal(TemporalType.DATE)
+	 @Column(name = "PG_DATE")
+	public java.util.Date getPG_DATE() {
+		return PG_DATE;
+	}
+	public void setPG_DATE(java.util.Date pG_DATE) {
+		PG_DATE = pG_DATE;
+	}
+	
+	 @Column(name = "ROUND")
+	public java.lang.String getROUND() {
+		return ROUND;
+	}
+	public void setROUND(java.lang.String rOUND) {
+		ROUND = rOUND;
+	}
+	
+    @Temporal(TemporalType.DATE)
+	 @Column(name = "SHIPING_DATE")
+	public java.util.Date getSHIPING_DATE() {
 		return SHIPING_DATE;
 	}
-	public void setSHIPING_DATE(Date sHIPING_DATE) {
+	public void setSHIPING_DATE(java.util.Date sHIPING_DATE) {
 		SHIPING_DATE = sHIPING_DATE;
 	}
 	
-	@Column(name = "REGION")
-	public String getREGION() {
+	 @Column(name = "REGION")
+	public java.lang.String getREGION() {
 		return REGION;
 	}
-	public void setREGION(String rEGION) {
+	public void setREGION(java.lang.String rEGION) {
 		REGION = rEGION;
 	}
-	
-	@Column(name = "EXP_QTY")
-	public String getEXP_QTY() {
-		return EXP_QTY;
+       
+    @Column(name = "UP_USER")
+    public java.lang.String getUP_USER() {
+        return UP_USER;
+    }
+    public void setUP_USER(java.lang.String UP_USER) {
+        this.UP_USER = UP_USER;
+    }
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "UP_DATE")
+    public java.util.Date getUP_DATE() {
+        return UP_DATE;
+    }
+
+    public void setUP_DATE(java.util.Date UP_DATE) {
+        this.UP_DATE = UP_DATE;
+    }
+    
+	@Transient 
+	public boolean getISEDIT() {
+		return ISEDIT;
 	}
-	public void setEXP_QTY(String eXP_QTY) {
-		EXP_QTY = eXP_QTY;
-	}
-	
-	@Column(name = "EXP_STATUS")
-	public String getEXP_STATUS() {
-		return EXP_STATUS;
-	}
-	public void setEXP_STATUS(String eXP_STATUS) {
-		EXP_STATUS = eXP_STATUS;
-	}
-	
-	@Column(name = "COUNTRY")
-	public String getCOUNTRY() {
-		return COUNTRY;
-	}
-	public void setCOUNTRY(String cOUNTRY) {
-		COUNTRY = cOUNTRY;
-	}
-	
-	@Column(name = "ITEMNUMBER")
-	public String getITEMNUMBER() {
-		return ITEMNUMBER;
-	}
-	public void setITEMNUMBER(String iTEMNUMBER) {
-		ITEMNUMBER = iTEMNUMBER;
+	 
+	public void setISEDIT(boolean iSEDIT) {
+		ISEDIT = iSEDIT;
 	}
 	
-	@Column(name = "PRIORITY")
-	public String getPRIORITY() {
-		return PRIORITY;
-	}
-	public void setPRIORITY(String pRIORITY) {
-		PRIORITY = pRIORITY;
-	}
-	
-	@Column(name = "FACTACCPDATE")
-	@Temporal(TemporalType.DATE)
-	public Date getFACTACCPDATE() {
-		return FACTACCPDATE;
-	}
-	public void setFACTACCPDATE(Date fACTACCPDATE) {
-		FACTACCPDATE = fACTACCPDATE;
-	}
-	
-	@Column(name = "REQUSHIPDATE")
-	@Temporal(TemporalType.DATE)
-	public Date getREQUSHIPDATE() {
-		return REQUSHIPDATE;
-	}
-	public void setREQUSHIPDATE(Date rEQUSHIPDATE) {
-		REQUSHIPDATE = rEQUSHIPDATE;
-	}
-	
-	@Column(name = "EXOTIC")
-	public String getEXOTIC() {
-		return EXOTIC;
-	}
-	public void setEXOTIC(String eXOTIC) {
-		EXOTIC = eXOTIC;
-	}
-	
-	@Column(name = "REMAKE")
-	public String getREMAKE() {
-		return REMAKE;
-	}
-	public void setREMAKE(String rEMAKE) {
-		REMAKE = rEMAKE;
-	}
-	
-	@Column(name = "SHIPPER")
-	public String getSHIPPER() {
-		return SHIPPER;
-	}
-	public void setSHIPPER(String sHIPPER) {
-		SHIPPER = sHIPPER;
-	}
-	
-	@Column(name = "BILLTOREGION")
-	public String getBILLTOREGION() {
-		return BILLTOREGION;
-	}
-	public void setBILLTOREGION(String bILLTOREGION) {
-		BILLTOREGION = bILLTOREGION;
-	}
-	
-	@Column(name = "SHIPTOSTUDIO")
-	public String getSHIPTOSTUDIO() {
-		return SHIPTOSTUDIO;
-	}
-	public void setSHIPTOSTUDIO(String sHIPTOSTUDIO) {
-		SHIPTOSTUDIO = sHIPTOSTUDIO;
-	}
-	
-	@Column(name = "POSTALCODE")
-	public String getPOSTALCODE() {
-		return POSTALCODE;
-	}
-	public void setPOSTALCODE(String pOSTALCODE) {
-		POSTALCODE = pOSTALCODE;
-	}
-	
-	@Column(name = "URL1")
-	public String getURL1() {
-		return URL1;
-	}
-	public void setURL1(String uRL1) {
-		URL1 = uRL1;
-	}
-	
-	@Column(name = "URL2")
-	public String getURL2() {
-		return URL2;
-	}
-	public void setURL2(String uRL2) {
-		URL2 = uRL2;
-	}
-	
-	@Column(name = "URL3")
-	public String getURL3() {
-		return URL3;
-	}
-	public void setURL3(String uRL3) {
-		URL3 = uRL3;
-	}
-	
-	@Column(name = "URL4")
-	public String getURL4() {
-		return URL4;
-	}
-	public void setURL4(String uRL4) {
-		URL4 = uRL4;
-	}
-	
-	@Column(name = "URL5")
-	public String getURL5() {
-		return URL5;
-	}
-	public void setURL5(String uRL5) {
-		URL5 = uRL5;
-	}
-	
-	@Column(name = "URL6")
-	public String getURL6() {
-		return URL6;
-	}
-	public void setURL6(String uRL6) {
-		URL6 = uRL6;
-	}
-	
-	@Column(name = "URL7")
-	public String getURL7() {
-		return URL7;
-	}
-	public void setURL7(String uRL7) {
-		URL7 = uRL7;
-	}
-	
-	@Column(name = "URL8")
-	public String getURL8() {
-		return URL8;
-	}
-	public void setURL8(String uRL8) {
-		URL8 = uRL8;
-	}
-	
-	@Column(name = "URL9")
-	public String getURL9() {
-		return URL9;
-	}
-	public void setURL9(String uRL9) {
-		URL9 = uRL9;
-	}
-	
-	@Column(name = "URL10")
-	public String getURL10() {
-		return URL10;
-	}
-	public void setURL10(String uRL10) {
-		URL10 = uRL10;
-	}
-	
-	@Column(name = "UP_USER")
-	public String getUP_USER() {
-		return UP_USER;
-	}
-	public void setUP_USER(String uP_USER) {
-		UP_USER = uP_USER;
-	}
-	
-	@Column(name = "UP_DATE")
-	@Temporal(TemporalType.DATE)
-	public Date getUP_DATE() {
-		return UP_DATE;
-	}
-	public void setUP_DATE(Date uP_DATE) {
-		UP_DATE = uP_DATE;
-	}
-	@Override
-	public int compareTo(DSID01_TEMP o) {
-		// TODO Auto-generated method stub
-		return 0;
+	@Transient
+	public boolean getISADD() {
+		return ISADD;
 	}
 
+	public void setISADD(boolean iSADD) {
+		ISADD = iSADD;
+	}
 }

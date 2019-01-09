@@ -1,0 +1,290 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSIDN06_01M}" />
+			<label value="${labels.MENU.DSIDN06_01M} (DSID06_01M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dsid.program.DSIDN06_01M_Program">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+					<!--  
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+						
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+					-->
+				
+			</div>
+		</div>
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+				
+				
+				
+			<hlayout>
+				<hlayout>
+						<label value="${labels.DSIDN06_01.EL_NO}" sclass="sectionTitleLabel" />
+						<textbox id="txt_EL_NO_SQL" width="120px" mold="rounded" />
+						<label value="${labels.DSIDN06_01.EL_CNAME}" sclass="sectionTitleLabel" />
+						<textbox id="txt_EL_CNAME_SQL" width="120px" mold="rounded" />
+						<label value="${labels.DSIDN06_01.PLACE}" sclass="sectionTitleLabel" />
+						<textbox id="txt_PLACE_SQL" width="120px" mold="rounded" />
+						<label value="${labels.DSIDN06_01.MODEL_NA}" sclass="sectionTitleLabel" />
+						<textbox id="txt_MODEL_NA_SQL" width="180px" mold="rounded" />
+				</hlayout>
+			</hlayout>
+		</groupbox>
+		<separator spacing="20px" />
+		<borderlayout height="550px">
+			<north size="100%" open="true" splittable="true" visible="true"
+				collapsible="true">
+				<div width="100%" visible="true">
+				  <div width="100%" visible="true" id="divedit">
+					<separator spacing="20px" />
+					<vlayout width="100%">
+					
+					<hlayout width="100%" height="32px">	
+							
+								
+					   		<label 
+					   			value="${labels.DSIDN06_01.EL_NO}" sclass="sectionTitleLabel" />
+							<textbox 
+								id="txt_EL_NO" mold="rounded" width="100px" />
+								
+							<label value="${labels.DSIDN06_01.EL_CNAME}" sclass="sectionTitleLabel" />
+							<textbox id="txt_EL_CNAME" mold="rounded" width="400px" />
+								
+							<label value="庫存數" sclass="sectionTitleLabel" />
+							<textbox id="txt_QTY" mold="rounded" width="50px" />	
+						</hlayout>
+						
+						<hlayout width="100%" height="32px">
+							<label value="${labels.DSIDN06_01.MODEL_NA}" sclass="sectionTitleLabel" />
+							<textbox id="txt_MODEL_NA" mold="rounded" width="300px" />
+											
+							<label value="${labels.DSIDN06_01.PLACE}" sclass="sectionTitleLabel" />
+							<textbox id="txt_PLACE" mold="rounded" width="150px" />
+							<button id="btnPO_NO" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+							<button id="btnClear" iconSclass="mdi mdi-broom" sclass="btn-danger" />
+								
+							<label value="${labels.DSIDN06_01.CUPBOARD}" sclass="sectionTitleLabel" />
+							<textbox id="txt_CUPBOARD" mold="rounded" width="50px" />
+						</hlayout>	
+							
+						<hlayout width="100%" height="32px">		
+							<label value="備註" sclass="sectionTitleLabel" />
+							<textbox id="txt_NOTE" mold="rounded" width="690px" />				
+						</hlayout>
+					</vlayout>
+				</div>	
+		
+		<!-- 1、abcListbox 輸入時顯示列表 -->
+		<separator spacing="20px" />
+		<div width="100%" height="500" id="divadd" visible="false" >
+			     <separator spacing="20px" />
+				<vlayout width="100%">
+					<hlayout width="100%" height="32px">	
+					
+							<label value="${labels.DSIDN06_01.EL_NO}" sclass="sectionTitleLabel" />
+							<textbox id="txt_EL_NO_ADD_SQL" width="100px" mold="rounded" />
+							
+							<label value="${labels.DSIDN06_01.EL_CNAME}" sclass="sectionTitleLabel" />
+							<textbox id="txt_EL_CNAME_ADD_SQL" width="120px" mold="rounded" />
+							
+							<label value="${labels.DSIDN06_01.PLACE}" sclass="sectionTitleLabel" />
+							<textbox id="txt_PLACE_ADD_SQL" width="80px" mold="rounded" />
+							
+							<label value="${labels.DSIDN06_01.MODEL_NA}" sclass="sectionTitleLabel" />
+							<textbox id="txt_MODEL_NA_ADD_SQL" width="200px" mold="rounded" />
+							
+							<button id="btnPO_NOa"
+								iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+							<button id="btnCleara" sclass="btn-warning"
+								iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}" mold="trendy" visible="false" />
+				</hlayout>	
+				</vlayout>
+				
+		 
+		<separator spacing="20px" />
+		<div width="100%">
+				<separator spacing="20px" />
+				
+					<listbox id="abcListbox" sclass="mylist" rows="10"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false" forward="">
+						<listhead sizable="true">
+						<listheader width="8%"
+								label="${labels.DSIDN06_01.CHECK}"/>
+							<listheader width="15%"
+								label="${labels.DSIDN06_01.MODEL_NA}"/>
+							<listheader width="10%"
+								label="${labels.DSIDN06_01.EL_NO}" />
+							<listheader width="40%"
+								label="${labels.DSIDN06_01.EL_CNAME}" />
+							<listheader width="20%"
+								label="${labels.DSIDN06_01.PLACE}" />
+							<listheader width="10%"
+								label="${labels.DSIDN06_01.CUPBOARD}" />
+						</listhead>
+						<template name="model">
+							<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+							<listcell>			
+						    		<checkbox name="HAVECHECK"  checked="${each.PLACE!= null}" forward="onClick=cccccc.onClick"/>
+						        </listcell>
+								<listcell label="${each.MODEL_NA}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.EL_CNAME}" />
+								<listcell>			
+						    		<textbox width="150px" name="PLACE" mold="rounded"  value="${each.PLACE}" forward="onClick=aaaaaa.onClick"
+						    		/>
+						        </listcell>
+						        <listcell>			
+						    		<textbox width="150px" name="CUPBOARD" mold="rounded"  value="${each.CUPBOARD}" 
+						    		/>
+						        </listcell>
+							</listitem>
+						</template>
+					</listbox>
+		</div>
+		
+		
+		</div>
+				
+		  <!-- 2、abcListboxd查詢對應列表- -->
+		  <separator spacing="20px" />
+		  <div id="divshowdate" visible="false">
+				<listbox id="abcListboxd" sclass="mylist" rows="5"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false">
+						<listhead sizable="true">
+							
+							<listheader width="7%"
+								label="${labels.DSID05.UNIQUEID}" />
+							<listheader width="10%"
+								label="${labels.DSID05.DAY_NO}" />
+							<listheader width="7%"
+								label="${labels.DSID05.OD_NO}" />
+							<listheader width="10%"
+								label="${labels.DSID05.MT_CODE}" />
+							<listheader width="32%"
+								label="${labels.DSID05.MT_PONO}" />
+							<listheader width="10%"
+								label="${labels.DSID05.MT_SEQ}" />
+							<listheader width="10%"
+								label="${labels.DSID05.EL_NO}" />
+							<listheader width="10%"
+								label="${labels.DSID05.MODEL_NA}" />
+							<listheader width="7%"
+								label="${labels.DSID05.UP_USER}" />
+						</listhead>
+						<template name="model">
+							<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+								<listcell label="${each.UNIQUEID}" />
+								<listcell label="${each.DAY_NO}" />
+								<listcell label="${each.OD_NO}" />
+								<listcell label="${each.MT_CODE}" />
+								<listcell label="${each.MT_PONO}" />
+								<listcell label="${each.MT_SEQ}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.MODEL_NA}" />
+								<listcell label="${each.UP_USER}" />
+							</listitem>
+						</template>
+					</listbox>
+			</div>
+			
+			
+			
+			<!-- 3、初始狀態和查詢結構顯示- -->
+			<separator spacing="20px" />
+				<div id="divcenter">
+					<listbox id="masterListbox" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false">
+						<listhead sizable="true">
+						<listheader width="7%"
+								label="${labels.COMM.OPERATE }" />
+							<listheader width="30%"
+								label="${labels.DSIDN06_01.MODEL_NA}"/>
+							<listheader width="10%"
+								label="${labels.DSIDN06_01.EL_NO}" />
+							<listheader width="40%"
+								label="${labels.DSIDN06_01.EL_CNAME}" />
+							<listheader width="13%"
+								label="${labels.DSIDN06_01.PLACE}" />
+							<listheader width="10%"
+								label="${labels.DSIDN06_01.CUPBOARD}" />
+							<listheader width="10%"
+								label="備註" />
+							
+						</listhead>
+						<template name="model">
+							<listitem
+								forward="onDoubleClick=onDoubleClickedPersonItem">
+								<listcell>
+									<hbox spacing="10px">
+										<image
+											visible="${sessionScope.UAuth}"
+											src="/resource/imgs/icons/btn_edit2_16x16.gif"
+											tooltiptext="${labels.COMM.EDIT}"
+											forward="onClick=masterListbox.onUpdate"
+											sclass="fimage">
+										</image>
+										  
+										<image
+											src="/resource/imgs/icons/btn_view_16x16.gif"
+											tooltiptext="${labels.COMM.SHOW}"
+											forward="onClick=bbbbbb.onClick"
+											sclass="fimage">
+										</image>
+									
+									</hbox>
+								</listcell>
+								<listcell label="${each.MODEL_NA}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.EL_CNAME}" />
+								<listcell label="${each.PLACE}" />
+								<listcell label="${each.CUPBOARD}" />
+								<listcell label="${each.NOTE}" />
+							</listitem>
+						</template>
+					</listbox>
+					<paging id="pagingCourse"></paging>
+				</div>
+				<label id="aaaaaa" visible="false"/>
+				<label id="bbbbbb" visible="false"/>
+				<label id="cccccc" visible="false"/>
+				
+				</div>
+				
+				
+			</north>
+		</borderlayout>
+	</window>
+</zk>

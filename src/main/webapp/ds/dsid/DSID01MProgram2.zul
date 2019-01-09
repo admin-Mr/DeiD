@@ -1,0 +1,228 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.DSID00}" />
+			<label value="ID線虛擬訂單主檔 (DSID01M2)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dsid.program.DSID01MProgram2">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />				
+				<!-- 開窗，導入xml文件 -->	
+  				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" /> 
+										
+				<!-- 整理GROUP、PID信息 -->	
+				<button id="btnOrder" sclass="btn-default"  label="整理" 	mold="trendy"/>
+								
+				<!-- 批量刪除 -->	
+				<button  id="btnDalete_All" sclass="btn-danger" iconSclass="mdi mdi-delete" label="刪除" mold="trendy"/> 
+				
+				<button  id="btnReceive" sclass="btn-default"  label="篩選接單" mold="trendy"/> 
+						
+			</div>
+		</div>
+
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="false">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>		
+				<label value="指令" sclass="sectionTitlelabel" />
+				<textbox id="query_od_no" mold="rounded" width="120px" />
+				<label value="接單日期" sclass="sectionTitlelabel" />
+				<datebox id="query_order_date" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
+				<label value="Work_order_id" sclass="sectionTitlelabel" />
+				<textbox id="query_work_order_id" mold="rounded" width="120px" />
+			</hlayout>
+		</groupbox>
+
+		<borderlayout height="440px">	
+ 			 <west size="100%" open="true" splittable="false" >
+	 			<div width="100%" height="230px">
+					<separator spacing="10px" />
+					<vlayout width="100%">
+						<hlayout width="100%" height="28px" >
+							<label value="指令" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
+							<textbox id="txtod_no" mold="rounded" width="100px" readonly="true"/>		
+							<label value="接單日期" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<datebox id="txtorder_date"  mold="rounded" width="100px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
+ 							<label value="訂單類型" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<textbox id="txttype"  mold="rounded" width="100px" readonly="true"/>														
+							<label value="訂單狀態" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<textbox id="txtstatus"  mold="rounded" width="100px" readonly="true"/>													
+						</hlayout>
+						<hlayout width="100%" height="28px">
+							<label value="Work Order ID" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txtwork_order_id" mold="rounded" width="100px" readonly="true"/>		
+							<label value="Ship Group ID" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txtship_order_id"  mold="rounded" width="100px" readonly="true"/>
+							<label value="Order ID" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<textbox id="txorder_id"  mold="rounded" width="100px" readonly="true"/>														
+							<label value="配色" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<textbox id="txtsh_styleno"  mold="rounded" width="100px" readonly="true"/>							
+						</hlayout>						
+						<hlayout width="100%" height="28px">
+							<label value="訂單數量" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txordrer_num" mold="rounded" width="100px" readonly="true"/>		
+							<label value="左腳碼數" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txtleft_size"  mold="rounded" width="100px" readonly="true"/>
+							<label value="右腳碼數" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<textbox id="txtright_size"  mold="rounded" width="100px" readonly="true"/>														
+							<label value="升降碼" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<textbox id="txttooling_size"  mold="rounded" width="100px" readonly="true"/>							
+						</hlayout>
+						<hlayout width="100%" height="28px">
+							<label value="NIKE型體" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txtnike_sh_aritcle" mold="rounded" width="300px" readonly="true"/>		
+							<label value="型體名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<textbox id="txtmodel_na"  mold="rounded" width="270px" readonly="true"/>
+						</hlayout>
+						<hlayout width="100%" height="28px" >
+							<label value="派工日期" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<datebox id="txtpg_date" mold="rounded" width="100px" readonly="true"  format="yyyy/MM/dd"/>		
+							<label value="派工輪次" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<textbox id="txtround"  mold="rounded" width="100px" readonly="true"/>
+							<label value="出貨日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<datebox id="txtship_date"  mold="rounded" width="100px" readonly="true"  format="yyyy/MM/dd"/>														
+							<label value="地區" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<textbox id="txtregion"  mold="rounded" width="100px" readonly="true" />							
+						</hlayout>																			
+					</vlayout>		
+				</div>
+			</west>
+					
+			<south >			
+				<div>
+					<listbox id="masterListbox" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false" rows="5">
+						<listhead sizable="true">
+							<listheader width="6%"  label="${labels.COMM.OPERATE }" />
+							<listheader width="7%"  label="指令" />
+							<listheader label="L_PID" />
+							<listheader label="R_PID" />
+							<listheader label="GROUP1" />
+							<listheader label="GROUP2" />
+							<listheader label="GROUP3" />
+							<listheader label="GROUP4" />							
+							<listheader label="GROUP5" />							
+							<listheader label="GROUP6" />							
+							<listheader label="GROUP7" />							
+							<listheader label="GROUP8" />							
+							<listheader label="GROUP9" />
+							<listheader label="GROUP10" />							
+							<listheader label="GROUP11" />							
+							<listheader label="GROUP12" />																					
+						</listhead>
+
+				<template name="model">
+					<listitem>
+						<listcell>
+							<hbox if="${each.ISEDIT == false and each.ISADD == false}" spacing="10px">
+								<image
+									visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+								<image
+									visible="${sessionScope.DAuth }"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DEL}"
+									forward="onClick=masterListbox.onDelete" sclass="fimage">
+								</image>
+							</hbox>
+							<hbox if="${each.ISEDIT == true or each.ISADD == true}" spacing="10px">
+									<image src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"										
+										tooltiptext="${labels.COMM.SAVE}" forward="onClick=masterListbox.onSave" />								
+									<image src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+										tooltiptext="${labels.COMM.CANCEL}" forward="onClick=masterListbox.onCancel" />
+							</hbox>										
+						</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.OD_NO}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TOD_NO" value="${each.OD_NO}" mold="rounded" width="120px" />
+				</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.PID01}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TL_PID" value="${each.PID01}" mold="rounded" width="120px" />
+				</listcell>
+					<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.PID02}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TR_PID" value="${each.PID02}" mold="rounded" width="120px" />
+				</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP1}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP1" value="${each.GROUP1}" mold="rounded" width="120px" />
+				</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP2}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP2" value="${each.GROUP2}" mold="rounded" width="120px" />
+				</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP3}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP3" value="${each.GROUP3}" mold="rounded" width="120px" />
+				</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP4}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP4" value="${each.GROUP4}" mold="rounded" width="120px" />
+				</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP5}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP5" value="${each.GROUP5}" mold="rounded" width="120px" />
+				</listcell>				
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP6}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP6" value="${each.GROUP6}" mold="rounded" width="120px" />
+				</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP7}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP7" value="${each.GROUP7}" mold="rounded" width="120px" />
+				</listcell>				
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP8}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP8" value="${each.GROUP8}" mold="rounded" width="120px" />
+				</listcell>				
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP9}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP9" value="${each.GROUP9}" mold="rounded" width="120px" />
+				</listcell>				
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP10}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP10" value="${each.GROUP10}" mold="rounded" width="120px" />
+				</listcell>				
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP11}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP11" value="${each.GROUP11}" mold="rounded" width="120px" />
+				</listcell>
+				<listcell>
+					<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP12}" />
+					<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TGROUP12" value="${each.GROUP12}" mold="rounded" width="120px" />
+				</listcell>													
+				</listitem>
+				</template>
+				
+				
+					</listbox>
+					<paging id="pagingCourse"></paging>
+				</div>
+			</south>
+		</borderlayout>
+	</window>
+</zk>

@@ -234,4 +234,5 @@ public class DSIDN08M_Query extends QueryWindow {
 		}
 		return lst;
 	}
+
 }

@@ -2,572 +2,347 @@ package ds.dsid.program;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import javax.persistence.Query;
-
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFDataFormat;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.zkoss.util.resource.Labels;
-import org.zkoss.zkplus.spring.SpringUtil;
+import org.zkoss.poi.hssf.usermodel.HSSFCell;
+import org.zkoss.poi.hssf.usermodel.HSSFCellStyle;
+import org.zkoss.poi.hssf.usermodel.HSSFFont;
+import org.zkoss.poi.hssf.usermodel.HSSFRow;
+import org.zkoss.poi.hssf.usermodel.HSSFSheet;
+import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
+import org.zkoss.poi.ss.util.CellRangeAddress;
 import org.zkoss.zul.Filedownload;
-import org.zkoss.zul.Messagebox;
+import util.Common;
 
-import ds.common.services.CRUDService;
 
-public class DSIDN10M_ExcelUtil {
-	private static CRUDService CRUDService;
-
-	// 使用poi匯出excel
-	public static void ExcelExport(String sSql, String sFileName, String sTitle, String[] arrHead) {
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService");
+public class DSIDN10M_ExcelUtil  {
+	
+	public static void ExcelExport( String title, String model_na,String starttime,String endtime) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		
+		ByteArrayOutputStream  stream = new ByteArrayOutputStream();
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet4 = wb.createSheet("SHEET1");
+		sheet4.setColumnWidth(0, 30*256);
+		sheet4.setColumnWidth(1, 15*256);
+		sheet4.setColumnWidth(2, 35*256);
+		sheet4.setColumnWidth(3, 35*256);
+		sheet4.setColumnWidth(4, 10*256);
+		sheet4.setColumnWidth(5, 10*256);
+		output(wb,sheet4,model_na,starttime,endtime);
+		
 		try {
-			Workbook wb = new HSSFWorkbook();
-			// 檔名
-			// FileOutputStream stream = new FileOutputStream(sFileName);
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			// 標題，設定格式:粗體置中 字體14
-			HSSFCellStyle styleTitle = (HSSFCellStyle) wb.createCellStyle();
-			Font fontTitle = wb.createFont();
-			fontTitle.setBoldweight(Font.BOLDWEIGHT_BOLD); // 粗體
-			fontTitle.setFontHeightInPoints((short) 14); // 字體
-			styleTitle.setFont(fontTitle);
-			styleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平置中
-			styleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); // 垂直置中
-			setStandStyle(styleTitle);
-
-			// 標題，設定格式:粗體置中 字體12
-			HSSFCellStyle styleHead = (HSSFCellStyle) wb.createCellStyle();
-			Font fontHead = wb.createFont();
-			fontHead.setBoldweight(Font.BOLDWEIGHT_BOLD); // 粗體
-			fontHead.setFontHeightInPoints((short) 12); // 字體
-			styleHead.setFont(fontHead);
-			styleHead.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平置中
-			styleHead.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); // 垂直置中
-			setStandStyle(styleHead); // 設定Border及自動換行
-
-			// 內容格式-文字
-			HSSFCellStyle styleString = (HSSFCellStyle) wb.createCellStyle();
-			styleString.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			styleString.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			setStandStyle(styleString);
-
-			// 內容格式-日期
-			HSSFCellStyle styleDate = (HSSFCellStyle) wb.createCellStyle();
-			HSSFDataFormat dateFormat = (HSSFDataFormat) wb.createDataFormat();
-			styleDate.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			styleDate.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			styleDate.setDataFormat(dateFormat.getFormat("YYYY/MM/DD"));
-			setStandStyle(styleDate);
-
-			// 內容格式-數字
-			HSSFCellStyle styleNumber = (HSSFCellStyle) wb.createCellStyle();
-			styleNumber.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			setStandStyle(styleNumber);
-
-			// 內容格式-數字-float
-			HSSFCellStyle styleFloat = (HSSFCellStyle) wb.createCellStyle();
-			styleFloat.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			styleFloat.setDataFormat(HSSFDataFormat.getBuiltinFormat("0.00"));
-			setStandStyle(styleFloat);
-
-			Query qry = CRUDService.createSQL(sSql);
-
-			// 設定 Sheet名稱
-			Sheet sh = wb.createSheet(sTitle);
-
-			int iRow = 0;
-			Row rowHead = sh.createRow(iRow);
-
-			// 報表名稱
-			Cell celltitle;
-			for (int i = 0; i < arrHead.length; i++) {
-				celltitle = rowHead.createCell(i);
-				celltitle.setCellStyle(styleTitle);
-			}
-			celltitle = rowHead.createCell(0);
-			celltitle.setCellValue(sTitle);
-			celltitle.setCellStyle(styleTitle);
-
-			// 合併儲存格
-			sh.addMergedRegion(new CellRangeAddress(0, 0, 0, arrHead.length - 1));
-			// 設定欄高
-			rowHead.setHeightInPoints((short) 40);
-
-			iRow++;
-			rowHead = sh.createRow(iRow);
-
-			// 標題
-			for (int i = 0; i < arrHead.length; i++) {
-				Cell cell = rowHead.createCell(i);
-				cell.setCellStyle(styleHead);
-				cell.setCellValue(arrHead[i]);
-
-				int iWidth = 20;
-
-				sh.setColumnWidth(i, (short) 256 * iWidth);
-				// sh.autoSizeColumn(i);
-			}
-
-			iRow++;
-			Row rowCell = sh.createRow(iRow);
-			int k = 0;
-
-			// 內容
-			for (Iterator i = qry.getResultList().iterator(); i.hasNext();) {
-				rowCell = sh.createRow(iRow + k);
-				Object[] obj = (Object[]) i.next();
-				for (int j = 0; j < arrHead.length; j++) {
-					Cell cell0 = rowCell.createCell(j);
-					if (obj[j] instanceof String) {
-						cell0.setCellStyle(styleString);
-						cell0.setCellValue((String) obj[j]);
-					} else if (obj[j] instanceof BigDecimal) {
-						cell0.setCellStyle(styleNumber);
-						cell0.setCellValue(((BigDecimal) obj[j]).doubleValue());
-					} else if (obj[j] instanceof Date) {
-						cell0.setCellStyle(styleDate);
-						cell0.setCellValue((Date) obj[j]);
-					} else if (obj[j] == null) {
-						cell0.setCellStyle(styleString);
-						cell0.setCellValue("");
-					}
-				}
-				k++;
-			}
-
 			wb.write(stream);
 
 			byte[] content = stream.toByteArray();
-			InputStream is = new ByteArrayInputStream(content);
+		    InputStream is = new ByteArrayInputStream(content);
 
-			// File file = new File(sFileName);
-			// Filedownload.save(file, "application/file");
-			Filedownload.save(is, "application/file", "abcdef");
+		    //儲存位置、名稱
+			Filedownload.save(is, "application/xls",title);
 			is.close();
 			stream.flush();
 			stream.close();
 		} catch (IOException e) {
-			Messagebox.show(Labels.getLabel("PUBLIC.MSG0008"), "File Not Found", Messagebox.OK, Messagebox.ERROR);
-		}
-
-	}
-
-	// 使用poi匯出excel
-	public static void ExcelExporta(String sSql, String sFileName, String sTitle, String[] arrHead) {
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService");
-		try {
-			Workbook wb = new HSSFWorkbook();
-			// 檔名
-			// FileOutputStream stream = new FileOutputStream(sFileName);
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			// 標題，設定格式:粗體置中 字體14
-			HSSFCellStyle styleTitle = (HSSFCellStyle) wb.createCellStyle();
-			Font fontTitle = wb.createFont();
-			fontTitle.setBoldweight(Font.BOLDWEIGHT_BOLD); // 粗體
-			fontTitle.setFontHeightInPoints((short) 14); // 字體
-			styleTitle.setFont(fontTitle);
-			styleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平置中
-			styleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); // 垂直置中
-			setStandStyle(styleTitle);
-
-			// 標題，設定格式:粗體置中 字體12
-			HSSFCellStyle styleHead = (HSSFCellStyle) wb.createCellStyle();
-			Font fontHead = wb.createFont();
-			fontHead.setBoldweight(Font.BOLDWEIGHT_BOLD); // 粗體
-			fontHead.setFontHeightInPoints((short) 12); // 字體
-			styleHead.setFont(fontHead);
-			styleHead.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平置中
-			styleHead.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); // 垂直置中
-			setStandStyle(styleHead); // 設定Border及自動換行
-
-			// 內容格式-文字
-			HSSFCellStyle styleString = (HSSFCellStyle) wb.createCellStyle();
-			styleString.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			styleString.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			setStandStyle(styleString);
-
-			// 內容格式-日期
-			HSSFCellStyle styleDate = (HSSFCellStyle) wb.createCellStyle();
-			HSSFDataFormat dateFormat = (HSSFDataFormat) wb.createDataFormat();
-			styleDate.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			styleDate.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			styleDate.setDataFormat(dateFormat.getFormat("YYYY/MM/DD"));
-			setStandStyle(styleDate);
-
-			// 內容格式-數字
-			HSSFCellStyle styleNumber = (HSSFCellStyle) wb.createCellStyle();
-			styleNumber.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			setStandStyle(styleNumber);
-
-			// 內容格式-數字-float
-			HSSFCellStyle styleFloat = (HSSFCellStyle) wb.createCellStyle();
-			styleFloat.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			styleFloat.setDataFormat(HSSFDataFormat.getBuiltinFormat("0.00"));
-			setStandStyle(styleFloat);
-
-			Query qry = CRUDService.createSQL(sSql);
-			// 設定 Sheet名稱
-			Sheet sh = wb.createSheet(sTitle);
-
-			int iRow = 0;
-			Row rowHead = sh.createRow(iRow);
-
-			// 報表名稱
-			Cell celltitle;
-			for (int i = 0; i < arrHead.length; i++) {
-				celltitle = rowHead.createCell(i);
-				celltitle.setCellStyle(styleTitle);
-			}
-			celltitle = rowHead.createCell(0);
-			celltitle.setCellValue(sTitle);
-			celltitle.setCellStyle(styleTitle);
-
-			// 合併儲存格
-			sh.addMergedRegion(new CellRangeAddress(0, 0, 0, arrHead.length - 1));
-			// 設定欄高
-			rowHead.setHeightInPoints((short) 40);
-
-			iRow++;
-			rowHead = sh.createRow(iRow);
-
-			// 標題
-			for (int i = 0; i < arrHead.length; i++) {
-				Cell cell = rowHead.createCell(i);
-				cell.setCellStyle(styleHead);
-				cell.setCellValue(arrHead[i]);
-
-				int iWidth = 20;
-
-				sh.setColumnWidth(i, (short) 256 * iWidth);
-				// sh.autoSizeColumn(i);
-			}
-
-			iRow++;
-			Row rowCell = sh.createRow(iRow);
-			int k = 0;
-			// // 內容
-			// for (int i =0;i<30;i++) {
-			// rowCell = sh.createRow(iRow + k);
-			// String obj = i+"---";
-			// for (int j = 0; j < arrHead.length; j++) {
-			// Cell cell0 = rowCell.createCell(j);
-			// cell0.setCellValue(obj +j);
-			// }
-			// k++;
-			// }
-
-			// 內容
-			for (Iterator i = qry.getResultList().iterator(); i.hasNext();) {
-				rowCell = sh.createRow(iRow + k);
-				Object[] obj = (Object[]) i.next();
-				for (int j = 0; j < arrHead.length; j++) {
-					Cell cell0 = rowCell.createCell(j);
-					if (obj[j] instanceof String) {
-						cell0.setCellStyle(styleString);
-						cell0.setCellValue((String) obj[j]);
-					} else if (obj[j] instanceof BigDecimal) {
-						cell0.setCellStyle(styleNumber);
-						cell0.setCellValue(((BigDecimal) obj[j]).doubleValue());
-					} else if (obj[j] instanceof Date) {
-						cell0.setCellStyle(styleDate);
-						cell0.setCellValue((Date) obj[j]);
-					} else if (obj[j] == null) {
-						cell0.setCellStyle(styleString);
-						cell0.setCellValue("");
-					}
-				}
-				k++;
-			}
-
-			wb.write(stream);
-
-			byte[] content = stream.toByteArray();
-			InputStream is = new ByteArrayInputStream(content);
-
-			// File file = new File(sFileName);
-			// Filedownload.save(file, "application/file");
-			Filedownload.save(is, "application/xls", sFileName);
-			is.close();
-			stream.flush();
-			stream.close();
-		} catch (IOException e) {
-			Messagebox.show(Labels.getLabel("PUBLIC.MSG0008"), "File Not Found", Messagebox.OK, Messagebox.ERROR);
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}
 	
-	// 使用poi匯出excel
-	public static void ExcelExportb(String sSql, String sFileName, String sTitle, String[] arrHead,String starttime,String	endtime) {
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
-		try {
-			Workbook wb = new HSSFWorkbook();
-			// 檔名
-			// FileOutputStream stream = new FileOutputStream(sFileName);
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			// 標題，設定格式:粗體置中 字體14
-			HSSFCellStyle styleTitle = (HSSFCellStyle) wb.createCellStyle();
-			Font fontTitle = wb.createFont();
-			fontTitle.setBoldweight(Font.BOLDWEIGHT_BOLD); // 粗體
-			fontTitle.setFontHeightInPoints((short) 14); // 字體
-			styleTitle.setFont(fontTitle);
-			styleTitle.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平置中
-			styleTitle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); // 垂直置中
-			setStandStyle(styleTitle);
+	
+	private static void output(HSSFWorkbook wb, HSSFSheet sheet4, String model_na, String starttime, String endtime) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	
+		Connection Conn = getDB01Conn();
+		Connection conn = Common.getDbConnection();
 
-			// 標題，設定格式:粗體置中 字體12
-			HSSFCellStyle styleHead = (HSSFCellStyle) wb.createCellStyle();
-			Font fontHead = wb.createFont();
-			fontHead.setBoldweight(Font.BOLDWEIGHT_BOLD); // 粗體
-			fontHead.setFontHeightInPoints((short) 12); // 字體
-			styleHead.setFont(fontHead);
-			styleHead.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平置中
-			styleHead.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER); // 垂直置中
-			setStandStyle(styleHead); // 設定Border及自動換行
-
-			// 內容格式-文字
-			HSSFCellStyle styleString = (HSSFCellStyle) wb.createCellStyle();
-			styleString.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			styleString.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			setStandStyle(styleString);
-
-			// 內容格式-日期
-			HSSFCellStyle styleDate = (HSSFCellStyle) wb.createCellStyle();
-			HSSFDataFormat dateFormat = (HSSFDataFormat) wb.createDataFormat();
-			styleDate.setAlignment(HSSFCellStyle.ALIGN_LEFT);
-			styleDate.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			styleDate.setDataFormat(dateFormat.getFormat("YYYY/MM/DD"));
-			setStandStyle(styleDate);
-
-			// 內容格式-數字
-			HSSFCellStyle styleNumber = (HSSFCellStyle) wb.createCellStyle();
-			styleNumber.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			setStandStyle(styleNumber);
-
-			// 內容格式-數字-float
-			HSSFCellStyle styleFloat = (HSSFCellStyle) wb.createCellStyle();
-			styleFloat.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-			styleFloat.setDataFormat(HSSFDataFormat.getBuiltinFormat("0.00"));
-			setStandStyle(styleFloat);
-
-			Query qry = CRUDService.createSQL(sSql);
-			// 設定 Sheet名稱
-			Sheet sh = wb.createSheet(sTitle);
-
-			int iRow = 0;
-			Row rowHead = sh.createRow(iRow);
-
-			// 報表名稱
-			Cell celltitle;
-			for (int i = 0; i < arrHead.length; i++) {
-				celltitle = rowHead.createCell(i);
-				celltitle.setCellStyle(styleTitle);
-			}
-			celltitle = rowHead.createCell(0);
-			celltitle.setCellValue(sTitle);
-			celltitle.setCellStyle(styleTitle);
-
-			// 合併儲存格
-			sh.addMergedRegion(new CellRangeAddress(0, 0, 0, arrHead.length - 1));
-			// 設定欄高
-			rowHead.setHeightInPoints((short) 40);
-
-			iRow++;
-			rowHead = sh.createRow(iRow);
-
-			// 標題
-			for (int i = 0; i < arrHead.length; i++) {
-				Cell cell = rowHead.createCell(i);
-				cell.setCellStyle(styleHead);
-				cell.setCellValue(arrHead[i]);
-
-				int iWidth = 20;
-				if(i==0)
-					sh.setColumnWidth(i, (short) 256 * 40);
-				else if(i==3)
-					sh.setColumnWidth(i, (short) 256 * 41);
-				else
-					sh.setColumnWidth(i, (short) 256 * iWidth);
-				
-				// sh.autoSizeColumn(i);
-			}
-
-			iRow++;
-			Row rowCell = sh.createRow(iRow);
-			int k = 0;
-			// // 內容
-			// for (int i =0;i<30;i++) {
-			// rowCell = sh.createRow(iRow + k);
-			// String obj = i+"---";
-			// for (int j = 0; j < arrHead.length; j++) {
-			// Cell cell0 = rowCell.createCell(j);
-			// cell0.setCellValue(obj +j);
-			// }
-			// k++;
-			// }
-			
-			Map<String,String> countMap  = DSIDN10M_Program.getNewMessage4(starttime,endtime);
-			Map<String,String> odnoMap =  DSIDN10M_Program.getNewMessage5(starttime,endtime);
-			
-			
-			String tempcontent ="";
-			int startrow =0;
-			int endrow =0;
-			int index =0;
-			List lit = qry.getResultList();
-			Iterator it = lit.iterator();
-			System.out.println("ppppppppppppppppp==========================start");
-			// 內容
-			for (Iterator i = it; i.hasNext();) {
-				rowCell = sh.createRow(iRow + k);
-				///rowCell.setHeightInPoints((short) 20);
-				Object[] obj = (Object[]) i.next();
-				int cellnum = 1;
-				for (int j = 0; j < obj.length; j++) {
-					Cell cell0 = rowCell.createCell(j==3?j+2:j);
+		HSSFRow row = null;
+		HSSFCell cell = null;
+		
+		// 字體	
+		HSSFFont font1 = wb.createFont();
+		font1.setFontName("Calibri");    				//设置字體  
+		font1.setFontHeightInPoints((short)10);    		//设置字体高度  
+//		font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 
 					
-					if (obj[j] instanceof String) {
-						cell0.setCellStyle(styleString);
-						cell0.setCellValue((String) obj[j]);
-					} else if (obj[j] instanceof BigDecimal) {
-						cell0.setCellStyle(styleNumber);
-						cell0.setCellValue(((BigDecimal) obj[j]).doubleValue());
-					} else if (obj[j] instanceof Date) {
-						cell0.setCellStyle(styleDate);
-						cell0.setCellValue((Date) obj[j]);
-					} else if (obj[j] == null) {
-						cell0.setCellStyle(styleString);
-						cell0.setCellValue("");
-					}
-					if (j == 0) {
-						if (index == 0) {
-							tempcontent = (String) obj[0];
-							startrow = iRow + k;
-							endrow = startrow;
-							Cell cell1 = rowCell.createCell(4);
-							cell1.setCellStyle(styleString);
-							//cell1.setCellValue(tempcontent);
-							cell1.setCellValue(countMap != null?countMap.get(tempcontent):"");
-							
-							
-							Cell cell2 = rowCell.createCell(3);
-							cell2.setCellStyle(styleString);
-							//cell1.setCellValue(tempcontent);
-							cell2.setCellValue(odnoMap != null ?odnoMap.get(tempcontent):"");
-							
-						} else {
-							System.out.println((index+iRow)+"===index"+obj[0]);
-							if (tempcontent != null && !tempcontent.equals((String) obj[0])) {
-								tempcontent = (String) obj[0];
-								System.out.println(startrow);
-								System.out.println(iRow + k-1);
-								//System.out.println(startrow + index);
-								System.out.println("===============u=======================");
-								sh.addMergedRegion(new CellRangeAddress(
-										startrow, // first// row (0-based)
-										iRow + k-1, // last row (0-based)
-										4, // first column (0-based)
-										4// last column (0-based)
-								));
-								
-								sh.addMergedRegion(new CellRangeAddress(
-										startrow, // first// row (0-based)
-										iRow + k-1, // last row (0-based)
-										3, // first column (0-based)
-										3// last column (0-based)
-								));
-								startrow = iRow + index;
+					// 標題格式
+		HSSFCellStyle style1 = wb.createCellStyle();
+		style1.setFont(font1);
+		style1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1.setFillPattern((short) 0);
+		style1.setWrapText(true);
+					
+		
+		PreparedStatement  ps1 = null, ps2 = null;
+		ResultSet  rs1 = null, rs2 = null;	
+		
+		int rowNum = 2;
 
-								Cell cell1 = rowCell.createCell(4);
-								cell1.setCellStyle(styleString);
-								//cell1.setCellValue(tempcontent);
+		Header4(sheet4,style1,row,cell);
+		
+		List<Object>  MODEL_NALIST=new ArrayList<Object>();
 
-								cell1.setCellValue(countMap != null ?countMap.get(tempcontent):"");
-								
-								
-								Cell cell2 = rowCell.createCell(3);
-								cell2.setCellStyle(styleString);
-								//cell1.setCellValue(tempcontent);
-								cell2.setCellValue(odnoMap != null ?odnoMap.get(tempcontent):"");
-								
-								
-								
-							}else{
-								endrow++;
-							}
-						}
-
-						// if(j==)
-					}
-
-					if ((iRow + k) == lit.size()) {
-						sh.addMergedRegion(new CellRangeAddress(
-								startrow, // first row (0-based)
-								iRow + k+1, // last row (0-based)
-								4, // first column (0-based)
-								4// last column (0-based)
-						));
-						sh.addMergedRegion(new CellRangeAddress(
-								startrow, // first row (0-based)
-								iRow + k+1, // last row (0-based)
-								3, // first column (0-based)
-								3// last column (0-based)
-						));
-					//	System.out.println(startrow);
-					//	System.out.println((iRow + k + 1));
-					}
-				}
-				k++;
-				index++;
+		String ExSql="";
+		if(!"".equals(model_na)){
+			ExSql=" AND MODEL_NA='"+model_na+"'";
+		}
+		String 	sql1="SELECT DISTINCT MODEL_NA FROM DSID76 WHERE TO_CHAR(UP_DATE,'YYYY/MM/DD')  BETWEEN '"+starttime+"' AND  '"+endtime+"' "+ExSql+" AND MODEL_NA IS NOT NULL";	
+		System.out.println(">>>>>"+sql1);
+		try {
+			ps1 = Conn.prepareStatement(sql1, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs1 = ps1.executeQuery();	
+			while(rs1.next()){
+				MODEL_NALIST.add(rs1.getString("MODEL_NA"));
 			}
-			System.out.println("ppppppppppppppppp==========================end");
+			rs1.close();
+			ps1.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for(int i=0;i<MODEL_NALIST.size();i++){
+				
+		List<Object>  His=getod_no(MODEL_NALIST.get(i).toString(),starttime,endtime,Conn);
 
-			sh.addMergedRegion(new CellRangeAddress(
-					3, //first row (0-based)
-					6, //last row (0-based)
-					3, //first column (0-based)
-					3//last column (0-based)
-					));
+		String sql2="SELECT MODEL_NA,A.EL_NO,B.EL_CNAME,A.MT_QTY FROM DSID76 A,DSEL00 B WHERE A.EL_NO=B.EL_NO AND MODEL_NA='"+MODEL_NALIST.get(i).toString()+"' AND  TO_CHAR(A.UP_DATE,'YYYY/MM/DD') BETWEEN '"+starttime+"' AND '"+endtime+"'  ORDER BY MODEL_NA ";
+		int num=rowNum;
+		try {
+			ps2 = Conn.prepareStatement(sql2);
+			rs2 = ps2.executeQuery();			
+			while(rs2.next()){
 
-			wb.write(stream);
+					row = sheet4.createRow(rowNum);				
+					cell = row.createCell(0);
+					cell.setCellType(1);
+					cell.setCellStyle(style1);
+					cell.setCellValue(rs2.getString(1));
+								
+					cell = row.createCell(1);
+					cell.setCellType(1);
+					cell.setCellStyle(style1);
+					cell.setCellValue(rs2.getString(2));
+								
+					cell = row.createCell(2);
+					cell.setCellType(1);
+					cell.setCellStyle(style1);
+					cell.setCellValue(rs2.getString(3));
+								
+					cell = row.createCell(3);
+					cell.setCellType(1);
+					cell.setCellStyle(style1);
+					if(His.size()!=0){
+					cell.setCellValue(His.get(0).toString());
+					}
+					sheet4.addMergedRegion(new CellRangeAddress(num, rowNum, 3, 3));
+					
+					cell = row.createCell(4);
+					cell.setCellType(1);
+					cell.setCellStyle(style1);
+					if(His.size()!=0){
+					cell.setCellValue(getSumyield(rs2.getString(1),rs2.getString(2),His.get(1).toString(),conn));
+					}
+					
+					cell = row.createCell(5);
+					cell.setCellType(1);
+					cell.setCellStyle(style1);
+					cell.setCellValue(rs2.getString(4));
+					
+					rowNum++;
+			}
+			ps2.close();
+			rs2.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			if(rs1!=null){
+				rs1.close();
+			}
+			if(ps1!=null){
+				ps1.close();
+			}
+			if(rs2!=null){
+				rs2.close();
+			}
+			if(ps2!=null){
+				ps2.close();
+			}
 
-			byte[] content = stream.toByteArray();
-			InputStream is = new ByteArrayInputStream(content);
-
-			// File file = new File(sFileName);
-			// Filedownload.save(file, "application/file");
-			Filedownload.save(is, "application/xls", sFileName);
-			is.close();
-			stream.flush();
-			stream.close();
-		} catch (IOException e) {
-			Messagebox.show(Labels.getLabel("PUBLIC.MSG0008"), "File Not Found", Messagebox.OK, Messagebox.ERROR);
+			Common.closeConnection(conn);
+			Common.closeConnection(Conn);
 		}
 
+			num=rowNum;
+		}
+	}
+	
+
+
+	private static Double getSumyield(String model_na,  String EL_NO, String qty, Connection conn) throws SQLException {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		ResultSet rs = null;		
+		
+		Double Syield=0.0;
+		String 	sql="SELECT * FROM (SELECT SUM(YIELD) YIELD FROM DSID04_1 WHERE  MODEL_NA='"+model_na+"' AND EL_NO='"+EL_NO+"'\n" +
+				"UNION\n" + 
+				"SELECT SUM(YIELD) YIELD FROM DSID04_2 WHERE  MODEL_NA='"+model_na+"' AND EL_NO='"+EL_NO+"'\n" + 
+				"UNION\n" + 
+				"SELECT SUM(YIELD) YIELD FROM DSID04_3 WHERE  MODEL_NA='"+model_na+"' AND EL_NO='"+EL_NO+"') WHERE YIELD >0";
+
+//		System.out.println(">>>>>"+sql);
+		try {
+			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = ps.executeQuery();	
+			if(rs.next()){
+				Syield=Double.valueOf(rs.getString("YIELD"))*Double.valueOf(qty);
+			}else{
+				Syield=0.0;
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+		}
+
+	
+			return Syield;
 	}
 
-	// 設定框線
-	private static void setStandStyle(HSSFCellStyle style) {
-		style.setBorderBottom((short) 1);
-		style.setBorderTop((short) 1);
-		style.setBorderLeft((short) 1);
-		style.setBorderRight((short) 1);
-		style.setWrapText(true);
+
+	private static List<Object> getod_no( String model_na,String starttime, String endtime, Connection conn) throws SQLException {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		List<Object>  His=new ArrayList<Object>();
+		String OD_NOLIST="";
+		int qty=0;
+		String ExSql="";
+		if(!"".equals(model_na)){
+			ExSql=" AND MODEL_NA='"+model_na+"'";
+		}
+		String 	sql="SELECT * FROM DSID65 WHERE TO_CHAR(PG_DATE,'YYYY/MM/DD')  BETWEEN '"+starttime+"' AND  '"+endtime+"' "+ExSql;	
+		System.out.println(">>>>>"+sql);
+		try {
+			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = ps.executeQuery();	
+			while(rs.next()){
+				qty++;
+				OD_NOLIST+=rs.getString("OD_NO")+",";
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+		}
+
+		if(OD_NOLIST.length()>0){
+			OD_NOLIST=OD_NOLIST.substring(0,OD_NOLIST.length()-1);
+			His.add(OD_NOLIST);
+			His.add(qty);
+		}
+		
+		
+		
+		return His;
 	}
 
+
+	private static void Header4(HSSFSheet sheet4, HSSFCellStyle style1, HSSFRow row, HSSFCell cell) {
+		// TODO Auto-generated method stub
+		
+		row = sheet4.createRow(0);
+		row.setHeightInPoints(30);		
+		cell = row.createCell(0);
+		cell.setCellType(1);
+		cell.setCellStyle(style1);
+		cell.setCellValue("出庫統計");	
+		sheet4.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
+		
+		row = sheet4.createRow(1);
+		row.setHeightInPoints(20);		
+		cell = row.createCell(0);
+		cell.setCellType(1);
+		cell.setCellStyle(style1);
+		cell.setCellValue("形體名稱");		
+			
+		cell = row.createCell(1);
+		cell.setCellType(1);
+		cell.setCellStyle(style1);
+		cell.setCellValue("材料編號");		
+			
+		cell = row.createCell(2);
+		cell.setCellType(1);
+		cell.setCellStyle(style1);
+		cell.setCellValue("材料名稱");		
+			
+		cell = row.createCell(3);
+		cell.setCellType(1);
+		cell.setCellStyle(style1);
+		cell.setCellValue("指令");		
+			
+		cell = row.createCell(4);
+		cell.setCellType(1);
+		cell.setCellStyle(style1);
+		cell.setCellValue("總用量");
+			
+		cell = row.createCell(5);
+		cell.setCellType(1);
+		cell.setCellStyle(style1);
+		cell.setCellValue("總領料");
+	}
+
+
+	public static Connection getDB01Conn(){
+		Connection  conn = null;
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+		String user = "DSOD";
+		String pwd = "ora@it2013";
+		try{
+	        Class.forName(driver);
+	     }catch(Exception e){
+	        e.printStackTrace();
+	     }
+	    try{
+	    	conn=DriverManager.getConnection(url,user,pwd);
+	    	System.err.println(">>>鏈接DB01數據庫");
+	    }catch(Exception e){
+	    	e.printStackTrace();
+	    }
+	    return conn;
+	}
+
+	
+	
+	
 }

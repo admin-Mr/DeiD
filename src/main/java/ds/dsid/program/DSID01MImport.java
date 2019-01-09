@@ -18,6 +18,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
@@ -45,7 +47,7 @@ public class DSID01MImport extends OpenWinCRUD{
 	@Wire
 	private Window windowMaster;
 	@Wire
-	private Radio N_radioButton,S_radioButton,T_radioButton;	
+	private Radio N_radioButton,S_radioButton,V_radioButton;	
 	@Wire
 	private Datebox txtorder_date;
 	@Wire
@@ -60,12 +62,24 @@ public class DSID01MImport extends OpenWinCRUD{
 	ArrayList<String> partnaList=new ArrayList();
 	Connection connHead = null;
 	String Errmessage="";
+	String TABLE="";
 	
 	@Override
 	public void doAfterCompose(Component window) throws Exception {
 		super.doAfterCompose(window);
 		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService");
 				
+		Execution execution = Executions.getCurrent();
+		TABLE =  (String) execution.getArg().get("TABLE"); 
+		System.err.println(">>>>>"+TABLE);
+//		if("DSID01".equals(TABLE)){
+//			V_radioButton.setVisible(false);	
+//		}else{
+//			N_radioButton.setVisible(false);
+//			S_radioButton.setVisible(false);
+//			V_radioButton.setChecked(true);
+//		}
+		
 		btnImport2 = (Fileupload) window.getFellow("btnImport2");
 		btnImport2.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
 			@SuppressWarnings("unused")
@@ -100,7 +114,7 @@ public class DSID01MImport extends OpenWinCRUD{
 
 				fw.flush();
 				fw.close();
-				write(file,i);
+				write(file,i,connHead);
 
 			}
 			for(int n=0;n<importdata.length;n++){
@@ -122,7 +136,7 @@ public class DSID01MImport extends OpenWinCRUD{
 		}
 	}
 	
-	private void write(File file, int i) {
+	private void write(File file, int i, Connection conn) {
 		// TODO Auto-generated method stub
 		SAXReader reader = new SAXReader();
 		reader.setEncoding("UTF-8");
@@ -130,7 +144,7 @@ public class DSID01MImport extends OpenWinCRUD{
 		
 		try {
 			document = reader.read(file);
-			importXMLToDB(document);
+			importXMLToDB(document,conn);
 			importdata[i][1]=true;
 			ShowMessage();			
 		} catch (Exception e){
@@ -138,13 +152,12 @@ public class DSID01MImport extends OpenWinCRUD{
 		}
 	}
 	
-	private void importXMLToDB(Document document) throws SQLException {
+	private void importXMLToDB(Document document, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 				
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
         DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 //		DSID01_TEMP DSID01_TEMP=new DSID01_TEMP();
-        Connection conn=Common.getDbConnection();
 		
 		List workOrder = document.selectNodes("//workOrder");
 		Iterator workOrderIt = workOrder.iterator();
@@ -155,7 +168,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			String OD_NO="",WORK_ORDER_ID="",TYPE="",SHIP_GROUP_ID="",ORDER_ID="",NIKE_SH_ARITCLE="",MODEL_NA="",SH_STYLENO="",ORDER_NUM="",LEFT_SIZE_RUN="",RIGHT_SIZE_RUN="";
 			String REGION="",EXP_QTY="",EXP_STATUS="",COUNTRY="",ITEMNUMBER="",PRIORITY="",EXOTIC="",REMAKE="",BILLTOREGION="",SHIPTOSTUDIO="",POSTALCODE="",SHIPPER="";
 			String URL1="",URL2="",URL3="",URL4="",URL5="",URL6="",URL7="",URL8="",URL9="",URL10="";
-			String FACTACCPDATE="",REQUSHIPDATE="",ORDER_DATE="";
+			String FACTACCPDATE="",REQUSHIPDATE="",ORDER_DATE="",FACTRECDATE="";
 			
 			//接單日期---可選
 
@@ -175,28 +188,25 @@ public class DSID01MImport extends OpenWinCRUD{
 			}
 			
 			//檢查work_order_id是否唯一
-//			isunique = checkunique(DSID01_TEMP.getWORK_ORDER_ID());
-//			if(!isunique){
-//				System.out.println(">>>："+DSID01_TEMP.getWORK_ORDER_ID()+"已經匯入。");
-//				return ;
-//			}	
+			Boolean Exist = Check(WORK_ORDER_ID,conn);
+			if(Exist==true){
+				System.out.println(">>>："+WORK_ORDER_ID+"已經匯入。");
+				continue;
+			}	
 	
 			//type
-			 if(N_radioButton.isSelected()){
-//				DSID01_TEMP.setTYPE("0");   //普通接單
+			
+			 if(N_radioButton.isSelected()){ 		//普通接單  normal 
 				TYPE="0"; 
-			}else if(S_radioButton.isSelected()){ //特殊訂單
-//				DSID01_TEMP.setTYPE("1");
+			}else if(S_radioButton.isSelected()){   //特殊訂單  Special
 				TYPE="1";
 			}
-//			else if(T_radioButton.isSelected()){
-////				DSID01_TEMP.setTYPE("2");   //測試訂單
+//			else if(V_radioButton.isSelected()){	//虛擬訂單  Virtual
 //				TYPE="2";
 //			}
 			 
-			System.err.println(">>>>>TYPE :"+TYPE);
-
-				
+			System.err.println(">>>>>TYPE :"+TYPE);			
+			
 			//shipGroupId			 
 			Iterator shipGroupIdIt = workOrderElement.elementIterator("shipGroupId");
 			while(shipGroupIdIt.hasNext()){
@@ -237,7 +247,22 @@ public class DSID01MImport extends OpenWinCRUD{
 //				DSID01_TEMP.setPRIORITY(priorityElement.getText());
 
 			}
-							
+				
+			SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yyyy");
+			//factoryReceivedDate	  客戶下單日期		 
+			Iterator factoryReceivedDate = workOrderElement.elementIterator("factoryReceivedDate");
+			while(factoryReceivedDate.hasNext()){
+				Element factoryReceivedDateElement = (Element)factoryReceivedDate.next();
+				try{
+//				 FACTACCPDATE = format.parse(factoryAcceptDateElement.getText());				 
+				 FACTRECDATE=factoryReceivedDateElement.getText();
+				 System.err.println(">>>>>FACTRECDATE :"+FACTRECDATE);
+//				 DSID01_TEMP.setFACTACCPDATE(acceptDate);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+			
 			//factoryAcceptDate			 
 			Iterator factoryAcceptDateIt = workOrderElement.elementIterator("factoryAcceptDate");
 			while(factoryAcceptDateIt.hasNext()){
@@ -245,7 +270,9 @@ public class DSID01MImport extends OpenWinCRUD{
 				try{
 //				 FACTACCPDATE = format.parse(factoryAcceptDateElement.getText());				 
 				 FACTACCPDATE=factoryAcceptDateElement.getText();
-				 FACTACCPDATE=FACTACCPDATE.replace("null", "");
+				 if("".equals(FACTACCPDATE)||FACTACCPDATE==null||"null".equals(FACTACCPDATE)){
+					 FACTACCPDATE=format1.format(new Date());
+				 }
 				 System.err.println(">>>>>FACTACCPDATE :"+FACTACCPDATE);
 //				 DSID01_TEMP.setFACTACCPDATE(acceptDate);
 				}catch(Exception e){
@@ -552,12 +579,12 @@ public class DSID01MImport extends OpenWinCRUD{
     		//獲取最新指令
     		OD_NO=GetOd_no(conn);
     		
-    		String 	sql="INSERT INTO DSID01 (OD_NO,ORDER_DATE,WORK_ORDER_ID,TYPE,SHIP_GROUP_ID,ORDER_ID,NIKE_SH_ARITCLE,"
+    		String 	sql="INSERT INTO "+TABLE+" (OD_NO,ORDER_DATE,WORK_ORDER_ID,TYPE,SHIP_GROUP_ID,ORDER_ID,NIKE_SH_ARITCLE,"
     				+ "MODEL_NA,SH_STYLENO,ORDER_NUM,LEFT_SIZE_RUN,RIGHT_SIZE_RUN,REGION,EXP_QTY,EXP_STATUS,COUNTRY,"
-    				+ "ITEMNUMBER,PRIORITY,FACTACCPDATE,REQUSHIPDATE,EXOTIC,REMAKE,SHIPPER,BILLTOREGION,SHIPTOSTUDIO,POSTALCODE,"
+    				+ "ITEMNUMBER,PRIORITY,FACTRECDATE,FACTACCPDATE,REQUSHIPDATE,EXOTIC,REMAKE,SHIPPER,BILLTOREGION,SHIPTOSTUDIO,POSTALCODE,"
     				+ "URL1,URL2,URL3,URL4,URL5,URL6,URL7,URL8,URL9,URL10,UP_USER,UP_DATE) VALUES('"+OD_NO+"',TO_DATE('"+ORDER_DATE+"','YYYY/MM/DD'),'"+WORK_ORDER_ID+"','"+TYPE+"','"+SHIP_GROUP_ID+"','"+ORDER_ID+"','"+NIKE_SH_ARITCLE
     				+"','"+MODEL_NA+"','"+SH_STYLENO+"','"+ORDER_NUM+"','"+LEFT_SIZE_RUN+"','"+RIGHT_SIZE_RUN+"','"+REGION+"','"+EXP_QTY+"','"+EXP_STATUS+"','"+COUNTRY
-    				+"','"+ITEMNUMBER+"','"+PRIORITY+"',TO_DATE('"+FACTACCPDATE+"','MM/dd/yyyy'),TO_DATE('"+REQUSHIPDATE+"','MM/dd/yyyy'),'"+EXOTIC+"','"+REMAKE+"','"+SHIPPER+"','"+BILLTOREGION+"','"+SHIPTOSTUDIO+"','"+POSTALCODE
+    				+"','"+ITEMNUMBER+"','"+PRIORITY+"',TO_DATE('"+FACTRECDATE+"','MM/dd/yyyy'),TO_DATE('"+FACTACCPDATE+"','MM/dd/yyyy'),TO_DATE('"+REQUSHIPDATE+"','MM/dd/yyyy'),'"+EXOTIC+"','"+REMAKE+"','"+SHIPPER+"','"+BILLTOREGION+"','"+SHIPTOSTUDIO+"','"+POSTALCODE
     				+"','"+URL1+"','"+URL2+"','"+URL3+"','"+URL4+"','"+URL5+"','"+URL6+"','"+URL7+"','"+URL8+"','"+URL9+"','"+URL10+"','"+_userInfo.getAccount()+"',TO_DATE('"+Format.format(new Date())+"','YYYY/MM/DD'))";	
     		System.out.println(sql);		
     		try {
@@ -571,18 +598,63 @@ public class DSID01MImport extends OpenWinCRUD{
 				conn.rollback();
 				return;
 			}
-		}
-			Common.closeConnection(conn);				
+		}			
 	 }
 
-	private String GetOd_no(Connection conn) {
+	//判斷是否是重複導單 如主單中存在，則不再重複導入，如果主檔不存在，則刪除明細檔的資料，無論有沒有。
+	private Boolean Check(String WORK_ORDER_ID, Connection conn) throws SQLException {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null,pstm1=null;
+		ResultSet rs = null;
+		Boolean Exist=false;
+		
+		String 	sql="SELECT * FROM "+TABLE+" WHERE WORK_ORDER_ID='"+WORK_ORDER_ID+"'";	
+		
+		try {
+			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = ps.executeQuery();	
+			if(rs.next()){
+				System.out.println(TABLE+">>>>>"+sql);
+				Exist=true;
+			}else{
+				String Sql1="DELETE DSID01_TEMP2 WHERE WORK_ORDER_ID='"+WORK_ORDER_ID+"' ";
+				System.err.println("DSID01_TEMP2刪除>>>>>"+Sql1);
+				try {
+					pstm1 = conn.prepareStatement(Sql1);
+					pstm1.executeUpdate();
+					pstm1.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				Exist=false;
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(pstm1!=null){
+			pstm1.close();
+		}
+
+
+		return Exist;
+	}
+
+
+
+	private String GetOd_no(Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
 		String OD_NO="",Str1 = "FNJ-",Str2 = "";
 
-		String 	sql="SELECT MAX(OD_NO) MOD_NO FROM DSID01 WHERE OD_NO LIKE '"+Str1+"%'";	
+//		String 	sql="SELECT MAX(OD_NO) MOD_NO FROM DSID01 WHERE OD_NO LIKE '"+Str1+"%'";	
+		//整合虛擬單和正式單的訂單號
+		String 	sql="SELECT MAX(OD_NO) MOD_NO FROM (SELECT OD_NO FROM DSID01 UNION SELECT OD_NO FROM DSID01_TEMP) WHERE OD_NO LIKE 'FNJ-%'";	
+
 		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -596,12 +668,21 @@ public class DSID01MImport extends OpenWinCRUD{
 			}else{
 				Str2="000001";
 			}
-			rs.close();
-			ps.close();
+			
+//			rs.close();
+//			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		finally{
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+		}
+
 		OD_NO=Str1+Str2.substring(Str2.length()-6, Str2.length());
 		System.err.println(">>>>>OD_NO :"+OD_NO);
 		return OD_NO;
@@ -670,6 +751,11 @@ public class DSID01MImport extends OpenWinCRUD{
 		return false;
 	}
 
+	@Override
+	protected boolean doCustomSave() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	@Override
 	protected void addDetailPrograms() {

@@ -1,0 +1,460 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs" visible="false">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.ZKTEST}" />
+			<label value="${labels.MENU.ZKTEST} (DSIDN09M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	 <script>
+		 <![CDATA[
+		        //  alert("dsdssd");
+		        var lo = document.getElementById("mymessage").value;
+		      //  alert(lo);
+		        var t =   document.getElementById(lo);
+		        //alert(t);
+		        t.style.backgroundColor= "#A0C1E5";
+		      //  alert(t);
+		 ]]>  
+	 </script>
+	<window title="位置預覽" id="windowMaster" border="normal"
+		width="70%"  apply="ds.dsid.program.DSIDN09M_Program_show"
+		maximizable="false" closable="true" sclass="mymodal" mode="modal">
+	<!-- 
+	<window width="70%" border="normal" id="windowMaster"
+		apply="ds.dsid.program.DSIDN09M_Program_show" 
+		 maximizable="false" closable="true" sclass="mymodal" mode="modal">
+		  
+				${$composer}
+		${$composer.aaa}
+		${$composer.d08.EL_NO}
+		${$composer.d06.A1}
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+					
+					
+					
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+						
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+				
+			</div>
+		</div>
+		-->
+		
+		<borderlayout height="650px">
+			<north size="100%" open="true" splittable="true" visible="true"
+				collapsible="true">
+				<div width="100%" visible="true">
+				  <div width="100%" visible="true" id="divedit">
+				  
+				  <html >
+				  <input type="hidden" id="mymessage" value="${$composer.getPLACE()}" />
+					<table   style="border:1px solid;font-size:12px;border-collapse: collapse" align="center" >
+  <tr>
+    <td  rowspan="7"  width="10" style="background-color:#FF0000;border:1px solid #333333;"><span class="STYLE2"></span></td>
+    <td colspan="4" style="background-color:#CCCCCC"></td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="B7">${labels.DSIDN06.B7}<br />${$composer.d06.getB7()}</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="B6">${labels.DSIDN06.B6}<br/>${$composer.d06.getB6()}</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="B5">${labels.DSIDN06.B5}<br/>${$composer.d06.getB5()}</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="B4">${labels.DSIDN06.B4}<br/>${$composer.d06.getB4()}</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="B3">${labels.DSIDN06.B3}<br/>${$composer.d06.getB3()}</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="B2">${labels.DSIDN06.B2}<br/>${$composer.d06.getB2()}</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="B1">${labels.DSIDN06.B1}<br/>${$composer.d06.getB1()}</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="A3">${labels.DSIDN06.A3}<br/>${$composer.d06.getA3()}</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="A2">${labels.DSIDN06.A2}<br/>${$composer.d06.getA2()}</td>
+    <td width="38"  style="background-color:#FF0000;border:1px solid #333333;width:10px;">飲用水放置區</td>
+    <td colspan="4" style="background-color:#FFFFFF;border:1px solid #333333;" id="A1">${labels.DSIDN06.A1}<br/>${$composer.d06.getA1()}</td>
+    <td colspan="3" style="background-color:#CCCCCC"></td>
+    <td width="19" style="border-right:1px solid #333333;background-color:#CCCCCC"></td>
+    <td colspan="2" style="background-color:#CCCCCC"></td>
+    <td width="16" rowspan="20" style="background-color:#CCCCCC" align="center">消防通道</td>
+  </tr>
+  <tr>
+    <td colspan="48" style="background-color:#CCCCCC" align="center">←消防通道→</td>
+    <td style="border:1px solid #333333;background-color:#CCCCCC">出入門口</td>
+    <td width="1" style="background-color:#CCCCCC"></td>
+    <td width="1" style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td width="32" style="background-color:#CCCCCC"></td>
+    <td colspan="2"  style="background-color:#FFFF99;border:1px solid #333333;">加工材料放置區</td>
+    <td width="3" style="background-color:#CCCCCC"></td>
+    <td width="32" rowspan="5" style="background-color:#CCCCCC">←消防通道→</td>
+    <td colspan="4" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333; " id="B11">${labels.DSIDN06.B11}<br/>${$composer.d06.getB11()}</td>
+    <td colspan="5" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333; " id="B10">${labels.DSIDN06.B10}<br/>${$composer.d06.getB10()}</td>
+    <td colspan="2" rowspan="2" style="background-color:#CCCCCC">←消防通道→</td>
+    <td colspan="5" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="B9">${labels.DSIDN06.B9}<br/>${$composer.d06.getB9()}</td>
+    <td colspan="4" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="B8">${labels.DSIDN06.B8}<br/>${$composer.d06.getB8()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#CCCCCC"></td>
+    <td colspan="12" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">拉料臺</td>
+    <td colspan="3" rowspan="2" style="background-color:#CCCCCC"></td>
+    <td colspan="2" rowspan="5" style="background-color:#CCCCCC"></td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333; ">辦公桌</td>
+    <td rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333; ">辦公桌</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td rowspan="2" style="background-color:#FFFF99;border:1px solid #333333; ">柱子</td>
+    <td colspan="3" style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td colspan="3" rowspan="2" class="STYLE1" style="background-color:#FFFFFF;border:1px solid #333333;" id="B12">${labels.DSIDN06.B12}<br/>${$composer.d06.getB12()}</td>
+    <td colspan="38" rowspan="3" style="background-color:#CCCCCC" align="center">←消防通道→</td>
+    <td colspan="4" rowspan="3" style="border-right:1px solid #333333; background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td style="background-color:#CCCCCC" align="center">←消防通道→</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td colspan="4" style="border-bottom:1px solid #333333;background-color:#CCCCCC;" align="center">消防通道</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  
+  <tr>
+    <td colspan="2" rowspan="13" ></td>
+    <td width="5"></td>
+    <td colspan="2" rowspan="2" style="background-color:#FFFF99;border:1px solid #333333; ">材料暫時放置區</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="E3">${labels.DSIDN06.E3}<br/>${$composer.d06.getE3()}</td>
+    <td width="35" rowspan="2" style="background-color:#CCCCCC"></td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="E2">${labels.DSIDN06.E2}<br/>${$composer.d06.getE2()}</td>
+    <td colspan="2" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="E1">${labels.DSIDN06.E1}<br/>${$composer.d06.getE1()}</td>
+    <td colspan="2" rowspan="5" style="background-color:#CCCCCC" align="center">←消防通道→</td>
+    <td width="29" rowspan="3"  style="background-color:#FF0000;border:1px solid #333333;">回收紙管放置區</td>
+    <td colspan="2" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="D1">${labels.DSIDN06.D1}<br/>${$composer.d06.getD1()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="D2">${labels.DSIDN06.D2}<br/>${$composer.d06.getD2()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="D3">${labels.DSIDN06.D3}<br/>${$composer.d06.getD3()}</td>
+    <td colspan="2" rowspan="5" style="background-color:#CCCCCC" align="center">←消防通道→</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="C3">${labels.DSIDN06.C3}<br/>${$composer.d06.getC3()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="C2">${labels.DSIDN06.C2}<br/>${$composer.d06.getC2()}</td>
+    <td colspan="2" rowspan="5" style="background-color:#CCCCCC" align="center">←消防通道→</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="C1">${labels.DSIDN06.C1}<br/>${$composer.d06.getC1()}</td>
+    <td colspan="5" rowspan="11" style="background-color:#CCCCCC" align="center">←消防通道→</td>
+    <td width="7" rowspan="2" style="background-color:#CCCCCC"></td>
+    <td colspan="2" style="background-color:#FFFFFF;border:1px solid #333333; ">資料箱</td>
+    <td colspan="4" style="background-color:#FFFF99;border:1px solid #333333; ">色卡櫃子</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td colspan="4"  style="background-color:#FF0000;border:1px solid #333333;">飲水機</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="border-right:1px solid #333333;background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td width="22" style="border-left:1px solid #333333;background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td colspan="9" style="border:1px solid #333333;background-color:#66FFCC">連接線</td>
+    <td colspan="8" style="border:1px solid #333333;background-color:#66FFCC">連接線</td>
+    <td colspan="6" style="border:1px solid #333333;background-color:#66FFCC">連接線</td>
+    <td colspan="3" style="border:1px solid #333333;background-color:#66FFCC">連接線</td>
+    <td colspan="4" rowspan="9" style="background-color:#CCCCCC"></td>
+    <td colspan="3" rowspan="3" style="background-color:#FFFF99;border:1px solid #333333;">白看板</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td colspan="2" rowspan="2" style="background-color:#FFFF99;border:1px solid #333333;">材料暫時放置區</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="G5">${labels.DSIDN06.G5}<br/>${$composer.d06.getG5()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="G4">${labels.DSIDN06.G4}<br/>${$composer.d06.getG4()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="G3">${labels.DSIDN06.G3}<br/>${$composer.d06.getG3()}</td>
+    <td colspan="2" rowspan="2" style="background-color:#FF0000;border:1px solid #333333;">垃圾放置區</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="G2">${labels.DSIDN06.G2}<br/>${$composer.d06.getG2()}</td>
+    <td colspan="4" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="G1">${labels.DSIDN06.G1}<br/>${$composer.d06.getG1()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="F3">${labels.DSIDN06.F3}<br/>${$composer.d06.getF3()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="F2">${labels.DSIDN06.F2}<br/>${$composer.d06.getF2()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="F1">${labels.DSIDN06.F1}<br/>${$composer.d06.getF1()}</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td colspan="35" rowspan="2"  style="border-left:1px solid #333333;background-color:#CCCCCC;height:50px;" align="center">←消防通道→</td>
+    <td colspan="3" style="background-color:#CCCCCC;border-right:1px solid #333333;"></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td  ></td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFF99;border:1px solid #333333; ">材料放置區</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td ></td>
+    <td colspan="9" style="border-left:1px solid #333333;background-color:#CCCCCC"></td>
+    <td colspan="2" style="background-color:#FFFFFF;border:1px solid #333333; ">櫃子</td>
+    <td colspan="2" style="background-color:#FFFFFF;border:1px solid #333333; ">櫃子</td>
+    <td style="background-color:#FFFF99;border:1px solid #333333; ">柱子</td>
+    <td style="background-color:#FF0000;border:1px solid #333333; ">清潔工具放置區</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="H4">${labels.DSIDN06.H4}<br/>${$composer.d06.getH4()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="H3">${labels.DSIDN06.H3}<br/>${$composer.d06.getH3()}</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="H2">${labels.DSIDN06.H2}<br/>${$composer.d06.getH2()}</td>
+    <td colspan="4" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;" id="H1">${labels.DSIDN06.H1}<br/>${$composer.d06.getH1()}</td>
+    <td width="31"  style="background-color:#FFFFFF;border:1px solid #333333;">柱子</td>
+    <td colspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">前襯發料區</td>
+    <td width="29" style="background-color:#CCCCCC"></td>
+    <td colspan="3" rowspan="4" style="background-color:#FFFFFF;border:1px solid #333333; ">檢驗材料暫時放置區</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td ></td>
+    <td colspan="15" style="border-left:1px solid #333333;background-color:#CCCCCC"></td>
+    <td colspan="2" rowspan="3" style="background-color:#FFFFFF;border:1px solid #333333;">中底板發料區</td>
+    <td colspan="2" rowspan="3" style="background-color:#FFFFFF;border:1px solid #333333;">中底板發料區</td>
+    <td colspan="3" style="border-right:1px solid #333333;background-color:#CCCCCC;"></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td ></td>
+    <td colspan="6" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">高壓工作區</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td colspan="6" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">高壓工作區</td>
+    <td colspan="4" rowspan="2" style="background-color:#CCCCCC"></td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">下線材料</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">下線材料</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">下線材料</td>
+    <td colspan="2" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">鞋墊發料區</td>
+    <td colspan="3" rowspan="2" style="background-color:#FFFF99;border:1px solid #333333;">材料檢驗臺</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td ></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td ></td>
+    <td colspan="44" rowspan="2"  style="border-left:1px solid #333333;background-color:#CCCCCC;height:40px;" align="center">←消防通道→</td>
+    <td colspan="3" rowspan="2" style="border:1px solid #333333;background-color:#CCCCCC">出入門口</td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td style="background-color:#CCCCCC"></td>
+    <td style="background-color:#CCCCCC"></td>
+  </tr>
+</table>
+
+<!--  
+			<table border='1'>
+				<tr>
+					<td >1${$composer.d08.EL_NO}</td>
+					<td>2${$composer.d08.EL_NO}</td>
+					<td>3${$composer.d08.EL_NO}</td>
+					<td>4${$composer.d08.EL_NO}</td>
+					<td>5${$composer.d08.EL_NO}</td>
+					<td>6${$composer.d08.EL_NO}</td>
+					<td>7${$composer.d08.EL_NO}</td>
+					<td>8${$composer.d08.EL_NO}</td>
+					<td>9${$composer.d08.EL_NO}</td>
+					<td>10${$composer.d08.EL_NO}</td>
+					<td>11${$composer.d08.EL_NO}</td>
+					<td>12${$composer.d08.EL_NO}</td>
+					<td>13${$composer.d08.EL_NO}</td>
+					<td>14${$composer.d08.EL_NO}</td>
+					<td>15${$composer.d08.EL_NO}</td>
+					<td>16${$composer.d08.EL_NO}</td>
+					<td>17${$composer.d08.EL_NO}</td>
+					<td>18${$composer.d08.EL_NO}</td>
+					<td>19${$composer.d08.EL_NO}</td>
+					<td>20${$composer.d08.EL_NO}</td>
+					<td>21${$composer.d08.EL_NO}</td>
+					<td>22${$composer.d08.EL_NO}</td>
+					<td>23${$composer.d08.EL_NO}</td>
+					<td  style="background-color:yellow">24${$composer.d08.EL_NO}</td>
+					<td style="background-color:red"></td>
+				</tr>
+				
+				<tr>
+					<td>1${$composer.d08.EL_NO}</td>
+					<td>2${$composer.d08.EL_NO}</td>
+					<td>3${$composer.d08.EL_NO}</td>
+					<td>4${$composer.d08.EL_NO}</td>
+					<td>5${$composer.d08.EL_NO}</td>
+					<td>6${$composer.d08.EL_NO}</td>
+					<td>7${$composer.d08.EL_NO}</td>
+					<td>8${$composer.d08.EL_NO}</td>
+					<td>9${$composer.d08.EL_NO}</td>
+					<td>10${$composer.d08.EL_NO}</td>
+					<td>11${$composer.d08.EL_NO}</td>
+					<td>12${$composer.d08.EL_NO}</td>
+					<td>13${$composer.d08.EL_NO}</td>
+					<td>14${$composer.d08.EL_NO}</td>
+					<td>15${$composer.d08.EL_NO}</td>
+					<td>16${$composer.d08.EL_NO}</td>
+					<td>17${$composer.d08.EL_NO}</td>
+					<td>18${$composer.d08.EL_NO}</td>
+					<td>19${$composer.d08.EL_NO}</td>
+					<td>20${$composer.d08.EL_NO}</td>
+					<td>21${$composer.d08.EL_NO}</td>
+					<td>22${$composer.d08.EL_NO}</td>
+					<td>23${$composer.d08.EL_NO}</td>
+					<td>24${$composer.d08.EL_NO}</td>
+					<td>25${$composer.d08.EL_NO}</td>
+				</tr>
+				
+				
+				<tr>
+					<td>1${$composer.d08.EL_NO}</td>
+					<td>2${$composer.d08.EL_NO}</td>
+					<td>3${$composer.d08.EL_NO}</td>
+					<td>4${$composer.d08.EL_NO}</td>
+					<td>5${$composer.d08.EL_NO}</td>
+					<td>6${$composer.d08.EL_NO}</td>
+					<td>7${$composer.d08.EL_NO}</td>
+					<td>8${$composer.d08.EL_NO}</td>
+					<td>9${$composer.d08.EL_NO}</td>
+					<td>10${$composer.d08.EL_NO}</td>
+					<td>11${$composer.d08.EL_NO}</td>
+					<td>12${$composer.d08.EL_NO}</td>
+					<td>13${$composer.d08.EL_NO}</td>
+					<td>14${$composer.d08.EL_NO}</td>
+					<td>15${$composer.d08.EL_NO}</td>
+					<td>16${$composer.d08.EL_NO}</td>
+					<td>17${$composer.d08.EL_NO}</td>
+					<td>18${$composer.d08.EL_NO}</td>
+					<td>19${$composer.d08.EL_NO}</td>
+					<td>20${$composer.d08.EL_NO}</td>
+					<td>21${$composer.d08.EL_NO}</td>
+					<td>22${$composer.d08.EL_NO}</td>
+					<td>23${$composer.d08.EL_NO}</td>
+					<td>24${$composer.d08.EL_NO}</td>
+					<td>25${$composer.d08.EL_NO}</td>
+				</tr>
+				
+			</table>-->
+		</html>
+				  
+				  <div id="divcenter" >
+					<listbox id="masterListbox" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false">
+						<listhead sizable="true">
+							
+							<listheader width="7%"
+								label="UNIQUEID" />
+							<listheader width="5%"
+								label="${labels.DSIDN08.UNIQUEID}" id="DAY_NO_Sort" />
+							<listheader width="10%"
+								label="${labels.DSIDN08.PO_NO}"  id="PO_NO_Sort" />
+							<listheader width="7%"
+								label="${labels.DSIDN08.PO_SEQ}" id="PO_SEQ_Sort" />
+							<listheader width="10%"
+								label="${labels.DSIDN08.EL_NO}" id="EL_NO_Sort"/>
+							<listheader width="32%"
+								label="${labels.DSIDN08.EL_CNAME}" id="EL_CNAME_Sort" />
+							<listheader width="7%"
+								label="${labels.DSIDN08.PO_QTY}" />
+							<listheader width="8%"
+								label="${labels.DSIDN08.PC_QTY}" />
+							<listheader width="7%"
+								label="${labels.COMM.OPERATE }" />
+							<listheader width="12%"
+								label="${labels.DSIDN08.PC_REDATE}" id="PC_REDATE_Sort"/>
+							<listheader width="7%"
+								label="${labels.DSIDN08.UP_USER}" />
+						</listhead>
+						<template name="model">
+							<listitem
+								forward="onDoubleClick=onDoubleClickedPersonItem">
+								
+								<listcell label="${each.UNIQUEID}" />
+								<listcell label="${each.DAY_NO}" />
+								<listcell label="${each.PO_NO}" />
+								<listcell label="${each.PO_SEQ}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.EL_CNAME}" />
+								<listcell label="${each.PO_QTY}" />
+								<listcell label="${each.PC_QTY}" />
+								<listcell>
+									<hbox spacing="10px">
+										<image
+											visible="${sessionScope.UAuth}"
+											src="/resource/imgs/icons/btn_edit2_16x16.gif"
+											tooltiptext="${labels.COMM.EDIT}"
+											forward="onClick=masterListbox.onUpdate"
+											sclass="fimage">
+										</image>
+										<image
+											visible="${sessionScope.DAuth}"
+											src="/resource/imgs/icons/btn_delete2_16x16.gif"
+											tooltiptext="${labels.COMM.DEL}"
+											forward="onClick=masterListbox.onDelete"
+											sclass="fimage">
+										</image>
+									</hbox>
+								</listcell>
+								
+								
+								<listcell label="${each.PC_REDATE}" />
+								<listcell label="${each.UP_USER}" />
+							</listitem>
+						</template>
+					</listbox>
+					<paging id="pagingCourse"></paging>
+					
+				</div>
+				
+				</div>
+				
+				
+				</div>
+				
+			</north>
+			
+	
+		
+			
+			
+			
+		</borderlayout>
+		
+		
+	</window>
+</zk>

@@ -1,0 +1,65 @@
+<zk>
+	<div id="detail1" apply="ds.dsid.program.DSID25RDetail">
+
+		<borderlayout height="225px">	
+					  
+			<center>			
+				<div>
+					<listbox id="detailListbox" sclass="mylist" autopaging="true" 
+					emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="5">
+						<listhead>
+        			<listheader width="6%"  label="${labels.COMM.OPERATE }" />
+        			<listheader label="型體" />
+        			<listheader label="部位" />
+            		<listheader label="材料編號" />
+            		<listheader label="剩餘餘料" /> 
+            		<listheader label="日期" />          		
+        		</listhead>
+        		<template name="model">
+        		<listitem >
+        				<listcell>
+							<hbox if="${each.ISEDIT == false and each.ISADD == false}" spacing="10px">
+								<image
+									visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=detailListbox.onUpdate" sclass="fimage">
+								</image>														
+							</hbox>
+							<hbox if="${each.ISEDIT == true or each.ISADD == true}" spacing="10px">
+									<image src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"										
+										tooltiptext="${labels.COMM.SAVE}" forward="onClick=detailListbox.onSave" />								
+									<image src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+										tooltiptext="${labels.COMM.CANCEL}" forward="onClick=detailListbox.onCancel" />
+							</hbox>											
+						</listcell>
+					 <listcell>
+						<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.MODEL_NA}" />
+						<label if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_MODEL_NA1" value="${each.MODEL_NA}"  />
+					</listcell>
+						
+					<listcell>
+						<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.GROUP_NO}" />
+						<label if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_GROUP_NO" value="${each.GROUP_NO}"  />
+					</listcell>
+						
+					<listcell>
+						<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.EL_NO}" />
+						<label if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_EL_NO1" value="${each.EL_NO}"  />
+					</listcell>
+						
+					<listcell>
+						<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.REMAIN}" />
+						<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_REMAIN" value="${each.REMAIN}"  />
+					</listcell>
+						
+        			<listcell label="${each.RE_DATE}"/>        			
+				</listitem>
+				</template>	
+					</listbox>
+					<paging id="pagingDetailCourse"></paging>
+				</div>
+			</center>
+		</borderlayout>
+	</div>
+</zk>

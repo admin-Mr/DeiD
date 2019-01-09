@@ -660,10 +660,9 @@ public class DSIDN08M_Program extends COMM_Master {
 	 * 取消鈕(新增/編輯),把狀態回復到瀏覽狀態(READ_MODE)
 	 * 
 	 * @param event
-	 * @throws Exception 
 	 */
 	@Listen("onClick = #btnCancelMaster")
-	public void masterCancel(Event event) throws Exception {
+	public void masterCancel(Event event) {
 		Add=false;
 		super.executeQuery();
 		super.masterCancel(event);
@@ -909,11 +908,11 @@ public class DSIDN08M_Program extends COMM_Master {
 	}
 	@Listen("onClick = #btnSaveMaster")
 	@Override
-	public boolean onClickbtnSaveMaster(Event event) throws Exception {
+	public void onClickbtnSaveMaster(Event event) {
 		boolean isok = false;
 		if(!Add){
 			super.onClickbtnSaveMaster(event);
-			return false;
+			return;
 		}
 		
 		CRUDService CRUDServicetemp = (CRUDService) SpringUtil.getBean("CRUDService");
@@ -1015,7 +1014,7 @@ public class DSIDN08M_Program extends COMM_Master {
 		}
 		if(!isok){
 			//Messagebox.show(Labels.getLabel("DSIDN08.MSG0008"), "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
-			return false ;
+			return ;
 		}
 		if(templist!= null){
 			for(int x =0;x<templist.size();x++){
@@ -1044,7 +1043,6 @@ public class DSIDN08M_Program extends COMM_Master {
 		abcListboxd.setModel(emptyModel);
 		Add = false;
 		txt_PO_NOa.setText("");
-		return true;
 	}
 	
 	@Listen("onClick = #btnCreateMaster")

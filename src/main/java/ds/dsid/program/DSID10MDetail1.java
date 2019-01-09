@@ -3,11 +3,13 @@ package ds.dsid.program;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -18,8 +20,6 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Textbox;
-import org.zkoss.zul.Window;
-
 import ds.dsid.domain.DSID10;
 import ds.dsid.domain.DSID10_1;
 import util.Common;
@@ -218,11 +218,19 @@ public class DSID10MDetail1 extends Detail{
 		strNIKE_SH_ARITCLE = master.getNIKE_SH_ARITCLE();
 		txtnike_sh_aritcle1.setText(strNIKE_SH_ARITCLE);
 		//流水號
-		txtseq.setText(AutoSeq(strNIKE_SH_ARITCLE));
+		try {
+			txtseq.setText(AutoSeq(strNIKE_SH_ARITCLE));
+		} catch (WrongValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
-	private String AutoSeq(String strNIKE_SH_ARITCLE) {
+	private String AutoSeq(String strNIKE_SH_ARITCLE) throws SQLException {
 		// TODO Auto-generated method stub
 		Connection conn=Common.getDbConnection();
 		PreparedStatement ps = null;
@@ -236,11 +244,18 @@ public class DSID10MDetail1 extends Detail{
 			if(rs.next()){
 				seq = rs.getString("SEQ");
 			}
-			ps.close();
 			rs.close();
+			ps.close();		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+
 			Common.closeConnection(conn);	
 		}
 		
@@ -259,6 +274,14 @@ public class DSID10MDetail1 extends Detail{
 		// TODO Auto-generated method stub
 		return 10;
 	}
+
+
+	@Override
+	protected boolean doCustomSave() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 
 	@Override
 	protected List getCustList() {
@@ -336,12 +359,6 @@ public class DSID10MDetail1 extends Detail{
 		Com_Spid.setReadonly(false);	
 		txtspl_info2.setReadonly(false);
 		txtrep_info.setText("");
-	}
-
-	@Override
-	protected Window getRootWindow() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 }

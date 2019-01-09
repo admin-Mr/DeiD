@@ -4,17 +4,22 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
@@ -25,6 +30,9 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.SpringUtil;
 import org.zkoss.zul.Fileupload;
+import org.zkoss.zul.ListModelList;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -43,10 +51,13 @@ public class DSID04MImport extends OpenWinCRUD{
 	private Window windowMaster;
 	@Wire
 	private Textbox txtMODEL_NA;
+	@Wire
+	private Listbox List_Model_na;
 	String MODEL_NA="";
-	String Errmessage="";
-	
+	String Errmessage="",Okmessage="";
+	   
 	@Override
+
 	public void doAfterCompose(Component window) throws Exception {
 		super.doAfterCompose(window);
 		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService");		
@@ -68,9 +79,40 @@ public class DSID04MImport extends OpenWinCRUD{
 				String sss = media.getFormat();
 				input = media.getStreamData();// 獲得輸入流
 				importFromExcel(input);
-				
 			}
 		});
+		
+		
+		Connection conn = Common.getDbConnection();
+		PreparedStatement  ps1 = null;
+		ResultSet  rs1 = null;
+		List<String> MODEL_NA_list = new ArrayList<String>();
+		MODEL_NA_list.add("");
+		String Sql="SELECT * FROM DSID04 WHERE IS_DROP='N' ORDER BY MODEL_NA";
+		System.err.println(">>>"+Sql);
+		try {
+			ps1 = conn.prepareStatement(Sql);
+			rs1 = ps1.executeQuery();			
+			while(rs1.next()){
+
+				MODEL_NA_list.add(rs1.getString("MODEL_NA"));
+			}
+			ps1.close();
+			rs1.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {	
+			if(rs1!=null){
+				rs1.close();
+			}
+			if(ps1!=null){
+				ps1.close();
+			}
+
+			Common.closeConnection(conn);	
+		}
+		
+		List_Model_na.setModel(new ListModelList<Object>(MODEL_NA_list));
 		
 	}
 
@@ -79,32 +121,43 @@ public class DSID04MImport extends OpenWinCRUD{
 		System.out.println("进入excel 读取内容");
 		Connection conn = Common.getDbConnection();
 		HSSFWorkbook wb = new HSSFWorkbook(input);
-		//型體
-		MODEL_NA=txtMODEL_NA.getValue();
 		
+		if(List_Model_na.getSelectedItem()!=null){
+			for(Listitem ltAll : List_Model_na.getItems()){
+				if (ltAll.isSelected()){
+					if(!"".equals((Object)ltAll.getValue())&&(Object)ltAll.getValue()!=null){
+						MODEL_NA=(Object)ltAll.getValue()+"";					
+					}
+				}
+			}
+		}
+		try{
 		ImportSheet0(wb,conn);//主檔
-		ImportSheet1(wb,conn);// VAMP 鞋面
+		ImportSheet1(wb,conn);//VAMP 鞋面
 		ImportSheet2(wb,conn);//label 標籤
 		ImportSheet3(wb,conn);//lace 鞋帶
 //		ImportSheet4(wb,conn);//Sockliner鞋墊
 		 
 		ShowMessage();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			Common.closeConnection(conn);
+		}
 
-		Common.closeConnection(conn);	
 	}
 		
-	private void ImportSheet3(HSSFWorkbook wb, Connection conn) {
+	private void ImportSheet3(HSSFWorkbook wb, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		System.out.println(">>>讀取工作表4>>>>>>>>>>>>>>");
 		int Start_Row = 0;
         DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
-		HSSFFormulaEvaluator Formul= new HSSFFormulaEvaluator(wb);		
+		HSSFFormulaEvaluator Formul= new HSSFFormulaEvaluator(wb);	
 		HSSFSheet sheet =wb.getSheetAt(3);	
-		
+		PreparedStatement pstm=null;
 		HSSFRow row=null;
 		int SEQ=0;
 		String LAST_COLOR="";
-
 		try {
 			conn.setAutoCommit(false);
 			
@@ -114,7 +167,7 @@ public class DSID04MImport extends OpenWinCRUD{
 				
 				String Str1=getCellValue(row.getCell(0));
 				
-				if(Str1.contains("Length")){
+				if(Str1.contains("Length")||Str1.contains("長度")){
 					Start_Row=x;
 					System.err.println(">>>開始行数"+Start_Row);
 					for(int j=2;j < 22 ;j++){
@@ -161,7 +214,7 @@ public class DSID04MImport extends OpenWinCRUD{
 						System.out.println(">>>導入>>>"+sql2);				
 							
 						try {
-							PreparedStatement pstm = conn.prepareStatement(sql2);
+							pstm = conn.prepareStatement(sql2);
 							pstm.executeUpdate();
 							pstm.close();
 						} catch (Exception e) {
@@ -171,19 +224,49 @@ public class DSID04MImport extends OpenWinCRUD{
 							
 						}
 					}
-			
+				}
+				
+			  }
+			if(Str1.contains("Total demand")){	
+				Str1=Str1.substring(0,Str1.indexOf("days"));
+				String ET_US=Str1.replace("Total demand for the coming ", "").replace("days", "");
+				System.err.println("ET_US>>>>>"+ET_US);			
+				
+				String sql ="UPDATE DSID04_4 SET ET_US='"+ET_US+"' WHERE MODEL_NA='"+MODEL_NA+"'";
+//				System.out.println("DSID04_4>>>ET_US>>>"+sql);				
+					
+				try {
+					pstm = conn.prepareStatement(sql);
+					pstm.executeUpdate();
+					pstm.close();
+				} catch (Exception e) {
+					conn.rollback();
+					e.printStackTrace();
+					
+				}
+				
+
+			}
+
+			}
 			if(Errmessage.length()<=0){
 				conn.commit();
+				Okmessage+="工作表4文件導入成功,共"+SEQ+"筆資料！\n";
 			}else{
 				conn.rollback();
-			}				
-			}}}
+				}
+			
 			}catch (Exception e) {
 				e.printStackTrace();
+			}finally{
+				if(pstm!=null){
+					pstm.close();
+				}
 			}
+
 	}
 	
-	private void ImportSheet2(HSSFWorkbook wb, Connection conn) {
+	private void ImportSheet2(HSSFWorkbook wb, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		System.out.println(">>>讀取工作表3>>>>>>>>>>>>>>");
 		int Start_Row=0;
@@ -191,9 +274,13 @@ public class DSID04MImport extends OpenWinCRUD{
         DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 		HSSFFormulaEvaluator Formul= new HSSFFormulaEvaluator(wb);		
 		HSSFSheet sheet =wb.getSheetAt(2);	
-		
+		PreparedStatement pstm=null;
 		HSSFRow row=null;
-
+		if(sheet.getPhysicalNumberOfRows()!=0){
+		row = sheet.getRow(0);		
+		String startStr=getCellValue(row.getCell(0));
+		if(!"".equals(startStr)){
+		
 		try {
 			conn.setAutoCommit(false);
 			
@@ -247,11 +334,10 @@ public class DSID04MImport extends OpenWinCRUD{
 				
 				String sql2 ="INSERT INTO DSID04_3 (MODEL_NA,EL_SEQ,COLOR,EL_NO,EL_NA,YIELD,COLOR_PRE,INI_BUY,ET_US,UP_USER,UP_DATE) VALUES ('"+MODEL_NA+"','"+EL_SEQ+"','"+COLOR+"','"+EL_NO+"','"+EL_NA+"','"+YIELD+"','"+COLOR_PRE+"','"+INI_BUY+"','"+ET_US+"','"+_userInfo.getAccount()+"',TO_DATE('"+Format.format(new Date())+"','YYYY/MM/DD'))";
 
-
 				System.out.println(">>>導入>>>"+sql2);				
 					
 				try {
-					PreparedStatement pstm = conn.prepareStatement(sql2);
+					pstm = conn.prepareStatement(sql2);
 					pstm.executeUpdate();
 					pstm.close();
 				} catch (Exception e) {
@@ -265,16 +351,30 @@ public class DSID04MImport extends OpenWinCRUD{
 			
 			if(Errmessage.length()<=0){
 				conn.commit();
+				Okmessage+="工作表3文件導入成功,共"+SEQ+"筆資料！\n";
 			}else{
 				conn.rollback();
 			}				
 				
 			}catch (Exception e) {
 				e.printStackTrace();
+			}finally{
+				if(pstm!=null){
+					pstm.close();
+				}
 			}
+
+		}else{
+			System.out.println("工作表3無資料.");
+			Okmessage+="工作表3中無資料！\n";
+		}
+		}else{
+			System.out.println("工作表3無資料.");
+			Okmessage+="工作表3中無資料！\n";
+		}
 	}
 
-	private void ImportSheet1(HSSFWorkbook wb, Connection conn) {
+	private void ImportSheet1(HSSFWorkbook wb, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		System.out.println(">>>讀取工作表2>>>>>>>>>>>>>>");
 		int Start_Row=0;
@@ -282,8 +382,12 @@ public class DSID04MImport extends OpenWinCRUD{
         DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 		HSSFFormulaEvaluator Formul= new HSSFFormulaEvaluator(wb);		
 		HSSFSheet sheet =wb.getSheetAt(1);	
-		
 		HSSFRow row=null;
+		if(sheet.getPhysicalNumberOfRows()!=0){
+		row = sheet.getRow(0);		
+		String startStr=getCellValue(row.getCell(0));
+		if(!"".equals(startStr)){
+			PreparedStatement pstm =null;
 		String VAMP_UPD="";
 
 		try {
@@ -313,7 +417,7 @@ public class DSID04MImport extends OpenWinCRUD{
 			System.out.println(">>>導入>>>"+sql1);
 			
 			try {
-				PreparedStatement pstm = conn.prepareStatement(sql1);	
+				pstm = conn.prepareStatement(sql1);	
 				pstm.executeUpdate();
 				pstm.close();
 			} catch (Exception e) {
@@ -360,11 +464,10 @@ public class DSID04MImport extends OpenWinCRUD{
 				
 				String sql2 ="INSERT INTO DSID04_2 (MODEL_NA,EL_SEQ,COLOR,EL_NO,EL_NA,YIELD,COLOR_PRE,DAILY_UOM,INI_BUY,ET_US,UP_USER,UP_DATE) VALUES ('"+MODEL_NA+"','"+EL_SEQ+"','"+COLOR+"','"+EL_NO+"','"+EL_NA+"','"+YIELD+"','"+COLOR_PRE+"','"+DAILY_UOM+"','"+INI_BUY+"','"+ET_US+"','"+_userInfo.getAccount()+"',TO_DATE('"+Format.format(new Date())+"','YYYY/MM/DD'))";
 
-
 				System.out.println(">>>導入>>>"+sql2);				
 					
 				try {
-					PreparedStatement pstm = conn.prepareStatement(sql2);
+					pstm = conn.prepareStatement(sql2);
 					pstm.executeUpdate();
 					pstm.close();
 				} catch (Exception e) {
@@ -378,23 +481,36 @@ public class DSID04MImport extends OpenWinCRUD{
 			
 			if(Errmessage.length()<=0){
 				conn.commit();
+				Okmessage+="工作表2文件導入成功,共"+SEQ+"筆資料！\n";
 			}else{
 				conn.rollback();
 			}				
-				
 			}catch (Exception e) {
 				e.printStackTrace();
+			}finally{
+				if(pstm!=null){
+					pstm.close();
+				}
 			}
+
+		}else{
+			System.out.println("工作表2無資料.");
+			Okmessage+="工作表2中無資料！\n";
+		}
+		}else{
+			System.out.println("工作表2無資料.");
+			Okmessage+="工作表2中無資料！\n";
+		}
 	}
 
-	private void ImportSheet0(HSSFWorkbook wb, Connection conn) {
+	private void ImportSheet0(HSSFWorkbook wb, Connection conn) throws SQLException {
 			// TODO Auto-generated method stub
         DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 		int Start_Row=12;
 		
-		HSSFFormulaEvaluator Formul= new HSSFFormulaEvaluator(wb);		
+		HSSFFormulaEvaluator Formul= new HSSFFormulaEvaluator(wb);	
 		HSSFSheet sheet =wb.getSheetAt(0);	
-		
+		PreparedStatement pstm =null;
 		HSSFRow row=null;
 		String LA_DATE="",DR_DATE="",MODEL_UPD="";
 
@@ -407,7 +523,7 @@ public class DSID04MImport extends OpenWinCRUD{
 				
 				String Str1=getCellValue(row.getCell(0));
 				if(Str1.contains("MODEL NAME")){
-					if("".equals(txtMODEL_NA.getValue())||txtMODEL_NA.getValue()==null){
+					if("".equals(MODEL_NA)||MODEL_NA==null){
 						MODEL_NA=getCellValue(row.getCell(1));
 					}
 					LA_DATE=getCellValue(row.getCell(3));
@@ -437,7 +553,7 @@ public class DSID04MImport extends OpenWinCRUD{
 					System.out.println(">>>導入>>>"+sql1);
 						
 					try {
-						PreparedStatement pstm = conn.prepareStatement(sql1);	
+						pstm = conn.prepareStatement(sql1);	
 						pstm.executeUpdate();
 						pstm.close();
 					} catch (Exception e) {
@@ -445,6 +561,7 @@ public class DSID04MImport extends OpenWinCRUD{
 						conn.rollback();
 						e.printStackTrace();						
 					}
+
 					
 			System.out.println(">>>明細開始行"+(Start_Row+1));
 			
@@ -475,9 +592,9 @@ public class DSID04MImport extends OpenWinCRUD{
 				String YIELD = getCellValue2(row.getCell(17));
 				
 				String COLOR_PRE = getCellValue2(Formul.evaluateInCell(row.getCell(28)));
-				String SAFE_DAY = getCellValue(Formul.evaluateInCell(row.getCell(29)));
-				String MIN_DAY = getCellValue(Formul.evaluateInCell(row.getCell(30)));
-				String MIN_UOM = getCellValue(Formul.evaluateInCell(row.getCell(31)));
+				String SAFE_DAY = getCellValue(Formul.evaluateInCell(row.getCell(29)));			
+				String MIN_DAY = getCellValue(Formul.evaluateInCell(row.getCell(30)));								
+				String MIN_UOM = getCellValue(Formul.evaluateInCell(row.getCell(31)));				
 				String MAX_DAY = getCellValue(Formul.evaluateInCell(row.getCell(34)));
 				String DAILY_UOM = getCellValue2(Formul.evaluateInCell(row.getCell(35)));
 				String MAX_UOM = getCellValue(Formul.evaluateInCell(row.getCell(36)));
@@ -501,7 +618,7 @@ public class DSID04MImport extends OpenWinCRUD{
 				System.out.println(">>>導入>>>"+sql2);				
 					
 				try {
-					PreparedStatement pstm = conn.prepareStatement(sql2);
+					pstm = conn.prepareStatement(sql2);
 					pstm.executeUpdate();
 					pstm.close();
 				} catch (Exception e) {
@@ -515,17 +632,24 @@ public class DSID04MImport extends OpenWinCRUD{
 			
 			if(Errmessage.length()<=0){
 				conn.commit();
+				Okmessage+="工作表1文件導入成功,共"+SEQ+"筆資料！\n";
 			}else{
 				conn.rollback();
 			}				
 				
 			}catch (Exception e) {
 				e.printStackTrace();
+			}finally{
+				if(pstm!=null){
+					pstm.close();
+				}
 			}
 		}
 
-	private void DeleteModel_na(String MODEL_NA, Connection conn) {
-		// TODO Auto-generated method stub
+	private void DeleteModel_na(String MODEL_NA, Connection conn) throws SQLException {
+		// TODO Auto-generated method stub\
+		PreparedStatement pstm1=null,pstm2=null,pstm3=null,pstm4=null,pstm5=null;
+		
 		String sql1 ="DELETE DSID04 WHERE MODEL_NA='"+MODEL_NA+"'";
 		String sql2 ="DELETE DSID04_1 WHERE MODEL_NA='"+MODEL_NA+"'";
 		String sql3 ="DELETE DSID04_2 WHERE MODEL_NA='"+MODEL_NA+"'";
@@ -533,25 +657,42 @@ public class DSID04MImport extends OpenWinCRUD{
 		String sql5 ="DELETE DSID04_4 WHERE MODEL_NA='"+MODEL_NA+"'";
 		System.out.println(">>>刪除重複資料>>>");
 		try {
-			PreparedStatement pstm1 = conn.prepareStatement(sql1);
+			pstm1 = conn.prepareStatement(sql1);
 			pstm1.executeUpdate();
 			pstm1.close();
-			PreparedStatement pstm2 = conn.prepareStatement(sql2);
+			pstm2 = conn.prepareStatement(sql2);
 			pstm2.executeUpdate();
 			pstm2.close();
-			PreparedStatement pstm3 = conn.prepareStatement(sql3);
+			pstm3 = conn.prepareStatement(sql3);
 			pstm3.executeUpdate();
 			pstm3.close();
-			PreparedStatement pstm4 = conn.prepareStatement(sql4);
+			pstm4 = conn.prepareStatement(sql4);
 			pstm4.executeUpdate();
 			pstm4.close();
-			PreparedStatement pstm5 = conn.prepareStatement(sql5);
+			pstm5 = conn.prepareStatement(sql5);
 			pstm5.executeUpdate();
 			pstm5.close();
-			
+			Okmessage+="型體:"+MODEL_NA+"\n 所有資料刪除成功！\n";
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally{
+			if(pstm1!=null){
+				pstm1.close();
+			}
+			if(pstm2!=null){
+				pstm2.close();
+			}
+			if(pstm3!=null){
+				pstm3.close();
+			}
+			if(pstm4!=null){
+				pstm4.close();
+			}
+			if(pstm5!=null){
+				pstm5.close();
+			}
 		}
+		
 	}
 
 	private static String getCellValue(HSSFCell cell) {
@@ -572,13 +713,16 @@ public class DSID04MImport extends OpenWinCRUD{
 				}
 				break;
 			case Cell.CELL_TYPE_STRING:
-				cellValue = cell.getStringCellValue();
-				cellValue = cellValue.trim();
+				cellValue = cell.getStringCellValue().trim();
 				break;
-//			case Cell.CELL_TYPE_FORMULA://獲取公式的計算結果
-//				System.out.println("*******公式？*******");
-//				cellValue = cell.getCellFormula();
-//				break;
+
+			case HSSFCell.CELL_TYPE_FORMULA:
+				try {
+					cellValue = cell.getStringCellValue();
+				} catch (IllegalStateException e) {
+					cellValue = String.valueOf(cell.getNumericCellValue());
+				}
+				break;
 			default:
 				break;
 			}
@@ -616,15 +760,47 @@ public class DSID04MImport extends OpenWinCRUD{
 //		System.out.println(">>>"+cellValue);
 		return cellValue;
 	}
-
+	
+	private static String getCellValue3(HSSFCell cell) {
+		String cellValue = "";
+		if (cell != null) {
+			switch (cell.getCellType()) {
+	        case Cell.CELL_TYPE_BOOLEAN:
+	        	System.err.println("Cell.CELL_TYPE_BOOLEAN:"+Cell.CELL_TYPE_BOOLEAN);
+	            return cell.getBooleanCellValue() ? "TRUE" : "FALSE";
+	        case Cell.CELL_TYPE_FORMULA://公式格式
+	        	System.err.println("Cell.CELL_TYPE_FORMULA:"+Cell.CELL_TYPE_FORMULA);
+	            return cell.getCellFormula();
+	        case Cell.CELL_TYPE_NUMERIC://数字格式
+	        	System.err.println("Cell.CELL_TYPE_NUMERIC:"+Cell.CELL_TYPE_NUMERIC);
+	            cell.setCellType(Cell.CELL_TYPE_STRING);
+	            return cell.getStringCellValue();
+	        case Cell.CELL_TYPE_STRING:
+	        	System.err.println("Cell.CELL_TYPE_STRING:"+Cell.CELL_TYPE_STRING);
+	            return cell.getStringCellValue();
+	        case Cell.CELL_TYPE_ERROR:
+	        	System.err.println("Cell.CELL_TYPE_ERROR:"+Cell.CELL_TYPE_ERROR);
+	            return String.valueOf(cell.getErrorCellValue());
+			default:
+				System.err.println("Cell.default");
+				break;
+			}
+		}else{
+			System.err.println("Cell.NULL");
+		}
+//		System.out.println(">>>"+cellValue);
+		return cellValue;
+	}
+	
 	private void ShowMessage() {
 		// TODO Auto-generated method stub
 		if(Errmessage.length()>0){
 			Messagebox.show("文件匯入失敗！！！"+Errmessage);
 		}else{
-			Messagebox.show("文件匯入成功！！！");
+			Messagebox.show(Okmessage);
 		}	
 		Errmessage="";
+		Okmessage="";
 	}
 		
 	@Override
@@ -671,6 +847,12 @@ public class DSID04MImport extends OpenWinCRUD{
 
 	@Override
 	protected boolean beforeSave(Object entityMaster) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected boolean doCustomSave() {
 		// TODO Auto-generated method stub
 		return false;
 	}

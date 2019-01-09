@@ -38,7 +38,7 @@
 					
 				<button id="btnExport" sclass="btn-default"
 					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
-					mold="trendy" disabled="true" />
+					mold="trendy" disabled="false" />
 					<!--  
 				<button id="aaa" sclass="btn-warning"
 					iconSclass="mdi mdi-magnify" label="測試"

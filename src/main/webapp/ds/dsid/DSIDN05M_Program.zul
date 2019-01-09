@@ -1,0 +1,328 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSID05M}" />
+			<label value="${labels.MENU.DSID05M} (DSID05M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dsid.program.DSIDN05M_Program">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+					<!--  
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+						-->
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+				
+			</div>
+		</div>
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+				
+			<hlayout>
+				<hlayout>
+				<vlayout width="70px">
+					<label value="${labels.DSID05.MT_PONO}" sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="txt_PO_NOSQL" width="120px" mold="rounded" />
+				</vlayout>
+				
+				<vlayout width="70px">
+					<label value="${labels.DSID05.MT_SEQ}" sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="txt_PO_SEQSQL" width="120px" mold="rounded" />
+				</vlayout>
+				
+					<vlayout width="70px">
+					<label value="${labels.DSID05.OD_NO}" sclass="sectionTitleLabel" />
+				</vlayout>
+				<vlayout width="140px">
+					<textbox id="txt_OD_NOSQL" width="120px" mold="rounded" />
+				</vlayout>
+				
+				</hlayout>
+					<hlayout>
+						<label value="接單日期"  />
+						<datebox id="querystartdate" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
+						<label value="~" />
+						<datebox id="queryenddate" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
+					</hlayout>
+			</hlayout>
+		</groupbox>
+		
+		<borderlayout height="550px">
+			<north size="100%" open="true" splittable="true" visible="true"
+				collapsible="true">
+				<div width="100%" visible="true">
+				  <div width="100%" visible="true" id="divedit">
+					<separator spacing="20px" />
+					<vlayout width="100%">
+						<hlayout width="100%" height="32px">	
+						
+						
+						<label 
+								value="${labels.DSID05.UNIQUEID}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_UNIQUEID" mold="rounded"
+								width="100px" />
+					   <label 
+								value="${labels.DSID05.DAY_NO}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_DAY_NO" mold="rounded"
+								width="100px" />
+								
+						
+													
+							<label
+								value="${labels.DSID05.OD_NO}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_OD_NO" mold="rounded"
+								width="100px" />
+							<button id="btnPO_NO"
+								iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+							<button id="btnClear"
+								iconSclass="mdi mdi-broom" sclass="btn-danger" />
+								
+								
+							<label
+								value="${labels.DSID05.MT_PONO}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_MT_PONO" mold="rounded"
+								width="100px" />
+								
+							<label
+								value="${labels.DSID05.MT_SEQ}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_MT_SEQ" mold="rounded"
+								width="100px" />
+						</hlayout>
+						<hlayout width="100%" height="32px">
+							<label
+								value="${labels.DSID05.EL_NO}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_EL_NO" mold="rounded"
+								width="300px" />
+							<label
+								value="${labels.DSID05.MT_CODE}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_MT_CODE"
+								mold="rounded" width="100px" />
+							<label
+								value="${labels.DSID05.MODEL_NA}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_MODEL_NA"
+								mold="rounded" width="100px" />
+						</hlayout>
+					</vlayout>
+					
+				</div>	
+		
+		<!-- 1、abcListbox 輸入時顯示列表 -->
+		<separator spacing="20px" />
+		<div width="100%" height="500" id="divadd" visible="false" >
+					<separator spacing="20px" />
+					<vlayout width="100%">
+						<hlayout width="100%" height="32px">	
+							<label
+								value="${labels.DSID05.MT_PONO}"
+								sclass="sectionTitleLabel" />
+							<textbox id="txt_PO_NOa" mold="rounded"
+								width="100px" />
+							<button id="btnPO_NOa"
+								iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+							<button id="btnCleara" sclass="btn-warning"
+								iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}" mold="trendy" />
+						</hlayout>
+				</vlayout>
+				
+		 
+		<separator spacing="20px" />
+		<div width="100%">
+				<separator spacing="20px" />
+				
+					<listbox id="abcListbox" sclass="mylist" rows="5"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false" forward="">
+						<listhead sizable="true">
+							<listheader width="10%"
+								label="${labels.DSID05.MT_CODE}" />
+							<listheader width="7%"
+								label="${labels.DSID05.MT_PONO}" />
+							<listheader width="10%"
+								label="${labels.DSID05.MT_SEQ}" />
+							<listheader width="53%"
+								label="${labels.DSID05.EL_NO}" />
+							<listheader width="10%"
+								label="${labels.DSID05.MODEL_NA}" />
+							<listheader width="10%"
+								label="${labels.DSID05.OD_NO}" />
+						</listhead>
+						<template name="model">
+							<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+								<listcell label="${each.MT_CODE}" />
+								<listcell label="${each.MT_PONO}" />
+								<listcell label="${each.MT_SEQ}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.MODEL_NA}" />
+								<listcell>			
+						    		<textbox width="150px" mold="rounded"  value="" forward="onClick=aaaaaa.onClick"
+						    		/>
+						        </listcell>
+							</listitem>
+						</template>
+					</listbox>
+		</div>
+		
+		
+		</div>
+				
+		  <!-- 2、abcListboxd查詢對應列表- -->
+		  <separator spacing="20px" />
+		  <div id="divshowdate" visible="false">
+				<listbox id="abcListboxd" sclass="mylist" rows="5"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false">
+						<listhead sizable="true">
+							
+							<listheader width="7%"
+								label="${labels.DSID05.UNIQUEID}" />
+							<listheader width="10%"
+								label="${labels.DSID05.DAY_NO}" />
+							<listheader width="7%"
+								label="${labels.DSID05.OD_NO}" />
+							<listheader width="10%"
+								label="${labels.DSID05.MT_CODE}" />
+							<listheader width="32%"
+								label="${labels.DSID05.MT_PONO}" />
+							<listheader width="10%"
+								label="${labels.DSID05.MT_SEQ}" />
+							<listheader width="10%"
+								label="${labels.DSID05.EL_NO}" />
+							<listheader width="10%"
+								label="${labels.DSID05.MODEL_NA}" />
+							<listheader width="7%"
+								label="${labels.DSID05.UP_USER}" />
+						</listhead>
+						<template name="model">
+							<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+								<listcell label="${each.UNIQUEID}" />
+								<listcell label="${each.DAY_NO}" />
+								<listcell label="${each.OD_NO}" />
+								<listcell label="${each.MT_CODE}" />
+								<listcell label="${each.MT_PONO}" />
+								<listcell label="${each.MT_SEQ}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.MODEL_NA}" />
+								<listcell label="${each.UP_USER}" />
+							</listitem>
+						</template>
+					</listbox>
+			</div>
+			
+			
+			
+			<!-- 3、初始狀態和查詢結構顯示- -->
+			<separator spacing="20px" />
+				<div id="divcenter">
+					<listbox id="masterListbox" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false">
+						<listhead sizable="true">
+							<listheader width="7%"
+								label="UNIQUEID" />
+							
+							<listheader width="5%"
+								label="${labels.DSID05.UNIQUEID}" />
+							<listheader width="10%"
+								label="${labels.DSID05.OD_NO}"  />
+							<listheader width="7%"
+								label="${labels.DSID05.MT_CODE}"  />
+							<listheader width="10%"
+								label="${labels.DSID05.MT_PONO}"/>
+							<listheader width="32%"
+								label="${labels.DSID05.MT_SEQ}" />
+							<listheader width="7%"
+								label="${labels.DSID05.EL_NO}" />
+							<listheader width="8%"
+								label="${labels.DSID05.MODEL_NA}" />
+							<listheader width="7%"
+								label="${labels.COMM.OPERATE }" />
+							<listheader width="12%"
+								label="${labels.DSID05.CREATEDATE}"/>
+							<listheader width="7%"
+								label="${labels.DSID05.UP_USER}" />
+						</listhead>
+						<template name="model">
+							<listitem
+								forward="onDoubleClick=onDoubleClickedPersonItem">
+								
+								<listcell label="${each.UNIQUEID}" />
+						    	<listcell label="${each.DAY_NO}" />
+								
+								<listcell label="${each.OD_NO}" />
+								<listcell label="${each.MT_CODE}" />
+								<listcell label="${each.MT_PONO}" />
+								<listcell label="${each.MT_SEQ}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.MODEL_NA}" />
+								<listcell>
+									<hbox spacing="10px">
+										<image
+											visible="${sessionScope.UAuth}"
+											src="/resource/imgs/icons/btn_edit2_16x16.gif"
+											tooltiptext="${labels.COMM.EDIT}"
+											forward="onClick=masterListbox.onUpdate"
+											sclass="fimage">
+										</image>
+										<image
+											visible="${sessionScope.DAuth}"
+											src="/resource/imgs/icons/btn_delete2_16x16.gif"
+											tooltiptext="${labels.COMM.DEL}"
+											forward="onClick=masterListbox.onDelete"
+											sclass="fimage">
+										</image>
+									</hbox>
+								</listcell>
+								<listcell label="${each.CREATEDATE}"  />
+								<listcell label="${each.UP_USER}" />
+							</listitem>
+						</template>
+					</listbox>
+					<paging id="pagingCourse"></paging>
+				</div>
+				<label id="aaaaaa"/>
+				
+				</div>
+				
+				
+			</north>
+		</borderlayout>
+	</window>
+</zk>

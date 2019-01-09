@@ -1,5 +1,7 @@
 package ds.dsid.program;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +16,7 @@ import org.zkoss.zul.Button;
 import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tabpanel;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Vlayout;
@@ -21,6 +24,7 @@ import org.zkoss.zul.Window;
 
 import ds.dsid.domain.DSID04;
 import ds.dsid.domain.DSID10;
+import util.Common;
 import util.ComponentColumn;
 import util.DataMode;
 import util.Detail;
@@ -33,7 +37,7 @@ public class DSID04MProgram extends Master{
 	@Wire
 	private Window windowMaster;
 	@Wire
-	private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDelete,btnImport,btnExport;	
+	private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDelete,btnDeleteM,btnImport,btnExport;	
 	@Wire
 	Textbox txtMODEL_NA,txtMODEL_UPD,txtVAMP_UPD,txtIS_DROP,query_sh_aritcle;
 	@Wire
@@ -41,8 +45,6 @@ public class DSID04MProgram extends Master{
 	@Wire
 	Tabpanel Detail1;
 
-	
-	
 	@Override
 	public void doAfterCompose(Component window) throws Exception{
 		super.doAfterCompose(window);
@@ -74,6 +76,14 @@ public class DSID04MProgram extends Master{
 		return windowMaster;
 	}
 
+	@Listen("onClick =#btnDeleteM")
+	public void onClickbtnDeleteM(Event event) throws Exception{
+		final HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("parentWindow", windowMaster);
+		map.put("DSID04MProgram", this);
+		Executions.createComponents("/ds/dsid/DSID04MDelete.zul", null, map);
+	}
+	
 	@Listen("onClick =#btnImport")
 	public void onClickbtnImport(Event event) throws Exception{
 		final HashMap<String, Object> map = new HashMap<String, Object>();
@@ -161,7 +171,6 @@ public class DSID04MProgram extends Master{
 		if(!query_sh_aritcle.getValue().isEmpty()){
 			sql+=" AND NIKE_SH_ARITCLE='"+query_sh_aritcle.getValue()+"'";
 		}
-		
 		return sql;
 	}
 
@@ -205,7 +214,6 @@ public class DSID04MProgram extends Master{
 		txtMODEL_UPD.setValue(entity == null ? "" : entity.getMODEL_UPD());
 		txtVAMP_UPD.setValue(entity == null ? "" : entity.getVAMP_UPD());
 		txtIS_DROP.setValue(entity == null ? "" : entity.getIS_DROP());
-
 	}
 
 	@Override
@@ -222,8 +230,7 @@ public class DSID04MProgram extends Master{
 
 	@Override
 	protected void doCreateDefault() {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generated method stub	
 	}
 
 	@Override
@@ -245,6 +252,12 @@ public class DSID04MProgram extends Master{
 	}
 
 	@Override
+	protected boolean doCustomSave() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
 	protected List getCustList() {
 		// TODO Auto-generated method stub
 		return null;
@@ -259,7 +272,7 @@ public class DSID04MProgram extends Master{
 		btnSaveMaster.setDisabled(true);
 		btnCancelMaster.setDisabled(true);
 		btnEditMaster.setDisabled(false);
-		btnDelete.setDisabled(false);
+		btnDeleteM.setDisabled(false);
 		
 		txtMODEL_NA.setReadonly(true);
 		txtLA_DATE.setReadonly(true);
@@ -267,9 +280,6 @@ public class DSID04MProgram extends Master{
 		txtMODEL_UPD.setReadonly(true);
 		txtVAMP_UPD.setReadonly(true);
 		txtIS_DROP.setReadonly(true);
-		
-		
-
 	}
 	
 	@Override
@@ -281,7 +291,7 @@ public class DSID04MProgram extends Master{
 		btnSaveMaster.setDisabled(false);
 		btnCancelMaster.setDisabled(false);
 		btnEditMaster.setDisabled(true);
-		btnDelete.setDisabled(true);
+		btnDeleteM.setDisabled(true);
 		
 		txtMODEL_NA.setReadonly(false);
 		txtLA_DATE.setReadonly(false);

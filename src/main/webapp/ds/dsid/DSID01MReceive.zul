@@ -1,0 +1,76 @@
+<zk>
+	<window border="none" id="Receivewindow" title="接單篩選"
+		apply="ds.dsid.program.DSID01MReceive" closable="true"  sclass="mymodal" mode= "modal" width="1000px" height="620px">
+	
+	<borderlayout >
+	
+	<west>
+	<div sclass="breadcrumbs" height="100%">
+	
+		<hlayout width="100%" height="35px" >
+			<label value="接單日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+			<datebox id="txtorder_date"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" />
+		 						
+			<label value="接單上限" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+			<textbox id="txt_UpLimit"  mold="rounded" width="100px" />
+		</hlayout>
+		<hlayout width="100%" height="35px" >
+			 <button id="btnSearch" label="開始篩選" mold="trendy"  iconSclass="mdi mdi-magnify" /> 
+
+	         <button id="btnConfirm" sclass="btn-primary" 
+				iconSclass="mdi mdi-account-check" label="轉為正式訂單" mold="trendy" visible="false"/>
+				
+		</hlayout>	
+		<hlayout width="100%" height="35px">
+			<label value="可預接訂單：" sclass="sectionTitleLabel" />
+		</hlayout>
+		<hlayout >
+			<textbox id="txt_rec_odno"  mold="rounded" width="620px"  height="80px" multiline="true" readonly="true"/>	
+		</hlayout>
+		</div>	
+		</west>
+		
+		<east  width="360px" >
+			<div height="135px" >
+			<hlayout >
+				<label value="篩選進度顯示：" sclass="sectionTitleLabel" style="display:inline-block;width:100px;color:red;" />
+			</hlayout>
+			<hlayout  >
+				<textbox id="txt_Pro"  mold="rounded" width="360px"  height="166px" multiline="true" readonly="true"/>	
+			</hlayout>
+			</div>
+		</east>
+		
+		<south  >
+		<div sclass="breadcrumbs" height="100%">
+		    <listbox id="ListBox"   multiple="true" autopaging="true" 
+		    			sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}" rows="10" >
+        		<listhead>
+            		<listheader label="型體" />
+            		<listheader label="部位" />
+            		<listheader label="顏色" />  
+            		<listheader label="材料編號" />  
+            		<listheader label="單位用量" />  
+            		<listheader label="倉庫庫存" />   
+            		<listheader label="可斬雙數" />
+            		<listheader label="訂單雙數" />          		
+        		</listhead>
+        		<template name="model">
+        		<listitem >
+        			<listcell label="${each.AA}"/>
+        			<listcell label="${each.BB}"/>
+        			<listcell label="${each.CC}"/>
+        			<listcell label="${each.DD}"/>
+        			<listcell label="${each.EE}"/>
+        			<listcell label="${each.FF}"/>
+        			<listcell label="${each.GG}"/>
+        			<listcell label="${each.HH}"/>
+				</listitem>
+			  </template>		
+			</listbox>
+		  <paging id="pagingSuppiler" ></paging>					
+		</div>
+	</south>
+	</borderlayout>
+	</window>
+</zk>

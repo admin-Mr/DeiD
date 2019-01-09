@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,6 +26,8 @@ import org.zkoss.poi.hssf.usermodel.HSSFRow;
 import org.zkoss.poi.hssf.usermodel.HSSFSheet;
 import org.zkoss.poi.hssf.usermodel.HSSFSheetConditionalFormatting;
 import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
+import org.zkoss.poi.hssf.util.HSSFColor.RED;
+import org.zkoss.poi.ss.usermodel.CellStyle;
 import org.zkoss.poi.ss.util.CellRangeAddress;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
@@ -32,12 +36,11 @@ import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.SpringUtil;
 import org.zkoss.zul.Filedownload;
-import org.zkoss.zul.Fileupload;
+import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Listitem;
 import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
-
-import com.ibm.icu.text.SimpleDateFormat;
 
 import ds.common.services.CRUDService;
 import util.Common;
@@ -52,7 +55,11 @@ public class DSID04MExport extends OpenWinCRUD{
 	private CRUDService CRUDService;
 	@Wire
 	private Textbox txtMODEL_NA;
-	static String EL_PO="",EL_NO_LIST="";;
+	@Wire
+	private Listbox List_Model_na;
+	static String EL_PO="",EL_NO_LIST="";
+	List<Object>  His=new ArrayList<Object>();
+	String Aqty="";
 	
 	@Override
 	public void doAfterCompose(Component window) throws Exception {
@@ -67,18 +74,33 @@ public class DSID04MExport extends OpenWinCRUD{
 		filterHeader();
 	}
 	
-	private  void filterHeader() {			
+	@SuppressWarnings("resource")
+	private  void filterHeader() throws SQLException {			
 		ByteArrayOutputStream  stream = new ByteArrayOutputStream();
 		
-		String  MODEL_NA = txtMODEL_NA.getValue(); // 型體名稱
+		String  MODEL_NA =""; // 型體名稱
+		
+		if(List_Model_na.getSelectedItem()!=null){
+			for(Listitem ltAll : List_Model_na.getItems()){
+				if (ltAll.isSelected()){
+					if(!"".equals((Object)ltAll.getValue())&&(Object)ltAll.getValue()!=null){
+						MODEL_NA=(Object)ltAll.getValue()+"";					
+					}
+				}
+			}
+		}
+		
 		System.err.println(">>>>" + MODEL_NA );
 		
 		if(!"".equals(MODEL_NA)){
 			Connection conn = Common.getDbConnection();
 			Connection Conn = getDB01Conn();
-			
+
 			HSSFWorkbook wb = new HSSFWorkbook();		
 
+			GetHistoryDate(MODEL_NA,conn);
+//			System.err.println(">>>"+His);
+			
 			// 字體	
 			HSSFFont font1 = wb.createFont();
 			font1.setFontName("Calibri");    				//设置字體  
@@ -206,13 +228,46 @@ public class DSID04MExport extends OpenWinCRUD{
 //			HSSFSheet sheet5 = wb.createSheet("Sockliner");
 			
 			SetColumnWidth(sheet1,sheet2,sheet3,sheet4);
+			PreparedStatement  ps1 = null, ps2 = null;
+			ResultSet  rs1 = null, rs2 = null;	
 			
 			try {
 				SetSheet1(wb,sheet1,style1,style2,style3,style4,style5,style6 ,conn,Conn,MODEL_NA);
-				SetSheet2(wb,sheet2,style1,style2,style3,style4,style7,style6 ,conn,Conn,MODEL_NA);
-				SetSheet3(wb,sheet3,style1,style2,style3,style4,style5,style6 ,conn,Conn,MODEL_NA);
-				SetSheet4(wb,sheet4,style9,style2,style3,style4,style7,style8 ,conn,Conn,MODEL_NA);
-//				SetSheet5(wb,sheet5,style1,style2,style3,style4,style5,style6 ,conn,Conn,MODEL_NA);	
+				
+				String sql1 = "SELECT * FROM DSID04_2 WHERE MODEL_NA='"+MODEL_NA+"'";				
+				try {
+					ps1 = conn.prepareStatement(sql1);
+					rs1 = ps1.executeQuery();			
+					if(rs1.next()){
+						SetSheet2(wb,sheet2,style1,style2,style3,style4,style7,style6 ,conn,Conn,MODEL_NA);
+						}
+					}catch (Exception e) {
+						e.printStackTrace();
+					}
+								
+				String sql2 = "SELECT * FROM DSID04_3 WHERE MODEL_NA='"+MODEL_NA+"' ORDER BY EL_SEQ";				
+				try {
+					ps2 = conn.prepareStatement(sql2);
+					rs2 = ps2.executeQuery();			
+					if(rs2.next()){
+						SetSheet3(wb,sheet3,style1,style2,style3,style4,style5,style6 ,conn,Conn,MODEL_NA);
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				String sql4 = "SELECT * FROM DSID04_4 WHERE MODEL_NA='"+MODEL_NA+"' ORDER BY EL_SEQ";				
+				try {
+					ps2 = conn.prepareStatement(sql4);
+					rs2 = ps2.executeQuery();			
+					if(rs2.next()){
+						SetSheet4(wb,sheet4,style9,style2,style3,style4,style7,style8 ,conn,Conn,MODEL_NA);
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				wb.setForceFormulaRecalculation(true);
 		        wb.write(stream);
 		        Date date = new Date();
 				SimpleDateFormat format1 = new SimpleDateFormat("HHmmss");
@@ -227,8 +282,23 @@ public class DSID04MExport extends OpenWinCRUD{
 				stream.close();
 				
 			} catch (Exception e) {
+				Messagebox.show("導出失敗!!"+e);
 				e.printStackTrace();
 			} finally {
+				if(rs1!=null){
+					rs1.close();
+				}
+				if(ps1!=null){
+					ps1.close();
+				}
+				if(rs2!=null){
+					rs2.close();
+				}
+				if(ps2!=null){
+					ps2.close();
+				}
+
+				
 				Common.closeConnection(conn);
 				
 				try {
@@ -244,6 +314,31 @@ public class DSID04MExport extends OpenWinCRUD{
 		}		
 	}
 	
+	private void GetHistoryDate(String mODEL_NA, Connection conn) {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String 	sql="SELECT LA_DATE,FLOOR((SYSDATE-NEXT_DAY(LA_DATE,2))/7) WEEK,NEXT_DAY(LA_DATE,2) DAY1 FROM DSID04 WHERE MODEL_NA='"+mODEL_NA+"'";	
+//		System.out.println(">>>>>"+sql);
+		try {
+			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = ps.executeQuery();	
+			if(rs.next()){
+//				System.out.println(rs.getString("LA_DATE")+">>>>>"+rs.getString("WEEK")+">>>>>"+rs.getString("DAY1"));
+				His.add(rs.getDate("LA_DATE"));
+				His.add(rs.getInt("WEEK"));
+				His.add(rs.getDate("DAY1"));
+			}else{
+				
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void SetColumnWidth(HSSFSheet sheet1, HSSFSheet sheet2, HSSFSheet sheet3, HSSFSheet sheet4) {
 		// TODO Auto-generated method stub
 		
@@ -264,11 +359,87 @@ public class DSID04MExport extends OpenWinCRUD{
 		for(int i=2;i<22;i++){
 			sheet4.setColumnWidth(i, 12*256);
 		}
+		
+		for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+			sheet1.setColumnWidth(45+2*k, 10*256);
+			sheet2.setColumnWidth(12+k, 10*256);
+			sheet3.setColumnWidth(11+k, 10*256);
+		}
 	}
 
 	private void SetSheet4(HSSFWorkbook wb, HSSFSheet sheet4, HSSFCellStyle style9, HSSFCellStyle style2, HSSFCellStyle style3,
 			HSSFCellStyle style4, HSSFCellStyle style7, HSSFCellStyle style8, Connection conn, Connection Conn, String MODEL_NA) {
 		// TODO Auto-generated method stub
+		
+		HSSFFont font1 = wb.createFont();
+		font1.setFontName("Calibri");    				//设置字體  
+		font1.setFontHeightInPoints((short)8);    		//设置字体高度  
+//		font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 
+		
+		HSSFCellStyle style1C1 = wb.createCellStyle();
+		style1C1.setFont(font1);
+		style1C1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C1.setWrapText(true);
+		style1C1.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+		style1C1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		
+		HSSFCellStyle style1C2 = wb.createCellStyle();
+		style1C2.setFont(font1);
+		style1C2.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C2.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C2.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C2.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C2.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C2.setWrapText(true);
+		style1C2.setFillForegroundColor(IndexedColors.GOLD.getIndex());
+		style1C2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C2.setDataFormat(wb.createDataFormat().getFormat("0"));
+		
+		HSSFCellStyle style1C3 = wb.createCellStyle();
+		style1C3.setFont(font1);
+		style1C3.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C3.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C3.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C3.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C3.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C3.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C3.setWrapText(true);
+		style1C3.setFillForegroundColor(IndexedColors.SKY_BLUE.getIndex());
+		style1C3.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C3.setDataFormat(wb.createDataFormat().getFormat("0"));
+		
+		HSSFCellStyle style1C4 = wb.createCellStyle();
+		style1C4.setFont(font1);
+		style1C4.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C4.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C4.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C4.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C4.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C4.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C4.setWrapText(true);
+		style1C4.setFillForegroundColor(IndexedColors.LIGHT_ORANGE.getIndex());
+		style1C4.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C4.setDataFormat(wb.createDataFormat().getFormat("0.0"));
+		
+		HSSFCellStyle style1C5 = wb.createCellStyle();
+		style1C5.setFont(font1);
+		style1C5.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C5.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C5.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C5.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C5.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C5.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C5.setWrapText(true);
+		style1C5.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+		style1C5.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C5.setDataFormat(wb.createDataFormat().getFormat("0"));
+		
 		HSSFRow row = null;
 		HSSFCell cell = null;
 		
@@ -281,7 +452,14 @@ public class DSID04MExport extends OpenWinCRUD{
 			ps1 = conn.prepareStatement(sql1);
 			rs1 = ps1.executeQuery();			
 			if(rs1.next()){
-				row = sheet4.createRow(2);
+				for(int i=0;i<14;i++){
+					row = sheet4.createRow(i);
+
+					cell = row.createCell(0);
+					cell.setCellType(1);
+				}
+				
+				row = sheet4.getRow(2);
 				row.setHeightInPoints(25);
 				
 //				cell = row.createCell(0);
@@ -304,7 +482,12 @@ public class DSID04MExport extends OpenWinCRUD{
 				cell = row.createCell(11);
 				cell.setCellType(1);
 				cell.setCellStyle(style3);
-				cell.setCellValue(Double.valueOf(rs1.getString("VAMP_UPD")));
+				if(!"".equals(rs1.getString("VAMP_UPD"))&&rs1.getString("VAMP_UPD")!=null){
+					cell.setCellValue(Double.valueOf(rs1.getString("VAMP_UPD")));
+				}else{
+					cell.setCellValue(Double.valueOf(rs1.getString("MODEL_UPD")));
+				}
+				
 				
 			}
 			ps1.close();
@@ -325,7 +508,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				if(cellNum%20==2){
 											
 					if(cellNum>20){
-						rowNum=rowNum+17;
+						rowNum=rowNum+17+Integer.valueOf(His.get(1).toString())+1;
 						cellNum=2;
 					}
 					// 表頭設定, 大小表頭		
@@ -402,13 +585,26 @@ public class DSID04MExport extends OpenWinCRUD{
 					cell = row.createCell(1);
 					cell.setCellType(1);
 					cell.setCellStyle(style3);
-					cell.setCellFormula("SUM(C"+(rowNum+15)+":V"+(rowNum+15)+")");					
+					cell.setCellFormula("SUM(C"+(rowNum+15)+":V"+(rowNum+15)+")");	
+										
+					for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+//						row = sheet4.getRow(rowNum+15+k);	
+//						cell = row.createCell(1);
+//						cell.setCellType(1);
+//						cell.setCellStyle(style3);
+//						cell.setCellFormula("SUM(C"+(rowNum+16+k)+":V"+(rowNum+16+k)+")");	
+						
+						row = sheet4.getRow(rowNum+15+k);	
+						cell = row.createCell(1);
+						cell.setCellStyle(style3);
+						
+					}
 				}
 				
 				row = sheet4.getRow(rowNum);				
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
-				cell.setCellStyle(style2);
+				cell.setCellStyle(style1C1);
 				cell.setCellValue(rs2.getString("COLOR"));				
 				if(Last_color.compareTo(rs2.getString("COLOR"))==0){
 //					System.err.println(">>>合併  行"+rowNum+" >>> 行 "+ rowNum+" >>>列 "+  c_Num+" >>>列  "+ cellNum);
@@ -435,7 +631,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				row = sheet4.getRow(rowNum+3);				
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style1C2);
 				cell.setCellValue(getkc(rs2.getString("EL_NO"), MODEL_NA, Conn));
 				
 				row = sheet4.getRow(rowNum+4);				
@@ -454,19 +650,19 @@ public class DSID04MExport extends OpenWinCRUD{
 				row = sheet4.getRow(rowNum+6);				
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style1C3);
 				cell.setCellValue(getbuy(rs2.getString("EL_NO"), MODEL_NA, Conn)-getacc(rs2.getString("EL_NO"), MODEL_NA, conn));
 
 				row = sheet4.getRow(rowNum+7);				
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
-				cell.setCellStyle(style8);
+				cell.setCellStyle(style1C4);
 				cell.setCellFormula("$L$3*"+((char) (cellNum+65))+(rowNum+6));
 				
 				row = sheet4.getRow(rowNum+8);				
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
-				cell.setCellStyle(style8);
+				cell.setCellStyle(style1C4);
 				cell.setCellFormula(""+((char) (cellNum+65))+(rowNum+8)+"*45");
 				
 				row = sheet4.getRow(rowNum+9);				
@@ -478,7 +674,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				row = sheet4.getRow(rowNum+10);				
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style1C5);
 				cell.setCellValue("");
 				
 				row = sheet4.getRow(rowNum+11);				
@@ -503,8 +699,26 @@ public class DSID04MExport extends OpenWinCRUD{
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
 				cell.setCellStyle(style3);
-				cell.setCellValue(Double.valueOf(rs2.getString("INI_BUY")));
+				if(!"".equals(rs2.getString("INI_BUY"))&&rs2.getString("INI_BUY")!=null){
+					cell.setCellValue(Double.valueOf(rs2.getString("INI_BUY")));
+				}else{
+					cell.setCellValue(0);
+				}
 				
+				
+				for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+					row = sheet4.getRow(rowNum+15+k);	
+					cell = row.createCell(cellNum);
+					cell.setCellType(1);
+					cell.setCellStyle(style3);
+					int HisQty=GetHisQty(MODEL_NA,rs2.getString("EL_NO"),Conn,k);
+					if("".equals(Aqty)&&HisQty>0){
+						cell.setCellValue(HisQty+"\n In Transit");
+					}else{
+						cell.setCellValue(HisQty+"\n"+Aqty);
+					}
+					
+				}
 				cellNum++;
 				
 			}
@@ -624,11 +838,77 @@ public class DSID04MExport extends OpenWinCRUD{
 		cell.setCellStyle(style9);
 		cell.setCellValue("Order History Initial buy");
 		
+		for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+			row = sheet4.createRow(rowNum+15+k);
+			row.setHeightInPoints(20);
+			
+			cell = row.createCell(0);
+			cell.setCellType(1);
+			cell.setCellStyle(style9);
+			if(k==0){
+				cell.setCellValue(His.get(0)+"~"+His.get(2));
+			}else{
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");             
+				Date date = null;   
+				String str = null;                 			  
+				// String转Date 
+				str=String.valueOf(His.get(2));
+				try {
+					date = format.parse(str);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String date1=format.format(new Date(date.getTime() + (1+7*(k-1)) *24 * 60 * 60 * 1000L));
+				String date2=format.format(new Date(date.getTime() + (7*k) *24 * 60 * 60 * 1000L));
+				cell.setCellValue(date1+"~"+date2);
+			}
+		}
+		
+		row = sheet4.createRow(rowNum+15+(Integer.valueOf (His.get(1).toString())+1));
+		cell = row.createCell(0);
+		cell.setCellType(1);
+	
+		row = sheet4.createRow(rowNum+15+(Integer.valueOf (His.get(1).toString())+2));
+		cell = row.createCell(0);
+		cell.setCellType(1);
 	}
 
 	private void SetSheet3(HSSFWorkbook wb, HSSFSheet sheet3, HSSFCellStyle style1, HSSFCellStyle style2, HSSFCellStyle style3,
 			HSSFCellStyle style4, HSSFCellStyle style5, HSSFCellStyle style6, Connection conn, Connection Conn, String MODEL_NA) {
 		// TODO Auto-generated method stub
+		
+		HSSFFont font1 = wb.createFont();
+		font1.setFontName("Calibri");    				//设置字體  
+		font1.setFontHeightInPoints((short)8);    		//设置字体高度  
+//		font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 
+		
+		HSSFCellStyle style1C1 = wb.createCellStyle();
+		style1C1.setFont(font1);
+		style1C1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C1.setWrapText(true);
+		style1C1.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+		style1C1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C1.setDataFormat(wb.createDataFormat().getFormat("0"));
+		
+		HSSFCellStyle style1C2 = wb.createCellStyle();
+		style1C2.setFont(font1);
+		style1C2.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C2.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C2.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C2.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C2.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C2.setWrapText(true);
+		style1C2.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+		style1C2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C2.setDataFormat(wb.createDataFormat().getFormat("0"));
+		
 		HSSFRow row = null;
 		HSSFCell cell = null;
 		
@@ -721,7 +1001,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				//庫存
 				cell = row.createCell(3);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style1C1);
 				cell.setCellValue(getkc(rs2.getString("EL_NO"), MODEL_NA, Conn));
 				
 				cell = row.createCell(4);
@@ -736,7 +1016,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				
 				cell = row.createCell(6);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style1C2);
 				cell.setCellFormula("E"+(rowNum+1)+"*F"+(rowNum+1)+"*$J$1*"+rs2.getString("ET_US"));
 				
 				//在途
@@ -758,7 +1038,25 @@ public class DSID04MExport extends OpenWinCRUD{
 				cell = row.createCell(10);
 				cell.setCellType(1);
 				cell.setCellStyle(style3);
-				cell.setCellValue(Double.valueOf(rs2.getString("INI_BUY")));
+				if(!"".equals(rs2.getString("INI_BUY"))&&rs2.getString("INI_BUY")!=null){
+					cell.setCellValue(Double.valueOf(rs2.getString("INI_BUY")));
+				}else{
+					cell.setCellValue(0);
+				}
+				
+				for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+					
+					cell = row.createCell(11+k);
+					cell.setCellType(1);
+					cell.setCellStyle(style3);
+					int HisQty=GetHisQty(MODEL_NA,rs2.getString("EL_NO"),Conn,k);
+					if("".equals(Aqty)&&HisQty>0){
+						cell.setCellValue(HisQty +"\n In Transit");
+					}else{
+						cell.setCellValue(HisQty+"\n"+Aqty);
+					}
+					
+				}
 				
 				rowNum++;
 			}
@@ -830,11 +1128,89 @@ public class DSID04MExport extends OpenWinCRUD{
 		cell.setCellStyle(style1);
 		cell.setCellValue("Order History\n Initial buy");
 		
+		for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){			
+			cell = row.createCell(11+k);
+			cell.setCellType(1);
+			cell.setCellStyle(style1);
+			if(k==0){
+				cell.setCellValue(His.get(0)+"~"+His.get(2));
+			}else{
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");             
+				Date date = null;   
+				String str = null;                 			  
+				// String转Date 
+				str=String.valueOf(His.get(2));
+				try {
+					date = format.parse(str);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String date1=format.format(new Date(date.getTime() + (1+7*(k-1)) *24 * 60 * 60 * 1000L));
+				String date2=format.format(new Date(date.getTime() + (7*k) *24 * 60 * 60 * 1000L));
+				cell.setCellValue(date1+"~"+date2);
+			}
+		}
+		
 	}
 	
 	private void SetSheet2(HSSFWorkbook wb, HSSFSheet sheet2, HSSFCellStyle style1, HSSFCellStyle style2, HSSFCellStyle style3,
 			HSSFCellStyle style4, HSSFCellStyle style7, HSSFCellStyle style6, Connection conn, Connection Conn, String MODEL_NA) {
 		// TODO Auto-generated method stub
+		HSSFFont font1 = wb.createFont();
+		font1.setFontName("Calibri");    				//设置字體  
+		font1.setFontHeightInPoints((short)10);    		//设置字体高度  
+//		font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 
+		
+		HSSFCellStyle style1C1 = wb.createCellStyle();
+		style1C1.setFont(font1);
+		style1C1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C1.setWrapText(true);
+		style1C1.setFillForegroundColor(IndexedColors.CORAL.getIndex());
+		style1C1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C1.setDataFormat(wb.createDataFormat().getFormat("0"));
+		
+		HSSFFont font2 = wb.createFont();
+		font2.setFontName("Calibri");    				//设置字體  
+		font2.setFontHeightInPoints((short)10);    		//设置字体高度  
+		font2.setColor(RED.index);
+//		font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 
+		
+		HSSFCellStyle style1C2 = wb.createCellStyle();
+		style1C2.setFont(font2);
+		style1C2.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C2.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C2.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C2.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C2.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C2.setWrapText(true);
+		style1C2.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+		style1C2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C2.setDataFormat(wb.createDataFormat().getFormat("0"));
+				
+		HSSFFont font3 = wb.createFont();
+		font3.setFontName("Calibri");    				//设置字體  
+		font3.setFontHeightInPoints((short)10);    		//设置字体高度  
+		font3.setColor(RED.index);
+		
+		HSSFCellStyle style1C3 = wb.createCellStyle();
+		style1C3.setFont(font3);
+		style1C3.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C3.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C3.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C3.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C3.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C3.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C3.setFillPattern((short) 0);
+		style1C3.setWrapText(true);
+		style1C3.setDataFormat(wb.createDataFormat().getFormat("0"));
+		
 		HSSFRow row = null;
 		HSSFCell cell = null;
 		
@@ -845,7 +1221,7 @@ public class DSID04MExport extends OpenWinCRUD{
 		Header2(sheet2,style1,row,cell);		
 		
 		String sql1 = "SELECT * FROM DSID04 WHERE MODEL_NA='"+MODEL_NA+"'";
-		
+		Double UPD=0.0;
 		try {
 			ps1 = conn.prepareStatement(sql1);
 			rs1 = ps1.executeQuery();			
@@ -873,6 +1249,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				cell = row.createCell(4);
 				cell.setCellType(1);
 				cell.setCellStyle(style3);
+				UPD=Double.valueOf(rs1.getString("VAMP_UPD"));
 				cell.setCellValue(Double.valueOf(rs1.getString("VAMP_UPD")));
 				
 				cell = row.createCell(10);
@@ -931,12 +1308,13 @@ public class DSID04MExport extends OpenWinCRUD{
 				//庫存
 				cell = row.createCell(3);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
-				cell.setCellValue(getkc(rs2.getString("EL_NO"), MODEL_NA, Conn));
+				cell.setCellStyle(style1C1);
+				Double Inventory=getkc(rs2.getString("EL_NO"), MODEL_NA, Conn);
+				cell.setCellValue(Inventory);
 				
 				cell = row.createCell(4);
 				cell.setCellType(1);
-				cell.setCellStyle(style7);
+				cell.setCellStyle(style1C2);
 				cell.setCellValue(Double.valueOf(rs2.getString("COLOR_PRE")));
 				
 				cell = row.createCell(5);
@@ -957,8 +1335,9 @@ public class DSID04MExport extends OpenWinCRUD{
 				//在途
 				cell = row.createCell(8);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
-				cell.setCellValue(getbuy(rs2.getString("EL_NO"), MODEL_NA, Conn)-getacc(rs2.getString("EL_NO"), MODEL_NA, conn));
+				cell.setCellStyle(style1C3);
+				Double Intransit=getbuy(rs2.getString("EL_NO"), MODEL_NA, Conn)-getacc(rs2.getString("EL_NO"), MODEL_NA, conn);
+				cell.setCellValue(Intransit);
 				
 				cell = row.createCell(9);
 				cell.setCellType(1);
@@ -967,8 +1346,12 @@ public class DSID04MExport extends OpenWinCRUD{
 				
 				cell = row.createCell(10);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
-				cell.setCellValue("");
+				if(UPD*Double.valueOf(rs2.getString("YIELD"))*Double.valueOf(rs2.getString("COLOR_PRE"))*Double.valueOf(rs2.getString("ET_US"))-(Inventory+Intransit)>0){
+					cell.setCellStyle(style1C3);
+				}else{
+					cell.setCellStyle(style3);
+				}				
+				cell.setCellFormula("H"+(rowNum+1)+"-(D"+(rowNum+1)+"+I"+(rowNum+1)+")");
 				
 				cell = row.createCell(11);
 				cell.setCellType(1);
@@ -977,7 +1360,19 @@ public class DSID04MExport extends OpenWinCRUD{
 					cell.setCellValue(Double.valueOf(rs2.getString("INI_BUY")));
 				}else{
 					cell.setCellValue("");
-				}			
+				}
+				
+				for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+					cell = row.createCell(12+k);
+					cell.setCellType(1);
+					cell.setCellStyle(style3);
+					int HisQty=GetHisQty(MODEL_NA,rs2.getString("EL_NO"),Conn,k);
+					if("".equals(Aqty)&&HisQty>0){
+						cell.setCellValue(HisQty+"\n In Transit");
+					}else{
+						cell.setCellValue(HisQty+"\n"+Aqty);
+					}
+				}
 				
 				rowNum++;
 			}
@@ -1056,8 +1451,32 @@ public class DSID04MExport extends OpenWinCRUD{
 		cell.setCellStyle(style1);
 		cell.setCellValue("Order History\n Initial buy");
 		
+		for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){			
+			cell = row.createCell(12+k);
+			cell.setCellType(1);
+			cell.setCellStyle(style1);
+			if(k==0){
+				cell.setCellValue(His.get(0)+"~"+His.get(2));
+			}else{
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");             
+				Date date = null;   
+				String str = null;                 			  
+				// String转Date 
+				str=String.valueOf(His.get(2));
+				try {
+					date = format.parse(str);
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String date1=format.format(new Date(date.getTime() + (1+7*(k-1)) *24 * 60 * 60 * 1000L));
+				String date2=format.format(new Date(date.getTime() + (7*k) *24 * 60 * 60 * 1000L));
+				cell.setCellValue(date1+"~"+date2);
+			}
+		}
+		
 	}
-
+	
 	private void SetSheet1(HSSFWorkbook wb, HSSFSheet sheet1, HSSFCellStyle style1, HSSFCellStyle style2, HSSFCellStyle style3, HSSFCellStyle style4, HSSFCellStyle style5, HSSFCellStyle style6, Connection conn, Connection Conn, String MODEL_NA) {
 		// TODO Auto-generated method stub
 		
@@ -1070,6 +1489,138 @@ public class DSID04MExport extends OpenWinCRUD{
 		CellRangeAddress[] regions = { CellRangeAddress.valueOf( "$AH$14:$AH$1000") };
 		sheetCF.addConditionalFormatting(regions,ruleRed);
 		
+		HSSFFont font1 = wb.createFont();
+		font1.setFontName("Calibri");    				//设置字體  
+		font1.setFontHeightInPoints((short)9);    		//设置字体高度  
+		font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 
+		
+		// 標題格式
+		HSSFCellStyle style1C8 = wb.createCellStyle();
+		style1C8.setFont(font1);
+		style1C8.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C8.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C8.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C8.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C8.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C8.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C8.setWrapText(true);
+		style1C8.setFillForegroundColor(IndexedColors.TURQUOISE.getIndex());
+		style1C8.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    style3.setDataFormat(wb.createDataFormat().getFormat("0"));
+		
+		HSSFCellStyle style1C9 = wb.createCellStyle();
+		style1C9.setFont(font1);
+		style1C9.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C9.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C9.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C9.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C9.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C9.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C9.setWrapText(true);
+		style1C9.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+		style1C9.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C9.setDataFormat(wb.createDataFormat().getFormat("$0.00"));
+		
+		HSSFCellStyle style1C10 = wb.createCellStyle();
+		style1C10.setFont(font1);
+		style1C10.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style1C10.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style1C10.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style1C10.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style1C10.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style1C10.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style1C10.setWrapText(true);
+		style1C10.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+		style1C10.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		style1C10.setDataFormat(wb.createDataFormat().getFormat("$0.00"));
+		
+		HSSFFont font2 = wb.createFont();
+		font2.setFontName("Calibri");    				//设置字體  
+		font2.setFontHeightInPoints((short)8);    		//设置字体高度  
+		
+		HSSFCellStyle style2C1 = wb.createCellStyle();
+		style2C1.setFont(font2);
+		style2C1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style2C1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style2C1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style2C1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style2C1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style2C1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style2C1.setFillPattern((short) 0);
+		style2C1.setWrapText(true);
+		style2C1.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+		style2C1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		
+		HSSFCellStyle style3C1 = wb.createCellStyle();
+		style3C1.setFont(font2);
+		style3C1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style3C1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style3C1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style3C1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style3C1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style3C1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style3C1.setFillPattern((short) 0);
+		style3C1.setWrapText(true);
+		style3C1.setDataFormat(wb.createDataFormat().getFormat("0"));
+		style3C1.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+		style3C1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    
+		HSSFCellStyle style4C1 = wb.createCellStyle();
+		style4C1.setFont(font2);
+		style4C1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style4C1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style4C1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style4C1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style4C1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style4C1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style4C1.setFillPattern((short) 0);
+		style4C1.setWrapText(true);
+		style4C1.setDataFormat(wb.createDataFormat().getFormat("$0.00"));
+		style4C1.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+		style4C1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		
+		HSSFCellStyle style5C1 = wb.createCellStyle();
+		style5C1.setFont(font2);
+		style5C1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style5C1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style5C1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style5C1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style5C1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style5C1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style5C1.setFillPattern((short) 0);
+		style5C1.setWrapText(true);
+		style5C1.setDataFormat(wb.createDataFormat().getFormat("0%"));
+		style5C1.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+		style5C1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		
+		HSSFCellStyle style3C2 = wb.createCellStyle();
+		style3C2.setFont(font2);
+		style3C2.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style3C2.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style3C2.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style3C2.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style3C2.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style3C2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style3C2.setFillPattern((short) 0);
+		style3C2.setWrapText(true);
+		style3C2.setDataFormat(wb.createDataFormat().getFormat("0"));
+		style3C2.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+		style3C2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+	    
+		HSSFCellStyle style4C2 = wb.createCellStyle();
+		style4C2.setFont(font2);
+		style4C2.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+		style4C2.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+		style4C2.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+		style4C2.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+		style4C2.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+		style4C2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+		style4C2.setFillPattern((short) 0);
+		style4C2.setWrapText(true);
+		style4C2.setDataFormat(wb.createDataFormat().getFormat("$0.00"));
+		style4C2.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+		style4C2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		
 		HSSFRow row = null;
 		HSSFCell cell = null;
 		
@@ -1079,7 +1630,7 @@ public class DSID04MExport extends OpenWinCRUD{
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");	
 
 		// 表頭設定, 大小表頭
-		Header1(sheet1,style1,row,cell);		
+		Header1(wb,sheet1,style1,row,cell);		
 		
 		String sql1 = "SELECT * FROM DSID04 WHERE MODEL_NA='"+MODEL_NA+"'";
 		
@@ -1113,7 +1664,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				
 				cell = row.createCell(28);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style1C8);
 				cell.setCellValue(Double.valueOf(rs1.getString("MODEL_UPD")));
 			}
 			ps1.close();
@@ -1237,8 +1788,9 @@ public class DSID04MExport extends OpenWinCRUD{
 				
 				cell = row.createCell(9);
 				cell.setCellType(1);
-				cell.setCellStyle(style2);
-				cell.setCellFormula("I"+(rowNum+1)+"-F$3");
+				cell.setCellStyle(style3);
+//				cell.setCellFormula("I"+(rowNum+1)+"-F$3");				
+				cell.setCellValue((rs2.getDate("ELDR_DATE").getTime()-(new Date()).getTime())/(24*60*60*1000)+1);
 				
 				cell = row.createCell(10);
 				cell.setCellType(1);
@@ -1295,13 +1847,26 @@ public class DSID04MExport extends OpenWinCRUD{
 				  }
 				  LAST_EL_NO=rs2.getString("EL_NO");
 				
-				
 				//庫存
 				cell = row.createCell(18);
 				cell.setCellType(1);
 				cell.setCellStyle(style2);
 				if(Cou==Cel_no){
 					  cell.setCellValue(vtkc_qty);
+					  
+						for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+							cell = row.createCell(47+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style3);
+							int HisQty=GetHisQty(MODEL_NA,rs2.getString("EL_NO"),Conn,k);
+							cell.setCellValue(HisQty);
+							
+							cell = row.createCell(48+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style4);
+							cell.setCellValue(Double.valueOf(rs2.getString("PO_PRICE"))*HisQty);
+						}
+						
 				  }else{
 					  if(Double.valueOf(rs2.getString("EL_FP"))<=vtkc_qty){
 						  cell.setCellValue(Double.valueOf(rs2.getString("EL_FP")));
@@ -1309,6 +1874,17 @@ public class DSID04MExport extends OpenWinCRUD{
 					  }else{
 						  cell.setCellValue(vtkc_qty);
 					  }
+						for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+							cell = row.createCell(47+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style3);
+							cell.setCellValue(0);
+							
+							cell = row.createCell(48+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style4);
+							cell.setCellValue(0);
+						}
 				  }
 				
 				//在途
@@ -1344,6 +1920,19 @@ public class DSID04MExport extends OpenWinCRUD{
 						cell.setCellType(1);
 						cell.setCellStyle(style3);
 						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,conn));
+						
+						for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+							cell = row.createCell(47+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style3);
+							int HisQty=GetHisQty2(MODEL_NA,Conn,k);
+							cell.setCellValue(HisQty);
+							
+							cell = row.createCell(48+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style4);
+							cell.setCellValue(Double.valueOf(rs2.getString("PO_PRICE"))*HisQty);
+						}
 					}else if(rs2.getString("COLOR").contains("/")&&rs2.getString("COLOR").length()==1){
 						//標籤
 						cell = row.createCell(18);
@@ -1355,6 +1944,19 @@ public class DSID04MExport extends OpenWinCRUD{
 						cell.setCellType(1);
 						cell.setCellStyle(style3);
 						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,conn));
+						
+						for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+							cell = row.createCell(47+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style3);
+							int HisQty=GetHisQty2(MODEL_NA,Conn,k);
+							cell.setCellValue(HisQty);
+							
+							cell = row.createCell(48+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style4);
+							cell.setCellValue(Double.valueOf(rs2.getString("PO_PRICE"))*HisQty);
+						}
 					}else{
 						//鞋帶
 						cell = row.createCell(18);
@@ -1366,6 +1968,19 @@ public class DSID04MExport extends OpenWinCRUD{
 						cell.setCellType(1);
 						cell.setCellStyle(style3);
 						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,conn));
+						
+						for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
+							cell = row.createCell(47+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style3);
+							int HisQty=GetHisQty2(MODEL_NA,Conn,k);
+							cell.setCellValue(HisQty);
+							
+							cell = row.createCell(48+2*k);
+							cell.setCellType(1);
+							cell.setCellStyle(style4);
+							cell.setCellValue(Double.valueOf(rs2.getString("PO_PRICE"))*HisQty);
+						}
 					}
 
 				}
@@ -1413,90 +2028,101 @@ public class DSID04MExport extends OpenWinCRUD{
 				
 				cell = row.createCell(28);
 				cell.setCellType(1);
-				cell.setCellStyle(style5);
+				cell.setCellStyle(style5C1);
 				cell.setCellValue(Double.valueOf(rs2.getString("COLOR_PRE")));
 				
 				cell = row.createCell(29);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("IF($F$3<H"+(rowNum+1)+",O"+(rowNum+1)+"*$AB$3,O"+(rowNum+1)+"*$AB$4)");
 				
 				cell = row.createCell(30);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("IF($J"+(rowNum+1)+"<(O"+(rowNum+1)+"+AD"+(rowNum+1)+"),$J"+(rowNum+1)+",O"+(rowNum+1)+"+AD"+(rowNum+1)+")");
 				
 				cell = row.createCell(31);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("CEILING(AJ"+(rowNum+1)+"*AE"+(rowNum+1)+",1)");
 				
 				cell = row.createCell(32);
 				cell.setCellType(1);
-				cell.setCellStyle(style4);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("AF"+(rowNum+1)+"*Q"+(rowNum+1)+"");
 				
 				cell = row.createCell(33);
 				cell.setCellType(1);
-				cell.setCellStyle(style2);
+				cell.setCellStyle(style2C1);
 				cell.setCellFormula("IF(Y"+(rowNum+1)+"<AF"+(rowNum+1)+",\"YES\",\"NO\")");
 				
 				cell = row.createCell(34);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("IF(AND($F$3<$H"+(rowNum+1)+",$K"+(rowNum+1)+"<($O"+(rowNum+1)+"+$AD"+(rowNum+1)+")),$K"+(rowNum+1)+"+$AD"+(rowNum+1)+",IF(J"+(rowNum+1)+"<O"+(rowNum+1)+"+AD"+(rowNum+1)+"+10,J"+(rowNum+1)+",O"+(rowNum+1)+"+AD"+(rowNum+1)+"+20))");
 				
 				cell = row.createCell(35);
 				cell.setCellType(1);
-				cell.setCellStyle(style6);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("$AC$12*R"+(rowNum+1)+"*AC"+(rowNum+1)+"");
 				
 				cell = row.createCell(36);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("AI"+(rowNum+1)+"*AJ"+(rowNum+1)+"");
 				
 				cell = row.createCell(37);
 				cell.setCellType(1);
-				cell.setCellStyle(style4);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("AK"+(rowNum+1)+"*Q"+(rowNum+1)+"");
 				
 				cell = row.createCell(38);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C1);
 				cell.setCellFormula("IF(AH"+(rowNum+1)+"=\"YES\",IF(M"+(rowNum+1)+"=\"initial buy\",(AI"+(rowNum+1)+"*AJ"+(rowNum+1)+")-Y"+(rowNum+1)+",IF(M"+(rowNum+1)+"=\"ramp down\",J"+(rowNum+1)+"*AJ"+(rowNum+1)+"-Y"+(rowNum+1)+",(AI"+(rowNum+1)+"+O"+(rowNum+1)+")*AJ"+(rowNum+1)+"-Y"+(rowNum+1)+")),0)");
 				
 				cell = row.createCell(39);
 				cell.setCellType(1);
-				cell.setCellStyle(style4);
+				cell.setCellStyle(style4C1);
 				cell.setCellFormula("IF(AM"+(rowNum+1)+">0,AM"+(rowNum+1)+"*Q"+(rowNum+1)+",0)");
 				
 				cell = row.createCell(40);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C2);
 				cell.setCellFormula("AM"+(rowNum+1));
 				
 				cell = row.createCell(41);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C2);
 				cell.setCellFormula("IF(ISERROR(AO"+(rowNum+1)+"/AJ"+(rowNum+1)+"),\"-\",AO"+(rowNum+1)+"/AJ"+(rowNum+1)+")");
 				
 				cell = row.createCell(42);
 				cell.setCellType(1);
-				cell.setCellStyle(style4);
+				cell.setCellStyle(style4C2);
 				cell.setCellFormula("AO"+(rowNum+1)+"*Q"+(rowNum+1)+"");
 				
 				cell = row.createCell(43);
 				cell.setCellType(1);
-				cell.setCellStyle(style3);
+				cell.setCellStyle(style3C2);
 				cell.setCellFormula("IF(ISERROR((Y"+(rowNum+1)+"+AO"+(rowNum+1)+")/AJ"+(rowNum+1)+"),\"-\",(Y"+(rowNum+1)+"+AO"+(rowNum+1)+")/AJ"+(rowNum+1)+")");
 					
 				cell = row.createCell(44);
 				cell.setCellType(1);
 				cell.setCellStyle(style3);
-				cell.setCellValue(Double.valueOf(rs2.getString("EL_SEQ")));
+				cell.setCellFormula("(Y"+(rowNum+1)+"+AO"+(rowNum+1)+")-((I"+(rowNum+1)+"-$F$3)*AJ"+(rowNum+1)+")");
 
+				cell = row.createCell(45);
+				cell.setCellType(1);
+				cell.setCellStyle(style4);
+				cell.setCellFormula("IF(AS"+(rowNum+1)+">0,AS"+(rowNum+1)+"*Q"+(rowNum+1)+",0)");
+
+				cell = row.createCell(46);
+				cell.setCellType(1);
+				cell.setCellStyle(style3);
+				cell.setCellValue(Double.valueOf(rs2.getString("EL_SEQ")));
+				
 				rowNum++;
+				EL_NO_LIST="";
 			}
 			ps2.close();
 			rs2.close();
@@ -1515,18 +2141,200 @@ public class DSID04MExport extends OpenWinCRUD{
 		
 		cell = row.createCell(39);
 		cell.setCellType(1);
-		cell.setCellStyle(style4);
+		cell.setCellStyle(style1C9);
 		cell.setCellFormula("SUM(AN14:AN"+rowNum+")");
 		
 		cell = row.createCell(42);
 		cell.setCellType(1);
-		cell.setCellStyle(style4);
+		cell.setCellStyle(style1C10);
 		cell.setCellFormula("SUM(AQ14:AQ"+rowNum+")");
 		
+		cell = row.createCell(45);
+		cell.setCellType(1);
+		cell.setCellStyle(style4);
+		cell.setCellFormula("SUM(AT14:AT"+rowNum+")");
+		
+		for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){	
+			row = sheet1.getRow(11);
+
+			cell = row.createCell(47+2*k);
+			cell.setCellType(1);
+			cell.setCellStyle(style4);
+			if(k<2){
+				cell.setCellFormula("SUM(A"+((char) (2*k+87))+"14:A"+((char) (2*k+87))+rowNum+")");
+			}else{
+				cell.setCellFormula("SUM("+((char) (66+Integer.valueOf((k-2)/13)))+((char) (2*(k-2)+65-26*((k-2)/13)))+"14:"+((char) (66+Integer.valueOf((k-2)/13)))+((char) (2*(k-2)+65-26*((k-2)/13)))+rowNum+")");
+			}
+			
+			cell = row.createCell(48+2*k);
+			cell.setCellStyle(style4);
+		}
 	}
 	
-	private void Header1(HSSFSheet sheet1, HSSFCellStyle style1, HSSFRow row, HSSFCell cell) {
-			// TODO Auto-generated method stub	
+	private int GetHisQty(String MODEL_NA, String EL_NO, Connection Conn, int k) {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Aqty="";
+		String AddSql="";
+		if(k==0){
+			AddSql=" TO_DATE('"+His.get(0)+"','YYYY/MM/DD' ) AND TO_DATE('"+His.get(2)+"','YYYY/MM/DD' )";
+		}else{
+			AddSql=" TO_DATE('"+His.get(2)+"','YYYY/MM/DD' )+"+(1+(k-1)*7)+" AND TO_DATE('"+His.get(2)+"','YYYY/MM/DD' )+"+(k*7)+"";
+		}
+		
+		String 	sql="SELECT PO_QTY,B.PO_CLOSE FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n" +
+						"AND PO_QTY!=0 AND EL_NO='"+EL_NO+"' AND STOCK_MARK='"+MODEL_NA+"'\n" + 
+						"AND A.PO_DATE BETWEEN"+AddSql;
+		int SQTY=0,AQTY=0;
+//		System.err.println(EL_NO+">>>>>"+sql);
+		try {
+			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = ps.executeQuery();	
+			while(rs.next()){
+				SQTY=Integer.valueOf(rs.getString("PO_QTY"));
+				if("T".equals(rs.getString("PO_CLOSE"))){
+					AQTY=Integer.valueOf(rs.getString("PO_QTY"));
+				}
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(AQTY>0){
+			Aqty="  already "+AQTY;
+//			System.err.println(EL_NO+">>>>>"+SQTY+">>>>>"+Aqty);
+		}
+		return SQTY;
+	}
+
+	private int GetHisQty2(String MODEL_NA, Connection Conn, int k) {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		String AddSql="";
+		if(k==0){
+			AddSql=" TO_DATE('"+His.get(0)+"','YYYY/MM/DD' ) AND TO_DATE('"+His.get(2)+"','YYYY/MM/DD' )";
+		}else{
+			AddSql=" TO_DATE('"+His.get(2)+"','YYYY/MM/DD' )+"+(1+(k-1)*7)+" AND TO_DATE('"+His.get(2)+"','YYYY/MM/DD' )+"+(k*7)+"";
+		}
+		
+		String 	sql="SELECT NVL(SUM(PO_QTY),0) QTY FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n" +
+						"AND PO_QTY!=0 AND EL_NO IN ("+EL_NO_LIST+") AND STOCK_MARK='"+MODEL_NA+"'\n" + 
+						"AND A.PO_DATE BETWEEN"+AddSql;
+		int QTY=0;
+//		System.out.println(">>>>>"+sql);
+		try {
+			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = ps.executeQuery();	
+			if(rs.next()){
+				QTY=Integer.valueOf(rs.getString("QTY"));
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return QTY;
+	}
+	
+	private void Header1(HSSFWorkbook wb, HSSFSheet sheet1, HSSFCellStyle style1, HSSFRow row, HSSFCell cell) {
+			// TODO Auto-generated method stub			
+			
+			HSSFFont font1 = wb.createFont();
+			font1.setFontName("Calibri");    				//设置字體  
+			font1.setFontHeightInPoints((short)9);    		//设置字体高度  
+			font1.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 
+			
+			// 標題格式
+			HSSFCellStyle style1C1 = wb.createCellStyle();
+			style1C1.setFont(font1);
+			style1C1.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+			style1C1.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+			style1C1.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+			style1C1.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+			style1C1.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+			style1C1.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+			style1C1.setWrapText(true);
+			style1C1.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+			style1C1.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			
+			HSSFCellStyle style1C2 = wb.createCellStyle();
+			style1C2.setFont(font1);
+			style1C2.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+			style1C2.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+			style1C2.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+			style1C2.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+			style1C2.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+			style1C2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+			style1C2.setWrapText(true);
+			style1C2.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+			style1C2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			
+			HSSFCellStyle style1C3 = wb.createCellStyle();
+			style1C3.setFont(font1);
+			style1C3.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+			style1C3.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+			style1C3.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+			style1C3.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+			style1C3.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+			style1C3.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+			style1C3.setWrapText(true);
+			style1C3.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+			style1C3.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			
+			HSSFCellStyle style1C4 = wb.createCellStyle();
+			style1C4.setFont(font1);
+			style1C4.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+			style1C4.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+			style1C4.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+			style1C4.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+			style1C4.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+			style1C4.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+			style1C4.setWrapText(true);
+			style1C4.setFillForegroundColor(IndexedColors.LAVENDER.getIndex());
+			style1C4.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			
+			HSSFCellStyle style1C5 = wb.createCellStyle();
+			style1C5.setFont(font1);
+			style1C5.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+			style1C5.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+			style1C5.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+			style1C5.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+			style1C5.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+			style1C5.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+			style1C5.setWrapText(true);
+			style1C5.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+			style1C5.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			
+			HSSFCellStyle style1C6 = wb.createCellStyle();
+			style1C6.setFont(font1);
+			style1C6.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+			style1C6.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+			style1C6.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+			style1C6.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+			style1C6.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+			style1C6.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+			style1C6.setWrapText(true);
+			style1C6.setFillForegroundColor(IndexedColors.LIGHT_GREEN.getIndex());
+			style1C6.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			
+			HSSFCellStyle style1C7 = wb.createCellStyle();
+			style1C7.setFont(font1);
+			style1C7.setBorderTop(HSSFCellStyle.BORDER_THIN);//上边框    
+			style1C7.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框    
+			style1C7.setBorderRight(HSSFCellStyle.BORDER_THIN);//右边框  
+			style1C7.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框    
+			style1C7.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中    
+			style1C7.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直居中
+			style1C7.setWrapText(true);
+			style1C7.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+			style1C7.setFillPattern(CellStyle.SOLID_FOREGROUND);
 			
 			//邊框格式
 			for(int i=1;i<7;i++){
@@ -1551,13 +2359,29 @@ public class DSID04MExport extends OpenWinCRUD{
 					}
 				}
 				
-				for(int j=27;j<44;j++){
+				for(int j=27;j<46;j++){
 					cell = row.createCell(j);
 					cell.setCellType(1);
-					cell.setCellStyle(style1);
+					if(j>=18&&j<21){
+						cell.setCellStyle(style1C2);
+					}
+					if(j>=21&&j<24){
+						cell.setCellStyle(style1C3);
+					}				
+					if(j>=24&&j<28){
+						cell.setCellStyle(style1C4);
+					}
+					if(j>=28&&j<40){
+						cell.setCellStyle(style1C5);
+					}
+					if(j>=40&&j<44){
+						cell.setCellStyle(style1C6);
+					}
+					if(j>=44&&j<46){
+						cell.setCellStyle(style1);
+					}
 				}
 			}
-			
 			
 			row = sheet1.createRow(0);
 			row.setHeightInPoints(30);
@@ -1698,15 +2522,21 @@ public class DSID04MExport extends OpenWinCRUD{
 			
 			cell = row.createCell(28);
 			cell.setCellType(1);
-			cell.setCellStyle(style1);
+			cell.setCellStyle(style1C5);
 			cell.setCellValue("Min/Max");
 			sheet1.addMergedRegion(new CellRangeAddress(7, 9 , 28, 39));
 			
 			cell = row.createCell(40);
 			cell.setCellType(1);
-			cell.setCellStyle(style1);
+			cell.setCellStyle(style1C6);
 			cell.setCellValue("Factory Adjusted Buy");
-			sheet1.addMergedRegion(new CellRangeAddress(7, 9 , 40, 43));		
+			sheet1.addMergedRegion(new CellRangeAddress(7, 9 , 40, 43));
+			
+			cell = row.createCell(44);
+			cell.setCellType(1);
+			cell.setCellStyle(style1);
+			cell.setCellValue("Projected Inventory at Drop");
+			sheet1.addMergedRegion(new CellRangeAddress(7, 9 , 44, 45));
 			
 			row = sheet1.getRow(8);
 			row.setHeightInPoints(20);
@@ -1719,20 +2549,39 @@ public class DSID04MExport extends OpenWinCRUD{
 			row = sheet1.getRow(10);
 			row.setHeightInPoints(40);
 			
+			for(int j=18;j<44;j++){
+				cell = row.createCell(j);
+				cell.setCellType(1);
+				if(j>=28&&j<40){
+					cell.setCellStyle(style1C5);
+				}
+				if(j>=40&&j<44){
+					cell.setCellStyle(style1C6);
+				}
+				if(j>=44&&j<46){
+					cell.setCellStyle(style1);
+				}
+			}
+			
 			cell = row.createCell(28);
 			cell.setCellType(1);
-			cell.setCellStyle(style1);
+			cell.setCellStyle(style1C5);
 			cell.setCellValue("Forecast Avg UPD");
 			
 			cell = row.createCell(39);
 			cell.setCellType(1);
-			cell.setCellStyle(style1);
+			cell.setCellStyle(style1C5);
 			cell.setCellValue("Total buy qty($)");
 			
 			cell = row.createCell(42);
 			cell.setCellType(1);
-			cell.setCellStyle(style1);
+			cell.setCellStyle(style1C6);
 			cell.setCellValue("Total adjusted buy($)");
+			
+			cell = row.createCell(45);
+			cell.setCellType(1);
+			cell.setCellStyle(style1);
+			cell.setCellValue("Total($)");
 			
 			row = sheet1.getRow(11);
 			row.setHeightInPoints(35);
@@ -1740,24 +2589,41 @@ public class DSID04MExport extends OpenWinCRUD{
 			for(int j=18;j<44;j++){
 				cell = row.createCell(j);
 				cell.setCellType(1);
-				cell.setCellStyle(style1);
+				if(j>=18&&j<21){
+					cell.setCellStyle(style1C2);
+				}
+				if(j>=21&&j<24){
+					cell.setCellStyle(style1C3);
+				}				
+				if(j>=24&&j<28){
+					cell.setCellStyle(style1C4);
+				}
+				if(j>=28&&j<40){
+					cell.setCellStyle(style1C5);
+				}
+				if(j>=40&&j<44){
+					cell.setCellStyle(style1C6);
+				}
+				if(j>=44&&j<46){
+					cell.setCellStyle(style1);
+				}
 			}
 			
 			cell = row.createCell(18);
 			cell.setCellType(1);
-			cell.setCellStyle(style1);
+			cell.setCellStyle(style1C2);
 			cell.setCellValue("Materials in warehouse");
 			sheet1.addMergedRegion(new CellRangeAddress(11, 11 , 18, 20));
 			
 			cell = row.createCell(21);
 			cell.setCellType(1);
-			cell.setCellStyle(style1);
+			cell.setCellStyle(style1C3);
 			cell.setCellValue("Materials in transit");
 			sheet1.addMergedRegion(new CellRangeAddress(11, 11 , 21, 23));
 			
 			cell = row.createCell(24);
 			cell.setCellType(1);
-			cell.setCellStyle(style1);
+			cell.setCellStyle(style1C4);
 			cell.setCellValue("Total inventory");
 			sheet1.addMergedRegion(new CellRangeAddress(11, 11 , 24, 27));
 			
@@ -1767,18 +2633,82 @@ public class DSID04MExport extends OpenWinCRUD{
 			int cellnum=0;
 			 List<String> heartname = Arrays.asList("Lgc Grp","	Material Usage","Fct Unique ID\n(FUI)","Vendor","Component Name","Material Name \n(included size breaks if any)","Color Code","Launch date","Drop date","Days to drop from Todays date","total lifespan days","Starting date for initial buy","Buying stages","UOM","MLT Days","MOQ","Unit Price","Yield",
 					 "In Stock\n(UOM)","In Stock\n($)",	"In Stock\n(day)","In Transit\n(UOM)","In Transit\n($)","ETA","Current inventory\n(UOM)","Current inventory\n(day)","Current inventory\n(unit)","Current inventory\n($)","Order % by color or size","Safety Days","MIN Days","MIN\n(UOM)","MIN\n($)","Order\n(Y/N)","MAX Days","Daily Demand\n(UOM)	","MAX\n(UOM)","Max\n($)","Order Quantity\n(UOM)",
-					 " Order Quantity\n(USD)","Factory Buy\n(UOM)",	"Factory buy\n(days)","Factory Buy\n(USD)","Inventory Days After Buy");
+					 " Order Quantity\n(USD)","Factory Buy\n(UOM)",	"Factory buy\n(days)","Factory Buy\n(USD)","Inventory Days After Buy","EOH(UOM)","EOH(USD)");
 			
 //			System.err.println(">>>"+heartname.size());
 			for(int i=0;i<heartname.size();i++){
 				
 				cell = row.createCell(cellnum);
-				cell.setCellType(1);
-				cell.setCellStyle(style1);
+				cell.setCellType(1);				
 				cell.setCellValue(heartname.get(i));
+				if(i<18){
+					cell.setCellStyle(style1C1);
+				}
+				if(i>=18&&i<21){
+					cell.setCellStyle(style1C2);
+				}
+				if(i>=21&&i<24){
+					cell.setCellStyle(style1C3);
+				}				
+				if(i>=24&&i<28){
+					cell.setCellStyle(style1C4);
+				}
+				if(i>=28&&i<40){
+					cell.setCellStyle(style1C5);
+				}
+				if(i>=40&&i<44){
+					cell.setCellStyle(style1C6);
+				}
+				if(i>=44&&i<46){
+					cell.setCellStyle(style1);
+				}
 				cellnum++;
 			}
 				
+			for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){	
+				row = sheet1.getRow(10);
+				sheet1.addMergedRegion(new CellRangeAddress(10, 10, (47+2*k), (48+2*k)));
+				
+				cell = row.createCell(47+2*k);
+				cell.setCellType(1);
+				cell.setCellStyle(style1);
+				if(k==0){
+					cell.setCellValue(His.get(0)+"~"+His.get(2)+" initial buy");
+				}else{
+					SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");             
+					Date date = null;   
+					String str = null;                 			  
+					// String转Date 
+					str=String.valueOf(His.get(2));
+					try {
+						date = format.parse(str);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String date1=format.format(new Date(date.getTime() + (1+7*(k-1)) *24 * 60 * 60 * 1000L));
+					String date2=format.format(new Date(date.getTime() + (7*k) *24 * 60 * 60 * 1000L));
+					cell.setCellValue(date1+"~"+date2+" Replenishment");
+				}
+				
+				cell = row.createCell(48+2*k);
+				cell.setCellStyle(style1);
+				
+				sheet1.addMergedRegion(new CellRangeAddress(11, 11, (47+2*k), (48+2*k)));
+				
+				row = sheet1.getRow(12);
+				
+				cell = row.createCell(47+2*k);
+				cell.setCellType(1);
+				cell.setCellStyle(style1C7);
+				cell.setCellValue("Replen 1 \n(days)");
+				
+				cell = row.createCell(48+2*k);
+				cell.setCellType(1);
+				cell.setCellStyle(style1C7);
+				cell.setCellValue("Replen 1$");
+				
+			}
 		}
 
 	private static int GetCel_no(String mODEL_NA, String string, Connection conn) {
@@ -1816,18 +2746,38 @@ public class DSID04MExport extends OpenWinCRUD{
 			ps = conn.prepareStatement(sql1);
 			rs = ps.executeQuery();			
 			while(rs.next()){
-				/*
-				 * 判斷最小庫存下材料能使用天數與最小陳坤天數比值
-				 * 不小於1.3→維持最小庫存值的數量
-				 * 小於1.3 →單位庫存量*1.3
-				 */
-				Double XX=(Double.valueOf(rs.getString("MIN_UOM"))/Double.valueOf(rs.getString("YIELD")))
-								/(Double.valueOf(rs.getString("MODEL_UPD"))*Double.valueOf(rs.getString("COLOR_PRE")))/Double.valueOf(rs.getString("MIN_DAY"));				
-				if(XX>=1.3){					
-					para=Math.ceil(Double.valueOf(rs.getString("MIN_UOM")));	
-				}else{					
-					para=Math.ceil(Double.valueOf(rs.getString("MIN_UOM"))/XX*1.3);					
+//				/*
+//				 * 判斷最小庫存下材料能使用天數與最小庫存天數比值
+//				 * 不小於1.3→維持最小庫存值的數量
+//				 * 小於1.3 →單位庫存量*1.3
+//				 */
+				
+				try{
+//					if(Double.valueOf(rs.getString("COLOR_PRE"))!=0){
+//						Double XX=(Double.valueOf(rs.getString("MIN_UOM"))/Double.valueOf(rs.getString("YIELD")))
+//								/(Double.valueOf(rs.getString("MODEL_UPD"))*Double.valueOf(rs.getString("COLOR_PRE")))/Double.valueOf(rs.getString("MIN_DAY"));				
+//						if(XX>=1.3){					
+//							para=Math.ceil(Double.valueOf(rs.getString("MIN_UOM")));	
+//						}else{					
+//							para=Math.ceil(Double.valueOf(rs.getString("MIN_UOM"))/XX*1.3);					
+//						}
+//					}else{
+//						para=0.0;
+//					}
+					
+					if(Double.valueOf(rs.getString("COLOR_PRE"))!=0){
+					Double XX=(Double.valueOf(rs.getString("MIN_UOM"))/Double.valueOf(rs.getString("YIELD")))
+							/(Double.valueOf(rs.getString("MODEL_UPD"))*Double.valueOf(rs.getString("COLOR_PRE")))/Double.valueOf(rs.getString("MIN_DAY"));				
+					if(XX>=1.3){					
+						para=Math.ceil(Double.valueOf(rs.getString("MIN_UOM")));	
+					}else{					
+						para=Math.ceil(Double.valueOf(rs.getString("MIN_UOM"))/XX*1.3);					
+					}
+				}else{
+					para=0.0;
 				}
+				
+				
 //				System.err.println("材料： "+rs.getString("EL_NO")+"最小庫存  "+rs.getString("MIN_UOM")+"計算結果：  "+para);
 				
 				String Upsql = "UPDATE DSID04_1 SET EL_FP='"+para+"' WHERE MODEL_NA='"+MODEL_NA+"' AND EL_SEQ='"+rs.getString("EL_SEQ")+"'";				
@@ -1840,15 +2790,22 @@ public class DSID04MExport extends OpenWinCRUD{
 					conn.rollback();
 					e.printStackTrace();						
 				}
+			  }catch (Exception e) {
+				 e.printStackTrace();	
+				 Messagebox.show("導出失敗!!"+e);
+				 break;
+			  }
 				
 			}
 			ps.close();
-			rs.close();
+			rs.close();			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
+		
 	}
 
+	
 	private static Double getacc(String EL_NO, String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub	
 		PreparedStatement ps = null;
@@ -1858,7 +2815,7 @@ public class DSID04MExport extends OpenWinCRUD{
 
 		String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 WHERE PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND EL_NO='"+EL_NO+"'";
 	
-		System.out.println(">>>>>"+sql);
+//		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -1877,6 +2834,7 @@ public class DSID04MExport extends OpenWinCRUD{
 		return qty;
 	}
 
+	
 	private static Double getacc2(String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub	
 		PreparedStatement ps = null;
@@ -1886,7 +2844,7 @@ public class DSID04MExport extends OpenWinCRUD{
 
 		String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 WHERE PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND EL_NO IN ("+EL_NO_LIST+")";
 	
-		System.out.println(">>>>>"+sql);
+//		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -1901,10 +2859,11 @@ public class DSID04MExport extends OpenWinCRUD{
 			e.printStackTrace();
 		}
 		EL_PO="";
-		EL_NO_LIST="";
+		
 		
 		return qty;
 	}
+	
 	
 	private static Double getbuy(String el_no, String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
@@ -1917,7 +2876,7 @@ public class DSID04MExport extends OpenWinCRUD{
 		String 	sql="SELECT A.PO_NO,A.STOCK_MARK,EL_NO,PO_QTY,PO_ACQTY FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n" +
 				"AND B.PO_CLOSE!='T' AND PO_QTY!=0 AND EL_NO='"+el_no+"' AND STOCK_MARK='"+MODEL_NA+"'";
 	
-		System.out.println(">>>>>"+sql);
+//		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -1936,6 +2895,7 @@ public class DSID04MExport extends OpenWinCRUD{
 		
 			return qty;
 	}
+	
 	
 	private static Double getbuy2(String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
@@ -1948,7 +2908,7 @@ public class DSID04MExport extends OpenWinCRUD{
 		String 	sql="SELECT A.PO_NO,A.STOCK_MARK,EL_NO,PO_QTY,PO_ACQTY FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n" +
 				"AND B.PO_CLOSE!='T' AND PO_QTY!=0 AND EL_NO IN ("+EL_NO_LIST+") AND STOCK_MARK='"+MODEL_NA+"'";
 	
-		System.out.println(">>>>>"+sql);
+//		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -1968,6 +2928,7 @@ public class DSID04MExport extends OpenWinCRUD{
 			return qty;
 	}
 
+	
 	private static Double getkc(String el_no, String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
 		
@@ -1977,7 +2938,7 @@ public class DSID04MExport extends OpenWinCRUD{
 		Double qty=0.0;
 
 		String 	sql="SELECT * FROM DSID77 WHERE EL_NO='"+el_no+"' AND MODEL_NA = '"+MODEL_NA+"'";	
-		System.out.println(">>>>>"+sql);
+//		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -1993,17 +2954,19 @@ public class DSID04MExport extends OpenWinCRUD{
 			return qty;
 	}
 	
+	
 	private static Double getkc2(String TABLE, String MODEL_NA,String COLOR, Connection conn, Connection Conn) {
 		// TODO Auto-generated method stub
 		
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
+		EL_NO_LIST="";
 		String sql="SELECT * FROM "+TABLE+" WHERE MODEL_NA = '"+MODEL_NA+"'";	
 		if(!"DSID04_3".equals(TABLE)){
 			sql+=" AND COLOR='"+COLOR+"'";
 		}
-		System.out.println(">>>>>"+sql);
+//		System.out.println("getkc2>>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -2015,28 +2978,29 @@ public class DSID04MExport extends OpenWinCRUD{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(EL_NO_LIST.length()>0){
-			EL_NO_LIST=EL_NO_LIST.substring(0, EL_NO_LIST.length()-1);
-		}
 		
 		Double qty=0.0;
-
-		sql="SELECT SUM(MT_QTY) MT_QTY FROM DSID77 WHERE EL_NO IN ("+EL_NO_LIST+") AND MODEL_NA = '"+MODEL_NA+"'";	
-		System.out.println(">>>>>"+sql);
-		try {
-			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			rs = ps.executeQuery();	
-			if(rs.next()){
-				qty=Double.valueOf(rs.getString("MT_QTY"));
+		if(EL_NO_LIST.length()>0){
+			EL_NO_LIST=EL_NO_LIST.substring(0, EL_NO_LIST.length()-1);
+			
+			sql="SELECT SUM(MT_QTY) MT_QTY FROM DSID77 WHERE EL_NO IN ("+EL_NO_LIST+") AND MODEL_NA = '"+MODEL_NA+"'";	
+//			System.out.println(">>>>>"+sql);
+			try {
+				ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				rs = ps.executeQuery();	
+				if(rs.next()){
+					qty=Double.valueOf(rs.getString("MT_QTY"));
+				}
+				rs.close();
+				ps.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			rs.close();
-			ps.close();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-
+		
 		return qty;
 	}
+	
 	
 	public static Connection getDB01Conn(){
 		Connection  conn = null;
@@ -2051,12 +3015,13 @@ public class DSID04MExport extends OpenWinCRUD{
 	     }
 	    try{
 	    	conn=DriverManager.getConnection(url,user,pwd);
-	    	System.err.println(">>>鏈接DB01數據庫");
+//	    	System.err.println(">>>鏈接DB01數據庫");
 	    }catch(Exception e){
 	    	e.printStackTrace();
 	    }
 	    return conn;
 	}
+	
 	
 	@Override
 	protected Class getEntityClass() {
@@ -2064,54 +3029,70 @@ public class DSID04MExport extends OpenWinCRUD{
 		return null;
 	}
 
+	
 	@Override
 	protected Window getRootWindow() {
 		// TODO Auto-generated method stub
 		return windowMaster;
 	}
 
+	
 	@Override
 	protected MSMode getMSMode() {
 		// TODO Auto-generated method stub
 		return MSMode.MASTER;
 	}
 
+	
 	@Override
 	protected ArrayList<String> getKeyName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	
 	@Override
 	protected ArrayList<String> getKeyValue(Object objectEntity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	
 	@Override
 	protected void init() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	
 	@Override
 	protected Object doSaveDefault(String columnName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	
 	@Override
 	protected boolean beforeSave(Object entityMaster) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	
+	@Override
+	protected boolean doCustomSave() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
 	@Override
 	protected void addDetailPrograms() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	
 	@Override
 	protected HashMap getReturnMap() {
 		// TODO Auto-generated method stub

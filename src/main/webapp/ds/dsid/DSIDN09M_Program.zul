@@ -10,7 +10,43 @@
 	</div>
 	<window width="100%" border="none" id="windowMaster"
 		apply="ds.dsid.program.DSIDN09M_Program">
-		
+		<!--  
+				${$composer}
+		${$composer.aaa}
+		${$composer.d08.EL_NO}
+		${$composer.d06.A1}
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+					
+					
+					
+				<button id="btnPrint" sclass="btn-info"
+					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
+					disabled="true" />
+				<button id="btnImport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-download"
+					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+						
+				<button id="btnExport" sclass="btn-default"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"
+					mold="trendy" disabled="true" />
+				
+			</div>
+		</div>
+		-->
 		
 		<borderlayout height="750px">
 			<north size="100%" open="true" splittable="true" visible="true"
@@ -52,7 +88,7 @@
     <td width="3" style="background-color:#CCCCCC"></td>
     <td width="32" rowspan="5" style="background-color:#CCCCCC">←消防通道→</td>
     <td colspan="4" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333; ">${labels.DSIDN06.B11}<br/>${$composer.d06.getB11()}</td>
-    <td colspan="5" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333; ">${labels.DSIDN06.B12}<br/>${$composer.d06.getB12()}</td>
+    <td colspan="5" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333; ">${labels.DSIDN06.B10}<br/>${$composer.d06.getB10()}</td>
     <td colspan="2" rowspan="2" style="background-color:#CCCCCC">←消防通道→</td>
     <td colspan="5" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">${labels.DSIDN06.B9}<br/>${$composer.d06.getB9()}</td>
     <td colspan="4" rowspan="2" style="background-color:#FFFFFF;border:1px solid #333333;">${labels.DSIDN06.B8}<br/>${$composer.d06.getB8()}</td>
@@ -228,6 +264,95 @@
     <td style="background-color:#CCCCCC"></td>
   </tr>
 </table>
+
+<!--  
+			<table border='1'>
+				<tr>
+					<td >1${$composer.d08.EL_NO}</td>
+					<td>2${$composer.d08.EL_NO}</td>
+					<td>3${$composer.d08.EL_NO}</td>
+					<td>4${$composer.d08.EL_NO}</td>
+					<td>5${$composer.d08.EL_NO}</td>
+					<td>6${$composer.d08.EL_NO}</td>
+					<td>7${$composer.d08.EL_NO}</td>
+					<td>8${$composer.d08.EL_NO}</td>
+					<td>9${$composer.d08.EL_NO}</td>
+					<td>10${$composer.d08.EL_NO}</td>
+					<td>11${$composer.d08.EL_NO}</td>
+					<td>12${$composer.d08.EL_NO}</td>
+					<td>13${$composer.d08.EL_NO}</td>
+					<td>14${$composer.d08.EL_NO}</td>
+					<td>15${$composer.d08.EL_NO}</td>
+					<td>16${$composer.d08.EL_NO}</td>
+					<td>17${$composer.d08.EL_NO}</td>
+					<td>18${$composer.d08.EL_NO}</td>
+					<td>19${$composer.d08.EL_NO}</td>
+					<td>20${$composer.d08.EL_NO}</td>
+					<td>21${$composer.d08.EL_NO}</td>
+					<td>22${$composer.d08.EL_NO}</td>
+					<td>23${$composer.d08.EL_NO}</td>
+					<td  style="background-color:yellow">24${$composer.d08.EL_NO}</td>
+					<td style="background-color:red"></td>
+				</tr>
+				
+				<tr>
+					<td>1${$composer.d08.EL_NO}</td>
+					<td>2${$composer.d08.EL_NO}</td>
+					<td>3${$composer.d08.EL_NO}</td>
+					<td>4${$composer.d08.EL_NO}</td>
+					<td>5${$composer.d08.EL_NO}</td>
+					<td>6${$composer.d08.EL_NO}</td>
+					<td>7${$composer.d08.EL_NO}</td>
+					<td>8${$composer.d08.EL_NO}</td>
+					<td>9${$composer.d08.EL_NO}</td>
+					<td>10${$composer.d08.EL_NO}</td>
+					<td>11${$composer.d08.EL_NO}</td>
+					<td>12${$composer.d08.EL_NO}</td>
+					<td>13${$composer.d08.EL_NO}</td>
+					<td>14${$composer.d08.EL_NO}</td>
+					<td>15${$composer.d08.EL_NO}</td>
+					<td>16${$composer.d08.EL_NO}</td>
+					<td>17${$composer.d08.EL_NO}</td>
+					<td>18${$composer.d08.EL_NO}</td>
+					<td>19${$composer.d08.EL_NO}</td>
+					<td>20${$composer.d08.EL_NO}</td>
+					<td>21${$composer.d08.EL_NO}</td>
+					<td>22${$composer.d08.EL_NO}</td>
+					<td>23${$composer.d08.EL_NO}</td>
+					<td>24${$composer.d08.EL_NO}</td>
+					<td>25${$composer.d08.EL_NO}</td>
+				</tr>
+				
+				
+				<tr>
+					<td>1${$composer.d08.EL_NO}</td>
+					<td>2${$composer.d08.EL_NO}</td>
+					<td>3${$composer.d08.EL_NO}</td>
+					<td>4${$composer.d08.EL_NO}</td>
+					<td>5${$composer.d08.EL_NO}</td>
+					<td>6${$composer.d08.EL_NO}</td>
+					<td>7${$composer.d08.EL_NO}</td>
+					<td>8${$composer.d08.EL_NO}</td>
+					<td>9${$composer.d08.EL_NO}</td>
+					<td>10${$composer.d08.EL_NO}</td>
+					<td>11${$composer.d08.EL_NO}</td>
+					<td>12${$composer.d08.EL_NO}</td>
+					<td>13${$composer.d08.EL_NO}</td>
+					<td>14${$composer.d08.EL_NO}</td>
+					<td>15${$composer.d08.EL_NO}</td>
+					<td>16${$composer.d08.EL_NO}</td>
+					<td>17${$composer.d08.EL_NO}</td>
+					<td>18${$composer.d08.EL_NO}</td>
+					<td>19${$composer.d08.EL_NO}</td>
+					<td>20${$composer.d08.EL_NO}</td>
+					<td>21${$composer.d08.EL_NO}</td>
+					<td>22${$composer.d08.EL_NO}</td>
+					<td>23${$composer.d08.EL_NO}</td>
+					<td>24${$composer.d08.EL_NO}</td>
+					<td>25${$composer.d08.EL_NO}</td>
+				</tr>
+				
+			</table>-->
 		</html>
 				  
 				  <div id="divcenter" >

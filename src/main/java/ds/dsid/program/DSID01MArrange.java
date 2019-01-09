@@ -131,6 +131,9 @@ public class DSID01MArrange extends QueryWindow{
 				}	
 			}catch (NullPointerException e){			
 				e.getStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
 			ShowTip();
@@ -139,12 +142,12 @@ public class DSID01MArrange extends QueryWindow{
 	
 	//確認全部
 	@Listen("onClick = #btnConfirm_All")
-	public void onClickbtnConfirm_All(Event event){
+	public void onClickbtnConfirm_All(Event event) throws SQLException{
 		doConfirm_All();
 	}
 	
 	//
-	private void doConfirm_All() {
+	private void doConfirm_All() throws SQLException {
 		// TODO Auto-generated method stub
 		String status="",woi_sql="";
 		
@@ -181,7 +184,7 @@ public class DSID01MArrange extends QueryWindow{
 	
 	//取消派工
 	@Listen("onClick = #btnReset")
-	public void onClickbtnReset(Event event){
+	public void onClickbtnReset(Event event) throws SQLException{
 		doReset();
 	}	
 	
@@ -189,7 +192,7 @@ public class DSID01MArrange extends QueryWindow{
 	private void ChangeStatus(String work_id_group,String status) throws SQLException {
 		// TODO Auto-generated method stub
 		Connection conn=Common.getDbConnection();
-		PreparedStatement pstm = null;
+		PreparedStatement pstm=null;	
 		String 	sql="UPDATE DSID01 SET STATUS='"+status+"', UP_DATE=SYSDATE WHERE WORK_ORDER_ID IN ("+work_id_group+")";	
 		System.out.println(sql);		
 		try {
@@ -198,12 +201,13 @@ public class DSID01MArrange extends QueryWindow{
 			pstm.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
+		}finally{
 			if(pstm!=null){
 				pstm.close();
 			}
 			Common.closeConnection(conn);
 		}
+			
 	}
 	
 	/*
@@ -350,7 +354,7 @@ public class DSID01MArrange extends QueryWindow{
 		return status;
 	}
 
-	private void doReset() {
+	private void doReset() throws SQLException {
 		// TODO Auto-generated method stub
 		
 		if("".equals(query_order_date.getValue())||query_order_date.getValue()==null){
@@ -431,7 +435,8 @@ public class DSID01MArrange extends QueryWindow{
 	@Override
 	protected String getSQLWhere() {
 		// TODO Auto-generated method stub
-		String SQL = " WHERE 1=1";
+		String SQL = " WHERE 1=1 ";
+//		String SQL = " WHERE 1=1 AND TYPE!='2'";   --虛擬訂單 不派工
 		
 		if(IS_PG==true){
 			SQL+=" AND t.STATUS ='7'";
@@ -535,4 +540,7 @@ public class DSID01MArrange extends QueryWindow{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+
 }

@@ -17,9 +17,9 @@
 				<button id="btnQuery" sclass="btn-warning"
 					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
 					mold="trendy" />
- 				<button id="btnCreateMaster" sclass="btn-primary"
+ 				<!-- <button id="btnCreateMaster" sclass="btn-primary"
 					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
-					mold="trendy" />				
+					mold="trendy" /> -->				
 				<!-- 編輯Edit 按鈕 -->
  				<button id="btnEditMaster" sclass="btn-primary"
 					iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
@@ -31,9 +31,7 @@
 					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
 					mold="trendy" disabled="true" />
 					
-					
-				<!-- 刪除 -->	
- 				<button id="btnDelete" sclass="btn-danger"
+				<button id="btnDeleteM" sclass="btn-danger"
 					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
 					mold="trendy" />
 					

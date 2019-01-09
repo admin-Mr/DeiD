@@ -11,9 +11,13 @@
 				</hlayout>
 				
 				<hlayout>
-	         	<button id="btnConfirm_delete" sclass="btn-primary"
-					iconSclass="mdi mdi-account-check" label="${labels.COMM.CONFIRM}"
+	         	<button id="btnConfirm_delete_old" sclass="btn-primary"
+					iconSclass="mdi mdi-account-check" label="刪除舊系統資料"
 					mold="trendy" />
+					
+				<button id="btnConfirm_delete" sclass="btn-primary"
+					iconSclass="mdi mdi-account-check" label="刪除新系統資料"
+					mold="trendy" />	
 					
 				</hlayout>
 

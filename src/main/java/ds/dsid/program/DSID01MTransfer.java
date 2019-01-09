@@ -63,17 +63,17 @@ public class DSID01MTransfer extends OpenWinCRUD{
 
 	
 	
-	private void doTransfer() {
+	private void doTransfer() throws SQLException {
 		// TODO Auto-generated method stub
 		Connection conn=Common.getDbConnection();
 		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
 		DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-		PreparedStatement ps = null,ps2 = null;
+		PreparedStatement ps = null,ps2 = null,pstm=null;
 		ResultSet rs = null,rs2 = null;
 		int num=1;
 		String err="";
-		
+		try {
 		if(txtorder_date.getValue()!=null){
 			
 			Delete(Conn);
@@ -237,7 +237,7 @@ public class DSID01MTransfer extends OpenWinCRUD{
 					
 					System.out.println(">>>主檔資料轉移 ："+UpSql);		
 					try {
-						PreparedStatement pstm = Conn.prepareStatement(UpSql);
+						pstm = Conn.prepareStatement(UpSql);
 						pstm.executeUpdate();
 						pstm.close();
 						num++;
@@ -328,8 +328,29 @@ public class DSID01MTransfer extends OpenWinCRUD{
 		}else{
 			Messagebox.show(Format.format(txtorder_date.getValue())+" 資料轉移成功！！！");
 		}
-		Common.closeConnection(Conn);
-		Common.closeConnection(conn);	
+		}catch (Exception e) {
+
+			e.printStackTrace();
+		}finally{
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+			if(rs2!=null){
+				rs2.close();
+			}
+			if(ps2!=null){
+				ps2.close();
+			}
+			if(pstm!=null){
+				pstm.close();
+			}
+			Common.closeConnection(Conn);
+			Common.closeConnection(conn);	
+		}
+
 	}
 
 	private String Getpart_no(String part_na, Connection Conn) {
@@ -463,6 +484,12 @@ public class DSID01MTransfer extends OpenWinCRUD{
 
 	@Override
 	protected boolean beforeSave(Object entityMaster) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected boolean doCustomSave() {
 		// TODO Auto-generated method stub
 		return false;
 	}

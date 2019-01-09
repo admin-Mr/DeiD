@@ -1,0 +1,128 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.DSID20}" />
+			<label value="${labels.DSID.DSID25R}(DSID25R)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dsid.program.DSID25RProgram">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+									
+				<fileupload id="btnImport" sclass="btn-default" mold="trendy"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.IMPORT}" />
+					
+				<button id="btnexport1" sclass="btn-default"
+					iconSclass="mdi mdi-watch-export" label="${labels.COMM.EXPORT}"
+					mold="trendy" />	
+			</div>
+		</div>
+
+
+		<borderlayout height="440px">	
+ 			 <west size="100%" open="true" splittable="false" >
+	 			<div width="100%" height="230px">
+					<separator spacing="10px" />
+					<vlayout width="100%">
+				<hlayout width="100%" height="30px" >
+					<label value="訂單日期" sclass="sectionTitlelabel"  style="display:inline-block;width:60px;"/>
+					<datebox id="po_date1" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
+<!-- 					<label value="~" sclass="sectionTitlelabel" />
+					<datebox id="po_date2" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
+ -->				</hlayout>
+			
+				<hlayout width="100%" height="30px" >
+					<label value="型體" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<listbox id ="List_Model_na" mold="select" rows="1" width="200px" height="25px" />
+					<button id="btnQuery1" sclass="btn-default" label="查詢" mold="trendy"/> 		
+				</hlayout>			
+					
+				<hlayout width="100%" height="30px" >
+					<label value="材料編號" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<textbox id="txtEL_NO" mold="rounded" width="200px" />		
+	
+				</hlayout>						
+					</vlayout>		
+				</div>
+			</west>
+						  
+		<south >			
+			<div>
+			 <listbox id="masterListbox"  autopaging="true" sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}" rows="7"  >
+        		<listhead>
+        			<listheader width="6%"  label="${labels.COMM.OPERATE }" />
+        			<listheader label="型體" />
+            		<listheader label="材料編號"  align="center"/>
+            		<listheader label="材料名稱" />   
+            		<listheader label="部位名稱" />
+            		<listheader label="領料倍數" align="center"/> 
+            		<listheader label="材料單位" align="center"/> 
+            		<listheader label="最新餘料日期"/> 																			
+				</listhead>
+
+				<template name="model">
+					<listitem>
+						<listcell>
+							<hbox if="${each.ISEDIT == false and each.ISADD == false}" spacing="10px">
+								<image
+									visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+			
+							</hbox>
+							<hbox if="${each.ISEDIT == true or each.ISADD == true}" spacing="10px">
+									<image src="/resource/imgs/icons/btn_save_16x16.png" sclass="fimage"										
+										tooltiptext="${labels.COMM.SAVE}" forward="onClick=masterListbox.onSave" />								
+									<image src="/resource/imgs/icons/btn_cancel_16x16.png" sclass="fimage"
+										tooltiptext="${labels.COMM.CANCEL}" forward="onClick=masterListbox.onCancel" />
+							</hbox>											
+						</listcell>
+				    <listcell>
+						<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.MODEL_NA}" />
+						<label if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_MODEL_NA" value="${each.MODEL_NA}"  />
+					</listcell>
+					 <listcell>
+						<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.EL_NO}" />
+						<label if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_EL_NO" value="${each.EL_NO}"  />
+					</listcell>
+					
+        			<listcell label="${each.EL_NA}"/>
+        			<listcell label="${each.GR_NA}"/>
+        			<listcell>
+						<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.BA_MU}" />
+						<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_BA_MU" value="${each.BA_MU}" mold="rounded" width="120px" />
+					</listcell>
+  
+        			<listcell label="${each.EL_UNIT}"/>
+        			<listcell label="${each.RE_DATE}"/>
+												
+				</listitem>
+				</template>
+							
+					</listbox>
+					<paging id="pagingCourse"></paging>
+				</div>
+			</south>
+		</borderlayout>
+		
+		<separator spacing="5px" />
+		<tabbox id="tabDetail">
+			<tabs>
+				<tab id="tabDetail1" label="歷史餘料" />
+			</tabs>
+			<tabpanels>
+				<tabpanel id="Detail1"></tabpanel>
+			</tabpanels>
+         </tabbox>
+	</window>
+</zk>

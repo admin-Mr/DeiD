@@ -103,6 +103,7 @@ public class DSID01MProgram extends Master{
 		final HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("parentWindow", windowMaster);
 		map.put("DSID01MProgram", this);
+		map.put("TABLE", "DSID01");
 		Executions.createComponents("/ds/dsid/DSID01MImport.zul", null, map);
 	}
 	
@@ -112,6 +113,7 @@ public class DSID01MProgram extends Master{
 		final HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("parentWindow", windowMaster);
 		map.put("DSID01MProgram", this);
+		map.put("TABLE", "DSID01");
 		Executions.createComponents("/ds/dsid/DSID01MOrder.zul", null, map);
 	}
 	//派工
@@ -130,6 +132,7 @@ public class DSID01MProgram extends Master{
 		final HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("parentWindow", windowMaster);
 		map.put("DSID01MProgram", this);
+		map.put("TABLE", "DSID01");
 		Executions.createComponents("/ds/dsid/DSID01MDelete.zul", null, map);
 	}
 	
@@ -316,14 +319,17 @@ public class DSID01MProgram extends Master{
 		}else if("1".equals(type)){
 			TYPE="特殊";
 		}
+//		else if("2".equals(type)){
+//			TYPE="虛擬";
+//		}
 		return TYPE;
 	}
 	
 	protected String OutShow2(String status) {
 		// TODO Auto-generated method stub
-		String STATUS="";
+		String STATUS="";		
 		if("0".equals(status)){
-			STATUS="虛擬單";
+			STATUS="預接單";
 		}else if("7".equals(status)){
 			STATUS="正式單";
 		}else if("99".equals(status)){
@@ -366,6 +372,12 @@ public class DSID01MProgram extends Master{
 	protected int getPageSize() {
 		// TODO Auto-generated method stub
 		return 100;
+	}
+
+	@Override
+	protected boolean doCustomSave() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	@Override

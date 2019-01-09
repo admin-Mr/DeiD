@@ -1,0 +1,43 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<window title="${labels.COMM.QRY}" id="windowQuery" border="normal" width="70%" height="80%"
+		apply="ds.dsid.program.DSIDN06_01M_Query" maximizable="false" closable="true" sclass="mymodal" mode="modal">
+		<div style="clear: both;" />
+		<div sclass="sectinSeperator" />
+		<panel width="100%">
+			<panelchildren style="overflow:auto;">
+				<separator />
+				<listbox id="queryListBox" checkmark="true" multiple="false" sclass="mylist"  rows="5"
+					emptyMessage="${labels.PUBLIC.MSG0026}">
+					<listhead sizable="true">
+						<listheader width="20%" label="${labels.DSID05.MT_PONO}" />
+						<listheader width="10%" label="${labels.DSID05.MT_CODE}" />
+						<listheader width="10%" label="${labels.DSID05.MT_SEQ}" />
+						<listheader width="50%" label="${labels.DSID05.EL_NO}" />
+						<listheader width="10%" label="${labels.DSID05.MODEL_NA}" />
+						
+					</listhead>
+					<template name="model">
+						<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+							<listcell label="${each.MT_PONO}" />
+							<listcell label="${each.MT_CODE}" />
+							<listcell label="${each.MT_SEQ}" />
+							<listcell label="${each.EL_NO}" />
+							<listcell label="${each.MODEL_NA}" />
+						</listitem>
+					</template>	
+				</listbox>
+				<paging id="pagingOperation" />				
+			</panelchildren>
+		</panel>
+		<separator />
+		<separator />
+		<div align="center">
+			<button id="btnConfirm" label="${labels.COMM.CFM}" mold="trendy"
+				iconSclass="mdi mdi-checkbox-marked-circle" sclass="btn-success" />
+			<button id="btnCancel" label="${labels.COMM.CANCEL}" mold="trendy"
+				iconSclass="mdi mdi-close-circle" sclass="btn-danger" />
+		</div>
+		<separator />		
+	</window>
+</zk>

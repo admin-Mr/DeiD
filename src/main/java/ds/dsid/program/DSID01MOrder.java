@@ -18,6 +18,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
@@ -48,11 +50,13 @@ public class DSID01MOrder extends OpenWinCRUD{
 	@Wire
 	private Datebox txtorder_date;
 	DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
-	
+	String TABLE="";
 	@Override
 	public void doAfterCompose(Component window) throws Exception {
 		super.doAfterCompose(window);	
-
+		Execution execution = Executions.getCurrent();
+		TABLE =  (String) execution.getArg().get("TABLE"); 
+		System.err.println(">>>>>"+TABLE);
 	}
 	
 	// 確認批量刪除
@@ -62,18 +66,19 @@ public class DSID01MOrder extends OpenWinCRUD{
 		doOrder();
 	}
 
-	private void doOrder() {
+	private void doOrder() throws SQLException {
 		// TODO Auto-generated method stub
 		
 		Connection conn=Common.getDbConnection();
 		PreparedStatement ps1 = null,ps2=null,ps3=null,ps4=null,ps5=null;
 		ResultSet rs1 = null,rs2=null,rs3=null,rs4=null,rs5=null;
 		String Errmess="";
-		
+		try{
+			
 		if(txtorder_date.getValue()!=null){
 		
 		//因是提前接單，故此時會處理當前日期之後得訂單的信息
-		String 	sql1="SELECT * FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"' ORDER BY OD_NO";	
+		String 	sql1="SELECT * FROM "+TABLE+" WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"' ORDER BY OD_NO";	
 		System.out.println(">>>>>"+sql1);
 		try {
 			ps1 = conn.prepareStatement(sql1, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -150,8 +155,8 @@ public class DSID01MOrder extends OpenWinCRUD{
 							TOOLING_SIZE=TOOLING_SIZE+".0";
 						}
 						//先將為空時的PID值傳入，再處理group時再複寫
-	            		String 	Updatesql2="UPDATE DSID01 SET MODEL_NA='"+MODEL_NA+"',TOOLING_SIZE='"+TOOLING_SIZE+"' ,PID01='"+ PID_TXT+"' , PID02='"+PID_TXT +"' WHERE WORK_ORDER_ID='"+rs1.getString("WORK_ORDER_ID")+"'";	
-	            		System.out.println(Updatesql2);		
+	            		String 	Updatesql2="UPDATE "+TABLE+" SET MODEL_NA='"+MODEL_NA+"',TOOLING_SIZE='"+TOOLING_SIZE+"' ,PID01='"+ PID_TXT+"' , PID02='"+PID_TXT +"' WHERE WORK_ORDER_ID='"+rs1.getString("WORK_ORDER_ID")+"'";	
+//	            		System.out.println(Updatesql2);		
 	            		try {
 							PreparedStatement pstm = conn.prepareStatement(Updatesql2);
 							pstm.executeUpdate();
@@ -171,14 +176,15 @@ public class DSID01MOrder extends OpenWinCRUD{
 				
 				//處理group信息
 				String 	sql2="SELECT GROUP_NO , MIN(SEQ) SEQ FROM DSID01_TEMP2 WHERE WORK_ORDER_ID='"+rs1.getString("WORK_ORDER_ID")+"' GROUP BY GROUP_NO ORDER BY SEQ";	
-				System.out.println(">>>>>"+sql2);
+//				System.out.println(">>>>>"+sql2);
 				try {
 					ps2 = conn.prepareStatement(sql2, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 					rs2 = ps2.executeQuery();	
 					while(rs2.next()){						
-						String Str1="",Str2="",Str3="",Str4="";
+						String Str1="",Str2="",Str3="",Str4="",Str5="";
 						String Group_Color="";
 						String pidsql="";
+						String pid1="",pid2="";
 						//
 						String 	sql3="SELECT * FROM DSID01_TEMP2 WHERE WORK_ORDER_ID='"+rs1.getString("WORK_ORDER_ID")+"' AND GROUP_NO='"+rs2.getString("GROUP_NO")+"'";	
 						System.out.println(">>>>>"+sql3);
@@ -190,10 +196,10 @@ public class DSID01MOrder extends OpenWinCRUD{
 								
 								//額外設定的pid_group部分判斷
 								if(!"".equals(PID_GROUP)&&PID_GROUP!=null&&PID_GROUP.equals(rs3.getString("GROUP_NO"))&&"PATTERN".equals(rs3.getString("TYPE"))){
-									System.out.println(">>>含PID——GROUP");
+//									System.out.println(">>>含PID——GROUP");
 									pidsql=", PID01='"+rs3.getString("CODE")+"', PID02='"+rs3.getString("CODE")+"' ";						
 								}else{
-									
+									System.out.println(">>>"+rs3.getString("TYPE")+">>>"+rs3.getString("CODE"));
 									if("COLOR".equals(rs3.getString("TYPE"))&&Str1!=rs3.getString("CODE")){
 										Str1=rs3.getString("CODE")+"_";							
 									}
@@ -207,23 +213,41 @@ public class DSID01MOrder extends OpenWinCRUD{
 										Str4=rs3.getString("CODE")+"_";
 									}
 									
+									
 									if("PID".equals(rs3.getString("TYPE"))){
 										if(rs3.getString("PART_NA").contains("LEFT")){
 											pidsql+=", PID01='"+rs3.getString("CODE")+"' ";										
-										}
-										if(rs3.getString("PART_NA").contains("RIGHT")){
+										}else if(rs3.getString("PART_NA").contains("RIGHT")){
 											pidsql+=", PID02='"+rs3.getString("CODE")+"' ";
+										}else if(rs3.getString("PART_NA").contains("SIGNATUREFILEID")){
+											Str5=rs3.getString("CODE")+"_";
+										}else if(rs3.getString("PART_NA").startsWith("PID")){
+											pidsql="";
+											if("PID 3".equals(rs3.getString("PART_NA"))){
+												pid1="上：" +rs3.getString("CODE");
+											}else if("PID 3A".equals(rs3.getString("PART_NA"))){
+												pid2=" 下：" +rs3.getString("CODE");
+											}else{
+												pidsql+=", PID01='"+rs3.getString("CODE")+"' , PID02='"+rs3.getString("CODE")+"' ";	
+											}
+											if(!"".equals(pid1)){
+												pidsql+=", PID01='"+pid1+pid2+"' , PID02='"+pid1+pid2+"' ";	
+											}
 										}
 									}
 								}								
 							
 							
 							//
-							Group_Color=Str1+Str2+Str3+Str4;
-							Group_Color=Group_Color.substring(0, Group_Color.length()-1);
+							Group_Color=Str1+Str2+Str3+Str4+Str5;
+
+							if(Group_Color.length()>0){
+								Group_Color=Group_Color.substring(0, Group_Color.length()-1);
+							}
+							
 							System.out.println(">>>>>COLOR :"+Group_Color); 
 							
-		            		String 	Updatesql="UPDATE DSID01 SET "+rs2.getString("GROUP_NO")+"='"+Group_Color+"'"+pidsql+" WHERE WORK_ORDER_ID='"+rs1.getString("WORK_ORDER_ID")+"'";	
+		            		String 	Updatesql="UPDATE "+TABLE+" SET "+rs2.getString("GROUP_NO")+"='"+Group_Color+"'"+pidsql+" WHERE WORK_ORDER_ID='"+rs1.getString("WORK_ORDER_ID")+"'";	
 		            		System.err.println(">>>>>GROUP COLOR&PID UPDATESQL :"+Updatesql);		
 		            		try {
 								PreparedStatement pstm = conn.prepareStatement(Updatesql);
@@ -240,7 +264,6 @@ public class DSID01MOrder extends OpenWinCRUD{
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-							
 					}
 						
 					rs2.close();
@@ -257,6 +280,14 @@ public class DSID01MOrder extends OpenWinCRUD{
 		
 		//Group信息拆分&替換
 		Replace(conn);
+		
+		//PEGASUS+35 ESS SU18 ID  GROUP1 拼接 GROUP8
+		SpliceGroup(Format.format(txtorder_date.getValue()),conn);
+		
+		//HO18 PEGASUS 35 SHIELD 中底筒  GROUP1 拼接 GROUP8
+		ReplaceGroup5(Format.format(txtorder_date.getValue()),conn);
+		
+		
 		}else{
 			Messagebox.show("日期為空,請核查!!!");
 		}
@@ -268,7 +299,98 @@ public class DSID01MOrder extends OpenWinCRUD{
 			Messagebox.show("訂單資料整理成功！！！");
 		}	
 		Errmess="";
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally{
+			if(rs1!=null){
+				rs1.close();
+			}
+			if(ps1!=null){
+				ps1.close();
+			}
+			if(rs2!=null){
+				rs2.close();
+			}
+			if(ps2!=null){
+				ps2.close();
+			}
+			if(rs3!=null){
+				rs3.close();
+			}
+			if(ps3!=null){
+				ps3.close();
+			}
+			if(rs4!=null){
+				rs4.close();
+			}
+			if(ps4!=null){
+				ps4.close();
+			}
+			if(rs5!=null){
+				rs5.close();
+			}
+			if(ps5!=null){
+				ps5.close();
+			}
+		}
+
 		
+	}
+
+	private void ReplaceGroup5(String DATE, Connection conn) {
+		// TODO Auto-generated method stub
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		String sql="SELECT A.WORK_ORDER_ID,B.TYPE,CODE FROM "+TABLE+" A,DSID01_TEMP2 B WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+DATE+"' AND A.MODEL_NA LIKE '%HO18 PEGASUS 35 SHIELD%' AND A.GROUP5 LIKE '01B%'\n" +
+					"AND A.WORK_ORDER_ID=B.WORK_ORDER_ID AND B.GROUP_NO='GROUP5'";
+		System.out.println("--ReplaceGroup5--"+sql);
+		try {
+
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				String color="";
+				if("PATTERN".equals(rs.getString("TYPE"))){
+					color="01B,金屬";
+				}else if("COLOR".equals(rs.getString("TYPE"))){
+					color="01B,反光";
+				}
+				String 	resql="UPDATE "+TABLE+" SET GROUP5='"+color+"' WHERE WORK_ORDER_ID='"+rs.getString("WORK_ORDER_ID")+"'";	
+				System.err.println(">>>>>區分中底筒的G5:"+resql);		
+				try {
+					PreparedStatement pstm = conn.prepareStatement(resql);
+					pstm.executeUpdate();
+					pstm.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void SpliceGroup(String ORDER_DATE, Connection conn) {
+		// TODO Auto-generated method stub
+		
+		String 	splsql="UPDATE "+TABLE+" SET GROUP8=GROUP1||'-'||GROUP8 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+ORDER_DATE+"' AND MODEL_NA LIKE '%PEGASUS+35 ESS SU18 ID'";	
+		System.err.println(">>>>>PEG35 拼接G1&gG8 :"+splsql);		
+		try {
+			PreparedStatement pstm = conn.prepareStatement(splsql);
+			pstm.executeUpdate();
+			pstm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+				
 	}
 
 	private void JudegNike_sh(Connection conn, String SH_STYLENO,String OD_NO) {
@@ -307,7 +429,7 @@ public class DSID01MOrder extends OpenWinCRUD{
 		
 		//區分型體
 		if(!"".equals(nike_sh)||nike_sh!=null){
-			String 	repsql="UPDATE DSID01 SET NIKE_SH_ARITCLE='"+nike_sh+"' WHERE OD_NO='"+OD_NO+"'";	
+			String 	repsql="UPDATE "+TABLE+" SET NIKE_SH_ARITCLE='"+nike_sh+"' WHERE OD_NO='"+OD_NO+"'";	
     		System.err.println(">>>>> 區分型體:"+repsql);		
     		try {
 				PreparedStatement pstm = conn.prepareStatement(repsql);
@@ -321,13 +443,13 @@ public class DSID01MOrder extends OpenWinCRUD{
 		
 	}
 
-	private void Replace(Connection conn) {
+	private void Replace(Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
-		PreparedStatement ps = null;
+		PreparedStatement ps = null,pstm=null;
 		ResultSet rs = null;
-		
+		try {
 
-		String 	sql="SELECT * FROM DSID10_1 WHERE NIKE_SH_ARITCLE IN (SELECT DISTINCT A.NIKE_SH_ARITCLE FROM DSID01 A WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"')";	
+		String 	sql="SELECT * FROM DSID10_1 WHERE NIKE_SH_ARITCLE IN (SELECT DISTINCT A.NIKE_SH_ARITCLE FROM "+TABLE+" A WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"') ORDER BY NIKE_SH_ARITCLE ,SEQ ";	
 		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -336,10 +458,10 @@ public class DSID01MOrder extends OpenWinCRUD{
 				
 				if("Y".equals(rs.getString("IS_SPL"))){
 					//拆分
-	        		String 	splsql="UPDATE DSID01 SET "+rs.getString("GROUP_NO")+"='"+rs.getString("SPL_INFO1")+"' ,"+rs.getString("SPL_GROUP")+"='"+rs.getString("SPL_INFO2")+"' WHERE NIKE_SH_ARITCLE = '"+rs.getString("NIKE_SH_ARITCLE")+"' AND "+rs.getString("GROUP_NO")+" ='"+rs.getString("ORI_INFO")+"' AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"'";	
+	        		String 	splsql="UPDATE "+TABLE+" SET "+rs.getString("GROUP_NO")+"='"+rs.getString("SPL_INFO1")+"' ,"+rs.getString("SPL_GROUP")+"='"+rs.getString("SPL_INFO2")+"' WHERE NIKE_SH_ARITCLE = '"+rs.getString("NIKE_SH_ARITCLE")+"' AND "+rs.getString("GROUP_NO")+" ='"+rs.getString("ORI_INFO")+"' AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"'";	
 	        		System.err.println(">>>>>拆分 :"+splsql);		
 	        		try {
-						PreparedStatement pstm = conn.prepareStatement(splsql);
+						pstm = conn.prepareStatement(splsql);
 						pstm.executeUpdate();
 						pstm.close();
 					} catch (Exception e) {
@@ -348,11 +470,11 @@ public class DSID01MOrder extends OpenWinCRUD{
 				}else if("Y".equals(rs.getString("IS_REP"))){
 		       		//翻譯
 //	        		String 	repsql="UPDATE DSID01 SET "+rs.getString("GROUP_NO")+" ='"+rs.getString("REP_INFO")+"' WHERE NIKE_SH_ARITCLE='"+rs.getString("NIKE_SH_ARITCLE")+"' AND "+rs.getString("GROUP_NO")+" ='"+rs.getString("ORI_INFO")+"' AND ORDER_DATE > SYSDATE";	
-	        		String  repsql="UPDATE DSID01 SET "+rs.getString("GROUP_NO")+"=REPLACE("+rs.getString("GROUP_NO")+",'"+rs.getString("ORI_INFO")+"','"+rs.getString("REP_INFO")+"') WHERE NIKE_SH_ARITCLE='"+rs.getString("NIKE_SH_ARITCLE")+"' AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"'";
+	        		String  repsql="UPDATE "+TABLE+" SET "+rs.getString("GROUP_NO")+"=REPLACE("+rs.getString("GROUP_NO")+",'"+rs.getString("ORI_INFO")+"','"+rs.getString("REP_INFO")+"') WHERE NIKE_SH_ARITCLE='"+rs.getString("NIKE_SH_ARITCLE")+"' AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"'";
 
 	        		System.err.println(">>>>>翻譯 :"+repsql);		
 	        		try {
-						PreparedStatement pstm = conn.prepareStatement(repsql);
+						pstm = conn.prepareStatement(repsql);
 						pstm.executeUpdate();
 						pstm.close();
 					} catch (Exception e) {
@@ -366,11 +488,23 @@ public class DSID01MOrder extends OpenWinCRUD{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+			if(pstm!=null){
+				pstm.close();
+			}
+		}
+
+			
 	}
 
-	
 	
 	@Override
 	protected Class getEntityClass() {
@@ -420,7 +554,12 @@ public class DSID01MOrder extends OpenWinCRUD{
 		return false;
 	}
 
-	
+	@Override
+	protected boolean doCustomSave() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	@Override
 	protected void addDetailPrograms() {
 		// TODO Auto-generated method stub

@@ -273,6 +273,13 @@ public class DSID02M_Import01 extends QueryBase {
 		return 10;
 	}
 	
+
+	@Override
+	protected void resetEditAreaMaster(Object entity) {
+		// TODO Auto-generated method stub
+	}
+	
+	
 	@Override
 	protected List getCustList() {
 		return null;
@@ -379,13 +386,6 @@ public class DSID02M_Import01 extends QueryBase {
 
 	public void setParentWindow(Window parentWindow) {
 		this.parentWindow = parentWindow;
-	}
-
-
-	@Override
-	protected void resetEditArea(Object entity) {
-		// TODO Auto-generated method stub
-		
 	}
     
     

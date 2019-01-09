@@ -1,0 +1,22 @@
+<zk>
+	<window border="normal" id="windowMaster" title="刪除型體明細資料"
+		apply="ds.dsid.program.DSID04MDelete" closable="true" mode= "modal" width="500px" height="250px">
+
+			<div sclass="breadcrumbs" height="100%">
+				
+				<hlayout width="100%" height="35px" >
+					<label value="型體" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<textbox id="txtMODEL_NA" mold="rounded" width="300px" />		
+
+				</hlayout>
+				
+				<hlayout>
+				<button id="btndelete" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle"
+					label="${labels.COMM.DELETE}" mold="trendy"  /> 
+					
+				</hlayout>
+				
+			</div>
+	</window>
+</zk>
