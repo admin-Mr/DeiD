@@ -250,13 +250,7 @@ public class DSID04MProgram extends Master{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	@Override
-	protected boolean doCustomSave() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
+	
 	@Override
 	protected List getCustList() {
 		// TODO Auto-generated method stub

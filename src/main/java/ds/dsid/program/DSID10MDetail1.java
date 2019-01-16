@@ -20,6 +20,8 @@ import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Window;
+
 import ds.dsid.domain.DSID10;
 import ds.dsid.domain.DSID10_1;
 import util.Common;
@@ -275,14 +277,6 @@ public class DSID10MDetail1 extends Detail{
 		return 10;
 	}
 
-
-	@Override
-	protected boolean doCustomSave() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-
 	@Override
 	protected List getCustList() {
 		// TODO Auto-generated method stub
@@ -359,6 +353,12 @@ public class DSID10MDetail1 extends Detail{
 		Com_Spid.setReadonly(false);	
 		txtspl_info2.setReadonly(false);
 		txtrep_info.setText("");
+	}
+
+	@Override
+	protected Window getRootWindow() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

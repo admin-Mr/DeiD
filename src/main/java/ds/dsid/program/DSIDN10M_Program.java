@@ -1,40 +1,21 @@
 package ds.dsid.program;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.Query;
-
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zkplus.spring.SpringUtil;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
-
 import ds.common.services.CRUDService;
-import ds.common.services.CRUDServiceImpl2;
-import ds.dsid.domain.DSIDN10VO;
-import util.Detail;
 import util.MSMode;
-import util.Master;
 import util.OpenWinCRUD;
-import util.OperationMode;
+
 
 public class DSIDN10M_Program extends OpenWinCRUD {
 	
@@ -120,11 +101,6 @@ public class DSIDN10M_Program extends OpenWinCRUD {
 		return false;
 	}
 
-	@Override
-	protected boolean doCustomSave() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	protected void addDetailPrograms() {

@@ -16,6 +16,7 @@ import org.zkoss.zul.Div;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Textbox;
+import org.zkoss.zul.Window;
 
 import ds.dsid.domain.DSID25_LOG;
 import util.ComponentColumn;
@@ -175,13 +176,13 @@ public class DSID25RDetail extends Detail{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
+	protected List getCustList() {
 		// TODO Auto-generated method stub
-		return true;
+		return null;
 	}
 
 	@Override
-	protected List getCustList() {
+	protected Window getRootWindow() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -279,11 +279,7 @@ private String COLOR_CODE;
 	}
 	
 
-	@Override
-	protected void resetEditAreaMaster(Object entity) {
-		// TODO Auto-generated method stub
-	}
-	
+
 	
 	@Override
 	protected List getCustList() {
@@ -391,6 +387,13 @@ private String COLOR_CODE;
 
 	public void setParentWindow(Window parentWindow) {
 		this.parentWindow = parentWindow;
+	}
+
+
+	@Override
+	protected void resetEditArea(Object entity) {
+		// TODO Auto-generated method stub
+		
 	}
     
     

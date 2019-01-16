@@ -204,12 +204,6 @@ public class DSID12MProgram  extends Master{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
 	protected List getCustList() {
 		// TODO Auto-generated method stub
 		return null;

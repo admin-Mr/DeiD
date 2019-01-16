@@ -63,7 +63,7 @@
 	</filter-mapping>
 	
 	<!-- 第二個廠區設定emfDeiD1 -->
-	<filter>
+<!-- 	<filter>
 		<filter-name>OEMIVF_FTLDB01</filter-name>
 		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
 		<async-supported>true</async-supported>
@@ -76,7 +76,7 @@
 	<filter-mapping>
 		<filter-name>OEMIVF_FTLDB01</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>	
+	</filter-mapping>	 -->
 	<!-- Spring end -->
 	
 	<!-- ZK begin-->
