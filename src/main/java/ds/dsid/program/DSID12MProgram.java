@@ -127,7 +127,7 @@ public class DSID12MProgram  extends Master{
 
 	@Override
 	protected void resetEditAreaMaster(Object entityMaster) {
-		System.out.println("=========onclick=Editor===========");
+//		System.out.println("=========onclick=Editor===========");
 		DSID12 entity = (DSID12) entityMaster;
 		System.out.println(entity==null);
 		TMODEL_NA.setValue(entity == null ? "" : entity.getMODEL_NA());

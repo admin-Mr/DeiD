@@ -138,7 +138,7 @@ public class DSID03M_Program extends COMM_Master {
 	@Override
 	protected void resetEditAreaMaster(Object entityMaster) {
 		
-		System.out.println("=========onclick=Editor===========");
+//		System.out.println("=========onclick=Editor===========");
 		DSID03 entity = (DSID03) entityMaster;
 		/*
 		System.out.println(entity==null);
@@ -167,7 +167,7 @@ public class DSID03M_Program extends COMM_Master {
 	@Override
 	public void masterReadMode(HashMap<String, Object> mapButton){
 		
-		System.out.println("========readDate====================");
+//		System.out.println("========readDate====================");
 		mapButton = new HashMap<String, Object>();
 		mapButton.put("btncreatemaster", btnCreateMaster);
 		mapButton.put("btnquery", btnQuery);		
