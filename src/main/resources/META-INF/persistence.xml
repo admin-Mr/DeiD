@@ -33,7 +33,7 @@
 			<property name="hibernate.current_session_context_class" value="thread" />
 		</properties>
 	</persistence-unit>
-	<persistence-unit name="FTLDB01">
+	<!-- <persistence-unit name="FTLDB01">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
@@ -41,7 +41,7 @@
 			<property name="hibernate.connection.url" value="jdbc:oracle:thin:@10.8.1.32:1521:FTLDB1" />
 			<property name="hibernate.connection.username" value="DSOD" />
 			<property name="hibernate.connection.password" value="ora@it2013" />
-			<!-- c3p0 config http://www.hibernate.org/214.html -->
+			c3p0 config http://www.hibernate.org/214.html
 			<property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="60" />
@@ -60,6 +60,6 @@
 			<property name="hibernate.current_session_context_class" value="thread" />
 
 		</properties>
-	</persistence-unit>
+	</persistence-unit> -->
 
 </persistence>

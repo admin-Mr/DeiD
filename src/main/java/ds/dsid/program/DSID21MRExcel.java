@@ -2531,12 +2531,6 @@ public class DSID21MRExcel extends OpenWinCRUD{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	protected void addDetailPrograms() {
 		// TODO Auto-generated method stub
 		

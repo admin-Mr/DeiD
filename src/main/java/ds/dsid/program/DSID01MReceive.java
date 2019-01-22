@@ -176,7 +176,8 @@ public class DSID01MReceive extends OpenWinCRUD{
 		Insert(InsSql,conn);
 
 		boolean Enough=false;
-		String Last_WOI_List="",ErrMess="";
+		String Last_WOI_List="",ErrMess1="",ErrMess2="";
+		String el_no="";
 		int order_num=0;
 		
 			String MODEL_NA="";
@@ -210,14 +211,16 @@ public class DSID01MReceive extends OpenWinCRUD{
 						}
 //						System.err.println("GroupList>>>>>"+GroupList);
 						
-						
-						
 						WOI_List+=rs1.getString("WORK_ORDER_ID")+",";
 						for(int j=0;j<GroupList.size();j++){
 							Enough=CheckEnough(MODEL_NA,GroupList.get(j),rs1.getString(GroupList.get(j)),WOI_List,conn);
 							if(Enough==false){
 								System.err.println(MODEL_NA+"部位："+GroupList.get(j)+"顏色："+rs1.getString(GroupList.get(j))+" 材料不足!");							
-								ErrMess+=MODEL_NA+"部位："+GroupList.get(j)+"顏色："+rs1.getString(GroupList.get(j))+" 對應材料："+GetEl_no(MODEL_NA,GroupList.get(j),rs1.getString(GroupList.get(j)),conn)+"材料不足,導致"+rs1.getString("WORK_ORDER_ID")+"不可接；\n";
+								el_no=GetEl_no(MODEL_NA,GroupList.get(j),rs1.getString(GroupList.get(j)),conn);
+								if(!ErrMess1.contains(el_no)){
+									ErrMess1+=el_no+",";
+								}
+								ErrMess2+=rs1.getString("WORK_ORDER_ID")+",";
 								continue;
 							}
 						}
@@ -242,10 +245,18 @@ public class DSID01MReceive extends OpenWinCRUD{
 //		}
 		txt_rec_odno.setValue(Last_WOI_List);
 		String Detial=GetDetial(Last_WOI_List,conn);
+		if(ErrMess1.length()>0){
+			ErrMess1=ErrMess1.substring(0, ErrMess1.length()-1);
+			ErrMess1="\n以下材料不足:\n"+ErrMess1;
+		}		
+		if(ErrMess2.length()>0){
+			ErrMess2=ErrMess2.substring(0, ErrMess2.length()-1);
+			ErrMess2="\n以下訂單不可接：\n"+ErrMess2;
+		}
 		
-//		Messagebox.show("不可接篩選結果：\n"+ErrMess);
+		
 //		Messagebox.show("可接篩選結果：\n"+Detial);
-		txt_Pro.setValue(Detial+"\n"+ErrMess);
+		txt_Pro.setValue(Detial+ErrMess1+ErrMess2);
 		
 		btnConfirm.setVisible(true);
 		} catch (Exception e) {				
@@ -490,12 +501,6 @@ public class DSID01MReceive extends OpenWinCRUD{
 
 	@Override
 	protected boolean beforeSave(Object entityMaster) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	protected boolean doCustomSave(Connection conn) {
 		// TODO Auto-generated method stub
 		return false;
 	}

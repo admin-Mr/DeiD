@@ -191,10 +191,6 @@ public class DSPB001M_Controller01 extends Master {
 
 	@Override
 	public void masterReadMode(HashMap<String, Object> mapButton){
-		mapButton = new HashMap<String, Object>();
-		mapButton.put("btncreatemaster", btnCreateMaster);
-		mapButton.put("btnquery", btnQuery);		
-		super.masterReadMode(mapButton);
 		btnSaveMaster.setDisabled(true);
 		btnCancelMaster.setDisabled(true);
 		btnPB_MUNODE.setDisabled(true);

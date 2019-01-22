@@ -236,12 +236,6 @@ public class DSID24RProgram extends OpenWinCRUD{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	protected void addDetailPrograms() {
 		// TODO Auto-generated method stub
 		

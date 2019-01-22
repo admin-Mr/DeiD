@@ -615,7 +615,12 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	public void masterCancel(Event event) {
 		Add=false;
 		super.executeQuery();
-		super.masterCancel(event);
+		try {
+			super.masterCancel(event);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//btnExport.setDisabled(true);
 		
 		divadd.setVisible(false);
@@ -640,7 +645,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 
 	@Listen("onClick = #btnSaveMaster")
 	@Override
-	public void onClickbtnSaveMaster(Event event) {
+	public boolean onClickbtnSaveMaster(Event event) {
 		boolean isok = false;
 		if(!Add){
 			//super.onClickbtnSaveMaster(event);
@@ -698,8 +703,13 @@ public class DSIDN06_01M_Program extends COMM_Master {
 			//System.out.println("----insert ----"+is);
 			
 			super.executeQuery();
-			super.masterCancel(event);
-			return;
+			try {
+				super.masterCancel(event);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return isok;
 		}
 		
 		CRUDService CRUDServicetemp = (CRUDService) SpringUtil.getBean("CRUDService");
@@ -773,7 +783,12 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		}
 		
 		super.executeQuery();
-		super.masterCancel(event);
+		try {
+			super.masterCancel(event);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//txt_PO_NOa.setText("");
 		abcListbox.clearSelection();
 		divadd.setVisible(false);
@@ -790,6 +805,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		txt_PLACE_ADD_SQL.setText("");
 		txt_EL_NO_ADD_SQL.setText("");
 		//txt_PO_NOa.setText("");
+		return isok;
 	}
 	
     private  void batchInsert(String sqlTemplate, List<List<DSIDN06_01>> list,Connection conn) {
@@ -1044,7 +1060,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 						public void onEvent(Event e)
 								throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 							if (Messagebox.ON_OK.equals(e.getName())) {
-								if (doCustomerDel()) {
+								if (doCustomerDel(null)) {
 									System.out.println("delete"+deleteMaster);
 									//doDelete(deleteMaster);
 								} else {

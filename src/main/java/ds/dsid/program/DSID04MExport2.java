@@ -3117,14 +3117,6 @@ public class DSID04MExport2 extends OpenWinCRUD{
 		return false;
 	}
 
-	
-	@Override
-	protected boolean doCustomSave() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	
 	@Override
 	protected void addDetailPrograms() {
 		// TODO Auto-generated method stub

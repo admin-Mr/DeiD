@@ -716,7 +716,12 @@ public DSIDN08 getD08() {
 	public void masterCancel(Event event) {
 		Add=false;
 		super.executeQuery();
-		super.masterCancel(event);
+		try {
+			super.masterCancel(event);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		btnExport.setDisabled(false);
 		
 		divadd.setVisible(false);
@@ -959,11 +964,16 @@ public DSIDN08 getD08() {
 	}
 	@Listen("onClick = #btnSaveMaster")
 	@Override
-	public void onClickbtnSaveMaster(Event event) {
+	public boolean onClickbtnSaveMaster(Event event) {
 		boolean isok = false;
 		if(!Add){
-			super.onClickbtnSaveMaster(event);
-			return;
+			try {
+				super.onClickbtnSaveMaster(event);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return false;
 		}
 		
 		CRUDService CRUDServicetemp = (CRUDService) SpringUtil.getBean("CRUDService");
@@ -1065,7 +1075,7 @@ public DSIDN08 getD08() {
 		}
 		if(!isok){
 			//Messagebox.show(Labels.getLabel("DSIDN08.MSG0008"), "Warning", Messagebox.OK, Messagebox.EXCLAMATION);
-			return ;
+			return false;
 		}
 		if(templist!= null){
 			for(int x =0;x<templist.size();x++){
@@ -1079,7 +1089,12 @@ public DSIDN08 getD08() {
 		}
 		
 		super.executeQuery();
-		super.masterCancel(event);
+		try {
+			super.masterCancel(event);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		txt_PO_NOa.setText("");
 	//	ListModelList  masterModel1 = new ListModelList(null, true);
 		//abcListbox.setModel(masterModel1);
@@ -1094,6 +1109,7 @@ public DSIDN08 getD08() {
 		abcListboxd.setModel(emptyModel);
 		Add = false;
 		txt_PO_NOa.setText("");
+		return isok;
 	}
 	
 	@Listen("onClick = #btnCreateMaster")

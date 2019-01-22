@@ -56,8 +56,8 @@ public class DSID02M_Program extends COMM_Master {
 		masterComponentColumns.add(new ComponentColumn<String>(txt_STATUS, "STATUS", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(null, "CREATE_USER", _userInfo.getAccount(), null, null));
 	//	masterComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));	
-		System.out.println(Sessions.getCurrent().getAttribute("UAuth")+"=====uauth===");
-		System.out.println(Sessions.getCurrent().getAttribute("DAuth")+"=====dauth===");;
+//		System.out.println(Sessions.getCurrent().getAttribute("UAuth")+"=====uauth===");
+//		System.out.println(Sessions.getCurrent().getAttribute("DAuth")+"=====dauth===");;
 		System.out.println("_userInfo"+_userInfo.getAuth());
 	}
 	
@@ -142,7 +142,7 @@ public class DSID02M_Program extends COMM_Master {
  */
 	@Override
 	protected void resetEditAreaMaster(Object entityMaster) {
-		System.out.println("=========onclick=Editor===========");
+//		System.out.println("=========onclick=Editor===========");
 		DSID02 entity = (DSID02) entityMaster;
 		System.out.println(entity==null);
 		txt_UNIQUEID.setValue((entity == null ? "" : entity.getUNIQUEID()));
@@ -158,7 +158,7 @@ public class DSID02M_Program extends COMM_Master {
 	 */
 	@Override
 	public void masterReadMode(HashMap<String, Object> mapButton){	
-		System.out.println("========readDate====================");
+//		System.out.println("========readDate====================");
 		mapButton = new HashMap<String, Object>();
 		mapButton.put("btncreatemaster", btnCreateMaster);
 		mapButton.put("btnquery", btnQuery);		
