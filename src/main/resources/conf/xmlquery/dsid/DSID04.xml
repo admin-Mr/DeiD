@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--程式清單檔-->
+<QryWin>
+	<SQL>
+		<BaseCondition></BaseCondition> 
+		<OrderBy>MODEL_NA</OrderBy>
+		<SQLStatement>
+			SELECT MODEL_NA,'' TEST FROM DSID04
+ 		</SQLStatement>
+	</SQL> 
+	<Fields>
+		<Field Name="MODEL_NA" 	Caption="DSID04_SIZE.MODEL_NA" 	Type="S" />
+		<Field Name="TEST" 	Caption="" 	Type="S" Width="0px" />
+	</Fields>
+</QryWin>

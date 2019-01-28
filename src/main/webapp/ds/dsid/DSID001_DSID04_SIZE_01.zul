@@ -1,0 +1,251 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.COMM.BASIC}" />
+			<label value="${labels.MENU.DSID001_DSID04_SIZE}(DSID001_DSID04_SIZE)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID001_DSID04_SIZE_01"><!--  -->
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+				<fileupload id="btnImportMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.IMPORT}"
+					mold="trendy"/>
+			</div>
+		</div>
+		<separator />
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<grid>
+				<columns>
+					<column width="75px" />
+					<column width="200px" />
+					<column width="75px" />
+				</columns>
+				<rows>
+					<row>
+						<label value="${labels.DSID04_SIZE.MODEL_NA}" sclass="sectionTitleLabel" />
+						<textbox id="qry_MODEL_NA" width="180px" mold="rounded" />
+						<button id="onqryDSID04" src="/resource/imgs/icons/btn_view_16x16.gif" 
+								forward="onClick=windowMaster.onOpenQueryField(onqryDSID04)"/>
+					</row>
+					<row>
+						<label value="男/女" sclass="sectionTitleLabel" />
+						<combobox id="cboqrySH_LAST" width="130px" mold="rounded">
+							<comboitem label="" value="" />
+							<comboitem label="${labels.DSID04_SIZE.SH_LAST.M}" value="M" />
+							<comboitem label="${labels.DSID04_SIZE.SH_LAST.F}" value="W" />
+						</combobox>
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+		
+		<groupbox id="editMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption label="${labels.COMM.EDIT}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<grid>
+				<columns>
+					<column width="5%" />
+					<column width="95%" />
+				</columns>
+				<rows>
+					<row>
+						<label value="${labels.DSID04_SIZE.MODEL_NA}" sclass="sectionTitleLabel" />
+						<hlayout>
+							<textbox id="txt_MODEL_NA" mold="rounded" width="200px" />
+							<button id="ontxtDSID04" src="/resource/imgs/icons/btn_view_16x16.gif" 
+									forward="onClick=windowMaster.onOpenQueryField(ontxtDSID04)"/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="男/女" sclass="sectionTitleLabel" />
+						<hlayout>
+							<combobox id="cboSH_LAST" mold="rounded" width="130px">
+								<comboitem label="${labels.DSID04_SIZE.SH_LAST.M}" value="M" />
+								<comboitem label="${labels.DSID04_SIZE.SH_LAST.F}" value="W" />
+							</combobox>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${labels.DSID04_NFPSIZE.EL_NO}" sclass="sectionTitleLabel" />
+						<hlayout>
+							<textbox id="txt_EL_NO" mold="rounded" width="200px" />
+							<button id="ontxtDSID04ELNO" src="/resource/imgs/icons/btn_view_16x16.gif" 
+									forward="onClick=windowMaster.onOpenQueryField(ontxtDSID04ELNO)"/>
+						</hlayout>
+					</row>
+					<row>
+						<hlayout>
+							<label value="${labels.DSID04_SIZE.MAX_DAY}" sclass="sectionTitleLabel" />
+						</hlayout>
+						<hlayout>
+							<doublebox id="txt_MAX_DAY" mold="rounded" width="100px" />
+							<label value="${labels.DSID04_SIZE.MIN_DAY}" sclass="sectionTitleLabel" />
+							<doublebox id="txt_MIN_DAY" mold="rounded" width="100px" />
+						</hlayout>
+					</row>
+					<row>
+						<label value="${labels.DSID04_SIZE.SIZE}" sclass="sectionTitleLabel" width="75px"/>
+						<hlayout>
+							<textbox id="txt_SIZE1" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE2" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE3" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE4" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE5" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE6" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE7" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE8" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE9" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE10" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE11" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE12" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE13" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE14" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE15" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE16" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE17" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE18" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE19" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE20" mold="rounded" width="50px" />
+						</hlayout>
+					</row>
+					<row>
+						<label value="${labels.DSID04_SIZE.PER}" sclass="sectionTitleLabel" width="75px"/>
+						<hlayout>
+							<doublebox id="txt_PER1" mold="rounded" width="50px" />
+							<doublebox id="txt_PER2" mold="rounded" width="50px" />
+							<doublebox id="txt_PER3" mold="rounded" width="50px" />
+							<doublebox id="txt_PER4" mold="rounded" width="50px" />
+							<doublebox id="txt_PER5" mold="rounded" width="50px" />
+							<doublebox id="txt_PER6" mold="rounded" width="50px" />
+							<doublebox id="txt_PER7" mold="rounded" width="50px" />
+							<doublebox id="txt_PER8" mold="rounded" width="50px" />
+							<doublebox id="txt_PER9" mold="rounded" width="50px" />
+							<doublebox id="txt_PER10" mold="rounded" width="50px" />
+							<doublebox id="txt_PER11" mold="rounded" width="50px" />
+							<doublebox id="txt_PER12" mold="rounded" width="50px" />
+							<doublebox id="txt_PER13" mold="rounded" width="50px" />
+							<doublebox id="txt_PER14" mold="rounded" width="50px" />
+							<doublebox id="txt_PER15" mold="rounded" width="50px" />
+							<doublebox id="txt_PER16" mold="rounded" width="50px" />
+							<doublebox id="txt_PER17" mold="rounded" width="50px" />
+							<doublebox id="txt_PER18" mold="rounded" width="50px" />
+							<doublebox id="txt_PER19" mold="rounded" width="50px" />
+							<doublebox id="txt_PER20" mold="rounded" width="50px" />
+						</hlayout>
+					</row>
+					<row>
+						<label value="${labels.DSID04_SIZE.SIZE}" sclass="sectionTitleLabel" width="75px"/>
+						<hlayout>
+							<textbox id="txt_SIZE21" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE22" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE23" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE24" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE25" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE26" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE27" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE28" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE29" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE30" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE31" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE32" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE33" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE34" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE35" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE36" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE37" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE38" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE39" mold="rounded" width="50px" />
+							<textbox id="txt_SIZE40" mold="rounded" width="50px" />
+						</hlayout>
+					</row>
+					<row>
+						<label value="${labels.DSID04_SIZE.PER}" sclass="sectionTitleLabel" width="75px"/>
+						<hlayout>
+							<doublebox id="txt_PER21" mold="rounded" width="50px" />
+							<doublebox id="txt_PER22" mold="rounded" width="50px" />
+							<doublebox id="txt_PER23" mold="rounded" width="50px" />
+							<doublebox id="txt_PER24" mold="rounded" width="50px" />
+							<doublebox id="txt_PER25" mold="rounded" width="50px" />
+							<doublebox id="txt_PER26" mold="rounded" width="50px" />
+							<doublebox id="txt_PER27" mold="rounded" width="50px" />
+							<doublebox id="txt_PER28" mold="rounded" width="50px" />
+							<doublebox id="txt_PER29" mold="rounded" width="50px" />
+							<doublebox id="txt_PER30" mold="rounded" width="50px" />
+							<doublebox id="txt_PER31" mold="rounded" width="50px" />
+							<doublebox id="txt_PER32" mold="rounded" width="50px" />
+							<doublebox id="txt_PER33" mold="rounded" width="50px" />
+							<doublebox id="txt_PER34" mold="rounded" width="50px" />
+							<doublebox id="txt_PER35" mold="rounded" width="50px" />
+							<doublebox id="txt_PER36" mold="rounded" width="50px" />
+							<doublebox id="txt_PER37" mold="rounded" width="50px" />
+							<doublebox id="txt_PER38" mold="rounded" width="50px" />
+							<doublebox id="txt_PER39" mold="rounded" width="50px" />
+							<doublebox id="txt_PER40" mold="rounded" width="50px" />
+						</hlayout>
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+
+		<div style="border:1px solid #CFCFCF">
+			<listbox id="masterListbox" sclass="mylist"
+				autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+				multiple="false">
+				<listhead sizable="true">
+					<listheader width="75px" 	label="${labels.COMM.OPERATE}" />
+					<listheader width="150px" 	label="${labels.DSID04_SIZE.MODEL_NA}" />
+					<listheader width="75px" 	label="男/女" />
+					<listheader width="100px" 	label="${labels.DSID04_1.EL_NO}" />
+					<listheader width="75px" 	label="${labels.DSID04_SIZE.MAX_DAY}" />
+					<listheader width="75px" 	label="${labels.DSID04_SIZE.MIN_DAY}" />
+				</listhead>
+
+				<template name="model">
+					<listitem>
+						<listcell>
+							<hbox spacing="10px">
+								<image visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+								<image visible="${sessionScope.DAuth}"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DELETE}"
+									forward="onClick=masterListbox.onDelete" sclass="fimage">
+								</image>
+							</hbox>
+						</listcell>
+						<listcell label="${each.MODEL_NA}" />
+						<listcell label="${each.SH_LAST == 'M' ? '男' : '女'}" />
+						<listcell label="${each.EL_NO}" />
+						<listcell label="${each.MAX_DAY}" />
+						<listcell label="${each.MIN_DAY}" />
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="pagingCourse"></paging>
+		</div>
+	</window>
+
+</zk>

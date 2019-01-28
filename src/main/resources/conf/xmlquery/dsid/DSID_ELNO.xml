@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--程式清單檔-->
+<QryWin>
+	<SQL>
+		<BaseCondition></BaseCondition> 
+		<OrderBy>EL_NO</OrderBy>
+		<SQLStatement>
+			SELECT DISTINCT EL_NO,'' TEST FROM DSID04_1
+ 		</SQLStatement>
+	</SQL> 
+	<Fields>
+		<Field Name="EL_NO" Caption="DSID04_NFPSIZE.EL_NO" 	Type="S" />
+		<Field Name="TEST" 	Caption="" 	Type="S" Width="0px" />
+	</Fields>
+</QryWin>

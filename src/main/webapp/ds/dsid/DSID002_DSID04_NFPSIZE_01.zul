@@ -1,0 +1,122 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.COMM.BASIC}" />
+			<label value="${labels.MENU.DSID002_DSID04_NFPSIZE}(DSID002_DSID04_NFPSIZE)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID002_DSID04_NFPSIZE_01"><!--  -->
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+			</div>
+		</div>
+		<separator />
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<grid>
+				<columns>
+					<column width="75px" />
+					<column width="200px" />
+					<column width="75px" />
+					<column width="200px" />
+				</columns>
+				<rows>
+					<row>
+						<label value="${labels.DSID04_NFPSIZE.MODEL_NA}" sclass="sectionTitleLabel" />
+						<textbox id="qry_MODEL_NA" width="180px" mold="rounded" />
+						<button id="onqryDSID04" src="/resource/imgs/icons/btn_view_16x16.gif" 
+								forward="onClick=windowMaster.onOpenQueryField(onqryDSID04)"/>
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+		
+		<groupbox id="editMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption label="${labels.COMM.EDIT}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<grid>
+				<columns>
+					<column width="5%" />
+					<column width="95%" />
+				</columns>
+				<rows>
+					<row>
+						<label value="${labels.DSID04_NFPSIZE.MODEL_NA}" sclass="sectionTitleLabel" />
+						<hlayout>
+							<textbox id="txt_MODEL_NA" mold="rounded" width="200px" />
+							<button id="ontxtDSID04" src="/resource/imgs/icons/btn_view_16x16.gif" 
+									forward="onClick=windowMaster.onOpenQueryField(ontxtDSID04)"/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${labels.DSID04_NFPSIZE.EL_NO}" sclass="sectionTitleLabel" />
+						<hlayout>
+							<textbox id="txt_EL_NO" mold="rounded" width="200px" />
+							<button id="ontxtDSID04ELNO" src="/resource/imgs/icons/btn_view_16x16.gif" 
+									forward="onClick=windowMaster.onOpenQueryField(ontxtDSID04ELNO)"/>
+						</hlayout>
+					</row>
+					<row>
+						<label value="${labels.DSID04_NFPSIZE.SIZES}" sclass="sectionTitleLabel" />
+						<textbox id="txt_SIZES" mold="rounded" width="200px" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+
+		<div style="border:1px solid #CFCFCF">
+			<listbox id="masterListbox" sclass="mylist"
+				autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+				multiple="false">
+				<listhead sizable="true">
+					<listheader width="75px" label="${labels.COMM.OPERATE}" />
+					<listheader width="200px" 	label="${labels.DSID04_NFPSIZE.MODEL_NA}" />
+					<listheader width="150px" 	label="${labels.DSID04_NFPSIZE.EL_NO}" />
+					<listheader width="150px" 	label="${labels.DSID04_NFPSIZE.SIZES}" />
+				</listhead>
+
+				<template name="model">
+					<listitem>
+						<listcell>
+							<hbox spacing="10px">
+								<image visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+								<image visible="${sessionScope.DAuth}"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DELETE}"
+									forward="onClick=masterListbox.onDelete" sclass="fimage">
+								</image>
+							</hbox>
+						</listcell>
+						<listcell label="${each.MODEL_NA}" />
+						<listcell label="${each.EL_NO}" />
+						<listcell label="${each.SIZES}" />
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="pagingCourse"></paging>
+		</div>
+	</window>
+
+</zk>

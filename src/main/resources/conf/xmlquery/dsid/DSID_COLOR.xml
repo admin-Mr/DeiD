@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--程式清單檔-->
+<QryWin>
+	<SQL>
+		<BaseCondition></BaseCondition> 
+		<OrderBy>COLOR</OrderBy>
+		<SQLStatement>
+			SELECT DISTINCT COLOR,'' TEST FROM DSID04_1
+ 		</SQLStatement>
+	</SQL> 
+	<Fields>
+		<Field Name="COLOR"	Caption="DSID04_NFPSIZE.COLOR" 	Type="S" />
+		<Field Name="TEST" 	Caption="" 	Type="S" Width="0px" />
+	</Fields>
+</QryWin>

@@ -1,0 +1,76 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.COMM.REPORT}" />
+			<label value="${labels.MENU.DSID003_DSID04_01}(DSID003_DSID04_01)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowQuery" apply="ds.dsid.program.DSID003_DSID04_1_01">
+		<div sclass="breadcrumbs">
+			<div>
+				<button id="btnQuery" label="${labels.COMM.QRY}"
+					mold="trendy" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+				<button id="btnExport" label="${labels.COMM.EXPORT}"
+					mold="trendy" iconSclass="mdi mdi-briefcase-download"
+					sclass="btn-default" />
+			</div>
+		</div>
+		<groupbox id="filterMaster" open="true" >
+			<caption label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+
+			<hlayout >
+				<grid>
+					<columns>
+						<column width="75px"/>
+						<column width="250px"/>
+					</columns>
+					
+					<rows>
+						<row>
+							<label value="${labels.DSID04_NFPSIZE.MODEL_NA}" sclass="sectionTitleLabel" />
+							<div>
+								<textbox id="qry_MODEL_NA" width="180px" mold="rounded" />
+								<button id="onqryDSID04" src="/resource/imgs/icons/btn_view_16x16.gif" 
+										forward="onClick=windowQuery.onOpenQueryField(onqryDSID04)"/>
+							</div>								
+						</row>										
+					</rows>
+				</grid>
+			</hlayout>
+		</groupbox>
+		
+		<div>
+			<div style="border:1px solid #CFCFCF">
+				<listbox id="queryListbox" sclass="mylist"
+					autopaging="true" 
+					emptyMessage="${labels.PUBLIC.MSG0026}">
+					
+					<listhead sizable="true">
+						<listheader id="lhMODEL_NA" width="150px" label="${labels.DSID04_1.MODEL_NA}" />
+						<listheader id="lhCOLOR" width="75px" label="${labels.DSID04_1.COLOR}" />
+						<listheader id="lhEL_NO" width="100px" label="${labels.DSID04_1.EL_NO}" />		
+						<listheader id="lhYIELD" width="100px" label="${labels.DSID04_1.YIELD}" />
+						<listheader id="lhCOLOR_PRE" width="100px" label="${labels.DSID04_1.COLOR_PRE}" />
+						<listheader id="lhSIZES" width="100px" label="${labels.DSID04_NFPSIZE.SIZES}" />
+					</listhead>
+					
+					<template name="model">
+					    <listitem >
+							<listcell label="${each.MODEL_NA}"/>
+							<listcell label="${each.COLOR}"/>
+							<listcell label="${each.EL_NO}"/>						
+							<listcell label="${each.YIELD}" />						
+							<listcell label="${each.COLOR_PRE}" />
+							<listcell label="${each.SIZES}" />
+						</listitem>
+					</template>
+				</listbox>
+				<paging id="pagingCourse"></paging>
+			</div>
+		</div>
+		</window>
+</zk>
