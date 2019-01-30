@@ -4,7 +4,7 @@
 		<div sclass="breadcrumb">
 			<span sclass="home-icon z-icon-home" />
 			<a label="${labels.DSID.DSID10}" />
-			<label value="型體資料設定作業(DSID10M)" />
+			<label value="${labels.DSID.DSID10M}(DSID10M)" />
 			<!-- 此處放置該程式多國系名稱及程式代號 -->
 		</div>
 	</div>
@@ -42,7 +42,7 @@
 			<caption id="filter" label="${labels.COMM.FILTER}"
 				sclass="mdi mdi-filter" style="font-size:10pt" />
 			<hlayout>		
-				<label value="型體" sclass="sectionTitlelabel" />
+				<label value="${labels.DSID01M.NIKE_SH_ARITCLE}" sclass="sectionTitlelabel" />
 				<textbox id="query_sh_aritcle" mold="rounded" width="200px" />
 				<!-- 做成查詢窗口 -->
 			</hlayout>
@@ -56,7 +56,7 @@
 					<vlayout width="100%" id="grid1" >
 						<hlayout  >
 							<!-- 窗口 -->
-							<label value="NIKE型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>	
+							<label value="${labels.DSID01M.NIKE_SH_ARITCLE}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>	
 							
 							<textbox id="txtnike_sh_aritcle" mold="rounded" width="300px" />		
 														
@@ -82,127 +82,127 @@
 								<comboitem label="${each}" forEach="${pid_group}" value="${each}"/>
 							</combobox>
 							 
-							<label value="PID空白時顯示" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>							
+							<label value="${labels.DSID10M.PID_TXT}" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>							
 							<textbox id="txtpid_txt" mold="rounded" width="180px" />							 	
 						</hlayout>
 						
 						<hlayout>
-							<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>							
+							<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>							
 							<textbox id="txtmodel_nas" mold="rounded" width="300px" />	
 													
-							<label value="派工排序" sclass="sectionTitleLabel" style="display:inline-block;width:80px;"/>							
+							<label value="${labels.DSID10M.ORDER_NUM}" sclass="sectionTitleLabel" style="display:inline-block;width:80px;"/>							
 							<textbox id="txtorder_num" mold="rounded" width="180px" />															
 						</hlayout>
 						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group1"/>
 							<label value="GROUP1" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup1"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group11"/>
 							<label value="GROUP11" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup11"  mold="rounded" width="280px"/>
 						</hlayout>
 												
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group2"/>
 							<label value="GROUP2" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup2"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group12"/>
 							<label value="GROUP12" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup12"  mold="rounded" width="280px"/>
 						</hlayout>						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group3"/>
 							<label value="GROUP3" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup3"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group13"/>
 							<label value="GROUP13" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup13"  mold="rounded" width="280px"/>
 						</hlayout>						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group4"/>
 							<label value="GROUP4" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup4"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group14"/>
 							<label value="GROUP14" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup14"  mold="rounded" width="280px"/>
 						</hlayout>						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group5"/>
 							<label value="GROUP5" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup5"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group15"/>
 							<label value="GROUP15" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup15"  mold="rounded" width="280px"/>
 						</hlayout>						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group6"/>
 							<label value="GROUP6" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup6"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group16"/>
 							<label value="GROUP16" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup16"  mold="rounded" width="280px"/>
 						</hlayout>						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group7"/>
 							<label value="GROUP7" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup7"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group17"/>
 							<label value="GROUP17" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup17"  mold="rounded" width="280px"/>
 						</hlayout>						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group8"/>
 							<label value="GROUP8" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup8"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group18"/>
 							<label value="GROUP18" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup18"  mold="rounded" width="280px"/>
 						</hlayout>						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group9"/>
 							<label value="GROUP9" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup9"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group19"/>
 							<label value="GROUP19" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup19"  mold="rounded" width="280px"/>
 						</hlayout>						
 						<hlayout width="100%" height="25px">
 							<checkbox id="ch_group10"/>
 							<label value="GROUP10" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup10"  mold="rounded" width="280px" />
 							<label   style="display:inline-block;width:40px;"/>
 							<checkbox id="ch_group20"/>
 							<label value="GROUP20" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-							<label value="中文名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID10M.NAME}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtgroup20"  mold="rounded" width="280px"/>
 						</hlayout>																							
 					</vlayout>		
@@ -212,11 +212,11 @@
 					<listbox id="masterListbox" sclass="mylist" autopaging="true" 
 					emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="5">
 						<listhead sizable="true">
-							<listheader width="25%" label="NIKE型體" />							
-							<listheader width="25%" label="型體" />	
-							<listheader label="派工排序" />
+							<listheader width="25%" label="${labels.DSID01M.NIKE_SH_ARITCLE}" />							
+							<listheader width="25%" label="${labels.DSID01M.MODEL_NA}" />	
+							<listheader label="${labels.DSID10M.ORDER_NUM}" />
 							<listheader label="PID_GROUP" />
-							<listheader label="PID空白時顯示" />																						
+							<listheader label="${labels.DSID10M.PID_TXT}" />																						
 						</listhead>
 
 				<template name="model">
@@ -238,7 +238,7 @@
 		<separator spacing="5px" />
 		<tabbox id="tabDetail">
 			<tabs>
-				<tab id="tabDetail1" label="顏色翻譯" />
+				<tab id="tabDetail1" label="${labels.DSID10M.COL_TRAN}" />
 				<!-- <tab id="tabDetail2" label="" /> -->
 			</tabs>
 			<tabpanels>

@@ -1912,13 +1912,13 @@ public class DSID04MExport2 extends OpenWinCRUD{
 				}else{
 					propo=1.0;
 				}
-				System.err.println("EL_NO>>>>"+rs2.getString("EL_NO")+" propo>>>>"+propo);
+//				System.err.println("EL_NO>>>>"+rs2.getString("EL_NO")+" propo>>>>"+propo);
 				if(!"".equals(rs2.getString("EL_NO"))&&rs2.getString("EL_NO")!=null){
 					
 
 				 Double kc_qty=Double.valueOf(getkc(rs2.getString("EL_NO"),MODEL_NA,Conn));
 				 Double zt_qty=getbuy(rs2.getString("EL_NO"),MODEL_NA,Conn)-getacc(rs2.getString("EL_NO"),MODEL_NA,conn);
-				 System.err.println("kc_qty>>>>"+kc_qty+" zt_qty>>>>"+zt_qty);
+//				 System.err.println("kc_qty>>>>"+kc_qty+" zt_qty>>>>"+zt_qty);
 				 
 				//庫存
 				cell = row.createCell(18);
@@ -2818,7 +2818,7 @@ public class DSID04MExport2 extends OpenWinCRUD{
 			EL_NO_List=EL_NO_List.substring(0, EL_NO_List.length()-1);
 			//單個材料的 固定分配比例 為：1
 			String Upsql2 = "UPDATE DSID04_1 SET EL_FP='' WHERE MODEL_NA='"+MODEL_NA+"' AND EL_NO NOT IN ('"+EL_NO_List.replace(",", "','")+"')";				
-			System.out.println(">>>更新比例>>>"+Upsql2);				
+//			System.out.println(">>>更新比例>>>"+Upsql2);				
 			try {
 				pstm = conn.prepareStatement(Upsql2);	
 				pstm.executeUpdate();
@@ -2853,14 +2853,14 @@ public class DSID04MExport2 extends OpenWinCRUD{
 		Double qty=0.0;
 
 		String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 WHERE PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND EL_NO='"+EL_NO+"'";
-	
+		
 //		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
 			while(rs.next()){
 				if(!"".equals(rs.getString("SPC_QTY"))&&rs.getString("SPC_QTY")!=null){
-				qty+=Double.valueOf(rs.getString("SPC_QTY"));
+					qty+=Double.valueOf(rs.getString("SPC_QTY"));
 				}
 			}
 			rs.close();
@@ -2881,9 +2881,9 @@ public class DSID04MExport2 extends OpenWinCRUD{
 		
 		Double qty=0.0;
 
-		String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 WHERE PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND EL_NO IN ("+EL_NO_LIST+")";
+		String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 A,DSPO06@ftldb01.deanshoes.com B WHERE A.PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND A.EL_NO IN ("+EL_NO_LIST+") AND A.PO_NO=B.PO_NO AND A.EL_NO=B.EL_NO AND B.PO_CLOSE!='T'";
 	
-//		System.out.println(">>>>>"+sql);
+		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -2947,7 +2947,7 @@ public class DSID04MExport2 extends OpenWinCRUD{
 		String 	sql="SELECT A.PO_NO,A.STOCK_MARK,EL_NO,PO_QTY,PO_ACQTY FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n" +
 				"AND B.PO_CLOSE!='T' AND PO_QTY!=0 AND EL_NO IN ("+EL_NO_LIST+") AND STOCK_MARK='"+MODEL_NA+"'";
 	
-//		System.out.println(">>>>>"+sql);
+		System.out.println("buy2>>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	

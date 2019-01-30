@@ -10,7 +10,7 @@
 		</div>
 		<div>.</div>
 		請選擇文件：
-		<button width="80px" label="瀏覽..."  id="btnUpload" upload="true"/>
+		<button width="80px" label="${labels.COMM.BROWSE}..."  id="btnUpload" upload="true"/>
         
         <div>.</div>
         <div  style="color:blue;">.

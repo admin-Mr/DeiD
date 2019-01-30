@@ -47,6 +47,7 @@ import util.Common;
 import util.MSMode;
 import util.OpenWinCRUD;
 
+// 因更改了分配方式，已棄用。
 public class DSID04MExport extends OpenWinCRUD{
 
 	@Wire

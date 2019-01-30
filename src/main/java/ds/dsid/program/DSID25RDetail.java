@@ -31,7 +31,7 @@ public class DSID25RDetail extends Detail{
 	@Wire
 	private Textbox TXT_REMAIN;
 	@Wire
-	private Label TXT_MODEL_NA1,TXT_GROUP_NO,TXT_EL_NO1;
+	private Label TXT_MODEL_NA1,TXT_GROUP_NO,TXT_EL_NO1,TXT_RE_DATE;
 	@Wire
 	private Button btnDeleteDetail;
 	@Wire
@@ -46,7 +46,7 @@ public class DSID25RDetail extends Detail{
 		detailComponentColumns.add(new ComponentColumn<String>("TXT_GROUP_NO", "GROUP_NO", null, null, null,false));
 		detailComponentColumns.add(new ComponentColumn<String>("TXT_EL_NO1", "EL_NO", null, null, null,false));
 		detailComponentColumns.add(new ComponentColumn<String>("TXT_REMAIN", "REMAIN", null, null, null,false));
-		detailComponentColumns.add(new ComponentColumn<Date>(null, "RE_DATE", new Date(), null, null));
+		detailComponentColumns.add(new ComponentColumn<String>("TXT_RE_DATE", "RE_DATE", null, null, null,false));
 	
 		detailComponentColumns.add(new ComponentColumn<String>(null, "UP_USER", _userInfo.getAccount(), null, null));
 		detailComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));
@@ -99,11 +99,13 @@ public class DSID25RDetail extends Detail{
 	@Override
 	protected ArrayList<String> getDetailKeyValue(Object entityDetail) {
 		// TODO Auto-generated method stub
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");	
 		DSID25_LOG detail = (DSID25_LOG) entityDetail;
 		ArrayList<String> detailValue = new ArrayList<String>();
-		detailValue.add(detail.getRE_DATE().toString());
-		detailValue.add(detail.getGROUP_NO());
+		detailValue.add(format.format(detail.getRE_DATE()));
 		detailValue.add(detail.getEL_NO());
+		detailValue.add(detail.getGROUP_NO());
 		detailValue.add(detail.getMODEL_NA());
 		return detailValue;
 	}
@@ -135,7 +137,7 @@ public class DSID25RDetail extends Detail{
 	@Override
 	protected String getWhereConditionals() {
 		// TODO Auto-generated method stub
-		String Sql=" AND RE_DATE IN (SELECT RE_DATE FROM DSID25 WHERE MODEL_NA=t.MODEL_NA)";
+		String Sql=" AND RE_DATE IN (SELECT MAX(RE_DATE) FROM DSID25 WHERE MODEL_NA=t.MODEL_NA)";
 		
 		return Sql;
 	}

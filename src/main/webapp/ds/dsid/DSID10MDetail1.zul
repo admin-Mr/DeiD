@@ -46,10 +46,10 @@
 					<vlayout width="100%">
 						<hlayout width="100%" height="25px" >
 							<!-- 窗口 -->
-							<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+							<label value="${labels.DSID01M.NIKE_SH_ARITCLE}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
 							<textbox id="txtnike_sh_aritcle1" mold="rounded" width="300px" />		
 							
-							<label value="項次" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+							<label value="${labels.DSID10M.SEQ}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
 							<textbox id="txtseq" mold="rounded" width="100px" />		
 							
 														
@@ -64,29 +64,29 @@
 								<comboitem label="${each}" forEach="${pid_group}" value="${each}"/>
 							</combobox>
 							
-							<label value="原始信息" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+							<label value="${labels.DSID10M.ORI_INFO}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
 							<textbox id="txtori_info" mold="rounded" width="100px" />	
 						</hlayout>						 
 						<hlayout>	
 							<checkbox id="rep_check" />
-							<label value="翻譯" sclass="sectionTitleLabel"  style="display:inline-block;width:30px;"/>
+							<label value="${labels.DSID10M.TRAN}" sclass="sectionTitleLabel"  style="display:inline-block;width:30px;"/>
 								
-							<label value="翻譯后的信息" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
+							<label value="${labels.DSID10M.TRAN_INFO}" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
 							<textbox id="txtrep_info" mold="rounded" width="100px" />														
 						</hlayout>						
 						<hlayout>
 							<checkbox id="spl_check" />
-							<label value="拆分" sclass="sectionTitleLabel"  style="display:inline-block;width:30px;"/>
+							<label value="${labels.DSID10M.SPLIT}" sclass="sectionTitleLabel"  style="display:inline-block;width:30px;"/>
 							
-							<label value="原GROUP信息" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
+							<label value="${labels.DSID10M.SPLIT_INFO1}" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
 							<textbox id="txtspl_info1" mold="rounded" width="100px" />		
 
-							<label value="拆分后GROUP" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
+							<label value="${labels.DSID10M.SPLIT_GRO}" sclass="sectionTitleLabel" style="display:inline-block;width:100px;"/>								
 							<combobox id="Com_Spid" width="100px" readonly="true">
 								<comboitem label="${each}" forEach="${pid_group}" value="${each}"/>
 							</combobox>							
 
-							<label value="拆分后信息" sclass="sectionTitleLabel" style="display:inline-block;width:75px;"/>								
+							<label value="${labels.DSID10M.SPLIT_INFO2}" sclass="sectionTitleLabel" style="display:inline-block;width:75px;"/>								
 							<textbox id="txtspl_info2" mold="rounded" width="100px" />														
 						</hlayout>								
 																						
@@ -100,16 +100,16 @@
 					emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="5">
 						<listhead sizable="true">
 							<!-- <listheader width="7%"  label="${labels.COMM.OPERATE }" /> -->
-							<listheader width="25%" label="型體" />
-							<listheader width="5%" label="項次" />
+							<listheader width="25%" label="${labels.DSID01M.NIKE_SH_ARITCLE}" />
+							<listheader width="5%" label="${labels.DSID10M.SEQ}" />
 							<listheader width="10%" label="GROUP" />	
-							<listheader width="10%" label="原始值" />	
-							<listheader width="5%" label="翻譯" />	
-							<listheader width="10%" label="替換後的信息" />	
-							<listheader width="5%" label="拆分" />	
-							<listheader width="10%" label="拆分后的信息1" />	
-							<listheader width="10%" label="拆分后的GROUP" />	
-							<listheader width="10%" label="拆分后的信息2" />																												
+							<listheader width="10%" label="${labels.DSID10M.ORI_INFO}" />	
+							<listheader width="5%" label="${labels.DSID10M.TRAN}" />	
+							<listheader width="10%" label="${labels.DSID10M.TRAN_INFO}" />	
+							<listheader width="5%" label="${labels.DSID10M.SPLIT}" />	
+							<listheader width="10%" label="${labels.DSID10M.SPLIT_INFO1}" />	
+							<listheader width="10%" label="${labels.DSID10M.SPLIT_GRO}" />	
+							<listheader width="10%" label="${labels.DSID10M.SPLIT_INFO2}" />																												
 						</listhead>
 
 				<template name="model">

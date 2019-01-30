@@ -4,7 +4,7 @@
 		<div sclass="breadcrumb">
 			<span sclass="home-icon z-icon-home" />
 			<a label="${labels.DSID.DSID00}" />
-			<label value="ID線虛擬訂單主檔 (DSID01M2)" />
+			<label value="${labels.DSID.DSID01M2} (DSID01M2)" />
 			<!-- 此處放置該程式多國系名稱及程式代號 -->
 		</div>
 	</div>
@@ -25,15 +25,15 @@
 				<!-- 開窗，導入xml文件 -->	
   				<button id="btnImport" sclass="btn-default"
 					iconSclass="mdi mdi-briefcase-download"
-					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" /> 
+					label="${labels.COMM.IMPORT}" mold="trendy" /> 
 										
 				<!-- 整理GROUP、PID信息 -->	
-				<button id="btnOrder" sclass="btn-default"  label="整理" 	mold="trendy"/>
+				<button id="btnOrder" sclass="btn-default"  label="${labels.COMM.ORDER}" 	mold="trendy"/>
 								
 				<!-- 批量刪除 -->	
 				<button  id="btnDalete_All" sclass="btn-danger" iconSclass="mdi mdi-delete" label="刪除" mold="trendy"/> 
 				
-				<button  id="btnReceive" sclass="btn-default"  label="篩選接單" mold="trendy"/> 
+				<button  id="btnReceive" sclass="btn-default"  label="${labels.COMM.SCREEN}" mold="trendy"/> 
 						
 			</div>
 		</div>
@@ -43,9 +43,9 @@
 			<caption id="filter" label="${labels.COMM.FILTER}"
 				sclass="mdi mdi-filter" style="font-size:10pt" />
 			<hlayout>		
-				<label value="指令" sclass="sectionTitlelabel" />
+				<label value="${labels.DSID01M.OD_NO}" sclass="sectionTitlelabel" />
 				<textbox id="query_od_no" mold="rounded" width="120px" />
-				<label value="接單日期" sclass="sectionTitlelabel" />
+				<label value="${labels.DSID01M.ORDER_DATE}" sclass="sectionTitlelabel" />
 				<datebox id="query_order_date" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
 				<label value="Work_order_id" sclass="sectionTitlelabel" />
 				<textbox id="query_work_order_id" mold="rounded" width="120px" />
@@ -58,13 +58,13 @@
 					<separator spacing="10px" />
 					<vlayout width="100%">
 						<hlayout width="100%" height="28px" >
-							<label value="指令" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
+							<label value="${labels.DSID01M.OD_NO}" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
 							<textbox id="txtod_no" mold="rounded" width="100px" readonly="true"/>		
-							<label value="接單日期" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<label value="${labels.DSID01M.ORDER_DATE}" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
 							<datebox id="txtorder_date"  mold="rounded" width="100px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
- 							<label value="訂單類型" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+ 							<label value="${labels.DSID01M.TYPE}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txttype"  mold="rounded" width="100px" readonly="true"/>														
-							<label value="訂單狀態" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID01M.STATUS}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtstatus"  mold="rounded" width="100px" readonly="true"/>													
 						</hlayout>
 						<hlayout width="100%" height="28px">
@@ -74,33 +74,33 @@
 							<textbox id="txtship_order_id"  mold="rounded" width="100px" readonly="true"/>
 							<label value="Order ID" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txorder_id"  mold="rounded" width="100px" readonly="true"/>														
-							<label value="配色" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID01M.SH_STYLENO}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtsh_styleno"  mold="rounded" width="100px" readonly="true"/>							
 						</hlayout>						
 						<hlayout width="100%" height="28px">
-							<label value="訂單數量" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<label value="${labels.DSID01M.QTY}" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
 							<textbox id="txordrer_num" mold="rounded" width="100px" readonly="true"/>		
-							<label value="左腳碼數" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<label value="${labels.DSID01M.LEFT_SIZE}" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
 							<textbox id="txtleft_size"  mold="rounded" width="100px" readonly="true"/>
-							<label value="右腳碼數" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID01M.RIGHT_SIZE}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtright_size"  mold="rounded" width="100px" readonly="true"/>														
-							<label value="升降碼" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID01M.TOOLING_SIZE}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txttooling_size"  mold="rounded" width="100px" readonly="true"/>							
 						</hlayout>
 						<hlayout width="100%" height="28px">
-							<label value="NIKE型體" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<label value="${labels.DSID01M.NIKE_SH_ARITCLE}" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
 							<textbox id="txtnike_sh_aritcle" mold="rounded" width="300px" readonly="true"/>		
-							<label value="型體名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtmodel_na"  mold="rounded" width="270px" readonly="true"/>
 						</hlayout>
 						<hlayout width="100%" height="28px" >
-							<label value="派工日期" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<label value="${labels.DSID01M.PG_DATE}" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
 							<datebox id="txtpg_date" mold="rounded" width="100px" readonly="true"  format="yyyy/MM/dd"/>		
-							<label value="派工輪次" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
+							<label value="${labels.DSID01M.PG_ROUND}" sclass="sectionTitleLabel"  style="display:inline-block;width:90px;"/>
 							<textbox id="txtround"  mold="rounded" width="100px" readonly="true"/>
-							<label value="出貨日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID01M.SHIP_DATE}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<datebox id="txtship_date"  mold="rounded" width="100px" readonly="true"  format="yyyy/MM/dd"/>														
-							<label value="地區" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+							<label value="${labels.DSID01M.REGION}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 							<textbox id="txtregion"  mold="rounded" width="100px" readonly="true" />							
 						</hlayout>																			
 					</vlayout>		

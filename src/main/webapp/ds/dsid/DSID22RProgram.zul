@@ -4,7 +4,7 @@
 		<div sclass="breadcrumb">
 		 <span sclass="home-icon z-icon-home" />
 			<a label="${labels.DSID.DSID20}" />
-			<label value="採購進度報表 (DSID22R)" />
+			<label value="${labels.DSID.DSID22R} (DSID22R)" />
 		</div>
 	</div>
 	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID22RProgram">
@@ -22,50 +22,50 @@
 		</div>
 				<radiogroup >
                     <hlayout width="100%" height="30px" >
-                    	<label value="物料類型" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-                        <radio id="type1" label="全部"
+                    	<label value="${labels.DSID22R.EL_TYPE}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+                        <radio id="type1" label="${labels.DSID22R.All}"
                             selected="${not win$composer.car.autoTransmission}" />
-                        <radio id="type2" label="國外料"
+                        <radio id="type2" label="${labels.DSID22R.EL_FOR}"
                             selected="${win$composer.car.autoTransmission}" />
-                        <radio id="type3" label="國內料"
+                        <radio id="type3" label="${labels.DSID22R.EL_DOM}"
                             selected="${win$composer.car.autoTransmission}" />
                     </hlayout>
                 </radiogroup>
                 
 				<radiogroup >
                     <hlayout width="100%" height="30px" >
-                    	<label value="驗收類型" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-                        <radio id="type_radio1" label="全部"
+                    	<label value="${labels.DSID22R.ACP_TYPE}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+                        <radio id="type_radio1" label="${labels.DSID22R.All}"
                             selected="${not win$composer.car.autoTransmission}" />
-                        <radio id="type_radio2" label="已驗收完"
+                        <radio id="type_radio2" label="${labels.DSID22R.ACP_COM}"
                             selected="${win$composer.car.autoTransmission}" />
-                        <radio id="type_radio4" label="未驗收完"
+                        <radio id="type_radio4" label="${labels.DSID22R.ACP_NCOM}"
                             selected="${win$composer.car.autoTransmission}" />
-                        <radio id="type_radio3" label="未驗收"
+                        <radio id="type_radio3" label="${labels.DSID22R.ACP_NACP}"
                             selected="${win$composer.car.autoTransmission}" />
 
                     </hlayout>
                 </radiogroup>
 				
 				<hlayout width="100%" height="35px" >
-					<label value="訂購日期" sclass="sectionTitlelabel"  style="display:inline-block;width:60px;"/>
+					<label value="${labels.DSID22R.PO_DATE}" sclass="sectionTitlelabel"  style="display:inline-block;width:60px;"/>
 					<datebox id="po_date1" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
 					<label value="~" sclass="sectionTitlelabel" />
 					<datebox id="po_date2" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
 				</hlayout>
 				<hlayout width="100%" height="35px" >
-					<label value="驗收日期" sclass="sectionTitlelabel"  style="display:inline-block;width:60px;"/>
+					<label value="${labels.DSID22R.AC_DATE}" sclass="sectionTitlelabel"  style="display:inline-block;width:60px;"/>
 					<datebox id="po_date3" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
 					<label value="~" sclass="sectionTitlelabel" />
 					<datebox id="po_date4" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
 				</hlayout>				
 				<hlayout width="100%" height="35px" >
-					<label value="型體" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 					<textbox id="txtMODEL_NA" mold="rounded" width="300px" />		
 				</hlayout>
 				
 				<hlayout width="100%" height="35px" >
-					<label value="訂購單號" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<label value="${labels.DSID22R.PO_NO}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 					<textbox id="txtPO_NO" mold="rounded" width="300px" />		
 				</hlayout>
 			</div> 
@@ -73,18 +73,18 @@
 		<div >
 		    <listbox id="ListBox"  autopaging="true" sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}" rows="7"  >
         		<listhead>
-        			<listheader label="序號" width="5%"/>
-            		<listheader label="國外訂單編號" />
-            		<listheader label="訂購單號" width="10%"/>
-            		<listheader label="廠商" width="5%"/>   
-            		<listheader label="材料編號" />
-            		<listheader label="材料名稱" /> 
-            		<listheader label="型體名稱" width="10%"/> 
-            		<listheader label="顏色" width="5%"/>
-            		<listheader label="採購數量" width="6%"/> 
-            		<listheader label="訂購日期" />
-            		<listheader label="預計交期" /> 
-            		<listheader label="來料入庫時間" />
+        			<listheader label="No." width="5%"/>
+            		<listheader label="${labels.DSID22R.FOR_ORD}" />
+            		<listheader label="${labels.DSID22R.PO_NO}" width="10%"/>
+            		<listheader label="${labels.DSID22R.MANU}" width="5%"/>   
+            		<listheader label="${labels.DSID22R.EL_NO}" />
+            		<listheader label="${labels.DSID22R.EL_NA}" /> 
+            		<listheader label="${labels.DSID01M.MODEL_NA}" width="10%"/> 
+            		<listheader label="${labels.DSID22R.COLOR}" width="5%"/>
+            		<listheader label="${labels.DSID22R.QTY}" width="6%"/> 
+            		<listheader label="${labels.DSID22R.PO_DATE}" />
+            		<listheader label="${labels.DSID22R.DEl_DATE}" /> 
+            		<listheader label="${labels.DSID22R.STO_DATE}" />
           		            		            		            		      		
         		</listhead>
         		<template name="model">

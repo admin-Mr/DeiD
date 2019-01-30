@@ -1,13 +1,13 @@
 <zk>
-	<window border="normal" id="windowMaster" title="配色分析報表"
-		apply="ds.dsid.program.DSID20MRExcel" closable="true" mode="modal"
-		width="500px" height="250px">
+	<window border="normal" id="windowMaster" title="${labels.DSID.DSID20MREx}"
+		apply="ds.dsid.program.DSID20MRExcel" closable="true" 
+		>
 
 		<div sclass="breadcrumbs" height="100%">
 
 
 			<hlayout width="100%" height="35px">
-				<label value="日期選擇" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+				<label value="${labels.DSID01M.ORDER_DATE}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 				<datebox id="txtorder_date1"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
 				
 				<label value="~" sclass="sectionTitleLabel" style="display:inline-block;width:30px;" />
@@ -15,13 +15,13 @@
 			</hlayout>
 			
 			<hlayout width="100%" height="35px">
-				<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+				<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 				<textbox id="Model_no" mold="rounded" width="300px" />
 		
 			</hlayout>
 			
 			<hlayout width="100%" height="35px">
-				<label value="鞋帶Group_na" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+				<label value="Lace Group_na" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 				<textbox id="Group_na" mold="rounded" width="300px" value = "Group4" />
 		
 			</hlayout>

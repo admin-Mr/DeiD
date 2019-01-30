@@ -1,0 +1,60 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<window title="${labels.COMM.QRY}" id="windowQuery" border="normal"
+		width="700px" height="520px" apply="ds.dsid.program.DSID17MQueryADH_ELNO"
+		maximizable="false" closable="true" sclass="mymodal" mode="modal">
+		
+		<hlayout width="100%">
+			<label width="10%" value="${labels.COMM.CONDITION}"
+				sclass="sectionTitleLabel" />
+			<combobox id="cboColumn" width="150px" mold="rounded" />
+			<combobox id="cboCondition" width="80px" mold="rounded" />
+			<textbox id="txtQuery" width="150px" mold="rounded" />
+			<div style="float:right">
+				<button id="btnSearch" label="${labels.COMM.QUERY}"
+					mold="trendy" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+			</div>
+		</hlayout>
+		
+		<div style="clear: both;" />
+		<div sclass="sectinSeperator" />
+		
+		<panel width="100%">
+			<panelchildren style="overflow:auto;">
+				<separator />
+				<listbox id="queryListBox" checkmark="true"
+					multiple="false" sclass="mylist"
+					emptyMessage="${labels.PUBLIC.MSG0026}">
+					<listhead sizable="true">
+							<listheader label="${labels.DSID07M.ADH_ELNO}" />
+							<listheader label="${labels.DSID07M.PRO_TYPE}" />
+							<listheader label="${labels.DSID07M.EL_UNIT}" />
+							<listheader label="${labels.DSID07M.COLOR}" />
+							<listheader label="${labels.DSID07M.ADH_ELNA}" />								
+					</listhead>
+					<template name="model">
+						<listitem
+							forward="onDoubleClick=onDoubleClickedPersonItem">
+							<listcell label="${each.ADH_ELNO}" />
+							<listcell label="${each.PRO_TYPE}" />
+							<listcell label="${each.EL_UNIT}" />
+							<listcell label="${each.COLOR}" />						
+							<listcell label="${each.ADH_ELNA}" />							
+						</listitem>
+					</template>
+				</listbox>
+				<paging id="pagingMenuNode"></paging>
+			</panelchildren>
+		</panel>
+		<separator />
+		<separator />
+		<div align="center">
+			<button id="btnConfirm" label="${labels.COMM.CFM}"
+				mold="trendy" iconSclass="mdi mdi-checkbox-marked-circle"
+				sclass="btn-success" />
+			<button id="btnCancel" label="${labels.COMM.CANCEL}"
+				mold="trendy" iconSclass="mdi mdi-close-circle" sclass="btn-danger" />
+		</div>
+		<separator />
+	</window>
+</zk>

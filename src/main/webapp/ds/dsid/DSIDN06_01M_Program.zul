@@ -44,9 +44,7 @@
 			sclass="main z-demo-config" open="true">
 			<caption id="filter" label="${labels.COMM.FILTER}"
 				sclass="mdi mdi-filter" style="font-size:10pt" />
-				
-				
-				
+					
 			<hlayout>
 				<hlayout>
 						<label value="${labels.DSIDN06_01.EL_NO}" sclass="sectionTitleLabel" />
@@ -129,8 +127,7 @@
 								iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}" mold="trendy" visible="false" />
 				</hlayout>	
 				</vlayout>
-				
-		 
+					 
 		<separator spacing="20px" />
 		<div width="100%">
 				<separator spacing="20px" />

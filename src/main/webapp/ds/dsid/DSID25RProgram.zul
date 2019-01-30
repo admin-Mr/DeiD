@@ -33,20 +33,20 @@
 					<separator spacing="10px" />
 					<vlayout width="100%">
 				<hlayout width="100%" height="30px" >
-					<label value="訂單日期" sclass="sectionTitlelabel"  style="display:inline-block;width:60px;"/>
+					<label value="${labels.DSID01M.ORDER_DATE}" sclass="sectionTitlelabel"  style="display:inline-block;width:60px;"/>
 					<datebox id="po_date1" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
 <!-- 					<label value="~" sclass="sectionTitlelabel" />
 					<datebox id="po_date2" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
  -->				</hlayout>
 			
 				<hlayout width="100%" height="30px" >
-					<label value="型體" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 					<listbox id ="List_Model_na" mold="select" rows="1" width="200px" height="25px" />
-					<button id="btnQuery1" sclass="btn-default" label="查詢" mold="trendy"/> 		
+					<button id="btnQuery1" sclass="btn-default" label="${labels.COMM.QUERY}" mold="trendy"/> 		
 				</hlayout>			
 					
 				<hlayout width="100%" height="30px" >
-					<label value="材料編號" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<label value="${labels.DSID25R.EL_NO}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 					<textbox id="txtEL_NO" mold="rounded" width="200px" />		
 	
 				</hlayout>						
@@ -59,13 +59,13 @@
 			 <listbox id="masterListbox"  autopaging="true" sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}" rows="7"  >
         		<listhead>
         			<listheader width="6%"  label="${labels.COMM.OPERATE }" />
-        			<listheader label="型體" />
-            		<listheader label="材料編號"  align="center"/>
-            		<listheader label="材料名稱" />   
-            		<listheader label="部位名稱" />
-            		<listheader label="領料倍數" align="center"/> 
-            		<listheader label="材料單位" align="center"/> 
-            		<listheader label="最新餘料日期"/> 																			
+        			<listheader label="${labels.DSID01M.MODEL_NA}" />
+            		<listheader label="${labels.DSID25R.EL_NO}"  align="center"/>
+            		<listheader label="${labels.DSID25R.EL_NA}" />   
+            		<listheader label="${labels.DSID25R.PART_NA}" />
+            		<listheader label="${labels.DSID25R.MULTIPLE}" align="center"/> 
+            		<listheader label="${labels.DSID25R.EL_UNIT}" align="center"/> 
+            		<listheader label="${labels.DSID25R.RE_DATE}"/> 																			
 				</listhead>
 
 				<template name="model">
@@ -118,7 +118,7 @@
 		<separator spacing="5px" />
 		<tabbox id="tabDetail">
 			<tabs>
-				<tab id="tabDetail1" label="歷史餘料" />
+				<tab id="tabDetail1" label="DSID25R.REMAIN" />
 			</tabs>
 			<tabpanels>
 				<tabpanel id="Detail1"></tabpanel>

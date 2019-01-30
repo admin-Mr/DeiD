@@ -56,48 +56,48 @@
 						<hlayout width="100%" height="32px">
 						<label
 								value="${labels.DSID12.MODEL_NA}"
-								sclass="sectionTitleLabel" />
+								sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 							<textbox id="TMODEL_NA" mold="rounded"
 								width="160px" />
 							<label
 								value="${labels.DSID12.SH_STYLENO}"
-								sclass="sectionTitleLabel" />
+								sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 							<textbox id="TSH_STYLENO" mold="rounded"
-								width="90px" />
+								width="160px" />
 							<label
 								value="${labels.DSID12.SH_LAST}"
-								sclass="sectionTitleLabel" />
+								sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 							<textbox id="TSH_LAST" mold="rounded"
-								width="90px" />
+								width="160px" />
 						</hlayout>
 						<hlayout width="100%" height="32px">
 							<label
 								value="${labels.DSID12.SH_TYPE}"
-								sclass="sectionTitleLabel" />
+								sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 							<textbox id="TSH_TYPE" mold="rounded"
-								width="90px" />
+								width="160px" />
 							<label
 								value="${labels.DSID12.SH_COLOR}"
-								sclass="sectionTitleLabel" />
+								sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 							<textbox id="TSH_COLOR"
-								mold="rounded" width="90px" />
+								mold="rounded" width="160px" />
 							<label
 								value="${labels.DSID12.SH_REMARK}"
-								sclass="sectionTitleLabel" />
+								sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 							<textbox id="TSH_REMARK"
-								mold="rounded" width="90px" />
+								mold="rounded" width="160px" />
 						</hlayout>
 						<hlayout  width="100%" height="32px">
 							<label
 								value="${labels.DSID12.UPPER_CLASS}"
-								sclass="sectionTitleLabel" />
+								sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 							<textbox id="TUPPER_CLASS"
-								mold="rounded" width="90px" />
+								mold="rounded" width="160px" />
 							<label
 								value="${labels.DSID12.SOLE_CLASS}"
-								sclass="sectionTitleLabel" />
+								sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 							<textbox id="TSOLE_CLASS"
-								mold="rounded" width="90px" />
+								mold="rounded" width="160px" />
 						</hlayout>
 					</vlayout>
 				</div>

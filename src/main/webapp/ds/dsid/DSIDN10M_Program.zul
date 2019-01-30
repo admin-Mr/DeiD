@@ -58,7 +58,7 @@
 					<textbox id="txt_MODEL_NA" width="120px" mold="rounded" />
 				</vlayout>
 				<hlayout>
-						<label value="接單日期"  />
+						<label value="${labels.DSID01M.ORDER_DATE}"  />
 						<datebox id="querystartdate" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />
 						<label value="~" />
 						<datebox id="queryenddate" mold="rounded" width="120px" cols="12" format="yyyy/MM/dd"  />

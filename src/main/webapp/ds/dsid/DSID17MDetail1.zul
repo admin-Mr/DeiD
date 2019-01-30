@@ -1,0 +1,85 @@
+<zk>
+	<div id="detail1" apply="ds.dsid.program.DSID17MDetail1">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb" >
+ 				<button id="btnCreateDetail" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<!-- 編輯Edit 按鈕 -->
+ 				<button id="btnEditDetail" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
+					mold="trendy" />
+				<button id="btnSaveDetail" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelDetail" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />	
+				<!-- 刪除 -->	
+ 				<button id="btnDeleteDetail" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+					mold="trendy" />
+			</div>
+		</div>
+
+		<groupbox id="filterDetail" width="100%"
+			sclass="main z-demo-config" open="false">
+			<caption label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>		
+				<label value="${labels.DSID17M.OT_NO}" sclass="sectionTitlelabel" />
+				<textbox id="query_OT_NO" mold="rounded" width="120px" />						
+			</hlayout>
+		</groupbox> 
+
+		<borderlayout height="400px">	
+ 			 <north size="40%" open="true" splittable="true" >
+	 			<div width="100%" height="150px">
+					<separator spacing="5px" />
+										
+					<vlayout width="100%">
+						<hlayout width="100%" height="30px" >
+							<label value="${labels.DSID17M.OT_NO}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="TOT_NO" mold="rounded" width="160px" />
+
+							<label value="${labels.DSID07M.ADH_ELNO}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="TADH_ELNO1" mold="rounded" width="160px" />	
+							
+							<label value="${labels.DSID17M.OT_QTY}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="TOT_QTY" mold="rounded" width="100px" />																				
+						</hlayout>
+																																			
+					</vlayout>		
+				</div>
+			</north>
+						  
+			<center>			
+				<div>
+					<listbox id="detailListbox" sclass="mylist" autopaging="true" 
+					emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="5">
+						<listhead sizable="true">
+							<listheader label="${labels.DSID17M.OT_NO}" />
+							<listheader label="${labels.DSID07M.ADH_ELNO}" />
+							<listheader label="${labels.DSID17M.OT_QTY}" />	
+							<listheader label="${labels.DSID07M.UP_USER}" />	
+							<listheader label="${labels.DSID07M.UP_DATE}" />																												
+						</listhead>
+
+				<template name="model">
+				<listitem>
+				<listcell label="${each.OT_NO}" />
+				<listcell label="${each.ADH_ELNO}" />
+				<listcell label="${each.OT_QTY}" />	
+				<listcell label="${each.UP_USER}" />
+				<listcell label="${each.UP_DATE}" />	
+																											
+				</listitem>
+				</template>	
+					</listbox>
+					<paging id="pagingDetail"></paging>
+				</div>
+			</center>
+		</borderlayout>
+	</div>
+</zk>

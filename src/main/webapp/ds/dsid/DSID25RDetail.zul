@@ -9,11 +9,11 @@
 					emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="5">
 						<listhead>
         			<listheader width="6%"  label="${labels.COMM.OPERATE }" />
-        			<listheader label="型體" />
-        			<listheader label="部位" />
-            		<listheader label="材料編號" />
-            		<listheader label="剩餘餘料" /> 
-            		<listheader label="日期" />          		
+        			<listheader label="${labels.DSID01M.MODEL_NA}" />
+        			<listheader label="${labels.DSID25R.PART_NA}" />
+            		<listheader label="${labels.DSID25R.EL_NO}" />
+            		<listheader label="${labels.DSID25R.EL_NA}" /> 
+            		<listheader label="${labels.DSID25R.RE_DATE}" />          		
         		</listhead>
         		<template name="model">
         		<listitem >
@@ -53,7 +53,10 @@
 						<textbox if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_REMAIN" value="${each.REMAIN}"  />
 					</listcell>
 						
-        			<listcell label="${each.RE_DATE}"/>        			
+        			<listcell>
+						<label if="${each.ISEDIT == false and each.ISADD == false}" value="${each.RE_DATE}" />
+						<datebox if="${each.ISEDIT == true or each.ISADD == true}" id="TXT_RE_DATE" value="${each.RE_DATE}"  readonly="true" />
+					</listcell>       			
 				</listitem>
 				</template>	
 					</listbox>

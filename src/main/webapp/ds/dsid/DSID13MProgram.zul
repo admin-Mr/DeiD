@@ -1,0 +1,112 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk >
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.DSID10}" />
+			<label value="${labels.DSID.DSID13M}(DSID13M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+		
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID13MProgram" >
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb" >
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+ 				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />				
+				<!-- 編輯Edit 按鈕 -->
+ 				<button id="btnEditMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+				<!-- 刪除 -->	
+ 				<button id="btnDeleteMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+					mold="trendy" />
+			</div>
+		</div>
+
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="false">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<hlayout>		
+				<label value="型體" sclass="sectionTitlelabel" />
+				<textbox id="query_MODEL_NA" mold="rounded" width="200px" />
+				<!-- 做成查詢窗口 -->
+			</hlayout>
+		</groupbox>
+
+		<borderlayout height="400px">
+			<north size="40%" open="true" splittable="true"
+				collapsible="true">
+				<div width="100%">
+					<separator spacing="20px" />
+					<vlayout width="100%">
+							
+						<hlayout width="100%" height="30px">
+							<label value="派工單名稱" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
+							<textbox id="TPG_NAME" mold="rounded" width="200px" />
+						
+							<label value="派工單類型" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
+							<textbox id="TPG_TYPE" mold="rounded" width="100px" />
+						</hlayout>
+						
+						<hlayout width="100%" height="30px">
+							<label value="NIKE型體" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
+							<textbox id="TNIKE_SH_ARITCLE" mold="rounded" width="200px" />
+							
+							<button id="btnQryNIKE_SH_ARITCLE" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+						</hlayout>
+								
+						<hlayout width="100%" height="30px">
+							<label value="部位" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
+							<textbox id="TGROUP_NOS" mold="rounded" width="200px" />
+							
+							<button id="btnQryGROUP_NO" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+												
+						</hlayout>				
+
+					</vlayout>
+				</div>
+			</north>
+			<west>
+				<div>
+					<listbox id="masterListbox" sclass="mylist" autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false" rows="5">
+						<listhead sizable="true">
+							<listheader label="派工單名稱" />
+							<listheader label="型體" />
+							<listheader label="派工單類型" />
+							<listheader label="部位" />
+							<listheader label="${labels.DSID07M.UP_USER}" />
+							<listheader label="${labels.DSID07M.UP_DATE}" />																						
+						</listhead>
+					<template name="model">
+					<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+						<listcell label="${each.PG_NAME}" />
+						<listcell label="${each.NIKE_SH_ARITCLE}" />
+						<listcell label="${each.PG_TYPE}" />
+						<listcell label="${each.GROUP_NOS}" />
+						<listcell label="${each.UP_USER}" />
+						<listcell label="${each.UP_DATE}" />																																						
+					</listitem>
+				</template>	
+				</listbox>
+					 <paging id="pagingMaster"></paging>			
+				</div>
+			</west>
+		</borderlayout>
+	</window>
+
+</zk>
