@@ -25,6 +25,10 @@
 				<button id="btnCancelMaster" sclass="btn-danger"
 					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
 					mold="trendy" disabled="true" />
+					
+				<button id="btnDeleteM" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+					mold="trendy" />
 					<!--  
 				<button id="btnPrint" sclass="btn-info"
 					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"

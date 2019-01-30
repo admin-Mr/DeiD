@@ -1,5 +1,6 @@
 package ds.dsid.program;
 
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -22,15 +23,24 @@ import java.util.Map;
 
 import javax.persistence.Query;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.SessionScope;
 import org.zkoss.util.resource.Labels;
+
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
@@ -41,6 +51,7 @@ import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Doublebox;
+import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Hbox;
 import org.zkoss.zul.Image;
 import org.zkoss.zul.Intbox;
@@ -66,6 +77,7 @@ import util.Common;
 import util.ComponentColumn;
 import util.DBManger;
 import util.DataMode;
+import util.MSMode;
 import util.OperationMode;
 
 public class DSIDN06_01M_Program extends COMM_Master {
@@ -88,8 +100,11 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	@Wire private Datebox querystartdate,queryenddate;
 	@Wire private Paging  pagingCourse;
 	@Wire private Checkbox checkbox_temp;
+	String Errmessage="",Okmessage="";
+	String MODEL_NA="";
+	
 	@Wire
-	private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnClear,btnCleara, btnPO_NO,btnPO_NOa,btnImport,btnExport,btnQueryA;
+	private Button btnSaveMaster, btnCancelMaster, btnDeleteM,btndelete,btnCreateMaster, btnQuery, btnClear,btnCleara, btnPO_NO,btnPO_NOa,btnImport,btnExport,btnQueryA;
 	private UserCredential _userInfo = (UserCredential) Sessions.getCurrent().getAttribute("userCredential");
 	
 	private boolean  Add=false;;
@@ -108,7 +123,136 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
 		setCRUDService(CRUDService);
 		
+		//导入的类型强制转换，需要看zul页面处使用的是什么类型的样式
+		btnImport = (Fileupload) window.getFellow("btnImport");
+		btnImport.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
+			@SuppressWarnings("unused")
+			public void onEvent(UploadEvent event) throws Exception {
+				String fileToRead ="";
+				org.zkoss.util.media.Media media = event.getMedia();
+				if (!media.getName().toLowerCase().endsWith(".xls")) {
+					//"格式有誤！"
+					Messagebox.show(Labels.getLabel("COMM.XLSFILE"));
+					return;
+				}
+				System.out.println("-------- fileToRead : " + fileToRead);
+				System.out.println("@@@@@@@@@@111111111");
+				InputStream input = null;
+				media.isBinary();
+				String sss = media.getFormat();
+				input = media.getStreamData();// 獲得輸入流
+				importFromExcel(input);
+			}
+		});
+		
 	}
+	@SuppressWarnings("resource")
+	public void importFromExcel(InputStream input) throws Exception {
+		System.out.println("进入excel 读取内容");
+		Connection Conn = getDB01Conn();
+		HSSFWorkbook wb = new HSSFWorkbook(input);
+		//型體
+//		MODEL_NA=txtMODEL_NA.getValue();
+		System.out.println("@@@@@@@@@@@2222222222222222");
+		ImportSheet0(wb,Conn);//第一张表
+		Common.closeConnection(Conn);	
+	}
+	
+	private void ImportSheet0(HSSFWorkbook wb, Connection Conn) throws Exception{
+		System.out.println(">>>>>>>>>读取报表");
+		// TODO Auto-generated method stub
+		SimpleDateFormat Format = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+		HSSFSheet sheet =wb.getSheetAt(0);	
+		HSSFRow row=null;
+
+		try {
+			Conn.setAutoCommit(false);//设置自动提交
+			for(int i = 1; i < sheet.getPhysicalNumberOfRows(); i++){
+				System.out.println(">>>行数"+i);
+				row = sheet.getRow(i);
+//              把从表中get到的值放入栏位
+				String EL_NO=getCellValue(row.getCell(0));
+				String EL_CNAME=getCellValue(row.getCell(1));
+				String MODEL_NA=getCellValue(row.getCell(2));
+//				需要一个if判断主键是否一样与是否为空，是直接break跳出
+				if ("".equals(MODEL_NA) || MODEL_NA == null) {
+					break;
+				}
+				String PLACE=getCellValue(row.getCell(3));
+				String CUPBOARD=getCellValue(row.getCell(4));
+				String NOTE=getCellValue(row.getCell(5));
+				System.out.println(">>>型體>>>"+MODEL_NA);
+				
+				//導入前先刪除
+				DeleteModel_na(EL_NO,Conn);
+				
+				//将值添加到数据库表中
+				String sql1 ="INSERT INTO DSIDN06_01 (MODEL_NA,EL_NO,EL_CNAME,PLACE,UP_DATE,UP_USER,CUPBOARD,NOTE) "
+						+ "VALUES ('"+MODEL_NA+"','"+EL_NO+"','"+EL_CNAME+"','"+PLACE+"',TO_DATE('"+Format.format(new Date())+"','yyyy/MM/dd hh:mi:ss AM'),'"+_userInfo.getAccount()+"','"+CUPBOARD+"','"+NOTE+"')";
+				System.out.println(">>>導入>>>"+sql1);
+				try {
+					PreparedStatement pstm = Conn.prepareStatement(sql1);	
+					pstm.executeUpdate();
+					pstm.close();
+				} catch (Exception e) {
+					Conn.rollback();
+					e.printStackTrace();						
+				}
+			}
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (Errmessage.length() <= 0) {
+			Conn.commit();
+			Messagebox.show("文件匯入成功！！！");
+		} else {
+			Conn.rollback();
+			Messagebox.show("文件匯入失敗！！！" + Errmessage);
+		}
+	}
+	//获取单元格的值，	
+	private static String getCellValue(HSSFCell cell) {
+			String cellValue = "";
+			if (cell != null) {
+				switch (cell.getCellType()) {
+				case Cell.CELL_TYPE_NUMERIC:
+					if(DateUtil.isCellDateFormatted(cell) && DateUtil.isValidExcelDate(cell.getNumericCellValue())){
+						
+					}else{
+						try{
+							BigDecimal bd = new BigDecimal(cell.getNumericCellValue());
+							cellValue =String.valueOf(bd.setScale(0, BigDecimal.ROUND_HALF_UP));
+						}catch(Exception ex){
+						}
+					}
+					break;
+				case Cell.CELL_TYPE_STRING:
+					cellValue = cell.getStringCellValue();
+					cellValue = cellValue.trim();
+					break;
+				default:
+					break;
+				}
+			}
+			//		System.out.println(">>>"+cellValue);
+			return cellValue;
+		}
+		
+	private void DeleteModel_na(String EL_NO, Connection conn) {
+			// TODO Auto-generated method stub
+			String sql1 ="DELETE DSIDN06_01 WHERE EL_NO='"+EL_NO+"'";
+			System.out.println(">>>刪除重複資料>>>	");
+			try {
+				PreparedStatement pstm1 = conn.prepareStatement(sql1);
+				pstm1.executeUpdate();
+				pstm1.close();
+				Okmessage+="型體:"+MODEL_NA+"\n 所有資料刪除成功！\n";
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 	
 	private String GetQTY(String MODEL_NA, String EL_NO) {
 		// TODO Auto-generated method stub
@@ -153,7 +297,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	     }
 	    try{
 	    	conn=DriverManager.getConnection(url,user,pwd);
-//	    	System.err.println(">>>鏈接DB01數據庫");
+	    	System.err.println(">>>鏈接DB01數據庫");
 	    }catch(Exception e){
 	    	e.printStackTrace();
 	    }
@@ -165,6 +309,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	 */
 	@Override
 	protected Window getRootWindow() {
+		// TODO Auto-generated method stub
 		return windowMaster;
 	}
 
@@ -174,6 +319,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected Class getMasterClass() {
+		// TODO Auto-generated method stub
 		return DSIDN06_01M_Program.class;
 	}
 
@@ -183,6 +329,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected Class getEntityClass() {
+		// TODO Auto-generated method stub
 		return DSIDN06_01.class;
 	}
 
@@ -191,6 +338,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	 */
 	@Override
 	protected OperationMode getOperationMode() {
+		// TODO Auto-generated method stub
 		return OperationMode.NORMAL;
 	}
 	
@@ -269,8 +417,6 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		
 		return strSQL;
 	}
-	
-	
 	
 	@Override
 	public String getQueryResultSizeBase() {
@@ -369,6 +515,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		btnSaveMaster.setDisabled(true);
 		btnCancelMaster.setDisabled(true);
 		//btnExport.setDisabled(false);
+		btnDeleteM.setDisabled(false);
 		
 		txt_MODEL_NA.setReadonly(true);
 		txt_EL_NO.setReadonly(true);
@@ -395,6 +542,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		btnSaveMaster.setDisabled(false);
 		btnCancelMaster.setDisabled(false);
 	//	btnExport.setDisabled(true);
+		btnDeleteM.setDisabled(true);
 		
 		txt_MODEL_NA.setReadonly(true);
 		txt_EL_NO.setReadonly(true);
@@ -417,11 +565,11 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	 */
 	@Listen("onClick = #btnImport")
 	public void onClickbtnQuerya(Event event) {
-		final HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("parentWindow", windowMaster);
-		map.put("pbgroupid", "abcedd");
-		Component con=  Executions.createComponents("/ds/dsid/DSID02M_Import01.zul", null, map);
-		
+//		final HashMap<String, Object> map = new HashMap<String, Object>();
+//		map.put("parentWindow", windowMaster);
+//		map.put("pbgroupid", "abcedd");
+//		Component con=  Executions.createComponents("/ds/dsid/DSIDN06_01M_Impot.zul", null, map);
+//		
 	}
 	
 	@Listen("onClick = #btnPO_NOa")
@@ -448,6 +596,14 @@ public class DSIDN06_01M_Program extends COMM_Master {
 	
 	
 		Executions.createComponents("/ds/dsid/DSIDN05M_Query.zul", null, map);*/
+	}
+	//删除按钮,开窗删除的话需要自己定义按钮,使用了btnDeleteMaster此按钮表示使用已写好的按钮
+	@Listen("onClick =#btnDeleteM")
+	public void onClickbtnDeleteM(Event event) throws Exception{
+		final HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("parentWindow", windowMaster);
+		map.put("DSIDN06_01M_Program", this);
+		Executions.createComponents("/ds/dsid/DSIDN06_01M_Delete.zul", null, map);
 	}
 	
 	@Listen("onClick = #btnPO_NO")
@@ -557,7 +713,6 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		DSIDN08M_ExcelUtil.ExcelExporta(sql,"已對應指令號", "已對應指令號材料", title);
 	}
 	
-	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Listen("onQueryWindowSend = #windowMaster")
 	public void onQueryWindowSend(Event event){
@@ -605,7 +760,6 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		return super.beforeMasterSave(entityMaster);
 	}
 	
-	
 	/**
 	 * 取消鈕(新增/編輯),把狀態回復到瀏覽狀態(READ_MODE)
 	 * 
@@ -645,7 +799,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 
 	@Listen("onClick = #btnSaveMaster")
 	@Override
-	public boolean onClickbtnSaveMaster(Event event) {
+	public boolean onClickbtnSaveMaster(Event event) throws Exception {
 		boolean isok = false;
 		if(!Add){
 			//super.onClickbtnSaveMaster(event);
@@ -783,12 +937,7 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		}
 		
 		super.executeQuery();
-		try {
-			super.masterCancel(event);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		super.masterCancel(event);
 		//txt_PO_NOa.setText("");
 		abcListbox.clearSelection();
 		divadd.setVisible(false);
@@ -843,9 +992,6 @@ public class DSIDN06_01M_Program extends COMM_Master {
         	DBManger.closeConnection(ps,conn,null);
         }  
     }
-    
-    
-    
     
     private   void batchUpdate(String sqlTemplate, List<List<DSIDN06_01>> list,Connection conn) {
         PreparedStatement ps = null;  
@@ -1039,41 +1185,54 @@ public class DSIDN06_01M_Program extends COMM_Master {
 				}
 			}
 		
-		/**
-		 * listbox 刪除鈕
-		 * 
-		 * @param evt
-		 */
-		@SuppressWarnings("unchecked")
-		@Listen("onDelete = #masterListbox,#master2Listbox,#master3Listbox,#master4Listbox,#master5Listbox,#master6Listbox,#master7Listbox,#master8Listbox,#master9Listbox,#master10Listbox,#master11Listbox,#master12Listbox,#master13Listbox,#master14Listbox,#master15Listbox,#master16Listbox,#master17Listbox,#master18Listbox,#master19Listbox,#master20Listbox")
-		public void onDeleteMasterListbox(ForwardEvent evt) {
-
-			Event origin = Events.getRealOrigin(evt);
-			Image btn = (Image) origin.getTarget();
-			Listitem litem = (Listitem) btn.getParent().getParent().getParent();
-			Object deleteMaster = litem.getValue();
-			setMasterSel(deleteMaster);
-			if (beforeMasterDel(deleteMaster) == false)
-				return;
-			Messagebox.show(Labels.getLabel("COMM.DELETE"), Labels.getLabel("PUBLIC.MSG0001"),
-					Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
-						public void onEvent(Event e)
-								throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-							if (Messagebox.ON_OK.equals(e.getName())) {
-								if (doCustomerDel(null)) {
-									System.out.println("delete"+deleteMaster);
-									//doDelete(deleteMaster);
-								} else {
-									return;
-								}
-							} else if (Messagebox.ON_CANCEL.equals(e.getName())) {
-								// Cancel is clicked
-							}
-						}
-					});
-		}
+//		/**
+//		 * listbox 刪除鈕
+//		 * 
+//		 * @param evt
+//		 */
+//		@SuppressWarnings("unchecked")
+//		@Listen("onDelete = #masterListbox,#master2Listbox,#master3Listbox,#master4Listbox,#master5Listbox,#master6Listbox,#master7Listbox,#master8Listbox,#master9Listbox,#master10Listbox,#master11Listbox,#master12Listbox,#master13Listbox,#master14Listbox,#master15Listbox,#master16Listbox,#master17Listbox,#master18Listbox,#master19Listbox,#master20Listbox")
+//		public void onDeleteMasterListbox(ForwardEvent evt) {
+//
+//			Event origin = Events.getRealOrigin(evt);
+//			Image btn = (Image) origin.getTarget();
+//			Listitem litem = (Listitem) btn.getParent().getParent().getParent();
+//			Object deleteMaster = litem.getValue();
+//			setMasterSel(deleteMaster);
+//			if (beforeMasterDel(deleteMaster) == false)
+//				return;
+//			Messagebox.show(Labels.getLabel("COMM.DELETE"), Labels.getLabel("PUBLIC.MSG0001"),
+//					Messagebox.OK | Messagebox.CANCEL, Messagebox.QUESTION, new org.zkoss.zk.ui.event.EventListener() {
+//		public void onEvent(Event e)
+//								throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+//							if (Messagebox.ON_OK.equals(e.getName())) {
+//								if (doCustomerDel()) {
+//									System.out.println("delete"+deleteMaster);
+//									//doDelete(deleteMaster);
+//								} else {
+//									return;
+//								}
+//							} else if (Messagebox.ON_CANCEL.equals(e.getName())) {
+//								// Cancel is clicked
+//							}
+//						}
+//					});
+//		}
 		@Override
 		protected int getPageSize() {
 			return 8;
+		}
+
+		@Override
+		protected Object doSaveDefault(String columnName) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+
+		@Override
+		protected void addDetailPrograms() {
+			// TODO Auto-generated method stub
+
 		}
 }
