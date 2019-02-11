@@ -37,7 +37,12 @@
 		<property name="companyName" value="DeID"/>	
 		<property name="connectionName" value="CRUDService"/>	
 	</bean>
-
+	<bean id="company02" class="util.info.CompanyInfo">
+		<property name="companyID" value="DsID"/>	
+		<property name="companyName" value="DsID"/>	
+		<property name="connectionName" value="CRUDService1"/>	
+	</bean>
+	
 	<!-- 多廠下拉選項清單 -->
 	<bean id="systemInfo" class="util.info.SystemInfo">
 		<property name="companies">
@@ -57,13 +62,13 @@
 		<property name="entityManagerFactory" ref="emfDeID" /> <!-- ref entityManagerFactory bean id -->
 	</bean>
 	
-<!-- 	<bean id="emfFTLDB01"
+	<bean id="emfDsID"
 		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="FTLDB01" />
+		<property name="persistenceUnitName" value="DsID" />
 	</bean>
 	<bean id="transactionManager1" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="emfFTLDB01" />
-	</bean> -->
+		<property name="entityManagerFactory" ref="emfDsID" />
+	</bean>
 
 	<!-- tell spring to use annotation based congfigurations -->
 	<!-- It allow us to use @Autowire, @Required and @Qualifier annotations. -->
@@ -88,7 +93,7 @@
 	<bean id="CRUDService" class="ds.common.services.CRUDServiceImpl" />
 	<bean id="CRUDDao" class="util.dao.CRUDDaoImpl" />
 	
-<!-- 	<bean id="CRUDService1" class="ds.common.services.CRUDServiceImpl1" />
-	<bean id="CRUDDao1" class="util.dao.CRUDDaoImpl1" /> -->
+	<bean id="CRUDService1" class="ds.common.services.CRUDServiceImpl1" />
+	<bean id="CRUDDao1" class="util.dao.CRUDDaoImpl1" /> 
 
 </beans>
