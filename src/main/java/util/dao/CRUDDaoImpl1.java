@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CRUDDaoImpl1 implements CRUDDao {
 
-	@PersistenceContext(unitName = "FTLDB01")
+	@PersistenceContext(unitName = "DsID")
 	private EntityManager em;
 	
 	public EntityManager getEm() {
