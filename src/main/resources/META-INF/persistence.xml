@@ -38,10 +38,9 @@
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />
 			<property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
-			<property name="hibernate.connection.url" value="jdbc:oracle:thin:@10.8.1.32:1521:FTLDB1" />
+			<property name="hibernate.connection.url" value="jdbc:oracle:thin:@5.1.1.55:1521:FVLDB01" />
 			<property name="hibernate.connection.username" value="DSID" />
 			<property name="hibernate.connection.password" value="eZtgwv8k" />
-			c3p0 config http://www.hibernate.org/214.html
 			<property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
 			<property name="hibernate.c3p0.acquire_increment" value="1" />
 			<property name="hibernate.c3p0.idle_test_period" value="60" />
