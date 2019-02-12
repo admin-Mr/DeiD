@@ -54,7 +54,7 @@ public class DSIDN05M_Query2 extends QueryWindow {
 		strPB_SYSID = sc.getInitParameter("projectID");
 		strPB_GROUPID = (String) execution.getArg().get("pbgroupid");
 		strAccount = (String) execution.getArg().get("account");
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
+		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService1");
 		setCRUDService(CRUDService);
 		PO_NO =  (String) execution.getArg().get("PO_NO");  
 		PO_NO_CONDITION =  (String) execution.getArg().get("PO_NO_CONDITION");  

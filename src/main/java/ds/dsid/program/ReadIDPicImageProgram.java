@@ -66,7 +66,7 @@ public class ReadIDPicImageProgram extends COMM_Master {
 
 		masterComponentColumns.add(new ComponentColumn<String>(null, "UP_USER", _userInfo.getAccount(), null, null));
 		masterComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
+		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService1");
 		setCRUDService(CRUDService);
 
 	}

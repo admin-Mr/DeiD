@@ -120,30 +120,30 @@ public class DSIDN06_01M_Program extends COMM_Master {
 		masterComponentColumns.add(new ComponentColumn<String>(txt_EL_CNAME, "EL_CNAME", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txt_PLACE, "PLACE", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txt_NOTE, "NOTE",null, null, null));
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
+		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService1");
 		setCRUDService(CRUDService);
 		
 		//导入的类型强制转换，需要看zul页面处使用的是什么类型的样式
-		btnImport = (Fileupload) window.getFellow("btnImport");
-		btnImport.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
-			@SuppressWarnings("unused")
-			public void onEvent(UploadEvent event) throws Exception {
-				String fileToRead ="";
-				org.zkoss.util.media.Media media = event.getMedia();
-				if (!media.getName().toLowerCase().endsWith(".xls")) {
-					//"格式有誤！"
-					Messagebox.show(Labels.getLabel("COMM.XLSFILE"));
-					return;
-				}
-				System.out.println("-------- fileToRead : " + fileToRead);
-				System.out.println("@@@@@@@@@@111111111");
-				InputStream input = null;
-				media.isBinary();
-				String sss = media.getFormat();
-				input = media.getStreamData();// 獲得輸入流
-				importFromExcel(input);
-			}
-		});
+//		btnImport = (Fileupload) window.getFellow("btnImport");
+//		btnImport.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
+//			@SuppressWarnings("unused")
+//			public void onEvent(UploadEvent event) throws Exception {
+//				String fileToRead ="";
+//				org.zkoss.util.media.Media media = event.getMedia();
+//				if (!media.getName().toLowerCase().endsWith(".xls")) {
+//					//"格式有誤！"
+//					Messagebox.show(Labels.getLabel("COMM.XLSFILE"));
+//					return;
+//				}
+//				System.out.println("-------- fileToRead : " + fileToRead);
+//				System.out.println("@@@@@@@@@@111111111");
+//				InputStream input = null;
+//				media.isBinary();
+//				String sss = media.getFormat();
+//				input = media.getStreamData();// 獲得輸入流
+//				importFromExcel(input);
+//			}
+//		});
 		
 	}
 	@SuppressWarnings("resource")

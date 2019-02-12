@@ -48,7 +48,7 @@
 		<property name="companies">
 			<list>
 				<ref bean="company01"/>
-<!-- 				<ref bean="company02"/> -->
+				<ref bean="company02"/>
 			</list>
 		</property>
 	</bean>
