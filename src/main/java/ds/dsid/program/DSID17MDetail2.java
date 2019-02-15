@@ -49,7 +49,7 @@ public class DSID17MDetail2 extends Detail{
 		detailComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));
 	}
 	
-	@Listen("onAfterRender = #detailListbox")
+	@Listen("onAfterRender = #detail2Listbox")
 	public void onAfterRenderDetailListbox(Event event) {
 		if (getData_Mode().equals(DataMode.CREATE_MODE) || getData_Mode().equals(DataMode.UPDATE_MODE)) {
 			TADH_ELNO2 = (Textbox) getParentWindow().getFellow("TADH_ELNO2");
@@ -99,6 +99,7 @@ public class DSID17MDetail2 extends Detail{
 		// TODO Auto-generated method stub
 
 		boolean Enough=ChkEnough();
+		
 		if(Enough==true){
 			switch (columnName) {
 			case "UP_USER":
@@ -106,7 +107,8 @@ public class DSID17MDetail2 extends Detail{
 			case "UP_DATE":
 				return new Date();
 			}
-		}
+		}	
+		
 		return Enough;
 	}
 	
@@ -319,10 +321,10 @@ public class DSID17MDetail2 extends Detail{
 		PreparedStatement pstm=null;
 		 
 		String UpSql="UPDATE DSID17 SET ADH_QTY=(\n" +
-						"SELECT ADH_QTY FROM ( SELECT NVL(SUM(A.AC_QTY),0)-(SELECT SUM(OUT_QTY) OUT_QTY FROM DSID17_OUT B WHERE B.ADH_ELNO=A.ADH_ELNO ) ADH_QTY FROM DSID17_ACP A WHERE A.ADH_ELNO='"+TADH_ELNO2.getValue()+"' GROUP BY ADH_ELNO)\n" + 
+						"SELECT ADH_QTY FROM ( SELECT NVL(SUM(A.AC_QTY),0)-(SELECT NVL(SUM(OUT_QTY),0) OUT_QTY FROM DSID17_OUT B WHERE B.ADH_ELNO=A.ADH_ELNO ) ADH_QTY FROM DSID17_ACP A WHERE A.ADH_ELNO='"+TADH_ELNO2.getValue()+"' GROUP BY ADH_ELNO)\n" + 
 							") WHERE ADH_ELNO='"+TADH_ELNO2.getValue()+"'";
 
-//		System.err.println("--UpSql--："+UpSql);
+		System.err.println("--UpSql--："+UpSql);
 		try {	
 			pstm = conn.prepareStatement(UpSql);	
 			pstm.executeUpdate();

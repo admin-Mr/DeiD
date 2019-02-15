@@ -29,13 +29,14 @@
 				<button id="btnDeleteM" sclass="btn-danger"
 					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
 					mold="trendy" />
+					
+				<fileupload id="btnImport" sclass="btn-default" mold="trendy"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.IMPORT}" />
 					<!--  
 				<button id="btnPrint" sclass="btn-info"
 					iconSclass="mdi mdi-printer" label="${labels.COMM.PRINT}"
 					disabled="true" />
-				<button id="btnImport" sclass="btn-default"
-					iconSclass="mdi mdi-briefcase-download"
-					label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" />
+				
 						
 				<button id="btnExport" sclass="btn-default"
 					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.EXPORT}"

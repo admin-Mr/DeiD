@@ -65,7 +65,7 @@ public class DSIDN08M_Query extends QueryWindow {
 		setCRUDService(CRUDService);
 		**/
 		
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService1");
+		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
 		setCRUDService(CRUDService);
 		PO_NO =  (String) execution.getArg().get("PO_NO");  
 		PO_NO_CONDITION =  (String) execution.getArg().get("PO_NO_CONDITION");  

@@ -61,7 +61,7 @@
 						  
 			<center>			
 				<div>
-					<listbox id="detailListbox2" sclass="mylist" autopaging="true" 
+					<listbox id="detail2Listbox" sclass="mylist" autopaging="true" 
 					emptyMessage="${labels.PUBLIC.MSG0026}" multiple="false" rows="5">
 						<listhead sizable="true">
 							<listheader label="${labels.DSID17M.AC_NO}" />

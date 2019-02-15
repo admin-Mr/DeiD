@@ -16,6 +16,8 @@ public class DSID17_OUT {
 	private String OUT_NO ;
 	private String ADH_ELNO ;
 	private String OUT_QTY ;
+	private String MT_PONO ;
+	private String MT_SEQ ;
 	private String UP_USER ;
 	private Date UP_DATE ;
 	
@@ -60,6 +62,22 @@ public class DSID17_OUT {
 	}
 	public void setUP_DATE(Date uP_DATE) {
 		UP_DATE = uP_DATE;
+	}
+	
+	@Column(name = "MT_PONO")
+	public String getMT_PONO() {
+		return MT_PONO;
+	}
+	public void setMT_PONO(String mT_PONO) {
+		MT_PONO = mT_PONO;
+	}
+	
+	@Column(name = "MT_SEQ")
+	public String getMT_SEQ() {
+		return MT_SEQ;
+	}
+	public void setMT_SEQ(String mT_SEQ) {
+		MT_SEQ = mT_SEQ;
 	}
 
 }

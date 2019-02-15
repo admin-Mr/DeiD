@@ -34,7 +34,19 @@ public class COMM_Master extends Master{
 	protected Class getMasterClass() {
 		return null;
 	}
-
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void setWhereConditionals(String sWhereMaster) {
+		
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void doFillListbox(int index) {
+		
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected Class getEntityClass() {

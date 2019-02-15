@@ -8,9 +8,9 @@
 			<property name="hibernate.connection.encryptor_registered_name" value="strongHibernateStringEncryptor" />
 			<property name="hibernate.dialect" value="util.CustomOracleDialect" />
 			<property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver" />
-			<property name="hibernate.connection.url" value="jdbc:oracle:thin:@5.1.1.55:1521:FVLDB01" />
-			<property name="hibernate.connection.username" value="DEID" />
-			<property name="hibernate.connection.password" value="8TzekRVU" />
+			<property name="hibernate.connection.url" value="jdbc:oracle:thin:@10.8.1.28:1521:FTLDDB01" />
+			<property name="hibernate.connection.username" value="DSOD" />
+			<property name="hibernate.connection.password" value="RUNNING2011" />
 			<!-- c3p0 config http://www.hibernate.org/214.html -->
 			<!-- Pool -->
 			<property name="connection.provider_class" value="org.hibernate.connection.C3P0ConnectionProvider" />
@@ -33,7 +33,8 @@
 			<property name="hibernate.current_session_context_class" value="thread" />
 		</properties>
 	</persistence-unit>
-	<persistence-unit name="DsID">
+	
+	 <persistence-unit name="DsID">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect" />

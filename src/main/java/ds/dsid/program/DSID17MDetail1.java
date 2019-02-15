@@ -100,7 +100,8 @@ public class DSID17MDetail1 extends Detail{
 			case "UP_DATE":
 				return new Date();
 			}
-		}
+		}	
+		
 		return Enough;
 	}
 	
@@ -124,9 +125,11 @@ public class DSID17MDetail1 extends Detail{
 			if(rs.next()){
 				for(int i=1;i<4;i++){
 					if(!"".equals(rs.getString("RAW_ELNO"+i))&&rs.getString("RAW_ELNO"+i)!=null){
+						
 						Double MT_QTY=GetMt_qty(rs.getString("MODEL_NA"),rs.getString("RAW_ELNO"+i),Conn);
-						if((OT_QTY+Double.valueOf(rs.getString("ADH_QTY")))*Double.valueOf(rs.getString("RAW_PRO"+i))>MT_QTY){
-							mess+="材料："+rs.getString("RAW_ELNO"+i)+"數量不足,不能進行貼合發料！！\n";
+						Double USE_QTY=GetUse_qty(rs.getString("RAW_ELNO"+i),conn);
+						if((OT_QTY+USE_QTY)>MT_QTY){
+							mess+="原材料："+rs.getString("RAW_ELNO"+i)+"數量不足,不能進行貼合發料！！\n";
 						}
 					}	
 				}
@@ -162,13 +165,60 @@ public class DSID17MDetail1 extends Detail{
 		return ChkEnough;
 	}
 
+	private Double GetUse_qty(String RAW_ELNO, Connection conn) {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Double USE_QTY=0.0;
+		
+		String sql = "SELECT * FROM DSID07 A,DSID17 B WHERE A.ADH_ELNO=B.ADH_ELNO AND (RAW_ELNO1='"+RAW_ELNO+"' OR RAW_ELNO2='"+RAW_ELNO+"' OR RAW_ELNO3='"+RAW_ELNO+"')";
+		System.err.println("--------\n："+sql);
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				for(int i=1;i<4;i++){
+					if(RAW_ELNO.equals(rs.getString("RAW_ELNO"+i))){
+						USE_QTY+=Double.valueOf(rs.getString("ADH_QTY"))*Double.valueOf(rs.getString("RAW+PRO"+i));
+						System.err.println("--USE_QTY--\n："+USE_QTY);
+					}
+				}
+				
+			}
+			rs.close();
+			ps.close();		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(rs!=null){
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(ps!=null){
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+		
+		return USE_QTY;
+	}
+
 	private double GetMt_qty(String MODEL_NA,String EL_NO, Connection Conn) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Double MT_QTY=0.0;
-		String sql = "SELECT * FROM DSID77 WHERE EL_NO='"+TADH_ELNO1.getValue()+"' AND MODEL_NA='"+MODEL_NA+"'";
-		
+		String sql = "SELECT * FROM DSID77 WHERE EL_NO='"+EL_NO+"' AND ( MODEL_NA='"+MODEL_NA+"' OR MODEL_NA='0') ORDER BY MODEL_NA DESC";
+		System.err.println("--Mt_qty--\n："+sql);
 		try {
 			ps = Conn.prepareStatement(sql);
 			rs = ps.executeQuery();

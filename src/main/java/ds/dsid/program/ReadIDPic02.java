@@ -54,7 +54,7 @@ public class ReadIDPic02 extends QueryWindow{
 	@Override
 	public void doAfterCompose(Component window) throws Exception {
 		super.doAfterCompose(window);
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService1");
+		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
 		setCRUDService(CRUDService);
 		System.out.println("0.5");
 		
