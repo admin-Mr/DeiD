@@ -53,6 +53,7 @@ import ds.common.services.UserCredential;
 import ds.dsid.domain.DSIDN06;
 import ds.dsid.domain.DSIDN08;
 import ds.dsid.domain.DSIDN08_T;
+import util.Common;
 import util.DBManger;
 import util.OperationMode;
 
@@ -1678,7 +1679,7 @@ public DSIDN08 getD08() {
 		}
 		
 		private DSIDN06 getNewMessage02() {
-			Connection conn = DBManger.getConnectionDB1();
+			Connection conn = Common.getService1Conn();
 			DSIDN06 d06 = new DSIDN06();
 			PreparedStatement pst = null;
 			ResultSet rs   = null;
@@ -1702,7 +1703,7 @@ public DSIDN08 getD08() {
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			} finally {
-				DBManger.closeConnection(pst, conn, rs);
+				Common.closeConnection(conn);
 			}
 			return d06;
 		}

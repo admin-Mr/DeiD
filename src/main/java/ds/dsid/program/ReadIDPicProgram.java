@@ -115,7 +115,7 @@ public class ReadIDPicProgram extends QueryWindow {
 		Jsstate = true;
 		sDate = Strfor.format(new Date()); // 獲取掃描時間
 		
-		Conn = Common.getDB01Conn(); // DB連接
+		Conn = Common.getService1Conn(); // DB連接
 		// 组底专有 日期选择空间, 组底账户:XEID9
 		if (_userInfo.getAccount() == "XEID9" || "XEID9".equals(_userInfo.getAccount())) {
 			BcDate = format.format(BarcodeDate.getValue());
@@ -367,7 +367,7 @@ public class ReadIDPicProgram extends QueryWindow {
 
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Conn = Common.getDB01Conn(); // DB連接
+		Conn = Common.getService1Conn(); // DB連接
 		String sql = "";
 		String bcda = "";
 		String[] SuData = new String[6];
@@ -428,7 +428,7 @@ public class ReadIDPicProgram extends QueryWindow {
 		String[] Data = new String[7];
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Conn = Common.getDB01Conn();
+		Conn = Common.getService1Conn();
 		user = _userInfo.getAccount(); // 獲取登陸賬戶
 		String Userid = ""; //getUsetname(user);
 		System.out.println(" ----- user ------  : " + user);
@@ -546,7 +546,7 @@ public class ReadIDPicProgram extends QueryWindow {
 
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Conn = Common.getDB01Conn(); // DB連接
+		Conn = Common.getService1Conn(); // DB連接
 		List<String[]> list = new ArrayList<String[]>();
 		String[] Cz = new String[4];
 		String[] Zc = new String[4];
@@ -637,7 +637,7 @@ public class ReadIDPicProgram extends QueryWindow {
 
 		ResultSet rs = null, rs1 = null;
 		PreparedStatement ps = null, ps1 = null;
-		Conn = Common.getDB01Conn();
+		Conn = Common.getService1Conn();
 		String[] url = new String[5];
 		String sqlurl1 = null, sqlurl2 = null, sqlurl3 = null, sqlurl4 = null;
 
@@ -767,7 +767,7 @@ public class ReadIDPicProgram extends QueryWindow {
 	public void setReidDate(String Bc, String user) {
 
 		PreparedStatement upDateps = null;
-		Conn = Common.getDB01Conn();
+		Conn = Common.getService1Conn();
 		String Strsql = "";
 		String Zcname = getUsetname(user);
 		System.out.println(" ----- Zcname : " + Zcname);
@@ -834,7 +834,7 @@ public class ReadIDPicProgram extends QueryWindow {
 		System.out.println(" ----- Bc 測試1 : " + Bc);
 		String OdnoDate = "", Zbcdate = "", Work = "";
 		ResultSet rs = null;
-		Connection Conn = Common.getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 		PreparedStatement ps = null;
 		Date date = new Date();
 		String Strdate = format.format(date);
@@ -887,7 +887,7 @@ public class ReadIDPicProgram extends QueryWindow {
 		// TODO Auto-generated method stub
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Connection Conn = Common.getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 		String ZDbc = "";
 		
 		String sql = "select work_order_id from dsid30 where url1 = '"+BcDemo+"' and to_char(order_date,'YYYY/MM/DD') = '"+BcDate.replace("-", "/")+"'";
@@ -907,6 +907,8 @@ public class ReadIDPicProgram extends QueryWindow {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			Common.closeConnection(Conn);
 		}
 		
 		return ZDbc;

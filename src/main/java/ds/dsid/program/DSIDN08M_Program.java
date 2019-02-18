@@ -462,7 +462,7 @@ public class DSIDN08M_Program extends COMM_Master {
 	
 	private String getNHFinsh(String PO_PURNO){
 		
-		CRUDService CRUDServicetemp = (CRUDService) SpringUtil.getBean("CRUDService2");
+		CRUDService CRUDServicetemp = (CRUDService) SpringUtil.getBean("CRUDService1");
 		String sql =" SELECT PO_NO FROM DSPO05 WHERE  PO_PURNO='"+PO_PURNO+"' OR PO_NO='"+PO_PURNO+"' ";
 		Query  tempquery = CRUDServicetemp.createSQL(sql);
 		List	tempList = tempquery.getResultList();
@@ -666,6 +666,11 @@ public class DSIDN08M_Program extends COMM_Master {
 		Add=false;
 		super.executeQuery();
 		try {
+			// Remory 如果沒有筆數會出現錯誤，所以當沒有筆數時自動新增一筆需你比數
+			if(!getInsertCurrent()) {  
+				masterModel.add(0, Class.forName(ENTITY_PATH).newInstance());
+				getmasterListbox().renderAll();
+			}
 			super.masterCancel(event);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -524,4 +524,37 @@ public class Common {
 		}
 		return conn;
 	}
+	/**
+	 * 取得第二個連線
+	 */
+	public static Connection getService1Conn() {
+		CRUDService CRUDService = (CRUDService) SpringUtil.getBean("CRUDService1");
+		SessionFactory sessionFactory = ((HibernateEntityManagerFactory) CRUDService.getEmf()).getSessionFactory();
+		Properties properties = ((SessionFactoryImpl) sessionFactory).getProperties();
+		String driverClass = (String) properties.get("hibernate.connection.driver_class");
+		String url = (String) properties.get("hibernate.connection.url");
+		String userName = (String) properties.get("hibernate.connection.username");
+		String passWord = (String) properties.get("hibernate.connection.password");
+		
+		String[] getURL = url.split(":"); // 使用:分隔
+		DBConnInfo[0] = getURL[3].substring(1); // ip位置
+		DBConnInfo[1] = getURL[4]; // port
+		DBConnInfo[2] = getURL[5]; // DB name
+
+		BasicDataSource dataSource = new BasicDataSource();
+		dataSource.setDriverClassName(driverClass);
+		dataSource.setUrl(url);
+		dataSource.setUsername(userName);
+		dataSource.setPassword(passWord);		
+		dataSource.setMaxIdle(1);	//最大空閒連接  
+		dataSource.setMaxActive(1); //最大活動連接 
+		dataSource.setTimeBetweenEvictionRunsMillis(5000);	//定時對線程池中的鏈接進行validateObject校驗，對無效的鏈接進行關閉後，會調用ensureMinIdle，適當建立鏈接保證最小的minIdle連接數。
+		dataSource.setMinEvictableIdleTimeMillis(5000);	//連接池中連接，在時間段內一直空閒，被逐出連接池的時間
+		try{		
+			return dataSource.getConnection();
+		} catch (SQLException e){
+			e.printStackTrace();			
+		}
+		return null;
+	}
 }

@@ -298,7 +298,7 @@ public class ReadIDPicImageProgram extends COMM_Master {
 	public boolean onClickbtnSaveMaster(Event event) throws Exception {
 		
 		boolean isok = false;
-		Conn = Common.getDB01Conn();
+		Conn = Common.getService1Conn();
 		ResultSet insertrs = null;
 		PreparedStatement upDateps = null, inserps = null;
 		
