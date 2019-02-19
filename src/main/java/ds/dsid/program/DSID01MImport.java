@@ -71,7 +71,7 @@ public class DSID01MImport extends OpenWinCRUD{
 				
 		Execution execution = Executions.getCurrent();
 		TABLE =  (String) execution.getArg().get("TABLE"); 
-		System.err.println(">>>>>"+TABLE);
+//		System.err.println(">>>>>"+TABLE);
 //		if("DSID01".equals(TABLE)){
 //			V_radioButton.setVisible(false);	
 //		}else{
@@ -120,6 +120,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			for(int n=0;n<importdata.length;n++){
 				if((boolean)importdata[n][1]==false){
 					msg+=((String)importdata[n][0]).toString()+"\n";
+					
 				}
 			}
 			if(msg.length()>0){
@@ -136,11 +137,12 @@ public class DSID01MImport extends OpenWinCRUD{
 		}
 	}
 	
-	private void write(File file, int i, Connection conn) {
+	private void write(File file, int i, Connection ConnHead) {
 		// TODO Auto-generated method stub
 		SAXReader reader = new SAXReader();
 		reader.setEncoding("UTF-8");
 		Document document = null;
+		Connection conn=Common.getDbConnection();
 		
 		try {
 			document = reader.read(file);
@@ -149,6 +151,8 @@ public class DSID01MImport extends OpenWinCRUD{
 			ShowMessage();			
 		} catch (Exception e){
 			e.printStackTrace();
+		}finally{
+			Common.closeConnection(conn);
 		}
 	}
 	
@@ -173,7 +177,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			//接單日期---可選
 
 			ORDER_DATE =format.format(txtorder_date.getValue());
-			System.err.println(">>>>>ORDER_DATE :"+ORDER_DATE);
+//			System.err.println(">>>>>ORDER_DATE :"+ORDER_DATE);
 			
 			
 			//workOrderID			
@@ -190,7 +194,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			//檢查work_order_id是否唯一
 			Boolean Exist = Check(WORK_ORDER_ID,conn);
 			if(Exist==true){
-				System.out.println(">>>："+WORK_ORDER_ID+"已經匯入。");
+//				System.out.println(">>>："+WORK_ORDER_ID+"已經匯入。");
 				continue;
 			}	
 	
@@ -205,14 +209,14 @@ public class DSID01MImport extends OpenWinCRUD{
 //				TYPE="2";
 //			}
 			 
-			System.err.println(">>>>>TYPE :"+TYPE);			
+//			System.err.println(">>>>>TYPE :"+TYPE);			
 			
 			//shipGroupId			 
 			Iterator shipGroupIdIt = workOrderElement.elementIterator("shipGroupId");
 			while(shipGroupIdIt.hasNext()){
 				Element shipGroupIdElement = (Element)shipGroupIdIt.next();
 				SHIP_GROUP_ID=shipGroupIdElement.getText();
-				System.err.println(">>>>>SHIP_GROUP_ID :"+SHIP_GROUP_ID);
+//				System.err.println(">>>>>SHIP_GROUP_ID :"+SHIP_GROUP_ID);
 //				DSID01_TEMP.setSHIP_GROUP_ID(shipGroupIdElement.getText());
 			}
 			
@@ -221,7 +225,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(orderIdIt.hasNext()){
 				Element orderIdElement = (Element)orderIdIt.next();
 				ORDER_ID=orderIdElement.getText();
-				System.err.println(">>>>>ORDER_ID :"+ORDER_ID);
+//				System.err.println(">>>>>ORDER_ID :"+ORDER_ID);
 //				DSID01_TEMP.setORDER_ID(orderIdElement.getText());
 			}	
 			
@@ -231,10 +235,10 @@ public class DSID01MImport extends OpenWinCRUD{
 				Element packingInfoElement = (Element)packingInfoIt.next();
 				
 				ORDER_NUM = packingInfoElement.attributeValue("total");
-				System.err.println(">>>>>ORDER_NUM :"+ORDER_NUM);
+//				System.err.println(">>>>>ORDER_NUM :"+ORDER_NUM);
 //				DSID01_TEMP.setORDER_NUM(ORDER_NUM);				
 				ITEMNUMBER=packingInfoElement.attributeValue("itemNumber");
-				System.err.println(">>>>>ITEMNUMBER :"+ITEMNUMBER);
+//				System.err.println(">>>>>ITEMNUMBER :"+ITEMNUMBER);
 //				DSID01_TEMP.setITEMNUMBER(ITEMNUMBER);
 			}	
 			
@@ -243,7 +247,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(priorityIt.hasNext()){
 				Element priorityElement = (Element)priorityIt.next();
 				PRIORITY=priorityElement.getText();
-				System.err.println(">>>>>PRIORITY :"+PRIORITY);
+//				System.err.println(">>>>>PRIORITY :"+PRIORITY);
 //				DSID01_TEMP.setPRIORITY(priorityElement.getText());
 
 			}
@@ -256,7 +260,7 @@ public class DSID01MImport extends OpenWinCRUD{
 				try{
 //				 FACTACCPDATE = format.parse(factoryAcceptDateElement.getText());				 
 				 FACTRECDATE=factoryReceivedDateElement.getText();
-				 System.err.println(">>>>>FACTRECDATE :"+FACTRECDATE);
+//				 System.err.println(">>>>>FACTRECDATE :"+FACTRECDATE);
 //				 DSID01_TEMP.setFACTACCPDATE(acceptDate);
 				}catch(Exception e){
 					e.printStackTrace();
@@ -273,7 +277,7 @@ public class DSID01MImport extends OpenWinCRUD{
 				 if("".equals(FACTACCPDATE)||FACTACCPDATE==null||"null".equals(FACTACCPDATE)){
 					 FACTACCPDATE=format1.format(new Date());
 				 }
-				 System.err.println(">>>>>FACTACCPDATE :"+FACTACCPDATE);
+//				 System.err.println(">>>>>FACTACCPDATE :"+FACTACCPDATE);
 //				 DSID01_TEMP.setFACTACCPDATE(acceptDate);
 				}catch(Exception e){
 					e.printStackTrace();
@@ -285,7 +289,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(exoticIt.hasNext()){
 				Element exoticElement = (Element)exoticIt.next();
 				EXOTIC=exoticElement.getText();
-				System.err.println(">>>>>EXOTIC :"+EXOTIC);
+//				System.err.println(">>>>>EXOTIC :"+EXOTIC);
 //				DSID01_TEMP.setEXOTIC(exoticElement.getText());
 			}
 			
@@ -295,7 +299,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(remakeIt.hasNext()){
 				Element remakeElement = (Element)remakeIt.next();
 				REMAKE=remakeElement.getText();
-				System.err.println(">>>>>REMAKE :"+REMAKE);				
+//				System.err.println(">>>>>REMAKE :"+REMAKE);				
 //				DSID01_TEMP.setREMAKE(remakeElement.getText());
 			}
 			
@@ -305,7 +309,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(shipToRegionIt.hasNext()){
 				Element shipToRegionElement = (Element)shipToRegionIt.next();
 				REGION=shipToRegionElement.getText();
-				System.err.println(">>>>>REGION :"+REGION);	
+//				System.err.println(">>>>>REGION :"+REGION);	
 //				DSID01_TEMP.setREGION(shipToRegionElement.getText());
 			}
 						
@@ -314,7 +318,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(shipToCountryIt.hasNext()){
 				Element shipToCountryElement = (Element)shipToCountryIt.next();
 				COUNTRY=shipToCountryElement.getText();
-				System.err.println(">>>>>COUNTRY :"+COUNTRY);					
+//				System.err.println(">>>>>COUNTRY :"+COUNTRY);					
 //				DSID01_TEMP.setCOUNTRY(shipToCountryElement.getText());
 			}
 					
@@ -323,7 +327,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(remakeIt.hasNext()){
 				Element shipperElement = (Element)shipperIt.next();
 				SHIPPER=shipperElement.getText();
-				System.err.println(">>>>>SHIPPER :"+shipperElement.getText());	
+//				System.err.println(">>>>>SHIPPER :"+shipperElement.getText());	
 //				DSID01_TEMP.setSHIPPER(shipperElement.getText());
 			}	
 			
@@ -333,7 +337,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(billToRegionIt.hasNext()){
 				Element billToRegionElement = (Element)billToRegionIt.next();
 				BILLTOREGION=billToRegionElement.getText();
-				System.err.println(">>>>>BILLTOREGION :"+BILLTOREGION);					
+//				System.err.println(">>>>>BILLTOREGION :"+BILLTOREGION);					
 //				DSID01_TEMP.setBILLTOREGION(billToRegionElement.getText());
 			}	
 			
@@ -348,7 +352,7 @@ public class DSID01MImport extends OpenWinCRUD{
 //					if("".equals(REQUSHIPDATE)||REQUSHIPDATE==null||REQUSHIPDATE=="null"){
 //						REQUSHIPDATE="";
 //					 }
-					System.err.println(">>>>>REQUSHIPDATE :"+REQUSHIPDATE);	
+//					System.err.println(">>>>>REQUSHIPDATE :"+REQUSHIPDATE);	
 //					DSID01_TEMP.setREQUSHIPDATE(shipDate);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -361,7 +365,7 @@ public class DSID01MImport extends OpenWinCRUD{
 				Element factoryAcceptDateElement = (Element)POSTALCODEIt.next();
 				try{
 				 POSTALCODE = factoryAcceptDateElement.getText();
-				 System.err.println(">>>>>POSTALCODE :"+POSTALCODE);	
+//				 System.err.println(">>>>>POSTALCODE :"+POSTALCODE);	
 //				 DSID01_TEMP.setPOSTALCODE(postalCode);
 				}catch(Exception e){
 					e.printStackTrace();
@@ -373,7 +377,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			while(shipToStudioIt.hasNext()){
 				Element shipToStudioElement = (Element)shipToStudioIt.next();
 				SHIPTOSTUDIO=shipToStudioElement.getText();
-				System.err.println(">>>>>SHIPTOSTUDIO :"+shipToStudioElement.getText());	
+//				System.err.println(">>>>>SHIPTOSTUDIO :"+shipToStudioElement.getText());	
 //				DSID01_TEMP.setSHIPTOSTUDIO(SHIPTOSTUDIO);
 			}
 			
@@ -458,7 +462,7 @@ public class DSID01MImport extends OpenWinCRUD{
 									//style and color  ---SH_STYLENO
 									String style_NO = productElement.attributeValue("style");
 									String color_NO = productElement.attributeValue("color");
-									System.err.println(">>>>>SH_STYLENO :"+style_NO+"-"+color_NO);
+//									System.err.println(">>>>>SH_STYLENO :"+style_NO+"-"+color_NO);
 									SH_STYLENO=style_NO+"-"+color_NO;
 //									DSID01_TEMP.setSH_STYLENO(SH_STYLENO);
 									
@@ -474,7 +478,7 @@ public class DSID01MImport extends OpenWinCRUD{
 									
 									//SizeLeft
 									String sizeLeft = itemElement.attributeValue("SizeLeft");
-									System.err.println(">>>>>LEFT_SIZE_RUN :"+sizeLeft);
+//									System.err.println(">>>>>LEFT_SIZE_RUN :"+sizeLeft);
 									LEFT_SIZE_RUN=sizeLeft;
 									if(!LEFT_SIZE_RUN.contains(".5")&&!LEFT_SIZE_RUN.contains(".0")){
 										LEFT_SIZE_RUN=LEFT_SIZE_RUN+".0";
@@ -483,7 +487,7 @@ public class DSID01MImport extends OpenWinCRUD{
 										
 									//SizeRight
 									String sizeRight = itemElement.attributeValue("SizeRight");
-									System.err.println(">>>>>RIGHT_SIZE_RUN :"+sizeRight);	
+//									System.err.println(">>>>>RIGHT_SIZE_RUN :"+sizeRight);	
 									RIGHT_SIZE_RUN=sizeRight;
 									if(!RIGHT_SIZE_RUN.contains(".5")&&!RIGHT_SIZE_RUN.contains(".0")){
 										RIGHT_SIZE_RUN=RIGHT_SIZE_RUN+".0";
@@ -492,7 +496,7 @@ public class DSID01MImport extends OpenWinCRUD{
 //									DSID01_TEMP.setRIGHT_SIZE_RUN(sizeRight);
 								}
 								
-								System.out.println(">>>>>GROUP & GROUP_COLOR");	
+//								System.out.println(">>>>>GROUP & GROUP_COLOR");	
 								
 								//comps
 								Iterator compsIt = bomElement.elementIterator("comps");
@@ -508,7 +512,7 @@ public class DSID01MImport extends OpenWinCRUD{
 										
 										// grp
 										String group = compElement.attributeValue("grp").trim();
-										System.err.println(">>>>>GROUP ："+group);
+//										System.err.println(">>>>>GROUP ："+group);
 								     	group = "GROUP"+group.substring(group.lastIndexOf(" ")+1);
 										String partName = "";
 											
@@ -516,7 +520,7 @@ public class DSID01MImport extends OpenWinCRUD{
 										partName = partName_Element.getText() ;
 										partName=partName.replace("'", " ");
 										
-							            System.err.println(">>>>>GROUP_NAME ：" + partName);
+//							            System.err.println(">>>>>GROUP_NAME ：" + partName);
 										Iterator valuesIt = compElement.elementIterator("values");
 											while(valuesIt.hasNext()){
 												Element valuesElement = (Element)valuesIt.next();
@@ -550,7 +554,7 @@ public class DSID01MImport extends OpenWinCRUD{
 								                    System.err.println(">>>>>SEQ :"+SEQ);
 								                    
 								            		String 	sql2="INSERT INTO DSID01_TEMP2 (WORK_ORDER_ID,SEQ,GROUP_NO,PART_NA,REMARKS,TYPE,CODE,NAME,UP_USER,UP_DATE) VALUES ('"+WORK_ORDER_ID+"','"+SEQ+"','"+group+"','"+partName+"','"+remarks+"','"+type+"','"+code+"','"+name+"','"+_userInfo.getAccount()+"',TO_DATE('"+Format.format(new Date())+"','YYYY/MM/DD'))";	
-								            		System.out.println(sql2);		
+//								            		System.out.println(sql2);		
 								            		try {
 														PreparedStatement pstm = conn.prepareStatement(sql2);
 														pstm.executeUpdate();
@@ -598,7 +602,8 @@ public class DSID01MImport extends OpenWinCRUD{
 				conn.rollback();
 				return;
 			}
-		}			
+		}
+		conn.commit();
 	 }
 
 	//判斷是否是重複導單 如主單中存在，則不再重複導入，如果主檔不存在，則刪除明細檔的資料，無論有沒有。
@@ -614,7 +619,7 @@ public class DSID01MImport extends OpenWinCRUD{
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
 			if(rs.next()){
-				System.out.println(TABLE+">>>>>"+sql);
+//				System.out.println(TABLE+">>>>>"+sql);
 				Exist=true;
 			}else{
 				String Sql1="DELETE DSID01_TEMP2 WHERE WORK_ORDER_ID='"+WORK_ORDER_ID+"' ";
@@ -655,7 +660,7 @@ public class DSID01MImport extends OpenWinCRUD{
 		//整合虛擬單和正式單的訂單號
 		String 	sql="SELECT MAX(OD_NO) MOD_NO FROM (SELECT OD_NO FROM DSID01 UNION SELECT OD_NO FROM DSID01_TEMP) WHERE OD_NO LIKE 'FNJ-%'";	
 
-		System.out.println(">>>>>"+sql);
+//		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
