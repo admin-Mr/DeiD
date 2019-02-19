@@ -19,6 +19,7 @@ public class DSID21 {
 
 	private String MODEL_NA;	//型體名稱
 	private String ITEMS;		//序號
+	private String TYPE;		//類型
 	private String GR_NO;		//部位
 	private String GR_NA;		//部位名稱
 	private String COLOR;		//顏色
@@ -26,6 +27,7 @@ public class DSID21 {
 	private String EL_NA;		//材料名稱
 	private String SIZE_FD;		//Size分段
 	private String NOTE	;		//備註
+	private Date IMPORT_DATE;	//匯入日期
 	private String UP_USER;		//異動人員
 	private Date UP_DATE;		//異動日期
 	
@@ -45,6 +47,14 @@ public class DSID21 {
 	}
 	public void setITEMS(String iTEMS) {
 		ITEMS = iTEMS;
+	}
+	
+	@Column(name = "TYPE")
+	public String getTYPE() {
+		return TYPE;
+	}
+	public void setTYPE(String tYPE) {
+		TYPE = tYPE;
 	}
 	
 	@Column(name = "GR_NO")
@@ -101,6 +111,14 @@ public class DSID21 {
 	}
 	public void setNOTE(String nOTE) {
 		NOTE = nOTE;
+	}
+	
+	@Column(name = "IMPORT_DATE")
+	public Date getIMPORT_DATE() {
+		return IMPORT_DATE;
+	}
+	public void setIMPORT_DATE(Date iMPORT_DATE) {
+		IMPORT_DATE = iMPORT_DATE;
 	}
 	
 	@Column(name = "UP_USER")

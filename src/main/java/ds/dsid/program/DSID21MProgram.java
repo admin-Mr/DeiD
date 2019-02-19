@@ -14,6 +14,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Datebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -29,20 +30,23 @@ import util.OperationMode;
 
 public class DSID21MProgram extends Master {
 
-	@Wire
-	private Window windowMaster;
-	@Wire
-	private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDelete, btnImport, btnExport, btnCustomExr;	
-	@Wire
-	private Textbox txtModel_na, txtItems, txtGr_no, txtGr_na, txtColor, txtEl_no, txtEl_na, txtSize_fd, txtNote;
+	@Wire private Window windowMaster;
+	@Wire private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDelete, btnImport, btnExport, btnCustomExr,
+					btnBatdelete;	
+	@Wire private Textbox txtModel_na, txtItems, txtGr_no, txtGr_na, txtColor, txtEl_no, txtEl_na, txtSize_fd, txtNote,
+					txtType, txtUp_user;
+	@Wire private Datebox txtImport_date, txtUp_date;
 	
 	@Override
 	public void doAfterCompose(Component window) throws Exception{
 		super.doAfterCompose(window);
 		setWhereConditionals(getWhereConditionals());
 		
+		super.doFillListbox(0);
+		
 		masterComponentColumns.add(new ComponentColumn<String>(txtModel_na, "MODEL_NA", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtItems, "ITEMS", null, null, null));
+		masterComponentColumns.add(new ComponentColumn<String>(txtType, "TYPE", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtGr_no, "GR_NO", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtGr_na, "GR_NA", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtColor, "COLOR", null, null, null));
@@ -51,11 +55,13 @@ public class DSID21MProgram extends Master {
 		masterComponentColumns.add(new ComponentColumn<String>(txtSize_fd, "SEZI_FD", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtNote, "NOTE", null, null, null));
 		
-		masterComponentColumns.add(new ComponentColumn<String>(null, "UP_USER", _userInfo.getAccount(), null, null));
-		masterComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));	
-
+		masterComponentColumns.add(new ComponentColumn<Date>(txtImport_date, "IMPORT_DATE", new Date(), null, null));
+		masterComponentColumns.add(new ComponentColumn<String>(txtUp_user, "UP_USER", _userInfo.getAccount(), null, null));
+		masterComponentColumns.add(new ComponentColumn<Date>(txtUp_date, "UP_DATE", new Date(), null, null));	
+		
 	}
 	
+	// 匯入
 	@Listen("onClick =#btnImport")
 	public void onClickbtnImport(Event event) throws Exception{
 		final HashMap<String, Object> map = new HashMap<String, Object>();
@@ -64,13 +70,33 @@ public class DSID21MProgram extends Master {
 		Executions.createComponents("/ds/dsid/DSID21MImport.zul", null, map);
 	}
 	
-/*	@Listen("onClick =#btnExport")
+	// 匯出
+	@Listen("onClick =#btnExport")
 	public void onClickbtnExport(Event event) throws Exception{
 		final HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("parentWindow", windowMaster);
-		map.put("DSID04MProgram", this);
-		Executions.createComponents("/ds/dsid/DSID04MExport.zul", null, map);
-	}*/
+		map.put("DSID21MProgram", this);
+		Executions.createComponents("/ds/dsid/DSID21MExport.zul", null, map);
+	}
+	
+	// 批量刪除
+	@Listen("onClick =#btnBatdelete")
+	public void onClickbtnBatdelete(Event event) throws Exception{
+		final HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("parentWindow", windowMaster);
+		map.put("DSID21MProgram", this);
+		Executions.createComponents("/ds/dsid/DSID21MBatDelete.zul", null, map);
+	}
+	
+	
+	// 批量刪除
+	@Listen("onClick =#btnCustomExr")
+	public void onClickbtnCustomExr(Event event) throws Exception{
+		final HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("parentWindow", windowMaster);
+		map.put("DSID21MProgram", this);
+		Executions.createComponents("/ds/dsid/DSID21MCustomExr.zul", null, map);
+	}
 	
 	@Override
 	protected Window getRootWindow() {
@@ -182,15 +208,53 @@ public class DSID21MProgram extends Master {
 		// TODO Auto-generated method stub
 		DSID21 entity = (DSID21) entityMaster;
 		txtModel_na.setValue(entity == null ? "" : entity.getMODEL_NA());
-		txtItems.setValue(entity == null ? null : entity.getITEMS());
-		txtGr_no.setValue(entity == null ? null : entity.getGR_NO());
+		txtItems.setValue(entity == null ? "" : entity.getITEMS());
+		txtGr_no.setValue(entity == null ? "" : entity.getGR_NO());
 		txtGr_na.setValue(entity == null ? "" : entity.getGR_NA());
 		txtColor.setValue(entity == null ? "" : entity.getCOLOR());
 		txtEl_no.setValue(entity == null ? "" : entity.getEL_NO());
 		txtEl_na.setValue(entity == null ? "" : entity.getEL_NA());
 		txtSize_fd.setValue(entity == null ? "" : entity.getSIZE_FD());
 		txtNote.setValue(entity == null ? "" : entity.getNOTE());
+		txtImport_date.setValue(entity == null ? null : entity.getIMPORT_DATE());
+		txtUp_user.setValue(entity == null ? "" : entity.getUP_USER());
+		txtUp_date.setValue(entity == null ? null : entity.getUP_DATE());
 		
+		if(entity == null || "".equals(entity)){
+			txtType.setValue("");
+		}else{
+
+			//System.out.println(" ----- 類型判斷 ！" + entity.getTYPE());
+			switch (entity.getTYPE()) {
+			case "0":
+				txtType.setValue("未設定"); 
+				break;
+			case "1":
+				txtType.setValue("前面片"); 
+				break;
+			case "2":
+				txtType.setValue("鞋帶");
+				break;
+			case "3":
+				txtType.setValue("前氣墊");
+				break;
+			case "4":
+				txtType.setValue("後氣墊");
+				break;
+			case "5":
+				txtType.setValue("港寶"); 
+				break;
+			case "6":
+				txtType.setValue("布標"); 
+				break;
+			case "7":
+				txtType.setValue("鞋帶");
+				break;
+			default:
+				txtType.setValue("/");
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -213,12 +277,13 @@ public class DSID21MProgram extends Master {
 	
 	private String AutoSeq() {
 		// TODO Auto-generated method stub
+		DSID21 entity = new DSID21();
 		Connection conn=Common.getDbConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String items = "";
 		
-		String sql = "SELECT LPAD(NVL(MAX(items),0)+1,4,'0')items  FROM  DSID21";
+		String sql = "SELECT LPAD(NVL(MAX(items),0)+1,4,'0')items FROM DSID21 where model_no = '"+entity.getMODEL_NA()+"'";
 		try {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
@@ -279,6 +344,8 @@ public class DSID21MProgram extends Master {
 		btnDelete.setDisabled(false);
 		btnSaveMaster.setDisabled(true);
 		btnCancelMaster.setDisabled(true);
+		btnBatdelete.setDisabled(false);
+		btnCustomExr.setDisabled(false);
 		
 		txtModel_na.setReadonly(true);
 		txtItems.setReadonly(true);
@@ -289,6 +356,10 @@ public class DSID21MProgram extends Master {
 		txtEl_na.setReadonly(true);
 		txtSize_fd.setReadonly(true);
 		txtNote.setReadonly(true);
+		txtType.setReadonly(true);
+		txtImport_date.setReadonly(true);
+		txtUp_user.setReadonly(true);
+		txtUp_date.setReadonly(true);
 
 	}
 	
@@ -309,6 +380,8 @@ public class DSID21MProgram extends Master {
 		btnDelete.setDisabled(true);
 		btnSaveMaster.setDisabled(false);
 		btnCancelMaster.setDisabled(false);
+		btnBatdelete.setDisabled(true);
+		btnCustomExr.setDisabled(true);
 		
 		txtModel_na.setReadonly(false);
 		txtItems.setReadonly(false);
@@ -319,6 +392,10 @@ public class DSID21MProgram extends Master {
 		txtEl_na.setReadonly(false);
 		txtSize_fd.setReadonly(false);
 		txtNote.setReadonly(false);
+		txtType.setReadonly(false);
+		txtImport_date.setReadonly(false);
+		txtUp_user.setReadonly(false);
+		txtUp_date.setReadonly(false);
 		
 	}
 }

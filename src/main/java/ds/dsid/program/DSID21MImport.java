@@ -91,7 +91,7 @@ public class DSID21MImport extends OpenWinCRUD{
 		//型體
 		//Model_na = txtMODEL_NA.getValue();
 		String MODEL_NA = "", GR_NO = "", GR_NA = "", COLOR = "", EL_NO = "", EL_NA = "", SIZE_FD = "", NOTE = "";
-		String ITEMS = "";
+		String ITEMS = "", TYPE = "";
 		
         DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 		HSSFFormulaEvaluator Formul = new HSSFFormulaEvaluator(wb);		
@@ -112,38 +112,40 @@ public class DSID21MImport extends OpenWinCRUD{
 					break;
 				}
 				
-				MODEL_NA = getCellValue(row.getCell(0));
+				MODEL_NA = getCellValue(row.getCell(0));	// 型體
 				ITEMS = getCellValue(row.getCell(1));
 				if(ITEMS == null || "".equals(ITEMS)){
-					ITEMS = String.valueOf(AutoSeq(MODEL_NA, conn));
+					ITEMS = String.valueOf(AutoSeq(MODEL_NA, conn));	// 序號
 				}
-				GR_NO = getCellValue(row.getCell(2));
-				GR_NA = getCellValue(row.getCell(3));
-				COLOR = getCellValue(row.getCell(4));
-				EL_NO = getCellValue(row.getCell(5));
-				EL_NA = getCellValue(row.getCell(6));
-				SIZE_FD = getCellValue(row.getCell(7));
-				NOTE = getCellValue(row.getCell(8));
+				TYPE  = getCellValue(row.getCell(2));		// 類型
+				GR_NO = getCellValue(row.getCell(3));		// 部位
+				GR_NA = getCellValue(row.getCell(4));		// 部位名稱
+				COLOR = getCellValue(row.getCell(5));		// 顏色
+				EL_NO = getCellValue(row.getCell(6));		// 材料編號
+				EL_NA = getCellValue(row.getCell(7));		// 材料名稱
+				SIZE_FD = getCellValue(row.getCell(8));		// 分段
+				NOTE = getCellValue(row.getCell(9));		// 備註
 				
 				/* System.out.println(" ----- 行數 : "+x+" --- 型體: " + MODEL_NA + " --- 編號: " + ITEMS + " --- 部位: " + GR_NO +
 				" --- 部位名稱: " + GR_NA + " --- 顏色: " + COLOR + " --- 材料編號: " + EL_NO + 
 				" --- 材料名稱: " + EL_NA + " --- Size分段: " + SIZE_FD + " --- 備註: " + NOTE);*/
-				System.err.println(" ----- items : " + ITEMS);
+				
 		
 				// 原有資料查詢
-				String selectsql = "select * from dsid21 where model_na = '"+MODEL_NA+"' and items = '"+ITEMS+"' and color = '"+COLOR+"' and el_no = '"+EL_NO+"'";
-				System.out.println(" ----- select sql : " + selectsql);
+				String selectsql = "select * from dsid21 where model_na = '"+MODEL_NA+"' and el_no = '"+EL_NO+"' and gr_no = '"+GR_NO+"' and color = '"+COLOR+"'";
+				System.out.println(" ----- 原有資料查詢 : " + selectsql);
 				try {
 					selectps = conn.prepareStatement(selectsql);
 					selectrs = selectps.executeQuery();
 					
 					if(selectrs.next()){ // 更新已存在的資料
-						if(MODEL_NA != null || !"".equals(MODEL_NA) && ITEMS != null || !"".equals(ITEMS)){
+						if(MODEL_NA != null || !"".equals(MODEL_NA) && GR_NO != null || !"".equals(GR_NO) && COLOR != null || !"".equals(COLOR)){
 							try {
-								String updatesql = "update dsid21 set gr_no = '"+GR_NO+"', gr_na = '"+GR_NA+"', color = '"+COLOR+"', el_no = '"+EL_NO+"', el_na = '"+EL_NA+"', size_fd = '"+SIZE_FD+"', note  = '"+NOTE+"', "
-										+ "up_user = '"+_userInfo.getAccount()+"', up_date = to_date('"+Format.format(new Date())+"','YYYY/MM/DD')"
-										+ "where model_na = '"+MODEL_NA+"' and items = '"+ITEMS+"'";
-								System.err.println(" ----- updatesel : " + updatesql);
+								String updatesql = "update dsid21 set type = '"+TYPE+"', gr_no = '"+GR_NO+"', gr_na = '"+GR_NA+"', color = '"+COLOR+"', el_no = '"+EL_NO+"', el_na = '"+EL_NA+"', size_fd = '"+SIZE_FD+"', note  = '"+NOTE+"', "
+										+ "import_date = to_date('"+Format.format(new Date())+"','YYYY/MM/DD'), up_user = '"+_userInfo.getAccount()+"', up_date = to_date('"+Format.format(new Date())+"','YYYY/MM/DD')"
+										+ "where model_na = '"+MODEL_NA+"' and el_no = '"+EL_NO+"' and gr_no = '"+GR_NO+"' and color = '"+COLOR+"'";
+								
+								System.err.println(" ----- update sel : " + updatesql);
 								updateps = conn.prepareStatement(updatesql);
 								updateps.executeUpdate();
 								updateps.close();
@@ -154,9 +156,9 @@ public class DSID21MImport extends OpenWinCRUD{
 						}
 					}else{ // 插入未存在的資料
 						try {
-							String insertsql = "insert into dsid21 (model_na, items, gr_no, gr_na,  color, el_no, el_na, size_fd, note, up_user, up_date) "
+							String insertsql = "insert into dsid21 (model_na, items, type, gr_no, gr_na,  color, el_no, el_na, size_fd, note, import_date, up_user, up_date) "
 									+ "values "
-									+ "('"+MODEL_NA+"', '"+ITEMS+"', '"+GR_NO+"',  '"+GR_NA+"', '"+COLOR+"', '"+EL_NO+"', '"+EL_NA+"', '"+SIZE_FD+"', '"+NOTE+"', '"+_userInfo.getAccount()+"', to_date('"+Format.format(new Date())+"','YYYY/MM/DD'))";
+									+ "('"+MODEL_NA+"', '"+ITEMS+"', '"+TYPE+"', '"+GR_NO+"',  '"+GR_NA+"', '"+COLOR+"', '"+EL_NO+"', '"+EL_NA+"', '"+SIZE_FD+"', '"+NOTE+"', to_date('"+Format.format(new Date())+"','YYYY/MM/DD'), '"+_userInfo.getAccount()+"', to_date('"+Format.format(new Date())+"','YYYY/MM/DD'))";
 							System.out.println(" ----- insert sql : "+ insertsql);
 						
 							insertps = conn.prepareStatement(insertsql);
@@ -176,6 +178,7 @@ public class DSID21MImport extends OpenWinCRUD{
 					Errmessage = "查詢原有資料失敗 !";
 					e.printStackTrace();
 				}
+				System.out.println(" --------------------------------------------------------------- ");
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -244,7 +247,7 @@ public class DSID21MImport extends OpenWinCRUD{
 		int seq = 0;
 		
 		String sql = "select LPAD(NVL(MAX(items),0)+1,4,'0') items from dsid21 where model_na = '"+model_na+"'";
-		System.out.println(" ----- Auto : " + sql);
+		//System.out.println(" ----- Auto : " + sql);
 		
 		try {
 			ps = conn.prepareStatement(sql);
