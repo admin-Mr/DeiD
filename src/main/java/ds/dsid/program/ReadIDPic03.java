@@ -69,7 +69,7 @@ public class ReadIDPic03 extends QueryWindow{
 	public void UpdataBar(){
 		
 		PreparedStatement ps = null;
-		Connection Conn = Common.getService1Conn();
+		Connection Conn = Common.getDB01Conn();
 		
 		String sql = "update dsid65 set is_repair = 'Y', repair_type = '"+Cho+"' where work_order_id = '"+Bar+"'" ;
 		System.out.println(" ----- Updata : " + sql);

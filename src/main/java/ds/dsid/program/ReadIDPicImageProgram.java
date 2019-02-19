@@ -66,7 +66,7 @@ public class ReadIDPicImageProgram extends COMM_Master {
 
 		masterComponentColumns.add(new ComponentColumn<String>(null, "UP_USER", _userInfo.getAccount(), null, null));
 		masterComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService1");
+		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
 		setCRUDService(CRUDService);
 
 	}
@@ -295,10 +295,10 @@ public class ReadIDPicImageProgram extends COMM_Master {
 
 	@Listen("onClick = #btnSaveMaster")
 	@Override
-	public boolean onClickbtnSaveMaster(Event event) throws Exception {
+	public boolean onClickbtnSaveMaster(Event event) {
 		
 		boolean isok = false;
-		Conn = Common.getService1Conn();
+		Conn = Common.getDB01Conn();
 		ResultSet insertrs = null;
 		PreparedStatement upDateps = null, inserps = null;
 		
@@ -340,9 +340,14 @@ public class ReadIDPicImageProgram extends COMM_Master {
 				Common.closeConnection(Conn);
 			}
 			super.executeQuery();
-			super.masterCancel(event);
+			try {
+				super.masterCancel(event);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Messagebox.show(Labels.getLabel("PUBLIC.MSG0080"), "Information", Messagebox.OK, Messagebox.INFORMATION);
-			return false;
+			return isok;
 		}
 		
 		String insertSql = "INSERT INTO DSID30_PIC(MODEL_NA, WORK_ORDER_ID, URL1, URL2, URL3, URL4, up_user, up_date)"
@@ -361,7 +366,12 @@ public class ReadIDPicImageProgram extends COMM_Master {
 		}
 
 		super.executeQuery();
-		super.masterCancel(event); // 取消新增或編輯, 回復瀏覽狀態
+		try {
+			super.masterCancel(event);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // 取消新增或編輯, 回復瀏覽狀態
 		Add = false;
 		MODEL_NA.setValue("");
 		WORK_ORDER_ID.setValue("");
@@ -370,7 +380,7 @@ public class ReadIDPicImageProgram extends COMM_Master {
 		URL3.setValue("");
 		URL4.setValue("");
 		Messagebox.show(Labels.getLabel("PUBLIC.MSG0081"), "Information", Messagebox.OK, Messagebox.INFORMATION);
-		return true;
+		return isok;
 	}
 
 	@Listen("onClick = #btnCreateMaster")
