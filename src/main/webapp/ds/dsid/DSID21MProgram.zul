@@ -23,6 +23,7 @@
 				<button id="btnCancelMaster" sclass="btn-danger" iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}" mold="trendy" disabled="true" />
 				<!-- 刪除 -->	
  				<button id="btnDelete" sclass="btn-danger" iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}" mold="trendy" />
+ 				<button id="btnBatdelete" sclass="btn-default" label="批量刪除" mold="trendy" /> 
 				<!-- 匯入 -->
 				<button id="btnImport" sclass="btn-default" iconSclass="mdi mdi-watch-import" label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" /> 
 				<!-- 匯出 -->
@@ -34,7 +35,7 @@
 		<groupbox id="filterMaster" width="100%" sclass="main z-demo-config" open="false">
 			<caption id="filter" label="${labels.COMM.FILTER}" sclass="mdi mdi-filter" style="font-size:10pt" />
 			<hlayout>		
-				<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitlelabel" />
+				<label value="型體" sclass="sectionTitlelabel" />
 				<textbox id="Query_Model_na" mold="rounded" width="200px" />
 				<!-- 做成查詢窗口 -->
 			</hlayout>
@@ -47,7 +48,7 @@
 						<vlayout width="100%" id="grid1" >
 							<hlayout width="100%" height="28px" >
 							<!-- 窗口 -->
-								<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
+								<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>								
 								<textbox id="txtModel_na" mold="rounded" width="300px" />		
 								<label style="display:inline-block;width:30px;"/>	
 								<label value="序號" sclass="sectionTitleLabel" style="display:inline-block;width:30px;"/>								
@@ -79,6 +80,20 @@
 								<textbox id="txtNote"  mold="rounded" width="100px" readonly="true"/>	
 								
 							</hlayout>
+							<hlayout>
+								<label value="類型" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<textbox id="txtType"  mold="rounded" width="100px" readonly="true"/>
+									<label style="display:inline-block;width:30px;"/>													
+								<label value="匯入日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<datebox id="txtImport_date"  mold="rounded" width="100px" readonly="true"/>	
+						 			<label style="display:inline-block;width:30px;"/>	
+						 		<label value="更新人員" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<textbox id="txtUp_user"  mold="rounded" width="65px" readonly="true"/>	
+									<label style="display:inline-block;width:30px;"/>	
+						 		<label value="更新日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+								<datebox id="txtUp_date"  mold="rounded" width="100px" readonly="true"/>
+								
+							</hlayout>
 						</vlayout>		
 					</div>
 					<div>
@@ -86,22 +101,28 @@
 							<listhead sizable="true">
  								<listheader width="20%" label="型體" />							
 								<listheader width="5%" label="序號" />
+								<listheader label="部位" />
+								<listheader label="部位名称" />
 								<listheader width="10%" label="材料編號" />
 								<listheader label="Size分段" />
 								<listheader width="10%" label="顏色" />	
 								<listheader label="備註" />
+								<listheader width="7%" label="匯入日期"/>
 								<listheader width="5%" label="更新人員" />	
-								<listheader width="8%" label="更新日期" />	 																			
+								<listheader width="7%" label="更新日期" />	 																			
 							</listhead>
 
 							<template name="model">
 								<listitem forward="onDoubleClick=onDoubleClickedPersonItem">
  									<listcell label="${each.MODEL_NA}"/>				
-									<listcell label="${each.ITEMS}"/>	
+									<listcell label="${each.ITEMS}"/>
+									<listcell label="${each.GR_NO}"/>
+									<listcell label="${each.GR_NA}"/>
 									<listcell label="${each.EL_NO}"/>
 									<listcell label="${each.SIZE_FD}"/>	
 									<listcell label="${each.COLOR}"/>					
-									<listcell label="${each.NOTE}" />	
+									<listcell label="${each.NOTE}" />
+									<listcell label="${each.IMPORT_DATE}"/>	
 									<listcell label="${each.UP_USER}"/>
 									<listcell label="${each.UP_DATE}"/>													
 								</listitem>

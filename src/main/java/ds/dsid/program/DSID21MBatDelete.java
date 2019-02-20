@@ -230,8 +230,7 @@ public class DSID21MBatDelete extends OpenWinCRUD{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
+	
 	@Override
 	protected void addDetailPrograms() {
 		// TODO Auto-generated method stub

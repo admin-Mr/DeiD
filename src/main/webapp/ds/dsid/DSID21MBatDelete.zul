@@ -1,0 +1,30 @@
+<zk>
+	<window border="normal" id="windowMaster" title="批量刪除"
+		apply="ds.dsid.program.DSID21MBatDelete" closable="true" mode= "modal" width="500px" height="180px">
+
+			<div sclass="breadcrumbs" height="100%">
+				
+				<hlayout width="100%" height="35px" >
+ 					<label value="型    體" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<listbox id ="List_Model_na" mold="select" rows="1" width="200px" />
+					<button id="btnQuery1" sclass="btn-default" label="查詢" mold="trendy"/> 		
+				</hlayout>				
+				
+				<hlayout width="100%" height="35px" >
+					<label value="匯入日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
+					<datebox id="Import_Date1"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
+					<label value="　-　" />
+					<datebox id="Import_Date2"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" onCreate="self.value = new Date()"/>
+				</hlayout>
+				
+				<!-- <hlayout width="100%" height="35px" >
+					<label value="注:　刪除資料后將無法恢復, 操作前請確認資料選擇正確 !!" style="display:inline-block;width:400px;color:#fd1d29;font-size:12px;"/>
+				</hlayout> -->
+				
+				<hlayout>
+					<button id="iMportDelete" sclass="btn-default" label="確認刪除" mold="trendy"/> 
+				</hlayout>
+				
+			</div>
+	</window>
+</zk>

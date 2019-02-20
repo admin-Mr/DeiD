@@ -30,7 +30,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.servlet.ServletOutputStream;
-//import javax.servlet.annotation.WebServlet;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -1687,7 +1687,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		
 		int Num=0;
 
-		String 	sql="SELECT COUNT(*) AMOUNT FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD') between '2019/01/01' and '2019/01/31' AND MODEL_NA LIKE '%PEGASUS+35 ESS SU18 ID%' AND GROUP8='"+nGroup+"' AND TO_NUMBER(TOOLING_SIZE) BETWEEN 3.0 AND 9.0";	
+		String 	sql="SELECT COUNT(*) AMOUNT FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD') between '"+ORDER_DATE1+"' and '"+ORDER_DATE2+"' AND MODEL_NA LIKE '%PEGASUS+35 ESS SU18 ID%' AND GROUP8='"+nGroup+"' AND TO_NUMBER(TOOLING_SIZE) BETWEEN 3.0 AND 9.0";	
 //		System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
