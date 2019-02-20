@@ -1,7 +1,6 @@
 <zk>
 	<window border="normal" id="windowMaster" title="配色分析報表"
-		apply="ds.dsid.program.DSID20MRExcel" closable="true" mode="modal"
-		width="500px" height="250px">
+		apply="ds.dsid.program.DSID20MRExcel" >
 
 		<div sclass="breadcrumbs" height="100%">
 

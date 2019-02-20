@@ -1549,7 +1549,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 	/**
 	 * Group1 - Group8 合併統計
 	 */
-	private Map<String, Double> SetGroup1_8(HSSFSheet sheet, Connection conn, int rowNum, HSSFCellStyle cellStype) {
+	private void SetGroup1_8(HSSFSheet sheet, Connection conn, int rowNum, HSSFCellStyle cellStype) {
 		// TODO Auto-generated method stub
 
 		HSSFRow Row = sheet.createRow(0);
@@ -1566,43 +1566,15 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		cell.setCellType(1);
 		cell.setCellValue("Group1 - Group8 合併統計");
 		cell.setCellStyle(cellStype);
-		sheet.addMergedRegion(new Region((short) iRow, (short) 0, (short) iRow, (short) 2));
+		sheet.addMergedRegion(new Region((short) iRow, (short) 0, (short) iRow, (short) 3));
 
-		for (int i = 1; i <= 2; i++) {
+		for (int i = 1; i <= 3; i++) {
 			cell = Row.createCell((short) i);
 			cell.setCellType(1);
 			cell.setCellStyle(cellStype);
 		}
 		
-		cell = Row.createCell((short) 3);
-		cell.setCellType(1);
-		cell.setCellValue("3 - 9#");
-		cell.setCellStyle(cellStype);
-		sheet.addMergedRegion(new Region((short) iRow, (short) 3, (short) iRow, (short) 4));
-
-		cell = Row.createCell((short) 4);
-		cell.setCellType(1);
-		cell.setCellStyle(cellStype);
-		
-		cell = Row.createCell((short) 5);
-		cell.setCellType(1);
-		cell.setCellValue("9.5 - 15.5#");
-		cell.setCellStyle(cellStype);
-		sheet.addMergedRegion(new Region((short) iRow, (short) 5, (short) iRow, (short) 6));
-
-		cell = Row.createCell((short) 6);
-		cell.setCellType(1);
-		cell.setCellStyle(cellStype);
-
-
 		iRow++;
-
-		/*
-		 * String sql = "SELECT COUNT(*) AMOUNT ,sGROUP8 FROM (" +
-		 * "SELECT GROUP8 sGROUP8 FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD') BETWEEN '"
-		 * +ORDER_DATE1+"' AND '"+ORDER_DATE2+"' AND MODEL_NA LIKE '%"+MODEL_NO+
-		 * "%'" + ") GROUP BY sGROUP8 ORDER BY sGROUP8";
-		 */
 
 		String sql = "SELECT COUNT(*) AMOUNT,NGROUP FROM ("
 				+ "SELECT CASE LENGTH(GROUP8) WHEN 7 THEN GROUP8 ELSE SUBSTR(GROUP8,0,10) END NGROUP " + "FROM DSID01 "
@@ -1614,69 +1586,110 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		try {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
-			int i = 0;
 			while (rs.next()) {
 
 				String nGroup = rs.getString("NGROUP");
 				Double Amount = rs.getDouble("AMOUNT");
-
-				// System.err.println(" ----- group1 ~ 8 " + i++);
-				Row = sheet.createRow(iRow);
-				cell = Row.createCell((short) 0);
-				cell.setCellType(1);
-				cell.setCellValue(nGroup);
-				cell.setCellStyle(cellStype);
-
-				cell = Row.createCell((short) 1);
-				cell.setCellType(1);
-				cell.setCellValue(Amount);
-				cell.setCellStyle(cellStype);
-
-				cell = Row.createCell((short) 2);
-				cell.setCellType(1);
-				cell.setCellValue(Amount / Odno);
-				cell.setCellStyle(CellStype_Baifb);
-
-				if (!nGroup.contains("圖形")) {
+				
+				if (nGroup.contains("圖形")) {
 					
-					int FdsizeNum=getNum(nGroup,conn);//3-9# 数量
+					Row = sheet.createRow(iRow);
 					
+					cell = Row.createCell((short) 0);
+					cell.setCellType(1);
+					cell.setCellValue(nGroup);
+					cell.setCellStyle(cellStype);
+
+					cell = Row.createCell((short) 2);
+					cell.setCellType(1);
+					cell.setCellValue(Amount);
+					cell.setCellStyle(cellStype);
+
 					cell = Row.createCell((short) 3);
 					cell.setCellType(1);
-					cell.setCellValue(FdsizeNum);
-					cell.setCellStyle(cellStype);
-
-					cell = Row.createCell((short) 4);
-					cell.setCellType(1);
-					cell.setCellValue(Double.valueOf(FdsizeNum)/Odno);
+					cell.setCellValue(Amount / Odno);
 					cell.setCellStyle(CellStype_Baifb);
-
-					cell = Row.createCell((short) 5);
-					cell.setCellType(1);
-					cell.setCellValue(Amount-FdsizeNum);
-					cell.setCellStyle(cellStype);
-
-					cell = Row.createCell((short) 6);
-					cell.setCellType(1);
-					cell.setCellValue((Amount-FdsizeNum)/Odno);
-					cell.setCellStyle(CellStype_Baifb);
+					
+					iRow++;
 				}
-
-				iRow++;
-
-				// System.out.println(" ----- Amounts : " + Amount +" \n " +
-				// Odno);
-				double Amounts = Double.valueOf(Format5.format(Amount / Odno));
-				dataMap.put(nGroup, Amounts);
 			}
-
+		
 			rs.close();
 			ps.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return dataMap;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				String nGroup = rs.getString("NGROUP");
+				Double Amount = rs.getDouble("AMOUNT");
+				
+				if (!nGroup.contains("圖形")) {
+					Row = sheet.createRow(iRow);
+					
+					cell = Row.createCell((short) 0);
+					cell.setCellType(1);
+					cell.setCellValue(nGroup);
+					cell.setCellStyle(cellStype);
+					sheet.addMergedRegion(new Region((short) iRow, (short) 0, (short) iRow+1, (short) 0));
+
+					
+					cell = Row.createCell((short) 1);
+					cell.setCellType(1);
+					cell.setCellValue("3-9#");
+					cell.setCellStyle(cellStype);
+					
+					int FdsizeNum=getNum(nGroup,conn);//3-9# 数量
+					
+					cell = Row.createCell((short) 2);
+					cell.setCellType(1);
+					cell.setCellValue(FdsizeNum);
+					cell.setCellStyle(cellStype);
+
+					cell = Row.createCell((short) 3);
+					cell.setCellType(1);
+					cell.setCellValue(Double.valueOf(FdsizeNum)/Odno);
+					cell.setCellStyle(CellStype_Baifb);
+					iRow++;
+					
+					Row = sheet.createRow(iRow);
+					
+					cell = Row.createCell((short) 0);
+					cell.setCellType(1);
+					cell.setCellStyle(cellStype);
+					
+					cell = Row.createCell((short) 1);
+					cell.setCellType(1);
+					cell.setCellValue("9.5-15.5#");
+					cell.setCellStyle(cellStype);
+					
+					cell = Row.createCell((short) 2);
+					cell.setCellType(1);
+					cell.setCellValue(Amount-FdsizeNum);
+					cell.setCellStyle(cellStype);
+
+					cell = Row.createCell((short) 3);
+					cell.setCellType(1);
+					cell.setCellValue((Amount-FdsizeNum)/Odno);
+					cell.setCellStyle(CellStype_Baifb);
+					
+					iRow++;
+			
+			}
+		}
+		
+		rs.close();
+		ps.close();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		
+//		return dataMap;
 	}
 
 	private int getNum(String nGroup, Connection conn) {
