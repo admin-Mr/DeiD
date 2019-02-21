@@ -98,7 +98,7 @@ public class DSID23_1RTask  {
 		}
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");		
+			
 		
 		String 	sql="SELECT DISTINCT MODEL_NA ,COUNT(*) COU FROM ( SELECT CASE WHEN MODEL_NA LIKE 'W%' THEN SUBSTR(MODEL_NA,3) ELSE MODEL_NA END AS MODEL_NA FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+START+"' "+ExSql+" )  GROUP BY MODEL_NA";
 		System.out.println(">>>>>"+sql);
@@ -169,6 +169,7 @@ public class DSID23_1RTask  {
 		sheet1.setColumnWidth(9, 10*256);
 		sheet1.setColumnWidth(10, 10*256);
 		sheet1.setColumnWidth(11, 10*256);	
+		sheet1.setColumnWidth(12, 15*256);	
 	}
 
 
@@ -274,6 +275,15 @@ public class DSID23_1RTask  {
 					cell.setCellType(1);
 					cell.setCellStyle(style1);
 					cell.setCellValue(zt_qty);
+					
+					cell = row.createCell(12);
+					cell.setCellType(1);
+					cell.setCellStyle(style1);
+					if(zt_qty>0){	
+						cell.setCellValue(getbuyDate(rs2.getString("EL_NO"),MODEL_NA,Conn));
+					}else{
+						cell.setCellValue("");
+					}				
 								
 					rowNum++;
 			}
@@ -290,6 +300,40 @@ public class DSID23_1RTask  {
 			}
 		}
 
+	}
+	
+	private static String getbuyDate(String el_no, String MODEL_NA, Connection Conn) throws SQLException {
+		// TODO Auto-generated method stub
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String PO_REDATE="";
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");	
+		
+		String 	sql="SELECT MIN(B.PO_REDATE) PO_REDATE FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n" +
+				"AND B.PO_CLOSE!='T' AND PO_QTY!=0 AND EL_NO='"+el_no+"' AND STOCK_MARK='"+MODEL_NA+"' AND B.PO_REDATE IS NOT NULL";
+	
+//		System.out.println(">>>>>"+sql);
+		try {
+			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = ps.executeQuery();	
+			if(rs.next()){
+				PO_REDATE=format.format(rs.getDate("PO_REDATE"));
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(rs!=null){
+				rs.close();
+			}
+			if(ps!=null){
+				ps.close();
+			}
+		}
+
+		return PO_REDATE;
 	}
 	
 	private static Double getbuy(String el_no, String MODEL_NA, Connection conn) throws SQLException {
@@ -516,6 +560,11 @@ public class DSID23_1RTask  {
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
 		cell.setCellValue("在途數量");
+		
+		cell = row.createCell(12);
+		cell.setCellType(1);
+		cell.setCellStyle(style1);
+		cell.setCellValue("最早到庫時間");
 		
 	}
 
