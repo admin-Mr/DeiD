@@ -203,7 +203,7 @@ public class DSID13RProgram extends OpenWinCRUD{
 	}
 
 	@Override
-	protected boolean doCustomSave() {
+	protected boolean doCustomSave(Connection Conn) {
 		// TODO Auto-generated method stub
 		return false;
 	}
