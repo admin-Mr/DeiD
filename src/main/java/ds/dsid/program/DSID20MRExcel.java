@@ -30,7 +30,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.servlet.ServletOutputStream;
-import javax.servlet.annotation.WebServlet;
+//import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -50,6 +50,7 @@ import org.zkoss.poi.ss.usermodel.CellStyle;
 import org.zkoss.poi.ss.usermodel.Workbook;
 import org.zkoss.poi.util.IOUtils;
 import org.zkoss.poi.xssf.usermodel.XSSFWorkbook;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -157,11 +158,11 @@ public class DSID20MRExcel extends OpenWinCRUD {
 //		ORDER_DATE2 = "2019/01/31";
 
 		if (GROUP_NA == null || "".equals(GROUP_NA)) {
-			Messagebox.show("鞋帶部位信息不能為空, 默認值為Group4, 其他情況可修改!!");
+			Messagebox.show(Labels.getLabel("DSID.MSG0067"));
 			return;
 		}
 		if (MODEL_NO == null || "".equals(MODEL_NO)) {
-			Messagebox.show("必須填寫型體名稱");
+			Messagebox.show(Labels.getLabel("DSID.MSG0068"));
 			return;
 		}
 
@@ -172,10 +173,10 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		HSSFWorkbook wb = new HSSFWorkbook();
 
-		HSSFSheet sheet1 = wb.createSheet("前面片統計");
-		HSSFSheet sheet2 = wb.createSheet("ToolingSize & 鞋帶統計");
-		HSSFSheet sheet = wb.createSheet("Group統計");
-		HSSFSheet sheet3 = wb.createSheet("氣墊&港寶&布標");
+		HSSFSheet sheet1 = wb.createSheet(Labels.getLabel("DSID.MSG0069"));
+		HSSFSheet sheet2 = wb.createSheet(Labels.getLabel("DSID.MSG0070"));
+		HSSFSheet sheet = wb.createSheet(Labels.getLabel("DSID.MSG0071"));
+		HSSFSheet sheet3 = wb.createSheet(Labels.getLabel("DSID.MSG0072"));
 
 		// 字體
 		// HSSFFont font = wb.createFont();
@@ -283,7 +284,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 			} else {
 
-				Messagebox.show("訂單數 : " + Odno + " . 導出結束 ! \n 請核查型體名稱或日期 !");
+				Messagebox.show(Labels.getLabel("DSID.MSG0073")+" : " + Odno + " . "+Labels.getLabel("DSID.MSG0074")+" ! \n "+Labels.getLabel("DSID.MSG0075")+" !");
 
 			}
 
@@ -336,7 +337,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell1 = row1.createCell((short) 7);
 		cell1.setCellType(1);
-		cell1.setCellValue("型體");
+		cell1.setCellValue(Labels.getLabel("DSID01M.MODEL_NA"));
 		cell1.setCellStyle(CellStype_10C);
 
 		cell1 = row1.createCell((short) 8);
@@ -347,7 +348,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell1 = row1.createCell((short) 17);
 		cell1.setCellType(1);
-		cell1.setCellValue("日期");
+		cell1.setCellValue(Labels.getLabel("COMM.DATE"));
 		cell1.setCellStyle(CellStype_10C);
 
 		cell1 = row1.createCell((short) 18);
@@ -362,7 +363,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		// 小標題
 		cell1 = row1.createCell((short) 0);
 		cell1.setCellType(1);
-		cell1.setCellValue("前面片/鞋身/鞋舌上層/鞋舌中層");
+		cell1.setCellValue(Labels.getLabel("DSID.MSG0082")+"/"+Labels.getLabel("DSID.MSG0083")+"/"+Labels.getLabel("DSID.MSG0084")+"/"+Labels.getLabel("DSID.MSG0085"));
 		cell1.setCellStyle(CellStype_10C);
 		sheet1.setColumnWidth((short) 0, (short) (16.9 * 260));
 
@@ -379,7 +380,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell1 = row1.createCell((short) 27);
 		cell1.setCellType(1);
-		cell1.setCellValue("總計結果");
+		cell1.setCellValue(Labels.getLabel("DSID.MSG0077"));
 		cell1.setCellStyle(CellStype_10C);
 		sheet1.setColumnWidth((short) 27, (short) (9.5 * 260));
 
@@ -436,7 +437,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 				ps3.close();
 				rs3.close();
 			} catch (SQLException e) {
-				Messagebox.show("右側總計結果失敗！！！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0078"));
 				e.printStackTrace();
 			}
 
@@ -477,7 +478,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 				ps.close();
 				rs.close();
 			} catch (SQLException e) {
-				Messagebox.show("資料導出錯誤！！！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0052"));
 				e.printStackTrace();
 			}
 		}
@@ -486,7 +487,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell1 = row1.createCell((short) 0);
 		cell1.setCellType(1);
-		cell1.setCellValue("總計結果");
+		cell1.setCellValue(Labels.getLabel("DSID.MSG0077"));
 		cell1.setCellStyle(CellStype_10C);
 
 		// 空單元格邊框打印
@@ -519,7 +520,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 			ps2.close();
 			rs2.close();
 		} catch (SQLException e) {
-			Messagebox.show("底部總計結果失敗！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0079"));
 			e.printStackTrace();
 		}
 
@@ -592,12 +593,12 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		cell1 = row1.createCell((short) 0);
 		cell1.setCellStyle(CellStype_10C);
 		cell1.setCellType(1);
-		cell1.setCellValue("配色分析百分比");
+		cell1.setCellValue(Labels.getLabel("DSID.MSG0080"));
 
 		cell1 = row1.createCell((short) 1);
 		cell1.setCellStyle(CellStype_10C);
 		cell1.setCellType(1);
-		cell1.setCellValue("總數量:");
+		cell1.setCellValue(Labels.getLabel("DSID.MSG0081")+":");
 		sheet1.addMergedRegion(new Region((short) rowNum, (short) 1, (short) rowNum, (short) 2));
 
 		cell1 = row1.createCell((short) 2);
@@ -616,7 +617,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		cell1 = row1.createCell((short) iCell);
 		cell1.setCellStyle(CellStype_10C);
 		cell1.setCellType(1);
-		cell1.setCellValue("顏色名稱");
+		cell1.setCellValue(Labels.getLabel("DSID.MSG0076"));
 		iCell++;
 
 		Points = "前面片";
@@ -834,7 +835,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 				ps.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				Errmessage = "前面片百分比, 轉印顏色計算失敗! ";
+				Errmessage = Labels.getLabel("DSID.MSG0086");
 				e.printStackTrace();
 			}
 		}
@@ -870,7 +871,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell2 = row2.createCell((short) 0);
 		cell2.setCellType(1);
-		cell2.setCellValue("型體");
+		cell2.setCellValue(Labels.getLabel("DSID01M.MODEL_NA"));
 		cell2.setCellStyle(CellStype_10C);
 
 		for (int i = 1; i < 10; i++) { // 空單元格打印
@@ -913,7 +914,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell2 = row2.createCell((short) 27);
 		cell2.setCellType(1);
-		cell2.setCellValue("統計結果");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0087"));
 		cell2.setCellStyle(CellStype_10C);
 		sheet2.setColumnWidth((short) 27, (short) (9.8 * 260));
 
@@ -922,7 +923,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell2 = row2.createCell((short) 0);
 		cell2.setCellType(1);
-		cell2.setCellValue("統計結果");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0087"));
 		cell2.setCellStyle(CellStype_10C);
 
 		for (Double s = 3.0; s <= 15.5; s += 0.5) {
@@ -970,7 +971,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-				Messagebox.show("第二頁錯誤！！！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0088"));
 			}
 			Tag2++;
 		}
@@ -999,12 +1000,12 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell2 = row2.createCell((short) 0);
 		cell2.setCellType(1);
-		cell2.setCellValue("小計 - 數量");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0089"));
 		cell2.setCellStyle(CellStype_10C);
 
 		cell2 = row2.createCell((short) 1);
 		cell2.setCellType(1);
-		cell2.setCellValue("左腳碼數");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0090"));
 		cell2.setCellStyle(CellStype_10C);
 
 		rowNum++;
@@ -1012,7 +1013,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		row2.setHeightInPoints(30); // 行高設定
 		cell2 = row2.createCell((short) 0);
 		cell2.setCellType(1);
-		cell2.setCellValue("配色 | 尺碼");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0091"));
 		cell2.setCellStyle(CellStype_10C);
 
 		int j = 1;
@@ -1027,7 +1028,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		cell2 = row2.createCell((short) 27);
 		cell2.setCellType(1);
-		cell2.setCellValue("統計結果");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0087"));
 		cell2.setCellStyle(CellStype_10C);
 
 		rowNum++;
@@ -1104,7 +1105,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		row2 = sheet2.createRow(rowNum);
 		cell2 = row2.createCell((short) 0);
 		cell2.setCellType(1);
-		cell2.setCellValue("統計結果");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0087"));
 		cell2.setCellStyle(CellStype_10C);
 
 		int k = 0;
@@ -1195,13 +1196,13 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		}
 
 		cell2 = row2.createCell((short) 0);
-		cell2.setCellValue("鞋帶配色分段統計");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0092"));
 		cell2.setCellType(1);
 		cell2.setCellStyle(CellStype_10C);
 		sheet2.addMergedRegion(new Region((short) rowNum, (short) 0, (short) rowNum, (short) 1));
 
 		cell2 = row2.createCell((short) 2);
-		cell2.setCellValue("總數量:");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0081")+":");
 		cell2.setCellType(1);
 		cell2.setCellStyle(CellStype_10C);
 		sheet2.addMergedRegion(new Region((short) rowNum, (short) 2, (short) rowNum, (short) 3));
@@ -1215,7 +1216,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		row2 = sheet2.createRow(rowNum);
 
 		cell2 = row2.createCell((short) 0);
-		cell2.setCellValue("配色名稱");
+		cell2.setCellValue(Labels.getLabel("DSID.MSG0093"));
 		cell2.setCellType(1);
 		cell2.setCellStyle(CellStype_10C);
 
@@ -1367,7 +1368,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		row = sheet.createRow(rowNum);
 
 		cell = row.createCell((short) iCell);
-		cell.setCellValue("Group 部位配色分析");
+		cell.setCellValue("Group "+Labels.getLabel("DSID.MSG0094"));
 		cell.setCellType(1);
 		cell.setCellStyle(CellStype);
 		// sheet.addMergedRegion(new Region((short)rowNum, (short)iCell,
@@ -1420,7 +1421,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 						cell = row.createCell((short) iCell);
 						cell.setCellType(1);
-						cell.setCellValue("Group" + i + "-總接單:");
+						cell.setCellValue("Group" + i + "-"+Labels.getLabel("DSID.MSG0095")+":");
 						cell.setCellStyle(CellStype);
 						sheet.addMergedRegion(new Region((short) (rowNum + 1), (short) iCell, (short) (rowNum + 1),
 								(short) (iCell + 1)));
@@ -1439,17 +1440,17 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 						cell = row.createCell((short) iCell);
 						cell.setCellType(1);
-						cell.setCellValue("顏色");
+						cell.setCellValue(Labels.getLabel("DSID.MSG0096"));
 						cell.setCellStyle(CellStype);
 
 						cell = row.createCell((short) (iCell + 1));
 						cell.setCellType(1);
-						cell.setCellValue("數量");
+						cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 						cell.setCellStyle(CellStype);
 
 						cell = row.createCell((short) (iCell + 2));
 						cell.setCellType(1);
-						cell.setCellValue("百分比");
+						cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 						cell.setCellStyle(CellStype);
 
 						String subStr = null;
@@ -1564,7 +1565,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		Row = sheet.createRow(iRow);
 		cell = Row.createCell((short) 0);
 		cell.setCellType(1);
-		cell.setCellValue("Group1 - Group8 合併統計");
+		cell.setCellValue("Group1 - Group8 "+Labels.getLabel("DSID.MSG0098"));
 		cell.setCellStyle(cellStype);
 		sheet.addMergedRegion(new Region((short) iRow, (short) 0, (short) iRow, (short) 3));
 
@@ -1760,7 +1761,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		RowNew = sheet3.getRow(iRow);
 		Cell = RowNew.createCell((short) iCell);
 		Cell.setCellType(1);
-		Cell.setCellValue("部位名稱");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 		Cell.setCellStyle(CellStype);
 		sheet3.addMergedRegion(new Region((short) iRow, (short) iCell, (short) iRow, (short) (iCell + 2)));
 
@@ -1774,12 +1775,12 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		Cell = RowNew.createCell((short) (iCell + 3));
 		Cell.setCellType(1);
-		Cell.setCellValue("數量");
+		Cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 		Cell.setCellStyle(CellStype);
 
 		Cell = RowNew.createCell((short) (iCell + 4));
 		Cell.setCellType(1);
-		Cell.setCellValue("百分比");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 		Cell.setCellStyle(CellStype);
 
 		/* 前掌氣墊 */
@@ -1787,7 +1788,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		for (Entry<String, Integer> Entry : Before.entrySet()) {
 
 			String[] Cent = Entry.getKey().split(",");
-			String Enname = "前掌氣墊#Ms " + Cent[0] + "-" + Cent[Cent.length - 1];
+			String Enname = Labels.getLabel("DSID.MSG0100")+"#Ms " + Cent[0] + "-" + Cent[Cent.length - 1];
 
 			// System.out.println("Enname : " + Enname + " ----- Entry.getKey()
 			// : " + Entry.getKey() + " ----- Entry.getValue() : " +
@@ -1829,7 +1830,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		RowNew = sheet3.getRow(iRow);
 		Cell = RowNew.createCell((short) iCell + 7);
 		Cell.setCellType(1);
-		Cell.setCellValue("部位名稱");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 		Cell.setCellStyle(CellStype);
 		sheet3.addMergedRegion(new Region((short) iRow, (short) (iCell + 7), (short) iRow, (short) (iCell + 9)));
 
@@ -1843,19 +1844,19 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		Cell = RowNew.createCell((short) (iCell + 10));
 		Cell.setCellType(1);
-		Cell.setCellValue("數量");
+		Cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 		Cell.setCellStyle(CellStype);
 
 		Cell = RowNew.createCell((short) (iCell + 11));
 		Cell.setCellType(1);
-		Cell.setCellValue("百分比");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 		Cell.setCellStyle(CellStype);
 
 		JiRow = 1;
 		for (Entry<String, Integer> Entry : After.entrySet()) {
 
 			String[] Cent = Entry.getKey().split(",");
-			String Enname = "後掌氣墊#Ms " + Cent[0] + "-" + Cent[Cent.length - 1];
+			String Enname = Labels.getLabel("DSID.MSG0101")+"#Ms " + Cent[0] + "-" + Cent[Cent.length - 1];
 
 			// System.out.println("Enname : " + Enname + " ----- Entry.getKey()
 			// : " + Entry.getKey() + " ----- Entry.getValue() : " +
@@ -1896,7 +1897,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		RowNew = sheet3.getRow(iRow);
 		Cell = RowNew.createCell((short) iCell + 14);
 		Cell.setCellType(1);
-		Cell.setCellValue("部位名稱");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 		Cell.setCellStyle(CellStype);
 		sheet3.addMergedRegion(new Region((short) iRow, (short) (iCell + 14), (short) iRow, (short) (iCell + 16)));
 
@@ -1910,19 +1911,19 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		Cell = RowNew.createCell((short) (iCell + 17));
 		Cell.setCellType(1);
-		Cell.setCellValue("數量");
+		Cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 		Cell.setCellStyle(CellStype);
 
 		Cell = RowNew.createCell((short) (iCell + 18));
 		Cell.setCellType(1);
-		Cell.setCellValue("百分比");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 		Cell.setCellStyle(CellStype);
 
 		JiRow = 1;
 		for (Entry<String, Integer> Entry : Port.entrySet()) {
 
 			String[] Cent = Entry.getKey().split(",");
-			String Enname = "港寶#Ms " + Cent[0] + "-" + Cent[Cent.length - 1];
+			String Enname = Labels.getLabel("DSID.MSG0102")+"#Ms " + Cent[0] + "-" + Cent[Cent.length - 1];
 			// System.out.println("Enname : " + Enname + " ----- Entry.getKey()
 			// : " + Entry.getKey() + " ----- Entry.getValue() : " +
 			// Entry.getValue());
@@ -1963,7 +1964,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		RowNew = sheet3.getRow(iRow + 15);
 		Cell = RowNew.createCell((short) iCell);
 		Cell.setCellType(1);
-		Cell.setCellValue("部位名稱");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 		Cell.setCellStyle(CellStype);
 		sheet3.addMergedRegion(
 				new Region((short) (iRow + 15), (short) iCell, (short) (iRow + 15), (short) (iCell + 2)));
@@ -1978,19 +1979,19 @@ public class DSID20MRExcel extends OpenWinCRUD {
 
 		Cell = RowNew.createCell((short) (iCell + 3));
 		Cell.setCellType(1);
-		Cell.setCellValue("數量");
+		Cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 		Cell.setCellStyle(CellStype);
 
 		Cell = RowNew.createCell((short) (iCell + 4));
 		Cell.setCellType(1);
-		Cell.setCellValue("百分比");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 		Cell.setCellStyle(CellStype);
 
 		JiRow = 16;
 		for (Entry<String, Integer> Entry : Cloth.entrySet()) {
 
 			String[] Cent = Entry.getKey().split(",");
-			String Enname = "布標#Ms " + Cent[0] + "-" + Cent[Cent.length - 1];
+			String Enname = Labels.getLabel("DSID.MSG0103")+"#Ms " + Cent[0] + "-" + Cent[Cent.length - 1];
 			// System.out.println(" 布標 Enname : " + Enname + " -----
 			// Entry.getKey() : " + Entry.getKey() + " ----- Entry.getValue() :
 			// " + Entry.getValue());
@@ -2060,7 +2061,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		Cell = RowNew.createCell((short) 0);
 		Cell.setCellStyle(CellStype_10C);
 		Cell.setCellType(1);
-		Cell.setCellValue("鞋舌布標分色統計");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0104"));
 		sheet3.addMergedRegion(new Region((short) iRow, (short) 0, (short) iRow, (short) 2));
 
 		Cell = RowNew.createCell((short) 1);
@@ -2077,7 +2078,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		Cell = RowNew.createCell((short) 0);
 		Cell.setCellStyle(CellStype_10C);
 		Cell.setCellType(1);
-		Cell.setCellValue("配色名稱");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0093"));
 
 		// 尺碼表頭打印
 		int sCell = 1;
@@ -2245,7 +2246,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 							Cell = Row.createCell((short) iCell);
 							Cell.setCellStyle(CellStype_10C);
 							Cell.setCellType(1);
-							Cell.setCellValue("小計數量");
+							Cell.setCellValue(Labels.getLabel("DSID.MSG0105"));
 							sheet.addMergedRegion(
 									new Region((short) iRow, (short) iCell, (short) iRow, (short) (iCell + 1)));
 
@@ -2270,7 +2271,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 							Cell = Row.createCell((short) iCell);
 							Cell.setCellStyle(CellStype_10C);
 							Cell.setCellType(1);
-							Cell.setCellValue("鞋舌活動繩.勾勾顏色");
+							Cell.setCellValue(Labels.getLabel("DSID.MSG0106"));
 							sheet.addMergedRegion(
 									new Region((short) iRow, (short) iCell, (short) iRow, (short) (iCell + 1)));
 
@@ -2278,25 +2279,25 @@ public class DSID20MRExcel extends OpenWinCRUD {
 							Cell = Row.createCell((short) iCell);
 							Cell.setCellStyle(CellStype_10C);
 							Cell.setCellType(1);
-							Cell.setCellValue("大");
+							Cell.setCellValue(Labels.getLabel("DSID.MSG0107"));
 
 							iCell += 1;
 							Cell = Row.createCell((short) iCell);
 							Cell.setCellStyle(CellStype_10C);
 							Cell.setCellType(1);
-							Cell.setCellValue("中");
+							Cell.setCellValue(Labels.getLabel("DSID.MSG0108"));
 
 							iCell += 1;
 							Cell = Row.createCell((short) iCell);
 							Cell.setCellStyle(CellStype_10C);
 							Cell.setCellType(1);
-							Cell.setCellValue("小");
+							Cell.setCellValue(Labels.getLabel("DSID.MSG0109"));
 
 							iCell += 1;
 							Cell = Row.createCell((short) iCell);
 							Cell.setCellStyle(CellStype_10C);
 							Cell.setCellType(1);
-							Cell.setCellValue("統計總計");
+							Cell.setCellValue(Labels.getLabel("DSID.MSG0110"));
 
 							String Judge = "GGcolor";
 							List<String> QueryCo = QueryColor(conn, Judge);
@@ -2398,7 +2399,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 								} catch (Exception e) {
 									// TODO: handle exception
 									e.printStackTrace();
-									Messagebox.show("勾勾數量查詢錯誤！");
+									Messagebox.show(Labels.getLabel("DSID.MSG0111"));
 								}
 							}
 
@@ -2416,7 +2417,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 							Cell = Row.createCell((short) iCell);
 							Cell.setCellStyle(CellStype_10C);
 							Cell.setCellType(1);
-							Cell.setCellValue("總計");
+							Cell.setCellValue(Labels.getLabel("DSID.MSG0112"));
 							sheet.addMergedRegion(
 									new Region((short) iRow, (short) iCell, (short) iRow, (short) (iCell + 1)));
 
@@ -2464,7 +2465,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show("勾勾配色查詢錯誤！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0113"));
 		}
 
 		String IFlist = "GG";
@@ -2522,11 +2523,11 @@ public class DSID20MRExcel extends OpenWinCRUD {
 							}
 						} catch (Exception e) {
 							// TODO: handle exception
-							Errmessage = "前面片 回寫失敗  ! ";
+							Errmessage = Labels.getLabel("DSID.MSG0082")+" "+Labels.getLabel("DSID.MSG0114")+"! ";
 							e.printStackTrace();
 						}
 					} else {
-						Errmessage = "前片回寫: 顏色" + Color + "、分段" + Tions + "、百分比" + Copre + ". 該數據不完整,請檢測!";
+						Errmessage = Labels.getLabel("DSID.MSG0082")+Labels.getLabel("DSID.MSG0115")+": "+ Labels.getLabel("DSID.MSG0096") + Color + "、"+ Labels.getLabel("DSID.MSG0116") + Tions + "、"+ Labels.getLabel("DSID.MSG0097") + Copre + ". "+ Labels.getLabel("DSID.MSG0117") +"!";
 					}
 				}
 
@@ -2556,12 +2557,12 @@ public class DSID20MRExcel extends OpenWinCRUD {
 							}
 						} catch (Exception e) {
 							// TODO: handle exception
-							Errmessage = "勾勾數據更新失敗 ! ";
+							Errmessage = Labels.getLabel("DSID.MSG0118");
 							e.printStackTrace();
 						}
 
 					} else {
-						Errmessage = "型體、顏色、顏色百分比, 關鍵資料為空或者小於0 !";
+						Errmessage = Labels.getLabel("DSID.MSG0119");
 					}
 				}
 			} else if (iFlist == "XD" || "XD".equals(iFlist)) { // 鞋帶
@@ -2589,12 +2590,12 @@ public class DSID20MRExcel extends OpenWinCRUD {
 							}
 						} catch (Exception e) {
 							// TODO: handle exception
-							Errmessage = "勾勾數據更新失敗 ! ";
+							Errmessage = Labels.getLabel("DSID.MSG0118");
 							e.printStackTrace();
 						}
 
 					} else {
-						Errmessage = "型體、顏色、顏色百分比, 關鍵資料為空或者小於0 !";
+						Errmessage = Labels.getLabel("DSID.MSG0119");
 					}
 				}
 
@@ -2636,7 +2637,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 										// ps1.close();
 									} catch (Exception e) {
 										// TODO: handle exception
-										Errmessage = " 常规配色百分比 数据更新失败,请查验!";
+										Errmessage = Labels.getLabel("DSID.MSG0120");
 										conn.rollback();
 										e.printStackTrace();
 									}
@@ -2711,7 +2712,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 				Subgro = rs.getString("subgro");
 
 				if (Subgro == null || "".equals(Subgro)) {
-					Messagebox.show("配色數據為空！！！");
+					Messagebox.show(Labels.getLabel("DSID.MSG0121"));
 				}
 
 				Colorlist.add(Subgro);
@@ -2720,7 +2721,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 			rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			Messagebox.show("配色名稱查詢失敗！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0122"));
 		}
 
 		return Colorlist;
@@ -2753,7 +2754,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Messagebox.show("月總接單數查詢錯誤！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0123"));
 		}
 		return Sumsize;
 	}
@@ -3135,7 +3136,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		Cell = RowNew.createCell((short) 0);
 		Cell.setCellStyle(CellStype_10C);
 		Cell.setCellType(1);
-		Cell.setCellValue("鞋墊百分比統計");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0124"));
 		sheet3.addMergedRegion(new Region((short) iRow, (short) 0, (short) iRow, (short) 2));
 
 		Cell = RowNew.createCell((short) 1);
@@ -3152,7 +3153,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		Cell = RowNew.createCell((short) 0);
 		Cell.setCellStyle(CellStype_10C);
 		Cell.setCellType(1);
-		Cell.setCellValue("Size碼");
+		Cell.setCellValue("Size");
 
 		String sql = "SELECT COUNT(*) numb,TOOLING_SIZE from dsid01 " + "where model_na like '%" + MODEL_NO
 				+ "'  AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD') BETWEEN '" + ORDER_DATE1 + "' AND '" + ORDER_DATE2 + "' "
@@ -3193,7 +3194,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		Cell = RowNew.createCell((short) Icell);
 		Cell.setCellStyle(CellStype);
 		Cell.setCellType(1);
-		Cell.setCellValue("總數統計");
+		Cell.setCellValue(Labels.getLabel("DSID.MSG0110"));
 
 		iRow++;
 		Icell = 1;
@@ -3203,7 +3204,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 		Cell = RowNew.createCell((short) 0);
 		Cell.setCellStyle(CellStype);
 		Cell.setCellType(1);
-		Cell.setCellValue("size數量");
+		Cell.setCellValue("Size "+Labels.getLabel("DSID01M.QTY"));
 
 		for (double i = 3.0; i <= 15.5; i += 0.5) {
 			out: for (Entry<Double, Integer> entry : dataMap.entrySet()) { // 遍歷size碼與對應數量
@@ -3327,9 +3328,9 @@ public class DSID20MRExcel extends OpenWinCRUD {
 	private void ShowMessage() {
 		// TODO Auto-generated method stub
 		if (Errmessage.length() > 0) {
-			Messagebox.show("文件匯出失敗！！！" + Errmessage);
+			Messagebox.show(Labels.getLabel("DSID.MSG0125") + Errmessage);
 		} else {
-			Messagebox.show("文件匯出成功！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0126"));
 		}
 		Errmessage = "";
 	}

@@ -3,8 +3,8 @@
 	<div sclass="breadcrumbs">
 		<div sclass="breadcrumb">
 			<span sclass="home-icon z-icon-home" />
-			<a label="${labels.MENU.DSID21}" />
-			<label value="配色百分比(DSID21M)" />
+			<a label="${labels.DSID.ReadID}" />
+			<label value="${labels.DSID.DSID21M} (DSID21M)" />
 			<!-- 此處放置該程式多國系名稱及程式代號 -->
 		</div>
 	</div>

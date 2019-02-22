@@ -155,11 +155,11 @@ public class DSID03M_Import01 extends QueryBase {
 	public void onClickbtnComfig(Event event){
 		String MODEL_NAME = txt_MODEL_NAME.getValue();
 		if(mediatemp == null){
-			Messagebox.show("附檔不能為空！！", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);	
+			Messagebox.show(Labels.getLabel("DSID.MSG0048")+Labels.getLabel("PUBLIC.MSG0003")+"！！", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);	
 			return;
 		}
 		if(MODEL_NAME == null || "".equals(MODEL_NAME)){
-			Messagebox.show("形體不能為空！！", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);	
+			Messagebox.show(Labels.getLabel("DSID01M.MODEL_NA")+Labels.getLabel("PUBLIC.MSG0003")+"！！", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);	
 			return;
 		}
 		
@@ -212,7 +212,7 @@ private String COLOR_CODE;
 		if (parentWindow != null)
 			Events.sendEvent(new Event("onQueryWindowSenddef", parentWindow,mediatemp.getName()));
 	//	Messagebox.show(Labels.getLabel("PUBLIC.MSG0060"), "Warning", Messagebox.OK, Messagebox.EXCLAMATION);		
-		Messagebox.show("導入成功！！", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);				
+		Messagebox.show(Labels.getLabel("DSID.MSG0047"), "Warning", Messagebox.OK, Messagebox.EXCLAMATION);				
 		getRootWindow().detach();
 	}
 	

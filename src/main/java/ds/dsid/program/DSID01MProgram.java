@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -315,9 +316,9 @@ public class DSID01MProgram extends Master{
 		// TODO Auto-generated method stub
 		String TYPE="";
 		if("0".equals(type)){
-			TYPE="普通";
+			TYPE=Labels.getLabel("DSID.MSG0028");
 		}else if("1".equals(type)){
-			TYPE="特殊";
+			TYPE=Labels.getLabel("DSID.MSG0029");
 		}
 //		else if("2".equals(type)){
 //			TYPE="虛擬";
@@ -329,11 +330,11 @@ public class DSID01MProgram extends Master{
 		// TODO Auto-generated method stub
 		String STATUS="";		
 		if("0".equals(status)){
-			STATUS="預接單";
+			STATUS=Labels.getLabel("DSID.MSG0030");
 		}else if("7".equals(status)){
-			STATUS="正式單";
+			STATUS=Labels.getLabel("DSID.MSG0031");
 		}else if("99".equals(status)){
-			STATUS="取消單";
+			STATUS=Labels.getLabel("DSID.MSG0032");
 		}
 		return STATUS;
 	}

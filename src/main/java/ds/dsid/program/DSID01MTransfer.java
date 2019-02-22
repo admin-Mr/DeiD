@@ -66,7 +66,8 @@ public class DSID01MTransfer extends OpenWinCRUD{
 	private void doTransfer() throws SQLException {
 		// TODO Auto-generated method stub
 		Connection conn=Common.getDbConnection();
-		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
+		Connection Conn=Common.getService1Conn();
+//		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
 		DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 		PreparedStatement ps = null,ps2 = null,pstm=null;
@@ -242,7 +243,7 @@ public class DSID01MTransfer extends OpenWinCRUD{
 						pstm.close();
 						num++;
 					} catch (Exception e) {
-						err=rs.getString("OD_NO")+"資料轉移失敗！"+e;
+						err=rs.getString("OD_NO")+Labels.getLabel("DSID.MSG0043")+e;
 						e.printStackTrace();
 					}
 					
@@ -253,7 +254,7 @@ public class DSID01MTransfer extends OpenWinCRUD{
 				rs.close();
 				ps.close();
 			} catch (Exception e) {
-				err="錯誤！！"+e;
+				err=Labels.getLabel("DSID.MSG0044")+"！！"+e;
 				e.printStackTrace();
 			}
 			
@@ -300,7 +301,7 @@ public class DSID01MTransfer extends OpenWinCRUD{
 						pstm2.executeUpdate();
 						pstm2.close();
 					} catch (Exception e) {
-						err=rs2.getString("OD_NO")+"資料轉移失敗！"+e;
+						err=rs2.getString("OD_NO")+Labels.getLabel("DSID.MSG0043")+e;
 						e.printStackTrace();
 					}
 					try{
@@ -315,18 +316,18 @@ public class DSID01MTransfer extends OpenWinCRUD{
 				rs2.close();
 				ps2.close();
 			} catch (Exception e) {
-				err="明細錯誤！！"+e;
+				err=Labels.getLabel("DSID.MSG0045")+"！！"+e;
 				e.printStackTrace();
 			}
 			
 		}else{
-			Messagebox.show("接單日期為空，請重新選擇！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0005"));
 		}
 		
 		if(err.length()>0){
 			Messagebox.show(err);
 		}else{
-			Messagebox.show(Format.format(txtorder_date.getValue())+" 資料轉移成功！！！");
+			Messagebox.show(Format.format(txtorder_date.getValue())+" "+Labels.getLabel("DSID.MSG0046")+"！！！");
 		}
 		}catch (Exception e) {
 

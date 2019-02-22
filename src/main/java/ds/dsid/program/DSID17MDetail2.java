@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.WrongValueException;
@@ -134,7 +136,7 @@ public class DSID17MDetail2 extends Detail{
 					rs = ps.executeQuery();
 					if(rs.next()){
 						if(Double.valueOf(AC_QTY)>Double.valueOf(rs.getString("SOT_QTY"))){
-							mess="驗收數量大於外發數量，不可驗收！！！";
+							mess=Labels.getLabel("DSID.MSG0062");
 						}
 						
 					}
@@ -163,11 +165,11 @@ public class DSID17MDetail2 extends Detail{
 					Common.closeConnection(conn);	
 				}
 			}else{
-				mess="驗收數量不能為空！！";
+				mess=Labels.getLabel("DSID.MSG0063");
 			}
 			
 		}else{
-			mess="外發單號不能為空！！";
+			mess=Labels.getLabel("DSID.MSG0064");
 		}
 		
 		if(mess.length()>0){

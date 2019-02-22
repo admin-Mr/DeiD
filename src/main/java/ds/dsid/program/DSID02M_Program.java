@@ -3,6 +3,7 @@ package ds.dsid.program;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.context.request.SessionScope;
@@ -24,9 +25,10 @@ import ds.common.services.UserCredential;
 import ds.dsid.domain.DSID02;
 import ds.dspb.domain.DSPB00_NEW;
 import util.ComponentColumn;
+import util.Master;
 import util.OperationMode;
 
-public class DSID02M_Program extends COMM_Master {
+public class DSID02M_Program extends Master {
 	
 	private static final long serialVersionUID = 1L;
 	@WireVariable
@@ -178,7 +180,7 @@ public class DSID02M_Program extends COMM_Master {
 	 */
 	@Override
 	public void masterCreateMode(HashMap<String, Object> mapButton){
-		
+
 		System.out.println("=====masterwindow==show =========");
 		mapButton = new HashMap<String, Object>();
 		mapButton.put("btncreatemaster", btnCreateMaster);
@@ -219,6 +221,24 @@ public class DSID02M_Program extends COMM_Master {
 		//DSPB00_NEW e = (DSPB00_NEW) map.get("selectedRecord");
 		//txtPB_MUNODE.setValue(e.getPB_MUITEM());
 		//txtPB_MUITEM.setValue(getNewItem());
+	}
+
+	@Override
+	protected void doCreateDefault() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected Object doSaveDefault(String columnName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected List getCustList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

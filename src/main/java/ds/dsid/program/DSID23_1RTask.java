@@ -21,6 +21,7 @@ import org.zkoss.poi.hssf.usermodel.HSSFRow;
 import org.zkoss.poi.hssf.usermodel.HSSFSheet;
 import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
 import org.zkoss.poi.ss.usermodel.CellStyle;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Filedownload;
 import util.Common;
 
@@ -31,8 +32,8 @@ public class DSID23_1RTask  {
 	
 	public static void ExcelExport(String MODEL_NA,String START) throws SQLException {
 		// TODO Auto-generated method stub
-		String title="材料需求分析報表";
-		Connection Conn = getDB01Conn();
+		String title=Labels.getLabel("DSID.MSG0193");
+		Connection Conn = Common.getService1Conn();
 		Connection conn = Common.getDbConnection();
 		
 		ByteArrayOutputStream  stream = new ByteArrayOutputStream();
@@ -485,17 +486,17 @@ public class DSID23_1RTask  {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("型體");		
+		cell.setCellValue(Labels.getLabel("DSID01M.MODEL_NA"));		
 		
 		cell = row.createCell(2);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("預接單日期：");	
+		cell.setCellValue(Labels.getLabel("DSID.MSG0194"));	
 		
 		cell = row.createCell(4);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("預接單總數：");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0195"));
 		
 		row = sheet.createRow(1);
 		row.setHeightInPoints(30);
@@ -503,91 +504,91 @@ public class DSID23_1RTask  {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("部位");		
+		cell.setCellValue(Labels.getLabel("DSID.MSG0171"));		
 		
 		cell = row.createCell(1);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("部位名稱");		
+		cell.setCellValue(Labels.getLabel("DSID.MSG0099"));		
 		
 		cell = row.createCell(2);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("材料編號");					
+		cell.setCellValue(Labels.getLabel("DSID22R.EL_NO"));					
 		
 		cell = row.createCell(3);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("材料名稱");	
+		cell.setCellValue(Labels.getLabel("DSID22R.EL_NA"));	
 		
 		cell = row.createCell(4);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("顏色");
+		cell.setCellValue(Labels.getLabel("DSID22R.COLOR"));
 		
 		cell = row.createCell(5);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("材料用量");		
+		cell.setCellValue(Labels.getLabel("DSID.MSG0196"));		
 			
 		cell = row.createCell(6);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("單位");		
+		cell.setCellValue(Labels.getLabel("DSID.MSG0197"));		
 			
 		cell = row.createCell(7);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("材料庫存");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0198"));
 		
 		cell = row.createCell(8);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("接單數量");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0199"));
 //		cell.setCellValue("庫存可斬雙數");
 		
 		cell = row.createCell(9);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("接單所需材料");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0200"));
 	
 		cell = row.createCell(10);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("倉庫剩餘數量");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0201"));
 		
 		cell = row.createCell(11);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("在途數量");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0202"));
 		
 		cell = row.createCell(12);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("最早到庫時間");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0203"));
 		
 	}
 
 
 	
-	public static Connection getDB01Conn(){
-		Connection  conn = null;
-		String driver = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
-		String user = "DSOD";
-		String pwd = "ora@it2013";
-		try{
-	        Class.forName(driver);
-	     }catch(Exception e){
-	        e.printStackTrace();
-	     }
-	    try{
-	    	conn=DriverManager.getConnection(url,user,pwd);
-	    	System.err.println(">>>鏈接DB01數據庫");
-	    }catch(Exception e){
-	    	e.printStackTrace();
-	    }
-	    return conn;
-	}
+//	public static Connection getDB01Conn(){
+//		Connection  conn = null;
+//		String driver = "oracle.jdbc.driver.OracleDriver";
+//		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+//		String user = "DSOD";
+//		String pwd = "ora@it2013";
+//		try{
+//	        Class.forName(driver);
+//	     }catch(Exception e){
+//	        e.printStackTrace();
+//	     }
+//	    try{
+//	    	conn=DriverManager.getConnection(url,user,pwd);
+//	    	System.err.println(">>>鏈接DB01數據庫");
+//	    }catch(Exception e){
+//	    	e.printStackTrace();
+//	    }
+//	    return conn;
+//	}
 
 }

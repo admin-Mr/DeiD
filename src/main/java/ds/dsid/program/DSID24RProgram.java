@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -99,7 +100,7 @@ public class DSID24RProgram extends OpenWinCRUD{
 			
 			List_od_no.setModel(new ListModelList<Object>(name_list));
 		}else{
-			Messagebox.show("日期不能為空！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0204"));
 		}
 		
 
@@ -142,7 +143,7 @@ public class DSID24RProgram extends OpenWinCRUD{
 			
 			List_Model_na.setModel(new ListModelList<Object>(name_list));
 		}else{
-			Messagebox.show("日期不能為空！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0204"));
 		}
 		
 
@@ -181,7 +182,7 @@ public class DSID24RProgram extends OpenWinCRUD{
 			
 			DSID24_1RTask.ExcelExport(DATE,MODEL_NA,WORK_ORDER_ID);
 		}else{
-			Messagebox.show("日期不能為空！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0204"));
 		}
 		
 

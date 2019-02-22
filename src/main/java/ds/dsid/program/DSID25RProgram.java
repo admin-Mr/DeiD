@@ -174,7 +174,7 @@ public class DSID25RProgram extends Master{
 					pstm.executeUpdate();
 					pstm.close();
 				} catch (Exception e) {
-					Errmessage ="材料"+EL_NO+"資料導入失敗！"+e;
+					Errmessage =Labels.getLabel("DSID.MSG0058")+EL_NO+Labels.getLabel("DSID.MSG0054")+"！"+e;
 					conn.rollback();
 					e.printStackTrace();
 					
@@ -197,9 +197,9 @@ public class DSID25RProgram extends Master{
 		
 		
 		if(Errmessage.length()>0){
-			Messagebox.show("文件匯入失敗！！！"+Errmessage);
+			Messagebox.show(Labels.getLabel("DSID.MSG0019")+Errmessage);
 		}else{
-			Messagebox.show("匯入成功！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0021"));
 		}	
 	}
 		
@@ -293,7 +293,7 @@ public class DSID25RProgram extends Master{
 			
 			List_Model_na.setModel(new ListModelList<Object>(name_list));
 		}else{
-			Messagebox.show("請選擇正確的日期區間！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0228"));
 		}
 	  }
 
@@ -317,7 +317,7 @@ public class DSID25RProgram extends Master{
 			
 			DSID25_1RTask.ExcelExport(START,MODEL_NA);
 		}else{
-			Messagebox.show("日期不能為空！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0204"));
 		}
 		
 

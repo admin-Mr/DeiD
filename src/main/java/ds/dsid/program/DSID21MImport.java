@@ -151,7 +151,7 @@ public class DSID21MImport extends OpenWinCRUD{
 								updateps.close();
 							} catch (Exception e) {
 								// TODO: handle exception
-								Errmessage = "資料更改失敗 !";
+								Errmessage = Labels.getLabel("DSID.MSG0172");
 							}
 						}
 					}else{ // 插入未存在的資料
@@ -167,7 +167,7 @@ public class DSID21MImport extends OpenWinCRUD{
 							insertps.close();	
 						} catch (Exception e) {
 							// TODO: handle exception
-							Errmessage = "資料匯入失敗 !";
+							Errmessage = Labels.getLabel("DSID.MSG0173");
 							e.printStackTrace();
 						}
 					}
@@ -175,7 +175,7 @@ public class DSID21MImport extends OpenWinCRUD{
 					selectps.close();
 				} catch (Exception e) {
 					// TODO: handle exception
-					Errmessage = "查詢原有資料失敗 !";
+					Errmessage = Labels.getLabel("DSID.MSG0174");
 					e.printStackTrace();
 				}
 				System.out.println(" --------------------------------------------------------------- ");
@@ -231,9 +231,9 @@ public class DSID21MImport extends OpenWinCRUD{
 	private void ShowMessage() {
 		// TODO Auto-generated method stub
 		if(Errmessage.length() > 0){
-			Messagebox.show("文件匯入失敗！！！"+Errmessage);
+			Messagebox.show(Labels.getLabel("DSID.MSG0175")+Errmessage);
 		}else{
-			Messagebox.show("文件匯入成功！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0176"));
 		}	
 		Errmessage="";
 	}

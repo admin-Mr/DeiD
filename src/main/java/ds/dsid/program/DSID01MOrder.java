@@ -289,14 +289,14 @@ public class DSID01MOrder extends OpenWinCRUD{
 		
 		
 		}else{
-			Messagebox.show("日期為空,請核查!!!");
+			Messagebox.show(Labels.getLabel("DSID.MSG0023"));
 		}
 		Common.closeConnection(conn);
 		
 		if(Errmess.length()>0){
-			Messagebox.show("訂單資料整理失敗！！！"+Errmess);
+			Messagebox.show(Labels.getLabel("DSID.MSG0024")+Errmess);
 		}else{
-			Messagebox.show("訂單資料整理成功！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0025"));
 		}	
 		Errmess="";
 		}catch (Exception e) {
@@ -354,9 +354,9 @@ public class DSID01MOrder extends OpenWinCRUD{
 			while(rs.next()){
 				String color="";
 				if("PATTERN".equals(rs.getString("TYPE"))){
-					color="01B,金屬";
+					color="01B,"+Labels.getLabel("DSID.MSG0026");
 				}else if("COLOR".equals(rs.getString("TYPE"))){
-					color="01B,反光";
+					color="01B,"+Labels.getLabel("DSID.MSG0027");
 				}
 				String 	resql="UPDATE "+TABLE+" SET GROUP5='"+color+"' WHERE WORK_ORDER_ID='"+rs.getString("WORK_ORDER_ID")+"'";	
 				System.err.println(">>>>>區分中底筒的G5:"+resql);		

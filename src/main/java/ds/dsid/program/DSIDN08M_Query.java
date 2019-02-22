@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.persistence.Query;
 import javax.servlet.ServletContext;
+
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -86,7 +88,7 @@ public class DSIDN08M_Query extends QueryWindow {
 		//listColumn.add(Labels.getLabel("DSPB.DSPB00_NEW.PB_PRGNAME"));
 		//listColumn.add(Labels.getLabel("DSPB.DSPB00_NEW.PB_LANGTAG"));
 		//listColumn.add("編號LIKE");
-		listColumn.add("訂購單號等於");
+		listColumn.add(Labels.getLabel("DSID.MSG0229"));
 		return listColumn;
 	}
 

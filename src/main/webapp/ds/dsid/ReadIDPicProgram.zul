@@ -3,8 +3,8 @@
 	<div sclass="breadcrumbs">
 		<div sclass="breadcrumb">
 			<span sclass="home-icon z-icon-home" />
-			<a label="${labels.DSID.ReadIDPic}" />
-			<label value="ID線製程掃描(ReadIDPic)" />
+			<a label="${labels.DSID.ReadID}" />
+			<label value="${labels.DSID.ReadIDPic} (ReadIDPic)" />
 			<!-- 此處放置該程式多國系名稱及程式代號 -->
 		</div>
 	</div>

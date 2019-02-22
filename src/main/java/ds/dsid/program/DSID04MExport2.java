@@ -32,6 +32,7 @@ import org.zkoss.poi.hssf.util.HSSFColor.RED;
 import org.zkoss.poi.ss.usermodel.CellStyle;
 import org.zkoss.poi.ss.util.CellRangeAddress;
 import org.zkoss.poi.xssf.usermodel.XSSFSheetConditionalFormatting;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -129,7 +130,7 @@ public class DSID04MExport2 extends OpenWinCRUD{
 		
 		if(!"".equals(MODEL_NA)){
 			Connection conn = Common.getDbConnection();
-			Connection Conn = getDB01Conn();
+			Connection Conn = Common.getService1Conn();
 
 			HSSFWorkbook wb = new HSSFWorkbook();		
 
@@ -317,7 +318,7 @@ public class DSID04MExport2 extends OpenWinCRUD{
 				stream.close();
 				
 			} catch (Exception e) {
-				Messagebox.show("導出失敗!!"+e);
+				Messagebox.show(Labels.getLabel("DSID.MSG0052")+e);
 				e.printStackTrace();
 			} finally {
 				if(rs1!=null){
@@ -345,7 +346,7 @@ public class DSID04MExport2 extends OpenWinCRUD{
 				System.err.println(" —————————— : 結束  : —————————— ");
 			}
 		}else{
-			Messagebox.show("型體為空，請核查輸入！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0053"));
 		}		
 	}
 	
@@ -1965,7 +1966,8 @@ public class DSID04MExport2 extends OpenWinCRUD{
 						cell = row.createCell(21);
 						cell.setCellType(1);
 						cell.setCellStyle(style32);
-						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,conn));
+//						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,conn));
+						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,Conn));
 						
 						for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
 							cell = row.createCell(47+2*k);
@@ -2881,7 +2883,8 @@ public class DSID04MExport2 extends OpenWinCRUD{
 		
 		Double qty=0.0;
 
-		String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 A,DSPO06@ftldb01.deanshoes.com B WHERE A.PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND A.EL_NO IN ("+EL_NO_LIST+") AND A.PO_NO=B.PO_NO AND A.EL_NO=B.EL_NO AND B.PO_CLOSE!='T'";
+		//String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 A,DSPO06@ftldb01.deanshoes.com B WHERE A.PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND A.EL_NO IN ("+EL_NO_LIST+") AND A.PO_NO=B.PO_NO AND A.EL_NO=B.EL_NO AND B.PO_CLOSE!='T'";
+		String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 A,DSPO06 B WHERE A.PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND A.EL_NO IN ("+EL_NO_LIST+") AND A.PO_NO=B.PO_NO AND A.EL_NO=B.EL_NO AND B.PO_CLOSE!='T'";
 	
 		System.out.println(">>>>>"+sql);
 		try {
@@ -3041,25 +3044,25 @@ public class DSID04MExport2 extends OpenWinCRUD{
 	}
 	
 	
-	public static Connection getDB01Conn(){
-		Connection  conn = null;
-		String driver = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
-		String user = "DSOD";
-		String pwd = "ora@it2013";
-		try{
-	        Class.forName(driver);
-	     }catch(Exception e){
-	        e.printStackTrace();
-	     }
-	    try{
-	    	conn=DriverManager.getConnection(url,user,pwd);
-//	    	System.err.println(">>>鏈接DB01數據庫");
-	    }catch(Exception e){
-	    	e.printStackTrace();
-	    }
-	    return conn;
-	}
+//	public static Connection getDB01Conn(){
+//		Connection  conn = null;
+//		String driver = "oracle.jdbc.driver.OracleDriver";
+//		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+//		String user = "DSOD";
+//		String pwd = "ora@it2013";
+//		try{
+//	        Class.forName(driver);
+//	     }catch(Exception e){
+//	        e.printStackTrace();
+//	     }
+//	    try{
+//	    	conn=DriverManager.getConnection(url,user,pwd);
+////	    	System.err.println(">>>鏈接DB01數據庫");
+//	    }catch(Exception e){
+//	    	e.printStackTrace();
+//	    }
+//	    return conn;
+//	}
 	
 	
 	@Override

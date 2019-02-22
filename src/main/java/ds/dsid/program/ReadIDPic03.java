@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -59,7 +60,7 @@ public class ReadIDPic03 extends QueryWindow{
 		UpdataBar(); // 資料更新方法
 		
 		if(ErrorJs <= 0){
-			Messagebox.show("登記成功 ! Barcod: " + Bar);
+			Messagebox.show(Labels.getLabel("DSID.MSG0234")+" ! Barcod: " + Bar);
 		}
 	}
 
@@ -69,7 +70,7 @@ public class ReadIDPic03 extends QueryWindow{
 	public void UpdataBar(){
 		
 		PreparedStatement ps = null;
-		Connection Conn = Common.getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 		
 		String sql = "update dsid65 set is_repair = 'Y', repair_type = '"+Cho+"' where work_order_id = '"+Bar+"'" ;
 		System.out.println(" ----- Updata : " + sql);

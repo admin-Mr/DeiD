@@ -28,6 +28,7 @@ import org.zkoss.poi.hssf.usermodel.HSSFRow;
 import org.zkoss.poi.hssf.usermodel.HSSFSheet;
 import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
 import org.zkoss.poi.hssf.util.Region;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -107,17 +108,17 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 
 		try { // 部位名稱與型體名稱不能為空
 			if (Modelna == null || "".equals(Modelna)) {
-				Messagebox.show("請選擇導出資料 ！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0134"));
 			} else {
 				
 				filterHeader(wb, Modelna, Odate1, Odate2); // 導出主體方法
-				Messagebox.show("匯出成功 ！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0135"));
 			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show("匯出失敗, 請檢查 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0136"));
 		}
 
 	}
@@ -178,9 +179,9 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 
 		try {
 
-			HSSFSheet sheet = wb.createSheet("Size 統計");
-			HSSFSheet sheet2 = wb.createSheet("Group 統計");
-			HSSFSheet sheet3 = wb.createSheet("百分比計算");
+			HSSFSheet sheet = wb.createSheet("Size "+Labels.getLabel("DSID.MSG0137"));
+			HSSFSheet sheet2 = wb.createSheet("Group "+Labels.getLabel("DSID.MSG0137"));
+			HSSFSheet sheet3 = wb.createSheet(Labels.getLabel("DSID.MSG0097")+Labels.getLabel("DSID.MSG0138"));
 			ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
 			QueryOdno(conn, Modelna); // 查詢訂單總數
@@ -459,7 +460,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				Messagebox.show(" 顏色數量查詢失敗 ！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0139"));
 			} finally {
 				if (rs != null)
 					rs.close();
@@ -475,7 +476,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("底部統計");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0140"));
 
 		for (int Min = 1; Min <= ((Maxtool - Mintool) * 2 + 2); Min++) {
 
@@ -557,7 +558,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				Messagebox.show(" 鞋帶數量查詢失敗 ！ ");
+				Messagebox.show(Labels.getLabel("DSID.MSG0141"));
 			} finally {
 				if (Wrs != null)
 					Wrs.close();
@@ -573,7 +574,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("底部統計");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0140"));
 
 		for (int Min = 1; Min <= ((Maxtool - Mintool) * 2 + 2); Min++) {
 
@@ -607,7 +608,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("數量");
+		cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 
 		int Mins = 1; // 空单元格打印
 		for (double Min = Mintool; Min <= Maxtool; Min += 0.5) {
@@ -676,7 +677,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show(" 鞋垫数量查询失败 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0142"));
 		} finally {
 			if (Qdrs != null)
 				Qdrs.close();
@@ -729,7 +730,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
 			if (i == 0) {
-				cell.setCellValue("Group 部位配色分析");
+				cell.setCellValue("Group "+Labels.getLabel("DSID.MSG0094"));
 			} else if (i == 2) {
 				cell.setCellValue("");
 				sheet2.addMergedRegion(new Region((short) irow, (short) (icell - 2), (short) irow, (short) icell));
@@ -767,7 +768,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				Messagebox.show(" 部位全稱查詢失敗 !");
+				Messagebox.show(Labels.getLabel("DSID.MSG0143"));
 			} finally {
 				if (rs != null)
 					rs.close();
@@ -797,7 +798,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 
 			cell = row.createCell((short) icell);
 			cell.setCellType(1);
-			cell.setCellValue("Group" + i + "-總接單:");
+			cell.setCellValue("Group" + i + "-"+Labels.getLabel("DSID.MSG0095")+":");
 			cell.setCellStyle(style2);
 			sheet2.addMergedRegion(
 					new Region((short) (Mrow + 1), (short) icell, (short) (Mrow + 1), (short) (icell + 1)));
@@ -816,17 +817,17 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 
 			cell = row.createCell((short) icell);
 			cell.setCellType(1);
-			cell.setCellValue("顏色");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0096"));
 			cell.setCellStyle(style2);
 
 			cell = row.createCell((short) (icell + 1));
 			cell.setCellType(1);
-			cell.setCellValue("數量");
+			cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 			cell.setCellStyle(style2);
 
 			cell = row.createCell((short) (icell + 2));
 			cell.setCellType(1);
-			cell.setCellValue("百分比");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 			cell.setCellStyle(style2);
 
 			// 顏色數量查詢
@@ -886,7 +887,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				Messagebox.show("Group統計 顏色數量查詢失敗 ！");
+				Messagebox.show("Group "+Labels.getLabel("DSID.MSG0137")+" "+Labels.getLabel("DSID.MSG0139")+" ！");
 			} finally {
 				if (rs2 != null)
 					rs2.close();
@@ -921,7 +922,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell.setCellType(1);
 		cell = row.createCell(0);
 		cell.setCellStyle(style2);
-		cell.setCellValue("Group1 - Group8 合併統計");
+		cell.setCellValue("Group1 - Group8 "+Labels.getLabel("DSID.MSG0098"));
 		sheet2.addMergedRegion(new Region((short) irow, (short) 0, (short) irow, (short) 2));
 
 		for (int i = 1; i <= 2; i++) { // 打印空单元格
@@ -973,7 +974,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show(" Group1 ~ 8 統計失敗 ！");
+			Messagebox.show(" Group1 ~ 8 "+Labels.getLabel("DSID.MSG0144")+" ！");
 		} finally {
 			if (rs3 != null)
 				rs3.close();
@@ -1018,7 +1019,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show(" 勾勾名稱查詢失敗！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0145"));
 		}
 		//System.out.println(" 完成 ！");
 		//System.err.println("* —————————— ↑ 勾勾大小拆分統計 ↑ —————————— —————————— ↑ 勾勾大小拆分統計 ↑ —————————— —————————— ↑ 勾勾大小拆分統計 ↑ ——————————");
@@ -1079,7 +1080,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) icell);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("總比統計");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0146"));
 		icell++;
 
 		icell = 0;
@@ -1186,7 +1187,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					Messagebox.show(" 轉印 前面片數量查詢失敗 ！");
+					Messagebox.show(Labels.getLabel("DSID.MSG0147"));
 				} finally {
 					if (rs != null)
 						rs.close();
@@ -1281,7 +1282,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 					} catch (Exception e) {
 						// TODO: handle exception
 						e.printStackTrace();
-						Messagebox.show("非轉印 前面片數量查詢失敗 ！");
+						Messagebox.show(Labels.getLabel("DSID.MSG0148"));
 					} finally {
 						if (rs != null)
 							rs.close();
@@ -1308,7 +1309,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (icell));
 			cell.setCellStyle(style3_B);
 			cell.setCellType(1);
-			cell.setCellValue("列統計");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0149"));
 			icell++;
 			
 			for(int i = 1; i <= Maxcell; i++){
@@ -1340,7 +1341,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) icell);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("顏色|數量");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0150"));
 		icell++;
 		
 		for (int i = 0; i < FData.length; i++) { // 分段表頭打印
@@ -1355,7 +1356,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) icell);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("總比統計");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0146"));
 		irow++;
 		Maxcell = icell;
 		Minrow = irow;
@@ -1419,7 +1420,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					Messagebox.show(" 鞋帶百分比數量查詢錯誤 ！");
+					Messagebox.show(Labels.getLabel("DSID.MSG0151"));
 				} finally {
 					if (rs2 != null)
 						rs2.close();
@@ -1445,7 +1446,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) (icell));
 		cell.setCellStyle(style3_B);
 		cell.setCellType(1);
-		cell.setCellValue("列統計");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0149"));
 		icell++;
 		
 		for(int i = 1; i <= Maxcell; i++){
@@ -1470,12 +1471,12 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) (icell + 1));
 		cell.setCellStyle(style2);
 		cell.setCellType(1);
-		cell.setCellValue("鞋舌布標");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0152"));
 		
 		cell = row.createCell((short) (icell + 2));
 		cell.setCellStyle(style2);
 		cell.setCellType(1);
-		cell.setCellValue("總訂單數");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0014"));
 		
 		cell = row.createCell((short) (icell + 3));
 		cell.setCellStyle(style2);
@@ -1488,7 +1489,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) (icell + 1));
 		cell.setCellStyle(style2);
 		cell.setCellType(1);
-		cell.setCellValue("顏色|數量");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0150"));
 		
 		// 分段信息獲取, 及小表頭打印
 		type = "6"; // 鞋舌布標
@@ -1506,7 +1507,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) (icell + Mcell));
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("總比統計");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0146"));
 		
 		Maxcell = icell + Mcell;
 		
@@ -1591,7 +1592,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) (icell + 1));
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("列統計");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0149"));
 		
 		for(;Mincell <= (Maxcell + 1); Mincell++){
 
@@ -1635,7 +1636,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (icell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("部位名稱");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 			sheet3.addMergedRegion(new Region((short)irow, (short) icell, (short)irow, (short) (icell+2)));
 			icell++;
 			
@@ -1650,13 +1651,13 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (icell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("數量");
+			cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 			icell++;
 			
 			cell = row.createCell((short) (icell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("百分比");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 			icell++;
 			irow++; 
 			Maxcell = icell;
@@ -1684,7 +1685,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				cell = row.createCell((short) (icell));
 				cell.setCellType(1);
 				cell.setCellStyle(style2);
-				cell.setCellValue("前掌氣墊Ms　" + FData[i]);
+				cell.setCellValue(Labels.getLabel("DSID.MSG0100")+"Ms　" + FData[i]);
 				sheet3.addMergedRegion(new Region((short)irow, (short) icell, (short)irow, (short) (icell+2)));
 				icell++;
 				
@@ -1723,7 +1724,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					Messagebox.show("前掌氣墊數量查詢錯誤 ！");
+					Messagebox.show(Labels.getLabel("DSID.MSG0153"));
 				} finally {
 					if (rs4 != null)
 						rs4.close();
@@ -1741,7 +1742,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (icell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("數據統計  ");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0154"));
 			sheet3.addMergedRegion(new Region((short)irow, (short) icell, (short)irow, (short) (icell+2)));
 			icell++;
 			
@@ -1787,7 +1788,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (Maxcell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("部位名稱");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 			sheet3.addMergedRegion(new Region((short)Maxrow, (short) Maxcell, (short)Maxrow, (short) (Maxcell+2)));
 			Maxcell++;
 			
@@ -1802,13 +1803,13 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (Maxcell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("數量");
+			cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 			Maxcell++;
 			
 			cell = row.createCell((short) (Maxcell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("百分比");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 			Maxcell++;
 			Maxrow++; 
 			
@@ -1832,7 +1833,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				cell = row.createCell((short) (Maxcell));
 				cell.setCellType(1);
 				cell.setCellStyle(style2);
-				cell.setCellValue("後掌氣墊Ms　" + FData[i]);
+				cell.setCellValue(Labels.getLabel("DSID.MSG0101")+"Ms　" + FData[i]);
 				sheet3.addMergedRegion(new Region((short)Maxrow, (short) Maxcell, (short)Maxrow, (short) (Maxcell+2)));
 				Maxcell++;
 
@@ -1871,7 +1872,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					Messagebox.show("後掌氣墊數量查詢錯誤 ！");
+					Messagebox.show(Labels.getLabel("DSID.MSG0155"));
 				} finally {
 					if (rs5 != null)
 						rs5.close();
@@ -1890,7 +1891,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (Mincell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("數據統計  ");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0154"));
 			sheet3.addMergedRegion(new Region((short)Maxrow, (short) Mincell, (short)Maxrow, (short) (Mincell+2)));
 			Mincell++;
 			
@@ -1938,7 +1939,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (icell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("部位名稱");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 			sheet3.addMergedRegion(new Region((short)irow, (short) icell, (short)irow, (short) (icell+2)));
 			icell++;
 			
@@ -1953,13 +1954,13 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (icell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("數量");
+			cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 			icell++;
 			
 			cell = row.createCell((short) (icell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("百分比");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 			icell++;
 			irow++; 
 			Maxcell = icell;
@@ -1987,7 +1988,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				cell = row.createCell((short) (icell));
 				cell.setCellType(1);
 				cell.setCellStyle(style2);
-				cell.setCellValue("港寶Ms　" + FData[i]);
+				cell.setCellValue(Labels.getLabel("DSID.MSG0102")+"Ms　" + FData[i]);
 				sheet3.addMergedRegion(new Region((short)irow, (short) icell, (short)irow, (short) (icell+2)));
 				icell++;
 				
@@ -2025,7 +2026,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					Messagebox.show("港寶數量查詢失敗！");
+					Messagebox.show(Labels.getLabel("DSID.MSG0156"));
 				} finally {
 					if (rs6 != null)
 						rs6.close();
@@ -2044,7 +2045,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (icell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("數據統計  ");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0154"));
 			sheet3.addMergedRegion(new Region((short)irow, (short) icell, (short)irow, (short) (icell+2)));
 			icell++;
 			
@@ -2087,7 +2088,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (Maxcell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("部位名稱");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 			sheet3.addMergedRegion(new Region((short)Maxrow, (short) Maxcell, (short)Maxrow, (short) (Maxcell+2)));
 			Maxcell++;
 			
@@ -2102,13 +2103,13 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (Maxcell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("數量");
+			cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 			Maxcell++;
 			
 			cell = row.createCell((short) (Maxcell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("百分比");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0097"));
 			Maxcell++;
 			Maxrow++; 
 			
@@ -2132,7 +2133,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				cell = row.createCell((short) (Maxcell));
 				cell.setCellType(1);
 				cell.setCellStyle(style2);
-				cell.setCellValue("布標Ms　" + FData[i]);
+				cell.setCellValue(Labels.getLabel("DSID.MSG0103")+"Ms　" + FData[i]);
 				sheet3.addMergedRegion(new Region((short)Maxrow, (short) Maxcell, (short)Maxrow, (short) (Maxcell+2)));
 				Maxcell++;
 
@@ -2171,7 +2172,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					Messagebox.show("布標數量查詢錯誤 ！");
+					Messagebox.show(Labels.getLabel("DSID.MSG0157"));
 				}
 				
 				Maxrow++;
@@ -2184,7 +2185,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (Mincell));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("數據統計  ");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0154"));
 			sheet3.addMergedRegion(new Region((short)Maxrow, (short) Mincell, (short)Maxrow, (short) (Mincell+2)));
 			Mincell++;
 			
@@ -2255,7 +2256,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show("查詢四小表分段信息錯誤！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0158"));
 		} finally {
 			if (rs != null)
 				rs.close();
@@ -2288,13 +2289,13 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			
 			switch (type) {
 			case "1":
-				Tabelname = "前面片";
+				Tabelname = Labels.getLabel("DSID.MSG0082");
 				break;
 			case "2":
-				Tabelname = "鞋帶";
+				Tabelname = Labels.getLabel("DSID.MSG0159");
 				break;
 			default:
-				Tabelname = "未設定";
+				Tabelname = Labels.getLabel("DSID.MSG0160");
 				break;
 			}
 			
@@ -2305,7 +2306,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				cell = row.createCell((short) icell);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("各部位百分比計算");
+				cell.setCellValue(Labels.getLabel("DSID.MSG0161"));
 				sheet3.addMergedRegion(new Region((short) irow, (short) icell, (short) irow, (short) (icell + 2)));
 
 				for (int i = 1; i <= 2; i++) {
@@ -2328,7 +2329,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) (icell + 1));
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("總訂單數");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0014"));
 
 			cell = row.createCell((short) (icell + 2));
 			cell.setCellType(1);
@@ -2342,7 +2343,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			cell = row.createCell((short) icell);
 			cell.setCellType(1);
 			cell.setCellStyle(style2);
-			cell.setCellValue("顏色 | 數量");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0150"));
 		}
 		
 
@@ -2390,22 +2391,22 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 
 		switch (Tableif) {
 		case "1":
-			TableName = "前面片/鞋身/...";
+			TableName = Labels.getLabel("DSID.MSG0162");
 			insts = "Tooling_Size_Run";
-			Tname = "顏色 | 數量";
+			Tname = Labels.getLabel("DSID.MSG0150");
 			iRow = 2;
 			break;
 		case "2":
-			TableName = "小計 - 左腳碼數";
+			TableName = Labels.getLabel("DSID.MSG0163");
 			insts = "Left_Size_Run";
-			Tname = "顏色 | 數量";
+			Tname = Labels.getLabel("DSID.MSG0150");
 			iRow = irow; // 間隔行數設定
 			break;
 		case "3":
-			TableName = "鞋垫统计";
+			TableName = Labels.getLabel("DSID.MSG0164");
 			insts = "Tooling_Size_Run";
 			iRow = irow; // 間隔行數設定
-			Tname = "顏色 | 數量";
+			Tname = Labels.getLabel("DSID.MSG0150");
 			break;
 		}
 
@@ -2487,7 +2488,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show(" tooling_size大小查詢失敗 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0165"));
 		} finally {
 			if (rs != null)
 				rs.close();
@@ -2499,7 +2500,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell(iCell);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("統計結果");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0087"));
 	}
 
 	/**
@@ -2540,7 +2541,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
-		cell.setCellValue("接單日期");
+		cell.setCellValue(Labels.getLabel("DSID01M.ORDER_DATE"));
 		sheet.addMergedRegion(new Region((short) 1, (short) 0, (short) 1, (short) 1));
 
 		cell = row.createCell(2);
@@ -2585,7 +2586,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show(" 訂單總數量查詢失敗 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0166"));
 		} finally {
 			if (rs != null)
 				rs.close();
@@ -2618,7 +2619,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show(" 訂單總數量查詢失敗 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0166"));
 		} finally {
 			if (rs != null)
 				rs.close();
@@ -2669,7 +2670,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			 */
 		} catch (Exception e) {
 			// TODO: handle exception
-			Messagebox.show(" 顏色名稱查詢失敗 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0167"));
 		} finally {
 			if (rs != null)
 				rs.close();
@@ -2715,7 +2716,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show("鞋帶 Group 查詢出錯 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0168"));
 		} finally {
 			if (rs != null)
 				rs.close();
@@ -2744,7 +2745,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 				if (ltAll.isSelected()) {
 					if (!"".equals((Object) ltAll.getValue()) && (Object) ltAll.getValue() != null) {
 
-						Messagebox.show("已選擇資料不需查詢, 如需再次查詢請選擇空 !");
+						Messagebox.show(Labels.getLabel("DSID.MSG0132"));
 
 					}
 				}
@@ -2770,7 +2771,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				Messagebox.show("好像沒有找到任何部位名稱 ... 找人吧 !");
+				Messagebox.show(Labels.getLabel("DSID.MSG0133"));
 			} finally {
 				if (rs != null)
 					rs.close();
@@ -2815,7 +2816,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show(" Group 数量查询失败 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0169"));
 		} finally {
 			if (rs != null)
 				rs.close();
@@ -2863,7 +2864,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		cell = row.createCell((short) icell);
 		cell.setCellStyle(style2);
 		cell.setCellType(1);
-		cell.setCellValue("小計數量");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0105"));
 		sheet2.addMergedRegion(new Region((short) onrow, (short) icell, (short) onrow, (short) (icell + 1)));
 
 		icell += 2;

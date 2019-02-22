@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -107,9 +108,16 @@ public class DSID22RProgram extends OpenWinCRUD{
 				ExSql=" AND B.PO_NO='"+PO_NO+"'";
 			}
 		 
+//			String Sql2="SELECT A.*,PO_QTY-PC_QTY QTY FROM  (SELECT B.PO_NO,C.SU_NA,B.EL_NO,D.EL_CNAME,A.STOCK_MARK,D.CLR,B.PO_QTY,A.PO_DATE,B.PO_REDATE,\n" +
+//					"(SELECT TO_CHAR(MAX(PC_REDATE),'YYYY/MM/DD') FROM DSIDN08@FTLDB00.DEANSHOES.COM WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO ) PC_REDATE,\n" + 
+//					"NVL((SELECT SUM(PC_QTY) FROM DSIDN08@FTLDB00.DEANSHOES.COM WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO),'0') PC_QTY\n" + 
+//					"FROM DSPO05 A,DSPO06 B,DSSU01 C,DSEL00 D WHERE A.PO_NO=B.PO_NO AND A.SU_NO=C.SU_NO AND B.EL_NO=D.EL_NO AND C.SU_NA NOT LIKE '%臺照%' \n" + 
+//					"AND A.PO_PURNO IS NULL  AND A.PO_NO LIKE 'IGM%' AND B.PO_QTY!=0 "+ExSql+"\n" + 
+//					"ORDER BY PO_NO,B.PO_REDATE) A WHERE 1=1 "+ExSql2;
+			
 			String Sql2="SELECT A.*,PO_QTY-PC_QTY QTY FROM  (SELECT B.PO_NO,C.SU_NA,B.EL_NO,D.EL_CNAME,A.STOCK_MARK,D.CLR,B.PO_QTY,A.PO_DATE,B.PO_REDATE,\n" +
-					"(SELECT TO_CHAR(MAX(PC_REDATE),'YYYY/MM/DD') FROM DSIDN08@FTLDB00.DEANSHOES.COM WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO ) PC_REDATE,\n" + 
-					"NVL((SELECT SUM(PC_QTY) FROM DSIDN08@FTLDB00.DEANSHOES.COM WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO),'0') PC_QTY\n" + 
+					"(SELECT TO_CHAR(MAX(PC_REDATE),'YYYY/MM/DD') FROM DSIDN08 WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO ) PC_REDATE,\n" + 
+					"NVL((SELECT SUM(PC_QTY) FROM DSIDN08 WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO),'0') PC_QTY\n" + 
 					"FROM DSPO05 A,DSPO06 B,DSSU01 C,DSEL00 D WHERE A.PO_NO=B.PO_NO AND A.SU_NO=C.SU_NO AND B.EL_NO=D.EL_NO AND C.SU_NA NOT LIKE '%臺照%' \n" + 
 					"AND A.PO_PURNO IS NULL  AND A.PO_NO LIKE 'IGM%' AND B.PO_QTY!=0 "+ExSql+"\n" + 
 					"ORDER BY PO_NO,B.PO_REDATE) A WHERE 1=1 "+ExSql2;
@@ -153,12 +161,18 @@ public class DSID22RProgram extends OpenWinCRUD{
 				ExSql=" AND B.PO_NO='"+PO_NO+"'";
 			}
 		}
+//		String Sql1="SELECT A.*,PO_QTY-PC_QTY QTY FROM  (SELECT A.PO_PURNO,B.PO_NO,C.SU_NA,B.EL_NO,D.EL_CNAME,A.STOCK_MARK,D.CLR,B.PO_QTY,A.PO_DATE,B.PO_REDATE,\n" +
+//						"(SELECT TO_CHAR(MAX(PC_REDATE),'YYYY/MM/DD') FROM DSIDN08@FTLDB00.DEANSHOES.COM WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO ) PC_REDATE,\n" + 
+//						"NVL((SELECT SUM(PC_QTY) FROM DSIDN08@FTLDB00.DEANSHOES.COM WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO),'0') PC_QTY\n" + 
+//						"FROM DSPO05 A,DSPO06 B,DSSU01 C,DSEL00 D WHERE A.PO_NO=B.PO_NO AND A.SU_NO=C.SU_NO AND B.EL_NO=D.EL_NO AND C.SU_NA NOT LIKE '%臺照%' \n" + 
+//						"AND A.PO_PURNO IS NOT NULL  AND A.PO_NO LIKE 'IGM%' AND B.PO_QTY!=0 "+ExSql+"\n" + 
+//						"ORDER BY PO_PURNO,PO_NO,B.PO_REDATE) A WHERE 1=1 "+ExSql2;
 		String Sql1="SELECT A.*,PO_QTY-PC_QTY QTY FROM  (SELECT A.PO_PURNO,B.PO_NO,C.SU_NA,B.EL_NO,D.EL_CNAME,A.STOCK_MARK,D.CLR,B.PO_QTY,A.PO_DATE,B.PO_REDATE,\n" +
-						"(SELECT TO_CHAR(MAX(PC_REDATE),'YYYY/MM/DD') FROM DSIDN08@FTLDB00.DEANSHOES.COM WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO ) PC_REDATE,\n" + 
-						"NVL((SELECT SUM(PC_QTY) FROM DSIDN08@FTLDB00.DEANSHOES.COM WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO),'0') PC_QTY\n" + 
-						"FROM DSPO05 A,DSPO06 B,DSSU01 C,DSEL00 D WHERE A.PO_NO=B.PO_NO AND A.SU_NO=C.SU_NO AND B.EL_NO=D.EL_NO AND C.SU_NA NOT LIKE '%臺照%' \n" + 
-						"AND A.PO_PURNO IS NOT NULL  AND A.PO_NO LIKE 'IGM%' AND B.PO_QTY!=0 "+ExSql+"\n" + 
-						"ORDER BY PO_PURNO,PO_NO,B.PO_REDATE) A WHERE 1=1 "+ExSql2;
+				"(SELECT TO_CHAR(MAX(PC_REDATE),'YYYY/MM/DD') FROM DSIDN08 WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO ) PC_REDATE,\n" + 
+				"NVL((SELECT SUM(PC_QTY) FROM DSIDN08 WHERE PO_NO=A.PO_NO AND EL_NO=B.EL_NO),'0') PC_QTY\n" + 
+				"FROM DSPO05 A,DSPO06 B,DSSU01 C,DSEL00 D WHERE A.PO_NO=B.PO_NO AND A.SU_NO=C.SU_NO AND B.EL_NO=D.EL_NO AND C.SU_NA NOT LIKE '%臺照%' \n" + 
+				"AND A.PO_PURNO IS NOT NULL  AND A.PO_NO LIKE 'IGM%' AND B.PO_QTY!=0 "+ExSql+"\n" + 
+				"ORDER BY PO_PURNO,PO_NO,B.PO_REDATE) A WHERE 1=1 "+ExSql2;
 		
 		return Sql1;
 	}
@@ -169,7 +183,7 @@ public class DSID22RProgram extends OpenWinCRUD{
 		String sql = "";
 
 		if(type1.isSelected()){
-			Messagebox.show("查詢時請選定物料類型！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0192"));
 		}else{
 			if(type2.isSelected()){
 				sql = Getsql1();
@@ -179,7 +193,7 @@ public class DSID22RProgram extends OpenWinCRUD{
 			}
 			
 			 List<GENERIC> list = new ArrayList<GENERIC>();
-			 Connection Conn = getDB01Conn();
+			 Connection Conn = Common.getService1Conn();
 			 PreparedStatement  ps1 = null;
 			 ResultSet  rs1 = null;	
 			 System.out.println(sql);
@@ -292,24 +306,24 @@ public class DSID22RProgram extends OpenWinCRUD{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	public static Connection getDB01Conn(){
-		Connection  conn = null;
-		String driver = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
-		String user = "DSOD";
-		String pwd = "ora@it2013";
-		try{
-	        Class.forName(driver);
-	     }catch(Exception e){
-	        e.printStackTrace();
-	     }
-	    try{
-	    	conn=DriverManager.getConnection(url,user,pwd);
-	    	System.err.println(">>>鏈接DB01數據庫");
-	    }catch(Exception e){
-	    	e.printStackTrace();
-	    }
-	    return conn;
-	}
+//	public static Connection getDB01Conn(){
+//		Connection  conn = null;
+//		String driver = "oracle.jdbc.driver.OracleDriver";
+//		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+//		String user = "DSOD";
+//		String pwd = "ora@it2013";
+//		try{
+//	        Class.forName(driver);
+//	     }catch(Exception e){
+//	        e.printStackTrace();
+//	     }
+//	    try{
+//	    	conn=DriverManager.getConnection(url,user,pwd);
+//	    	System.err.println(">>>鏈接DB01數據庫");
+//	    }catch(Exception e){
+//	    	e.printStackTrace();
+//	    }
+//	    return conn;
+//	}
 	
 }

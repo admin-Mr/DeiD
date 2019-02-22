@@ -79,16 +79,16 @@ public class DSID01MArrange extends QueryWindow{
 	@Listen("onClick = #btnSwitch")
 	public void onClickbtnSwitch(Event event){
 		if(IS_PG==false){
-			btnSwitch.setLabel("切換至未確認");
-			btnConfirm_All.setLabel("取消全部");
+			btnSwitch.setLabel(Labels.getLabel("DSID.MSG0001"));
+			btnConfirm_All.setLabel(Labels.getLabel("DSID.MSG0003"));
 			IS_PG=true;
 			btnConfirm_id.setVisible(false);
 			btnArrange.setVisible(false);
 			btnReset.setVisible(true);
 			doSearch();
 		}else if(IS_PG==true){
-			btnSwitch.setLabel("切換至已確認 ");
-			btnConfirm_All.setLabel("確認全部");
+			btnSwitch.setLabel(Labels.getLabel("DSID.MSG0002"));
+			btnConfirm_All.setLabel(Labels.getLabel("DSID.MSG0004"));
 			IS_PG=false;
 			btnConfirm_id.setVisible(true);
 			btnArrange.setVisible(true);
@@ -103,7 +103,7 @@ public class DSID01MArrange extends QueryWindow{
 	public void onClickbtnConfirm(Event event){
 		
 		if("".equals(query_order_date.getValue())||query_order_date.getValue()==null){
-			Messagebox.show("接單日期為空，請選擇日期！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0005"));
 		}else{
 			ArrayList<Object> arrList = new ArrayList<Object>();		
 			arrList.clear();
@@ -152,10 +152,10 @@ public class DSID01MArrange extends QueryWindow{
 		String status="",woi_sql="";
 		
 		if("".equals(query_order_date.getValue())||query_order_date.getValue()==null){
-			Messagebox.show("接單日期為空，請選擇日期！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0005"));
 		}else{
 			if(queryListBox.getItemCount()<=0){
-				Messagebox.show("無資料可進行確認，請核查！！！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0006"));
 			}else{
 				if(IS_PG==false){
 					status="7";
@@ -168,7 +168,7 @@ public class DSID01MArrange extends QueryWindow{
 				System.out.println(">>>>"+woi_sql);
 				ChangeStatus(woi_sql ,status);
 				
-				Messagebox.show("全部確認成功！！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0007"));
 				doSearch();
 				ShowTip();
 			}
@@ -230,7 +230,7 @@ public class DSID01MArrange extends QueryWindow{
 		
 
 		if("".equals(query_order_date.getValue())||query_order_date.getValue()==null){
-			Messagebox.show("接單日期為空，請選擇日期！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0005"));
 		}else{
 			
 			if(!"".equals(Max_num.getValue())&&Max_num.getValue()!=null){
@@ -295,7 +295,7 @@ public class DSID01MArrange extends QueryWindow{
 									pstm.close();
 									ON_ORDER++;
 								} catch (Exception e) {
-									Errmessage="更新失敗！！,指令："+rs3.getString("OD_NO")+", "+e;
+									Errmessage=Labels.getLabel("DSID.MSG0008")+rs3.getString("OD_NO")+", "+e;
 									e.printStackTrace();
 								}
 
@@ -315,9 +315,9 @@ public class DSID01MArrange extends QueryWindow{
 			}
 			
 			if(Errmessage.length()>0){
-				Messagebox.show("派工失敗！！"+Errmessage);
+				Messagebox.show(Labels.getLabel("DSID.MSG0009")+Errmessage);
 			}else{
-				Messagebox.show("派工成功！！！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0010"));
 			}	
 			Errmessage="";
 		}
@@ -341,7 +341,7 @@ public class DSID01MArrange extends QueryWindow{
 				if(!"".equals(rs.getString("COU"))){
 					if(Double.valueOf(rs.getString("COU"))>Double.valueOf(Max_num)){
 						status=false;
-						Messagebox.show("確認數"+rs.getString("COU")+"大於接單上限"+Max_num+"，請核查！！！");
+						Messagebox.show(Labels.getLabel("DSID.MSG0011")+rs.getString("COU")+Labels.getLabel("DSID.MSG0012")+Max_num+"，"+Labels.getLabel("DSID.MSG0013"));
 					}
 				}
 			}
@@ -358,7 +358,7 @@ public class DSID01MArrange extends QueryWindow{
 		// TODO Auto-generated method stub
 		
 		if("".equals(query_order_date.getValue())||query_order_date.getValue()==null){
-			Messagebox.show("接單日期為空，請選擇日期！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0005"));
 		}else{
 			ArrayList<Object> arrList = new ArrayList<Object>();		
 			arrList.clear();
@@ -403,7 +403,7 @@ public class DSID01MArrange extends QueryWindow{
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
 			if(rs.next()){
-				tip_label.setValue(order_date+" 總訂單數："+rs.getString("A_NUM")+"雙，已確認訂單數："+rs.getString("C_NUM")+"雙。");
+				tip_label.setValue(order_date+" "+Labels.getLabel("DSID.MSG0014")+rs.getString("A_NUM")+Labels.getLabel("DSID.MSG0015")+"，"+Labels.getLabel("DSID.MSG0016")+rs.getString("C_NUM")+Labels.getLabel("DSID.MSG0015")+"。");
 			}
 			rs.close();
 			ps.close();

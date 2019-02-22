@@ -18,6 +18,7 @@ import org.zkoss.poi.hssf.usermodel.HSSFFont;
 import org.zkoss.poi.hssf.usermodel.HSSFRow;
 import org.zkoss.poi.hssf.usermodel.HSSFSheet;
 import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -76,16 +77,16 @@ public class DSID21MExport extends OpenWinCRUD{
 				
 				filterHeader(wb, Grna, Modelna, conn); // 導出主體方法
 				
-				Messagebox.show("匯出成功 !");
+				Messagebox.show(Labels.getLabel("DSID.MSG0135"));
 			
 			}else{
-				Messagebox.show("請選擇導出資料 !");
+				Messagebox.show(Labels.getLabel("DSID.MSG0134"));
 			}
 			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show("匯出失敗, 請檢查 !");
+			Messagebox.show(Labels.getLabel("DSID.MSG0136"));
 		}
 		
 	}
@@ -280,7 +281,7 @@ public class DSID21MExport extends OpenWinCRUD{
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			Messagebox.show("資料查詢與匯出失敗.!");
+			Messagebox.show(Labels.getLabel("DSID.MSG0170"));
 		}
 	}
 
@@ -306,55 +307,55 @@ public class DSID21MExport extends OpenWinCRUD{
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("型體");
+		cell.setCellValue(Labels.getLabel("DSID01M.MODEL_NA"));
 		
 		
 		cell = row.createCell(1);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("序號");
+		cell.setCellValue(Labels.getLabel("DSID02.UNIQUEID"));
 		
 		
 		cell = row.createCell(2);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("部位");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0171"));
 		
 		
 		cell = row.createCell(3);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("部位名稱");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0099"));
 		
 		
 		cell = row.createCell(4);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("顏色");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0096"));
 		
 		
 		cell = row.createCell(5);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("材料編號");
+		cell.setCellValue(Labels.getLabel("DSID03.FU_ID"));
 		
 		
 		cell = row.createCell(6);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("材料名稱");
+		cell.setCellValue(Labels.getLabel("DSID03.EL_NAME"));
 		
 		
 		cell = row.createCell(7);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("Size分段");
+		cell.setCellValue("Size "+Labels.getLabel("DSID.MSG0116"));
 		
 		
 		cell = row.createCell(8);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("備註");
+		cell.setCellValue(Labels.getLabel("PUBLIC.MSG0040"));
 		
 		
 	}
@@ -374,7 +375,7 @@ public class DSID21MExport extends OpenWinCRUD{
 				if (ltAll.isSelected()){
 					if(!"".equals((Object)ltAll.getValue())&&(Object)ltAll.getValue()!=null){
 						
-						Messagebox.show("已選擇資料不需查詢, 如需再次查詢請選擇空 !");		
+						Messagebox.show(Labels.getLabel("DSID.MSG0132"));		
 						
 					}
 				}
@@ -400,7 +401,7 @@ public class DSID21MExport extends OpenWinCRUD{
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				Messagebox.show("好像沒有找到任何部位名稱 ... 找人吧 !");
+				Messagebox.show(Labels.getLabel("DSID.MSG0133"));
 			} finally {	
 				Common.closeConnection(conn);	
 			}
@@ -426,7 +427,7 @@ public class DSID21MExport extends OpenWinCRUD{
 				if (ltAll.isSelected()){
 					if(!"".equals((Object)ltAll.getValue())&&(Object)ltAll.getValue()!=null){
 						
-						Messagebox.show("已選擇資料不需查詢, 如需再次查詢請選擇空 !");		
+						Messagebox.show(Labels.getLabel("DSID.MSG0132"));		
 						
 					}
 				}
@@ -452,7 +453,7 @@ public class DSID21MExport extends OpenWinCRUD{
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				Messagebox.show("好像沒有找到任何部位名稱 ... 找人吧 !");
+				Messagebox.show(Labels.getLabel("DSID.MSG0133"));
 			} finally {	
 				Common.closeConnection(conn);	
 			}

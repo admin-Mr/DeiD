@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -54,7 +55,7 @@ public class ReadIDPic02 extends QueryWindow{
 	@Override
 	public void doAfterCompose(Component window) throws Exception {
 		super.doAfterCompose(window);
-		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService2");
+		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService1");
 		setCRUDService(CRUDService);
 		System.out.println("0.5");
 		
@@ -73,7 +74,7 @@ public class ReadIDPic02 extends QueryWindow{
 			
 		} catch (Exception e) {
 			// TODO: handle exception
-			Messagebox.show("未選擇時間區間!");
+			Messagebox.show(Labels.getLabel("DSID.MSG0233"));
 			e.printStackTrace();
 			return;
 		}

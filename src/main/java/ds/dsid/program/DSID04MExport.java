@@ -29,6 +29,7 @@ import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
 import org.zkoss.poi.hssf.util.HSSFColor.RED;
 import org.zkoss.poi.ss.usermodel.CellStyle;
 import org.zkoss.poi.ss.util.CellRangeAddress;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -95,7 +96,7 @@ public class DSID04MExport extends OpenWinCRUD{
 		
 		if(!"".equals(MODEL_NA)){
 			Connection conn = Common.getDbConnection();
-			Connection Conn = getDB01Conn();
+			Connection Conn = Common.getService1Conn();
 
 			HSSFWorkbook wb = new HSSFWorkbook();		
 
@@ -283,7 +284,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				stream.close();
 				
 			} catch (Exception e) {
-				Messagebox.show("導出失敗!!"+e);
+				Messagebox.show(Labels.getLabel("DSID.MSG0052")+e);
 				e.printStackTrace();
 			} finally {
 				if(rs1!=null){
@@ -311,7 +312,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				System.err.println(" —————————— : 結束  : —————————— ");
 			}
 		}else{
-			Messagebox.show("型體為空，請核查輸入！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0053"));
 		}		
 	}
 	
@@ -2793,7 +2794,7 @@ public class DSID04MExport extends OpenWinCRUD{
 				}
 			  }catch (Exception e) {
 				 e.printStackTrace();	
-				 Messagebox.show("導出失敗!!"+e);
+				 Messagebox.show(Labels.getLabel("DSID.MSG0052")+e);
 				 break;
 			  }
 				
@@ -3003,25 +3004,25 @@ public class DSID04MExport extends OpenWinCRUD{
 	}
 	
 	
-	public static Connection getDB01Conn(){
-		Connection  conn = null;
-		String driver = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
-		String user = "DSOD";
-		String pwd = "ora@it2013";
-		try{
-	        Class.forName(driver);
-	     }catch(Exception e){
-	        e.printStackTrace();
-	     }
-	    try{
-	    	conn=DriverManager.getConnection(url,user,pwd);
-//	    	System.err.println(">>>鏈接DB01數據庫");
-	    }catch(Exception e){
-	    	e.printStackTrace();
-	    }
-	    return conn;
-	}
+//	public static Connection getDB01Conn(){
+//		Connection  conn = null;
+//		String driver = "oracle.jdbc.driver.OracleDriver";
+//		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+//		String user = "DSOD";
+//		String pwd = "ora@it2013";
+//		try{
+//	        Class.forName(driver);
+//	     }catch(Exception e){
+//	        e.printStackTrace();
+//	     }
+//	    try{
+//	    	conn=DriverManager.getConnection(url,user,pwd);
+////	    	System.err.println(">>>鏈接DB01數據庫");
+//	    }catch(Exception e){
+//	    	e.printStackTrace();
+//	    }
+//	    return conn;
+//	}
 	
 	
 	@Override

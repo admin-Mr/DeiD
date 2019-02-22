@@ -125,7 +125,9 @@ public class DSID01MImport extends OpenWinCRUD{
 			}
 			if(msg.length()>0){
 				connHead.rollback();
-				Messagebox.show("XML文件導入失敗！！！"+msg);
+				Messagebox.show("XML"+Labels.getLabel("DSID.MSG0019")+msg);
+			}else{
+				connHead.commit();
 			}
 			
 		}catch(Exception e){
@@ -598,7 +600,7 @@ public class DSID01MImport extends OpenWinCRUD{
 				System.out.println(WORK_ORDER_ID+"訂單主信息匯入成功！！！");
 			} catch (Exception e) {
 				e.printStackTrace();
-				Errmessage+=WORK_ORDER_ID+"訂單主信息有誤！！"+e;
+				Errmessage+=WORK_ORDER_ID+Labels.getLabel("DSID.MSG0020")+e;
 				conn.rollback();
 				return;
 			}
@@ -698,10 +700,10 @@ public class DSID01MImport extends OpenWinCRUD{
 	private void ShowMessage() {
 		// TODO Auto-generated method stub
 		if(Errmessage.length()>0){
-			Messagebox.show("xml文件匯入失敗！！！"+Errmessage);
+			Messagebox.show("xml"+Labels.getLabel("DSID.MSG0019")+Errmessage);
 		}else{
-			Messagebox.show("xml文件匯入成功！！！");
-			ShowResult.setValue(Index+"筆資料已匯入！！");
+			Messagebox.show("xml"+Labels.getLabel("DSID.MSG0021"));
+			ShowResult.setValue(Index+Labels.getLabel("DSID.MSG0022"));
 		}	
 		Errmessage="";
 		Index=0;

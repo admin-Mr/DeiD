@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -282,7 +283,7 @@ public class DSID17MDetail3 extends Detail{
 				rs = ps.executeQuery();
 				if(rs.next()){
 					if(Double.valueOf(OUT_QTY)>Double.valueOf(rs.getString("ADH_QTY"))){
-						mess="出庫數量大於庫存數量，不可出庫！！！";
+						mess=Labels.getLabel("DSID.MSG0065");
 					}
 					
 				}
@@ -311,7 +312,7 @@ public class DSID17MDetail3 extends Detail{
 				Common.closeConnection(conn);	
 			}
 		}else{
-			mess="出庫數量不能為空！！";
+			mess=Labels.getLabel("DSID.MSG0066");
 		}
 		
 		if(mess.length()>0){
@@ -335,7 +336,8 @@ public class DSID17MDetail3 extends Detail{
 	
 	
 	private ArrayList<String> GetMt_pono() {
-		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
+		Connection Conn=Common.getService1Conn();
+//		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		ArrayList<String> Mt_list=new ArrayList<>();
@@ -397,7 +399,8 @@ public class DSID17MDetail3 extends Detail{
 	private void OutRaw_elno() {
 		// TODO Auto-generated method stub
 		Connection conn=Common.getDbConnection();
-		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
+		Connection Conn=Common.getService1Conn();
+//		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
 		PreparedStatement ps = null,pstm=null;
 		ResultSet rs = null;
 		String seq="";
@@ -518,7 +521,8 @@ public class DSID17MDetail3 extends Detail{
 	private void Anti_Raw_elno() {
 		// TODO Auto-generated method stub
 		Connection conn=Common.getDbConnection();
-		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
+		Connection Conn=Common.getService1Conn();
+//		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
 		PreparedStatement ps = null,pstm=null;
 		ResultSet rs = null;
 		try {

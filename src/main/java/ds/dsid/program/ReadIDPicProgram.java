@@ -17,6 +17,7 @@ import java.util.Queue;
 import javax.swing.plaf.synth.SynthSpinnerUI;
 
 import org.zkoss.image.AImage;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zhtml.Img;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Desktop;
@@ -110,18 +111,18 @@ public class ReadIDPicProgram extends QueryWindow {
 		String Bc = strBc.toString();
 		String User = "";
 		url = getUrl(Bc);
-		Connection Conn = Common.getDB01Conn(); // DB連接
+		Connection Conn = Common.getService1Conn(); // DB連接
 		try {
 			// Bc = Barcode.getValue();
 			if (Bc == null || "".equals(Bc)) {
-				Messagebox.show(" 條碼欄不能為空 或 未检测到條碼扫描 !! ");
+				Messagebox.show(Labels.getLabel("DSID.MSG0236"));
 				return;
 			} else {
 				System.out.println(" ----- Bc.length() : " + Barcode.getValue().length());
 				System.out.println(" ----- User " + user);
 				if (!"XEID9".equals(user)) {
 					if (Bc.toString().length() < 0 && Bc.toString().length() > 8) {
-						Messagebox.show("條碼不正確, 請核對!!");
+						Messagebox.show(Labels.getLabel("DSID.MSG0237"));
 						return;
 					}
 				}
@@ -402,7 +403,7 @@ public class ReadIDPicProgram extends QueryWindow {
 
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Connection Conn = Common.getDB01Conn(); // DB連接
+		Connection Conn = Common.getService1Conn(); // DB連接
 		String sql = "";
 		String bcda = "";
 		// String Bcstr = String.valueOf(Bc);
@@ -453,7 +454,7 @@ public class ReadIDPicProgram extends QueryWindow {
 			ps.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			Messagebox.show("訂單資訊查詢失敗!");
+			Messagebox.show(Labels.getLabel("DSID.MSG0238"));
 			e.printStackTrace();
 		} finally {
 			if(ps != null){
@@ -473,7 +474,7 @@ public class ReadIDPicProgram extends QueryWindow {
 		String[] Data = new String[7];
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Connection Conn = Common.getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 		user = _userInfo.getAccount(); // 獲取登陸賬戶
 		String Userid = ""; // getUsetname(user);
 		// System.out.println(" ----- user ------ : " + user);
@@ -493,7 +494,7 @@ public class ReadIDPicProgram extends QueryWindow {
 			Userid = "DECIDE_DATE";
 		} else if (user == "DSGPI") {
 			Userid = "DECIDE_DATE";
-			Messagebox.show("該為測試賬戶, 請使用現場賬號作測試！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0239"));
 		}
 
 		// System.out.println(" ----- Userid : " + Userid);
@@ -584,7 +585,7 @@ public class ReadIDPicProgram extends QueryWindow {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			Userid = Userid == "" ? null : Userid;
-			Messagebox.show(" 警示資訊查詢失敗 ! \n User : " + Userid + " \n User ID 不能為空, 請使用現場賬戶 !");
+			Messagebox.show(Labels.getLabel("DSID.MSG0240")+" ! \n User : " + Userid + " \n User ID "+Labels.getLabel("DSID.MSG0241")+" !");
 			e.printStackTrace();
 
 		} finally {
@@ -605,7 +606,7 @@ public class ReadIDPicProgram extends QueryWindow {
 
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Connection Conn = Common.getDB01Conn(); // DB連接
+		Connection Conn = Common.getService1Conn(); // DB連接
 		List<String[]> list = new ArrayList<String[]>();
 		String[] Cz = new String[4];
 		String[] Zc = new String[4];
@@ -683,7 +684,7 @@ public class ReadIDPicProgram extends QueryWindow {
 			ps.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			Messagebox.show("各製程產量查詢失敗!");
+			Messagebox.show(Labels.getLabel("DSID.MSG0242"));
 			e.printStackTrace();
 		} finally {
 			if(ps != null){
@@ -702,7 +703,7 @@ public class ReadIDPicProgram extends QueryWindow {
 
 		ResultSet rs = null, rs1 = null;
 		PreparedStatement ps = null, ps1 = null;
-		Connection Conn = Common.getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 		String[] url = new String[5];
 		String sqlurl1 = null, sqlurl2 = null, sqlurl3 = null, sqlurl4 = null;
 		// String Bcstr = Bc.toString();
@@ -753,7 +754,7 @@ public class ReadIDPicProgram extends QueryWindow {
 				ps1.close();
 			} catch (Exception e) {
 				// TODO: handle exception
-				Messagebox.show("Dsid30 圖片鏈接查詢失敗!");
+				Messagebox.show("Dsid30 "+Labels.getLabel("DSID.MSG0243")+"!");
 				e.printStackTrace();
 			}
 
@@ -765,7 +766,7 @@ public class ReadIDPicProgram extends QueryWindow {
 			ps.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			Messagebox.show("Dsid Pic 圖片基礎資料查詢失敗!");
+			Messagebox.show("Dsid Pic "+Labels.getLabel("DSID.MSG0244")+"!");
 			e.printStackTrace();
 		} finally {
 			if(ps != null){
@@ -849,7 +850,7 @@ public class ReadIDPicProgram extends QueryWindow {
 	public void setReidDate(String Bc, String user) throws SQLException {
 
 		PreparedStatement upDateps = null;
-		Connection Conn = Common.getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 		String Strsql = "";
 		String Zcname = getUsetname(user);
 		// System.out.println(" ----- Zcname : " + Zcname);
@@ -869,7 +870,7 @@ public class ReadIDPicProgram extends QueryWindow {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				Messagebox.show("更新掃描時間失敗 ! ");
+				Messagebox.show(Labels.getLabel("DSID.MSG0245")+" ! ");
 			} finally {
 				if(upDateps != null){
 					upDateps.close();
@@ -920,7 +921,7 @@ public class ReadIDPicProgram extends QueryWindow {
 		// System.out.println(" ----- Bc 測試1 : " + Bc);
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Connection Conn = Common.getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 
 		Date date = new Date();
 		String Strdate = format.format(date);
@@ -984,7 +985,7 @@ public class ReadIDPicProgram extends QueryWindow {
 		// TODO Auto-generated method stub
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		Connection Conn = Common.getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 		String ZDbc = "";
 
 		String sql = "select work_order_id from dsid30 where url1 = '" + BcDemo

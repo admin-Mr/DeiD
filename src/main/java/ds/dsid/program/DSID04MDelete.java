@@ -92,9 +92,9 @@ public class DSID04MDelete extends OpenWinCRUD{
 				pstm5 = conn.prepareStatement(sql5);
 				pstm5.executeUpdate();
 				pstm5.close();
-				Messagebox.show("型體："+MODEL_NA+"資料全部刪除完成！！！");
+				Messagebox.show(Labels.getLabel("DSID01M.MODEL_NA")+"："+MODEL_NA+Labels.getLabel("DSID.MSG0049")+"！！！");
 			} catch (Exception e) {
-				Messagebox.show("型體："+MODEL_NA+"資料全部刪除失敗,"+e);
+				Messagebox.show(Labels.getLabel("DSID01M.MODEL_NA")+"："+MODEL_NA+Labels.getLabel("DSID.MSG0050")+","+e);
 				e.printStackTrace();
 			}finally{
 				if(pstm1!=null){
@@ -115,7 +115,7 @@ public class DSID04MDelete extends OpenWinCRUD{
 				Common.closeConnection(conn);	
 			}
 		}else{
-			Messagebox.show("型體資料為空,刪除失敗!");
+			Messagebox.show(Labels.getLabel("DSID.MSG0051"));
 		}
 	}
 

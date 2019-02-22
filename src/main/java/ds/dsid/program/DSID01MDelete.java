@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
@@ -90,9 +92,9 @@ public class DSID01MDelete extends OpenWinCRUD{
 				Common.closeConnection(conn);
 			}
 			
-			Messagebox.show(Format.format(Dateorder_date.getValue())+" 資料批量刪除成功！！！");
+			Messagebox.show(Format.format(Dateorder_date.getValue())+" "+Labels.getLabel("DSID.MSG0017"));
 		}else{
-			Messagebox.show("選擇的日期為空，請核查！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0018"));
 		}
 
 			
@@ -100,14 +102,17 @@ public class DSID01MDelete extends OpenWinCRUD{
 
 	private void doDelete_All_old() throws SQLException {
 		// TODO Auto-generated method stub
-		Connection conn=Common.getDbConnection();
+//		Connection conn=Common.getDbConnection();
+		Connection conn=Common.getService1Conn();
 		PreparedStatement pstm1=null,pstm2=null;
 		DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 		String  Sql1="",Sql2="";
 		
 		if(Dateorder_date.getValue()!=null){
-			Sql1="DELETE DSID31@FTLDB01.DEANSHOES.COM WHERE OD_NO IN (SELECT OD_NO FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
-			Sql2="DELETE DSID30@FTLDB01.DEANSHOES.COM WHERE OD_NO IN (SELECT OD_NO FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
+//			Sql1="DELETE DSID31@FTLDB01.DEANSHOES.COM WHERE OD_NO IN (SELECT OD_NO FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
+//			Sql2="DELETE DSID30@FTLDB01.DEANSHOES.COM WHERE OD_NO IN (SELECT OD_NO FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
+			Sql1="DELETE DSID31 WHERE OD_NO IN (SELECT OD_NO FROM DSID01_LINK WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
+			Sql2="DELETE DSID30 WHERE OD_NO IN (SELECT OD_NO FROM DSID01_LINK WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
 			
 			System.err.println("DSID31批量刪除>>>>>"+Sql1);
 			System.err.println("DSID30批量刪除>>>>>"+Sql2);
@@ -130,9 +135,9 @@ public class DSID01MDelete extends OpenWinCRUD{
 				Common.closeConnection(conn);
 			}
 			
-			Messagebox.show(Format.format(Dateorder_date.getValue())+" 資料批量刪除成功！！！");
+			Messagebox.show(Format.format(Dateorder_date.getValue())+" "+Labels.getLabel("DSID.MSG0017"));
 		}else{
-			Messagebox.show("選擇的日期為空，請核查！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0018"));
 		}
 
 		Common.closeConnection(conn);	

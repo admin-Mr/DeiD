@@ -4,7 +4,7 @@
 	<div sclass="breadcrumbs">
 		<div sclass="breadcrumb">
 			<span sclass="home-icon z-icon-home" />
-			<a label="${labels.MENU.DSIDN12M}" />
+			<a label="${labels.DSID.DSID10}" />
 			<label value="${labels.MENU.DSIDN12M} (DSID12M)" />
 			<!-- 此處放置該程式多國系名稱及程式代號 -->
 		</div>

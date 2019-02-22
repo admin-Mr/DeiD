@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -94,11 +95,11 @@ public class DSID01MReceive extends OpenWinCRUD{
 //						e.printStackTrace();
 //					}
 					
-					Messagebox.show("轉單成功！！！");
+					Messagebox.show(Labels.getLabel("DSID.MSG0033"));
 				} catch (Exception e) {
 					// TODO: handle exception
 					conn.rollback();
-					Messagebox.show("轉單失敗！！！\n"+e);
+					Messagebox.show(Labels.getLabel("DSID.MSG0034")+"\n"+e);
 				}
 			}
 			} catch (SQLException e) {				
@@ -111,7 +112,7 @@ public class DSID01MReceive extends OpenWinCRUD{
 			}
 			
 		}else{
-			Messagebox.show("接單日期為空，請核查！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0035")+Labels.getLabel("DSID.MSG0023"));
 		}
 	
 	}
@@ -139,7 +140,7 @@ public class DSID01MReceive extends OpenWinCRUD{
 		String InsSql="";
 	
 		String Sql="SELECT A.MODEL_NA,GROUP_NO,COLOR,A.EL_NO,A.YIELD,B.MT_QTY,FLOOR(B.MT_QTY/A.YIELD) NUM\n" +
-				"FROM DSID04_1 A,DSID77@FTLDB01.DEANSHOES.COM B WHERE A.MODEL_NA=B.MODEL_NA AND A.EL_NO=B.EL_NO\n" + 
+				"FROM DSID04_1 A,DSID77 B WHERE A.MODEL_NA=B.MODEL_NA AND A.EL_NO=B.EL_NO\n" + 
 				"AND A.MODEL_NA IN (SELECT DISTINCT CASE WHEN MODEL_NA LIKE 'W%' THEN SUBSTR(MODEL_NA,3) ELSE MODEL_NA END AS MODEL_NA FROM DSID01_TEMP) \n" + 
 				" AND A.GROUP_NO LIKE 'GROUP%' AND A.EL_NO IS NOT NULL AND A.COLOR NOT LIKE '%/%' ORDER BY A.MODEL_NA,NUM ";		
 		System.err.println(">>>>"+Sql);
@@ -247,11 +248,11 @@ public class DSID01MReceive extends OpenWinCRUD{
 		String Detial=GetDetial(Last_WOI_List,conn);
 		if(ErrMess1.length()>0){
 			ErrMess1=ErrMess1.substring(0, ErrMess1.length()-1);
-			ErrMess1="\n以下材料不足:\n"+ErrMess1;
+			ErrMess1="\n"+Labels.getLabel("DSID.MSG0036")+"\n"+ErrMess1;
 		}		
 		if(ErrMess2.length()>0){
 			ErrMess2=ErrMess2.substring(0, ErrMess2.length()-1);
-			ErrMess2="\n以下訂單不可接：\n"+ErrMess2;
+			ErrMess2="\n"+Labels.getLabel("DSID.MSG0037")+"\n"+ErrMess2;
 		}
 		
 		
@@ -314,7 +315,7 @@ public class DSID01MReceive extends OpenWinCRUD{
 			ps1 = conn.prepareStatement(Sql);
 			rs1 = ps1.executeQuery();			
 			while(rs1.next()){	
-				Detial+="型體："+rs1.getString("NIKE_SH_ARITCLE")+" 預接："+rs1.getString("COU")+" 雙\n";
+				Detial+=Labels.getLabel("DSID01M.MODEL_NA")+"："+rs1.getString("NIKE_SH_ARITCLE")+" "+Labels.getLabel("DSID.MSG0038")+"："+rs1.getString("COU")+" "+Labels.getLabel("DSID.MSG0015")+"\n";
 				num+=Integer.valueOf(rs1.getString("COU"));
 			}
 			ps1.close();
@@ -322,7 +323,7 @@ public class DSID01MReceive extends OpenWinCRUD{
 		} catch (SQLException e) {				
 			e.printStackTrace();
 		}
-		Detial="共可預接"+num+",其中：\n"+Detial+"詳細 WORK_ORDER_ID 已列出！！！\n";
+		Detial=Labels.getLabel("DSID.MSG0039")+num+","+Labels.getLabel("DSID.MSG0040")+"：\n"+Detial+Labels.getLabel("DSID.MSG0041")+" WORK_ORDER_ID "+Labels.getLabel("DSID.MSG0042")+"！！！\n";
 		return Detial;
 	}
 

@@ -207,7 +207,7 @@ public class DSID02M_Import01 extends QueryBase {
 		if (parentWindow != null)
 			Events.sendEvent(new Event("onQueryWindowSenddef", parentWindow,mediatemp.getName()));
 		//Messagebox.show(Labels.getLabel("PUBLIC.MSG0060"), "Warning", Messagebox.OK, Messagebox.EXCLAMATION);				
-		Messagebox.show("導入成功！！", "Warning", Messagebox.OK, Messagebox.EXCLAMATION);				
+		Messagebox.show(Labels.getLabel("DSID.MSG0047"), "Warning", Messagebox.OK, Messagebox.EXCLAMATION);				
 	    getRootWindow().detach();
 	}
 	

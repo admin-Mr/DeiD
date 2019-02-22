@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import util.Common;
+
 public class DSIDN08M_DBManger {
 	private static final String URL = "jdbc:oracle:thin:@10.8.1.28:1521:FTLDDB01";
 	private static final String PASS = "running2011";
@@ -64,7 +66,7 @@ public class DSIDN08M_DBManger {
 		}
 	}
     public static void batchUpdate(String sqlTemplate, List<List<Object>> list) {  
-        Connection conn = DSIDN08M_DBManger.getConnection();  
+        Connection conn = Common.getDbConnection();  
         PreparedStatement ps = null;  
         try {  
             ps = conn.prepareStatement(sqlTemplate);  
@@ -95,7 +97,7 @@ public class DSIDN08M_DBManger {
         }  
     }  
 	public static void main(String[] args) {
-		Connection conn = DSIDN08M_DBManger.getConnection();
+		Connection conn = Common.getDbConnection(); 
 		try{
 		System.out.println("Connection===== "+ conn.isClosed());
 		closeConnection(null, conn, null);

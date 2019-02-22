@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -46,7 +48,7 @@ public class DSID23RProgram extends OpenWinCRUD{
 			String START=sdf.format(po_date1.getValue());
 			DSID23_1RTask.ExcelExport(MODEL_NA,START);
 		}else{
-			Messagebox.show("日期不能為空！！！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0204"));
 		}
 		
 //		START="2018/10/09";

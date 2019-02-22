@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.WrongValueException;
 import org.zkoss.zk.ui.event.Event;
@@ -109,7 +111,8 @@ public class DSID17MDetail1 extends Detail{
 		// TODO Auto-generated method stub
 	
 		Connection conn=Common.getDbConnection();
-		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
+		Connection Conn=Common.getService1Conn();
+//		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
@@ -129,7 +132,7 @@ public class DSID17MDetail1 extends Detail{
 						Double MT_QTY=GetMt_qty(rs.getString("MODEL_NA"),rs.getString("RAW_ELNO"+i),Conn);
 						Double USE_QTY=GetUse_qty(rs.getString("RAW_ELNO"+i),conn);
 						if((OT_QTY+USE_QTY)>MT_QTY){
-							mess+="原材料："+rs.getString("RAW_ELNO"+i)+"數量不足,不能進行貼合發料！！\n";
+							mess+=Labels.getLabel("DSID.MSG0060")+Labels.getLabel("DSID.MSG0058")+"："+rs.getString("RAW_ELNO"+i)+Labels.getLabel("DSID.MSG0061")+"\n";
 						}
 					}	
 				}

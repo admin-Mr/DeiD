@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -227,28 +228,28 @@ public class DSID21MProgram extends Master {
 			//System.out.println(" ----- 類型判斷 ！" + entity.getTYPE());
 			switch (entity.getTYPE()) {
 			case "0":
-				txtType.setValue("未設定"); 
+				txtType.setValue(Labels.getLabel("DSID.MSG0160")); 
 				break;
 			case "1":
-				txtType.setValue("前面片"); 
+				txtType.setValue(Labels.getLabel("DSID.MSG0082")); 
 				break;
 			case "2":
-				txtType.setValue("鞋帶");
+				txtType.setValue(Labels.getLabel("DSID.MSG0159"));
 				break;
 			case "3":
-				txtType.setValue("前氣墊");
+				txtType.setValue(Labels.getLabel("DSID.MSG0177"));
 				break;
 			case "4":
-				txtType.setValue("後氣墊");
+				txtType.setValue(Labels.getLabel("DSID.MSG0178"));
 				break;
 			case "5":
-				txtType.setValue("港寶"); 
+				txtType.setValue(Labels.getLabel("DSID.MSG0102")); 
 				break;
 			case "6":
-				txtType.setValue("布標"); 
+				txtType.setValue(Labels.getLabel("DSID.MSG0103")); 
 				break;
 			case "7":
-				txtType.setValue("鞋帶");
+				txtType.setValue(Labels.getLabel("DSID.MSG0159"));
 				break;
 			default:
 				txtType.setValue("/");

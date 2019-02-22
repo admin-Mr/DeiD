@@ -19,6 +19,7 @@ import org.zkoss.poi.hssf.usermodel.HSSFFont;
 import org.zkoss.poi.hssf.usermodel.HSSFRow;
 import org.zkoss.poi.hssf.usermodel.HSSFSheet;
 import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
@@ -78,7 +79,7 @@ public class DSID21MBatDelete extends OpenWinCRUD{
 			BatchDelete(conn, Modelna, Batdate1, Batdate2);
 			
 		}else{
-			Messagebox.show("請選擇型體 ！");
+			Messagebox.show(Labels.getLabel("DSID.MSG0127"));
 		}
 		
 	}
@@ -113,15 +114,15 @@ public class DSID21MBatDelete extends OpenWinCRUD{
 					deletePs = conn.prepareStatement(deleteSql);
 					deletePs.executeUpdate();
 					deletePs.close();
-					Messagebox.show(batdate1+" - "+batdate2+"该时段资料删除成功！");
+					Messagebox.show(batdate1+" - "+batdate2+Labels.getLabel("DSID.MSG0128")+"！");
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
-					Messagebox.show(batdate1+" - "+batdate2+"该时段资料删除失败！");
+					Messagebox.show(batdate1+" - "+batdate2+Labels.getLabel("DSID.MSG0129")+"！");
 				}
 				
 			}else {
-				Messagebox.show("查詢結果 : \n "+batdate1+" - "+batdate2+" \n 無該時段資料,請確認選擇日期 ！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0130")+": \n "+batdate1+" - "+batdate2+" \n "+Labels.getLabel("DSID.MSG0131"));
 			}
 			
 			selectRs.close();
@@ -146,7 +147,7 @@ public class DSID21MBatDelete extends OpenWinCRUD{
 				if (ltAll.isSelected()){
 					if(!"".equals((Object)ltAll.getValue())&&(Object)ltAll.getValue()!=null){
 						
-						Messagebox.show("已選擇資料不需查詢, 如需再次查詢請選擇空 ！");		
+						Messagebox.show(Labels.getLabel("DSID.MSG0132"));		
 						
 					}
 				}
@@ -172,7 +173,8 @@ public class DSID21MBatDelete extends OpenWinCRUD{
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
-				Messagebox.show("好像沒有找到任何部位名稱 ... 找人吧 ！");
+//				Messagebox.show("好像沒有找到任何部位名稱 ... 找人吧 ！");
+				Messagebox.show(Labels.getLabel("DSID.MSG0133"));
 			} finally {	
 				Common.closeConnection(conn);	
 			}

@@ -20,6 +20,7 @@ import org.zkoss.poi.hssf.usermodel.HSSFRow;
 import org.zkoss.poi.hssf.usermodel.HSSFSheet;
 import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
 import org.zkoss.poi.ss.util.CellRangeAddress;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Filedownload;
 import util.Common;
 
@@ -64,7 +65,7 @@ public class DSIDN10M_ExcelUtil  {
 		// TODO Auto-generated method stub
 		
 	
-		Connection Conn = getDB01Conn();
+		Connection Conn = Common.getService1Conn();
 		Connection conn = Common.getDbConnection();
 
 		HSSFRow row = null;
@@ -285,7 +286,7 @@ public class DSIDN10M_ExcelUtil  {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("出庫統計");	
+		cell.setCellValue(Labels.getLabel("DSID.MSG0230"));	
 		sheet4.addMergedRegion(new CellRangeAddress(0, 0, 0, 5));
 		
 		row = sheet4.createRow(1);
@@ -293,54 +294,54 @@ public class DSIDN10M_ExcelUtil  {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("形體名稱");		
+		cell.setCellValue(Labels.getLabel("DSIDN10.MODEL_NA"));		
 			
 		cell = row.createCell(1);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("材料編號");		
+		cell.setCellValue(Labels.getLabel("DSIDN10.EL_NO"));		
 			
 		cell = row.createCell(2);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("材料名稱");		
+		cell.setCellValue(Labels.getLabel("DSIDN10.EL_CNAME"));		
 			
 		cell = row.createCell(3);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("指令");		
+		cell.setCellValue(Labels.getLabel("DSID.MSG0231"));		
 			
 		cell = row.createCell(4);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("總用量");
+		cell.setCellValue(Labels.getLabel("DSIDN10.MT_QTY"));
 			
 		cell = row.createCell(5);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue("總領料");
+		cell.setCellValue(Labels.getLabel("DSID.MSG0232"));
 	}
 
 
-	public static Connection getDB01Conn(){
-		Connection  conn = null;
-		String driver = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
-		String user = "DSOD";
-		String pwd = "ora@it2013";
-		try{
-	        Class.forName(driver);
-	     }catch(Exception e){
-	        e.printStackTrace();
-	     }
-	    try{
-	    	conn=DriverManager.getConnection(url,user,pwd);
-	    	System.err.println(">>>鏈接DB01數據庫");
-	    }catch(Exception e){
-	    	e.printStackTrace();
-	    }
-	    return conn;
-	}
+//	public static Connection getDB01Conn(){
+//		Connection  conn = null;
+//		String driver = "oracle.jdbc.driver.OracleDriver";
+//		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+//		String user = "DSOD";
+//		String pwd = "ora@it2013";
+//		try{
+//	        Class.forName(driver);
+//	     }catch(Exception e){
+//	        e.printStackTrace();
+//	     }
+//	    try{
+//	    	conn=DriverManager.getConnection(url,user,pwd);
+//	    	System.err.println(">>>鏈接DB01數據庫");
+//	    }catch(Exception e){
+//	    	e.printStackTrace();
+//	    }
+//	    return conn;
+//	}
 
 	
 	

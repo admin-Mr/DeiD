@@ -218,7 +218,7 @@ public class DSID04MImport extends OpenWinCRUD{
 							pstm.executeUpdate();
 							pstm.close();
 						} catch (Exception e) {
-							Errmessage ="工作表4材料"+EL_NO+"資料導入失敗！"+e;
+							Errmessage =Labels.getLabel("DSID.MSG0055")+"4"+Labels.getLabel("DSID.MSG0058")+EL_NO+Labels.getLabel("DSID.MSG0054")+"！"+e;
 							conn.rollback();
 							e.printStackTrace();
 							
@@ -251,7 +251,7 @@ public class DSID04MImport extends OpenWinCRUD{
 			}
 			if(Errmessage.length()<=0){
 				conn.commit();
-				Okmessage+="工作表4文件導入成功,共"+SEQ+"筆資料！\n";
+				Okmessage+=Labels.getLabel("DSID.MSG0055")+"4"+Labels.getLabel("DSID.MSG0056")+SEQ+Labels.getLabel("DSID.MSG0057")+"！\n";
 			}else{
 				conn.rollback();
 				}
@@ -341,7 +341,7 @@ public class DSID04MImport extends OpenWinCRUD{
 					pstm.executeUpdate();
 					pstm.close();
 				} catch (Exception e) {
-					Errmessage ="工作表3材料"+EL_NO+"資料導入失敗！"+e;
+					Errmessage =Labels.getLabel("DSID.MSG0055")+"3"+Labels.getLabel("DSID.MSG0058")+EL_NO+Labels.getLabel("DSID.MSG0054")+"！"+e;
 					conn.rollback();
 					e.printStackTrace();
 					
@@ -351,7 +351,7 @@ public class DSID04MImport extends OpenWinCRUD{
 			
 			if(Errmessage.length()<=0){
 				conn.commit();
-				Okmessage+="工作表3文件導入成功,共"+SEQ+"筆資料！\n";
+				Okmessage+=Labels.getLabel("DSID.MSG0055")+"3"+Labels.getLabel("DSID.MSG0056")+SEQ+Labels.getLabel("DSID.MSG0057")+"\n";
 			}else{
 				conn.rollback();
 			}				
@@ -366,11 +366,11 @@ public class DSID04MImport extends OpenWinCRUD{
 
 		}else{
 			System.out.println("工作表3無資料.");
-			Okmessage+="工作表3中無資料！\n";
+			Okmessage+=Labels.getLabel("DSID.MSG0055")+"3"+Labels.getLabel("DSID.MSG0059")+"！\n";
 		}
 		}else{
 			System.out.println("工作表3無資料.");
-			Okmessage+="工作表3中無資料！\n";
+			Okmessage+=Labels.getLabel("DSID.MSG0055")+"3"+Labels.getLabel("DSID.MSG0059")+"！\n";
 		}
 	}
 
@@ -471,7 +471,7 @@ public class DSID04MImport extends OpenWinCRUD{
 					pstm.executeUpdate();
 					pstm.close();
 				} catch (Exception e) {
-					Errmessage ="工作表2材料"+EL_NO+"資料導入失敗！"+e;
+					Errmessage =Labels.getLabel("DSID.MSG0055")+"2"+Labels.getLabel("DSID.MSG0058")+EL_NO+Labels.getLabel("DSID.MSG0054")+"！"+e;
 					conn.rollback();
 					e.printStackTrace();
 					
@@ -481,7 +481,7 @@ public class DSID04MImport extends OpenWinCRUD{
 			
 			if(Errmessage.length()<=0){
 				conn.commit();
-				Okmessage+="工作表2文件導入成功,共"+SEQ+"筆資料！\n";
+				Okmessage+=Labels.getLabel("DSID.MSG0055")+"2"+Labels.getLabel("DSID.MSG0056")+SEQ+Labels.getLabel("DSID.MSG0057")+"！\n";
 			}else{
 				conn.rollback();
 			}				
@@ -495,11 +495,11 @@ public class DSID04MImport extends OpenWinCRUD{
 
 		}else{
 			System.out.println("工作表2無資料.");
-			Okmessage+="工作表2中無資料！\n";
+			Okmessage+=Labels.getLabel("DSID.MSG0055")+"2"+Labels.getLabel("DSID.MSG0059")+"！\n";
 		}
 		}else{
 			System.out.println("工作表2無資料.");
-			Okmessage+="工作表2中無資料！\n";
+			Okmessage+=Labels.getLabel("DSID.MSG0055")+"2"+Labels.getLabel("DSID.MSG0059")+"！\n";
 		}
 	}
 
@@ -557,7 +557,7 @@ public class DSID04MImport extends OpenWinCRUD{
 						pstm.executeUpdate();
 						pstm.close();
 					} catch (Exception e) {
-						Errmessage ="型體"+MODEL_NA+"資料導入失敗！"+e;
+						Errmessage =Labels.getLabel("DSID01M.MODEL_NA")+MODEL_NA+Labels.getLabel("DSID.MSG0054")+"！"+e;
 						conn.rollback();
 						e.printStackTrace();						
 					}
@@ -622,7 +622,7 @@ public class DSID04MImport extends OpenWinCRUD{
 					pstm.executeUpdate();
 					pstm.close();
 				} catch (Exception e) {
-					Errmessage ="工作表1材料"+EL_NO+"資料導入失敗！"+e;
+					Errmessage =Labels.getLabel("DSID.MSG0055")+"1"+Labels.getLabel("DSID.MSG0058")+EL_NO+Labels.getLabel("DSID.MSG0054")+"！"+e;
 					conn.rollback();
 					e.printStackTrace();
 					
@@ -632,7 +632,7 @@ public class DSID04MImport extends OpenWinCRUD{
 			
 			if(Errmessage.length()<=0){
 				conn.commit();
-				Okmessage+="工作表1文件導入成功,共"+SEQ+"筆資料！\n";
+				Okmessage+=Labels.getLabel("DSID.MSG0055")+"1"+Labels.getLabel("DSID.MSG0056")+SEQ+Labels.getLabel("DSID.MSG0057")+"\n";
 			}else{
 				conn.rollback();
 			}				
@@ -672,7 +672,7 @@ public class DSID04MImport extends OpenWinCRUD{
 			pstm5 = conn.prepareStatement(sql5);
 			pstm5.executeUpdate();
 			pstm5.close();
-			Okmessage+="型體:"+MODEL_NA+"\n 所有資料刪除成功！\n";
+			Okmessage+=Labels.getLabel("DSID01M.MODEL_NA")+":"+MODEL_NA+"\n "+Labels.getLabel("DSID.MSG0049")+"！\n";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -795,7 +795,7 @@ public class DSID04MImport extends OpenWinCRUD{
 	private void ShowMessage() {
 		// TODO Auto-generated method stub
 		if(Errmessage.length()>0){
-			Messagebox.show("文件匯入失敗！！！"+Errmessage);
+			Messagebox.show(Labels.getLabel("DSID.MSG0019")+Errmessage);
 		}else{
 			Messagebox.show(Okmessage);
 		}	

@@ -3,8 +3,8 @@
 	<div sclass="breadcrumbs">
 		<div sclass="breadcrumb">
 			<span sclass="home-icon z-icon-home" />
-			<a label="${labels.MENU.ZKTEST}" />
-			<label value="${labels.MENU.ZKTEST} (ABC_aaBK)" />
+			<a label="${labels.DSID.DSID30}" />
+			<label value="${labels.DSID.DSID02M} (DSID02M)" />
 			<!-- 此處放置該程式多國系名稱及程式代號 -->
 		</div>
 	</div>
