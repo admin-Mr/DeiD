@@ -32,6 +32,10 @@
  				<button id="btnDeleteMaster" sclass="btn-danger"
 					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
 					mold="trendy" />
+					
+				<fileupload id="btnImport" sclass="btn-default" mold="trendy"
+					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.IMPORT}" />
+					
 			</div>
 		</div>
 	

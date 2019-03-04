@@ -1,17 +1,32 @@
 package ds.dsid.program;
 
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
-import org.zkoss.zk.ui.Executions;
-import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.select.annotation.Listen;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Fileupload;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 import ds.dsid.domain.DSID07;
+import util.Common;
 import util.ComponentColumn;
 import util.Master;
 
@@ -24,6 +39,11 @@ public class DSID07MProgram extends Master{
 	private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDeleteMaster;	
 	@Wire
 	private Textbox TADH_ELNO,TPRO_TYPE,TEL_UNIT,TCOLOR,TMODEL_NA,TADH_ELNA,TRAW_ELNO1,TRAW_PRO1,TRAW_ELNO2,TRAW_PRO2,TRAW_ELNO3,TRAW_PRO3,query_ADH_ELNO;
+	@Wire
+	private Fileupload btnImport;
+	Object [][] importdata=null;
+
+	String Errmessage="";
 	
 	@Override
 	public void doAfterCompose(Component window) throws Exception{
@@ -47,8 +67,149 @@ public class DSID07MProgram extends Master{
 		masterComponentColumns.add(new ComponentColumn<String>(null, "UP_USER", _userInfo.getAccount(), null, null));
 		masterComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));
 	
+		btnImport = (Fileupload) window.getFellow("btnImport");
+		btnImport.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
+			@SuppressWarnings("unused")
+			public void onEvent(UploadEvent event) throws Exception {
+				String fileToRead = "";
+				org.zkoss.util.media.Media media = event.getMedia();
+				if (!media.getName().toLowerCase().endsWith(".xls")) {
+					//"格式有誤！"
+					Messagebox.show(Labels.getLabel("COMM.XLSFILE"));
+					return;
+				}
+				System.out.println("-------- fileToRead : " + fileToRead);
+				InputStream input = null;
+				media.isBinary();
+				String sss = media.getFormat();
+				input = media.getStreamData();// 獲得輸入流
+				importFromExcel(input);
+			}
+		});
+	}
+
+	@SuppressWarnings("resource")
+	public void importFromExcel(InputStream input) throws Exception {
+		System.out.println("进入excel 读取内容");
+		Connection conn = Common.getDbConnection();
+		HSSFWorkbook wb = new HSSFWorkbook(input);
+		
+		try{
+			ImportSheet(wb,conn);//主檔
+
+//		ShowMessage();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			Common.closeConnection(conn);
+		}
+
+	}
+
+	private void ImportSheet(HSSFWorkbook wb, Connection conn) throws SQLException {
+		// TODO Auto-generated method stub
+		System.out.println(">>>讀取工作表>>>>>>>>>>>>>>");
+
+        DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
+//		HSSFFormulaEvaluator Formul= new HSSFFormulaEvaluator(wb);		
+		HSSFSheet sheet =wb.getSheetAt(0);	
+		HSSFRow row=null;
+		PreparedStatement pstm =null;
+		row = sheet.getRow(0);		
+		String sql ="";
+		
+		try {
+			conn.setAutoCommit(false);	
+			//材料明細	導入	
+			for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+				
+				row = sheet.getRow(i);
+				System.out.println(">>>行数"+(i+1));
+				String ADH_ELNO = getCellValue(row.getCell(0));
+				if("".equals(ADH_ELNO)){
+					break;
+				}
+				String ADH_ELNA = getCellValue(row.getCell(1));
+
+				String PRO_TYPE = getCellValue(row.getCell(2));
+				String EL_UNIT = getCellValue(row.getCell(3));
+				String COLOR = getCellValue(row.getCell(4));				
+				String MODEL_NA = getCellValue(row.getCell(5));
+				String RAW_ELNO1 = getCellValue(row.getCell(6));
+				String RAW_PRO1 = getCellValue(row.getCell(7));	
+				String RAW_ELNO2 = getCellValue(row.getCell(8));
+				String RAW_PRO2 = getCellValue(row.getCell(9));	
+				String RAW_ELNO3 = getCellValue(row.getCell(10));
+				String RAW_PRO3 = getCellValue(row.getCell(11));	
+				
+				sql +="INTO DSID07 (ADH_ELNO,ADH_ELNA,PRO_TYPE,EL_UNIT,COLOR,MODEL_NA,RAW_ELNO1,RAW_PRO1,RAW_ELNO2,RAW_PRO2,RAW_ELNO3,RAW_PRO3,UP_USER,UP_DATE) VALUES ('"+ADH_ELNO+"','"+ADH_ELNA+"','"+PRO_TYPE+"','"+EL_UNIT+"','"+COLOR+"','"+MODEL_NA+"','"+RAW_ELNO1+"','"+RAW_PRO1+"','"+RAW_ELNO2+"','"+RAW_PRO2+"','"+RAW_ELNO3+"','"+RAW_PRO3+"','"+_userInfo.getAccount()+"',TO_DATE('"+Format.format(new Date())+"','YYYY/MM/DD'))";
+					
+			}
+			if(!"".equals(sql)){
+				sql ="INSERT ALL "+sql+" SELECT * FROM DUAL";
+				System.out.println(">>>導入>>>"+sql);	
+				try {
+					pstm = conn.prepareStatement(sql);
+					pstm.executeUpdate();
+					pstm.close();
+				} catch (Exception e) {	
+					Errmessage=e.getMessage();
+					conn.rollback();
+					e.printStackTrace();	
+				}
+			}
+					
+			if(Errmessage.length()<=0){
+				conn.commit();
+			}else{
+				conn.rollback();
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(pstm!=null){
+				pstm.close();
+			}
+		
+		}
+		
+		if(Errmessage.length()>0){
+			Messagebox.show(Labels.getLabel("DSID.MSG0019")+Errmessage);
+		}else{
+			Messagebox.show(Labels.getLabel("DSID.MSG0021"));
+		}	
 	}
 	
+	private static String getCellValue(HSSFCell cell) {
+		String cellValue = "";
+		if (cell != null) {
+			switch (cell.getCellType()) {
+	        case Cell.CELL_TYPE_BOOLEAN:
+//	        	System.err.println("Cell.CELL_TYPE_BOOLEAN:"+Cell.CELL_TYPE_BOOLEAN);
+	            return cell.getBooleanCellValue() ? "TRUE" : "FALSE";
+	        case Cell.CELL_TYPE_FORMULA://公式格式
+//	        	System.err.println("Cell.CELL_TYPE_FORMULA:"+Cell.CELL_TYPE_FORMULA);
+	            return cell.getCellFormula();
+	        case Cell.CELL_TYPE_NUMERIC://数字格式
+//	        	System.err.println("Cell.CELL_TYPE_NUMERIC:"+Cell.CELL_TYPE_NUMERIC);
+	            cell.setCellType(Cell.CELL_TYPE_STRING);
+	            return cell.getStringCellValue();
+	        case Cell.CELL_TYPE_STRING:
+//	        	System.err.println("Cell.CELL_TYPE_STRING:"+Cell.CELL_TYPE_STRING);
+	            return cell.getStringCellValue();
+//	        case Cell.CELL_TYPE_ERROR:
+//	        	System.err.println("Cell.CELL_TYPE_ERROR:"+Cell.CELL_TYPE_ERROR);
+//	            return String.valueOf(cell.getErrorCellValue());
+			default:
+//				System.err.println("Cell.default");
+				break;
+			}
+		}else{
+			System.err.println("Cell.NULL");
+		}
+//		System.out.println(">>>"+cellValue);
+		return cellValue;
+	}
 	@Override
 	protected Window getRootWindow() {
 		// TODO Auto-generated method stub
