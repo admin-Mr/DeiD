@@ -361,7 +361,7 @@ public class DSID01MTransfer extends OpenWinCRUD{
 		
 		String PART_NO="";
 
-		String 	sql="SELECT * FROM DSID02 WHERE PART_NA='"+part_na+"'";	
+		String 	sql="SELECT * FROM DSID02_OLD WHERE PART_NA='"+part_na+"'";	
 		System.out.println(">>>>>"+sql);
 		try {
 			ps = Conn.prepareStatement(sql);

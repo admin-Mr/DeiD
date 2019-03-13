@@ -111,8 +111,8 @@ public class DSID01MDelete extends OpenWinCRUD{
 		if(Dateorder_date.getValue()!=null){
 //			Sql1="DELETE DSID31@FTLDB01.DEANSHOES.COM WHERE OD_NO IN (SELECT OD_NO FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
 //			Sql2="DELETE DSID30@FTLDB01.DEANSHOES.COM WHERE OD_NO IN (SELECT OD_NO FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
-			Sql1="DELETE DSID31 WHERE OD_NO IN (SELECT OD_NO FROM DSID01_LINK WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
-			Sql2="DELETE DSID30 WHERE OD_NO IN (SELECT OD_NO FROM DSID01_LINK WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
+			Sql1="DELETE DSID31 WHERE OD_NO IN (SELECT OD_NO FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
+			Sql2="DELETE DSID30 WHERE OD_NO IN (SELECT OD_NO FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(Dateorder_date.getValue())+"')";
 			
 			System.err.println("DSID31批量刪除>>>>>"+Sql1);
 			System.err.println("DSID30批量刪除>>>>>"+Sql2);
