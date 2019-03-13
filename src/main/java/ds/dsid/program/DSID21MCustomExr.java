@@ -63,7 +63,7 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 
 	@Wire private Window windowMaster;
 	@Wire private CRUDService CRUDService;
-	@Wire private Button btnexport, btnQuery1;
+	@Wire private Button btnexport,btnExport2;
 	@Wire private Listbox List_Model_na;
 	@Wire private Datebox Odno_Date1, Odno_Date2;
 	@Wire Checkbox Chbox;
@@ -81,8 +81,70 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		super.doAfterCompose(window);
 		// doSearch();
 
+		Connection conn = Common.getDbConnection();
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+
+		List<String> Grnolist = new ArrayList<String>();
+		Grnolist.add("");
+
+		String sql = "select distinct MODEL_NA from dsid21 order by MODEL_NA asc";
+		// System.out.println(" ----- 測試獲取 Grno : " + sql);
+
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Grnolist.add(rs.getString("MODEL_NA"));
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			Messagebox.show(Labels.getLabel("DSID.MSG0133"));
+		} finally {
+			if (rs != null)
+				rs.close();
+			if (ps != null)
+				ps.close();
+			Common.closeConnection(conn);
+		}
+		
+		List_Model_na.setModel(new ListModelList<Object>(Grnolist));
 	}
 
+	@Listen("onClick = #btnExport2")
+	public void onClickbtnExport2() throws SQLException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		
+		Date Start=Odno_Date1.getValue();
+		Date End=Odno_Date2.getValue();
+		String Modelna="";
+		Boolean Up_date=false;
+		if(Chbox.isChecked()){ // 判斷 使用者 是否選擇更新資料
+			Up_date=true;
+		}
+		
+		if(!"".equals(Start)&&Start!=null&&!"".equals(End)&&End!=null){
+			String START=sdf.format(Start);
+			String END=sdf.format(End);
+			
+			for (Listitem ltAll : List_Model_na.getItems()) {
+				if (ltAll.isSelected()) {
+					Modelna = ltAll.getValue().toString();
+				}
+			}
+			DSID21_1RTask.ExcelExport(Modelna,START,END,Up_date);
+		}else{
+			Messagebox.show(Labels.getLabel("DSID.MSG0204"));
+		}
+		
+		
+	}
+	
+	
 	@Listen("onClick = #btnexport")
 	public void onClickbtnexport() {
 
@@ -2728,64 +2790,6 @@ public class DSID21MCustomExr extends OpenWinCRUD {
 		return grno;
 	}
 
-	/**
-	 * 抓取 型體名稱 放入Listbox 供使用者選擇
-	 * 
-	 * @throws SQLException
-	 */
-	@Listen("onClick = #btnQuery1")
-	public void onClickbtnQuery1() throws SQLException {
-
-		ResultSet rs = null;
-		PreparedStatement ps = null;
-		Connection conn = Common.getDbConnection();
-
-		if (List_Model_na.getSelectedItem() != null) {
-			for (Listitem ltAll : List_Model_na.getItems()) {
-				if (ltAll.isSelected()) {
-					if (!"".equals((Object) ltAll.getValue()) && (Object) ltAll.getValue() != null) {
-
-						Messagebox.show(Labels.getLabel("DSID.MSG0132"));
-
-					}
-				}
-			}
-		} else {
-
-			List<String> Grnolist = new ArrayList<String>();
-			Grnolist.add("");
-			Grnolist.add("All");
-
-			String sql = "select distinct MODEL_NA from dsid21 order by MODEL_NA asc";
-			// System.out.println(" ----- 測試獲取 Grno : " + sql);
-
-			try {
-				ps = conn.prepareStatement(sql);
-				rs = ps.executeQuery();
-
-				while (rs.next()) {
-					Grnolist.add(rs.getString("MODEL_NA"));
-				}
-				rs.close();
-				ps.close();
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-				Messagebox.show(Labels.getLabel("DSID.MSG0133"));
-			} finally {
-				if (rs != null)
-					rs.close();
-				if (ps != null)
-					ps.close();
-				Common.closeConnection(conn);
-			}
-			/*
-			 * for(String s : Grnolist){
-			 * System.out.println(" ----- Gtnolist : "+s); }
-			 */
-			List_Model_na.setModel(new ListModelList<Object>(Grnolist));
-		}
-	}
 
 	/**
 	 * 查询Group 数量

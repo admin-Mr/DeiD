@@ -1,26 +1,38 @@
 package ds.dsid.program;
 
+import java.io.InputStream;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFFormulaEvaluator;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Datebox;
+import org.zkoss.zul.Fileupload;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
-
-import com.sun.tracing.dtrace.ProviderAttributes;
-
 import ds.dsid.domain.DSID04;
 import ds.dsid.domain.DSID21;
 import util.Common;
@@ -32,11 +44,14 @@ import util.OperationMode;
 public class DSID21MProgram extends Master {
 
 	@Wire private Window windowMaster;
-	@Wire private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDelete, btnImport, btnExport, btnCustomExr,
+	@Wire private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDelete, btnExport, btnCustomExr,
 					btnBatdelete;	
 	@Wire private Textbox txtModel_na, txtItems, txtGr_no, txtGr_na, txtColor, txtEl_no, txtEl_na, txtSize_fd, txtNote,
 					txtType, txtUp_user;
-	@Wire private Datebox txtImport_date, txtUp_date;
+	@Wire private Datebox  txtUp_date;
+	String Errmessage = "";
+	@Wire
+	private Fileupload btnImport;	
 	
 	@Override
 	public void doAfterCompose(Component window) throws Exception{
@@ -55,22 +70,153 @@ public class DSID21MProgram extends Master {
 		masterComponentColumns.add(new ComponentColumn<String>(txtEl_no, "EL_NO", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtSize_fd, "SEZI_FD", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtNote, "NOTE", null, null, null));
-		
-		masterComponentColumns.add(new ComponentColumn<Date>(txtImport_date, "IMPORT_DATE", new Date(), null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtUp_user, "UP_USER", _userInfo.getAccount(), null, null));
 		masterComponentColumns.add(new ComponentColumn<Date>(txtUp_date, "UP_DATE", new Date(), null, null));	
 		
+		
+		btnImport = (Fileupload) window.getFellow("btnImport");
+		btnImport.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
+			@SuppressWarnings("unused")
+			public void onEvent(UploadEvent event) throws Exception {
+				String fileToRead = "";
+				org.zkoss.util.media.Media media = event.getMedia();
+				if (!media.getName().toLowerCase().endsWith(".xls")) {
+					//"格式有誤！"
+					Messagebox.show(Labels.getLabel("COMM.XLSFILE"));
+					return;
+				}
+				System.out.println(" ----- fileToRead : " + fileToRead);
+				InputStream input = null;
+				media.isBinary();
+				String sss = media.getFormat();
+				input = media.getStreamData();// 獲得輸入流
+				importFromExcel(input);
+				
+				ShowMessage();
+			}
+		});
 	}
 	
-	// 匯入
-	@Listen("onClick =#btnImport")
-	public void onClickbtnImport(Event event) throws Exception{
-		final HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("parentWindow", windowMaster);
-		map.put("DSID21MProgram", this);
-		Executions.createComponents("/ds/dsid/DSID21MImport.zul", null, map);
+	public void importFromExcel(InputStream input) throws Exception {
+		System.out.println("进入excel 读取内容");
+		Connection conn = Common.getDbConnection();
+		HSSFWorkbook wb = new HSSFWorkbook(input);
+		//型體
+		//Model_na = txtMODEL_NA.getValue();
+		String MODEL_NA = "", MT_USAGE="", GR_NO = "", GR_NA = "", COLOR = "", EL_NO = "", EL_NA = "", SIZE_FD = "", NOTE = "";
+		String  TYPE = "";
+		int ITEMS=0;
+
+		HSSFSheet sheet = wb.getSheetAt(0);	
+		HSSFRow row = null;
+		String Upsql="";
+
+		try {
+			conn.setAutoCommit(false); // 數據庫事務控制, 批量提交數據庫操作.
+			
+			for(int x = 1;x < sheet.getPhysicalNumberOfRows();x++){
+				
+				row = sheet.getRow(x);
+				if(row.getCell(0) == null || "".equals(row.getCell(0))){
+					
+					break;
+				}
+				
+				MODEL_NA = getCellValue(row.getCell(0));	// 型體
+				ITEMS ++ ;
+				MT_USAGE = getCellValue(row.getCell(1));		// 使用部位
+
+				GR_NO = getCellValue(row.getCell(2));		// 部位
+				GR_NA = getCellValue(row.getCell(3));		// 部位名稱
+				COLOR = getCellValue(row.getCell(4));		// 顏色
+				EL_NO = getCellValue(row.getCell(5));		// 材料編號
+				EL_NA = getCellValue(row.getCell(6));		// 材料名稱
+				SIZE_FD = getCellValue(row.getCell(7));		// 分段
+				NOTE = getCellValue(row.getCell(8));		// 備註	
+				TYPE  = getCellValue(row.getCell(9));		// 類型
+		
+				Upsql+=" INTO DSID21 (MODEL_NA,ITEMS,MT_USAGE,TYPE,GR_NO,GR_NA,COLOR,EL_NO,EL_NA,SIZE_FD,NOTE,UP_USER,UP_DATE) VALUES('"+MODEL_NA+"','"+ITEMS+"','"+MT_USAGE+"','"+TYPE+"','"+GR_NO+"','"+GR_NA+"','"+COLOR+"','"+EL_NO+"','"+EL_NA+"','"+SIZE_FD+"','"+NOTE+"','"+_userInfo.getAccount()+"',SYSDATE)";
+			
+			}
+			
+				String Delsql = "DELETE DSID21 WHERE MODEL_NA='"+MODEL_NA+"'";
+				System.out.println(" ----- 刪除 : " + Delsql);
+				
+				try {
+					PreparedStatement pstm = conn.prepareStatement(Delsql);
+					pstm.executeUpdate();
+					pstm.close();
+					conn.commit();
+				} catch (Exception e) {
+					Errmessage="Delete false!";
+					e.printStackTrace();
+					conn.rollback();
+					return;
+				}
+				
+				
+				String InSql=" INSERT ALL "+Upsql+" SELECT * FROM DUAL";
+				System.out.println(" ----- 匯入 : " + InSql);
+				
+				try {
+					PreparedStatement pstm = conn.prepareStatement(InSql);
+					pstm.executeUpdate();
+					pstm.close();
+					conn.commit();
+				} catch (Exception e) {
+					Errmessage="Insert false!";
+					e.printStackTrace();
+					conn.rollback();
+					return;
+				}
+						
+		} catch (Exception e) {
+			// TODO: handle exception
+			conn.rollback();
+			e.printStackTrace();
+		} finally {
+			Common.closeConnection(conn);
+		}
 	}
 	
+	private static String getCellValue(HSSFCell cell) {
+		String cellValue = "";
+		if (cell != null) {
+			switch (cell.getCellType()) {
+			case Cell.CELL_TYPE_NUMERIC:
+				if(DateUtil.isCellDateFormatted(cell) && DateUtil.isValidExcelDate(cell.getNumericCellValue())){
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+					Date dt= DateUtil.getJavaDate(cell.getNumericCellValue());
+					cellValue = sdf.format(dt);
+				}else{
+					try{
+						BigDecimal bd = new BigDecimal(cell.getNumericCellValue());
+						cellValue =String.valueOf(bd.setScale(2, BigDecimal.ROUND_HALF_UP));
+					}catch(Exception ex){
+					}
+				}
+				break;
+			case Cell.CELL_TYPE_STRING:
+				cellValue = cell.getStringCellValue();
+				cellValue = cellValue.trim();
+				break;
+			default:
+				break;
+			}
+		}
+//		System.out.println(">>>"+cellValue);
+		return cellValue;
+	}
+	
+	private void ShowMessage() {
+		// TODO Auto-generated method stub
+		if(Errmessage.length() > 0){
+			Messagebox.show(Labels.getLabel("DSID.MSG0175")+Errmessage);
+		}else{
+			Messagebox.show(Labels.getLabel("DSID.MSG0176"));
+		}	
+		Errmessage="";
+	}
 	// 匯出
 	@Listen("onClick =#btnExport")
 	public void onClickbtnExport(Event event) throws Exception{
@@ -90,7 +236,7 @@ public class DSID21MProgram extends Master {
 	}
 	
 	
-	// 批量刪除
+	//
 	@Listen("onClick =#btnCustomExr")
 	public void onClickbtnCustomExr(Event event) throws Exception{
 		final HashMap<String, Object> map = new HashMap<String, Object>();
@@ -217,7 +363,6 @@ public class DSID21MProgram extends Master {
 		txtEl_na.setValue(entity == null ? "" : entity.getEL_NA());
 		txtSize_fd.setValue(entity == null ? "" : entity.getSIZE_FD());
 		txtNote.setValue(entity == null ? "" : entity.getNOTE());
-		txtImport_date.setValue(entity == null ? null : entity.getIMPORT_DATE());
 		txtUp_user.setValue(entity == null ? "" : entity.getUP_USER());
 		txtUp_date.setValue(entity == null ? null : entity.getUP_DATE());
 		
@@ -358,7 +503,6 @@ public class DSID21MProgram extends Master {
 		txtSize_fd.setReadonly(true);
 		txtNote.setReadonly(true);
 		txtType.setReadonly(true);
-		txtImport_date.setReadonly(true);
 		txtUp_user.setReadonly(true);
 		txtUp_date.setReadonly(true);
 
@@ -394,7 +538,6 @@ public class DSID21MProgram extends Master {
 		txtSize_fd.setReadonly(false);
 		txtNote.setReadonly(false);
 		txtType.setReadonly(false);
-		txtImport_date.setReadonly(false);
 		txtUp_user.setReadonly(false);
 		txtUp_date.setReadonly(false);
 		

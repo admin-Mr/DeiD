@@ -24,10 +24,13 @@
 				<!-- 刪除 -->	
  				<button id="btnDelete" sclass="btn-danger" iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}" mold="trendy" />
  				<button id="btnBatdelete" sclass="btn-default" label="批量刪除" mold="trendy" /> 
-				<!-- 匯入 -->
-				<button id="btnImport" sclass="btn-default" iconSclass="mdi mdi-watch-import" label="${labels.COMM.IMPORT}" mold="trendy" disabled="true" /> 
-				<!-- 匯出 -->
+				<!-- 匯出 百分比基礎資料-->
 				<button id="btnExport" sclass="btn-default" iconSclass="mdi mdi-watch-export" label="${labels.COMM.EXPORT}" mold="trendy" /> 
+				<!-- 匯入 補充后的百分比資料-->
+				<fileupload id="btnImport" sclass="btn-default" mold="trendy"
+				iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.IMPORT}" />
+				
+				<!-- 匯出 百分比統計報表-->
 				<button id="btnCustomExr" sclass="btn-default" label="百分比匯出" mold="trendy" /> 
 			</div>
 		</div>
@@ -84,9 +87,7 @@
 								<label value="類型" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 								<textbox id="txtType"  mold="rounded" width="100px" readonly="true"/>
 									<label style="display:inline-block;width:30px;"/>													
-								<label value="匯入日期" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
-								<datebox id="txtImport_date"  mold="rounded" width="100px" readonly="true"/>	
-						 			<label style="display:inline-block;width:30px;"/>	
+						 		<label style="display:inline-block;width:30px;"/>	
 						 		<label value="更新人員" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 								<textbox id="txtUp_user"  mold="rounded" width="65px" readonly="true"/>	
 									<label style="display:inline-block;width:30px;"/>	
@@ -107,7 +108,6 @@
 								<listheader label="Size分段" />
 								<listheader width="10%" label="顏色" />	
 								<listheader label="備註" />
-								<listheader width="7%" label="匯入日期"/>
 								<listheader width="5%" label="更新人員" />	
 								<listheader width="7%" label="更新日期" />	 																			
 							</listhead>
@@ -122,7 +122,6 @@
 									<listcell label="${each.SIZE_FD}"/>	
 									<listcell label="${each.COLOR}"/>					
 									<listcell label="${each.NOTE}" />
-									<listcell label="${each.IMPORT_DATE}"/>	
 									<listcell label="${each.UP_USER}"/>
 									<listcell label="${each.UP_DATE}"/>													
 								</listitem>
