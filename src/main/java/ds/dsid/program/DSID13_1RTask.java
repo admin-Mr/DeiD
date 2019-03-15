@@ -22,6 +22,7 @@ import org.zkoss.poi.hssf.usermodel.HSSFSheet;
 import org.zkoss.poi.hssf.usermodel.HSSFWorkbook;
 import org.zkoss.poi.ss.usermodel.CellStyle;
 import org.zkoss.poi.ss.util.CellRangeAddress;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zul.Filedownload;
 
 import ds.dsid.domain.DSID10;
@@ -31,8 +32,8 @@ public class DSID13_1RTask{
 	
 	public static void ExcelExport(String NIKE_SH_ARITCLE, String START, String SARTY,String PG_NAME) {
 		
-		String title="派工單報表";
-		Connection Conn = getDB01Conn();
+		String title=Labels.getLabel("DSID.MSG0249");
+		Connection Conn = Common.getService1Conn();
 		Connection conn = Common.getDbConnection();
 		ByteArrayOutputStream  stream = new ByteArrayOutputStream();
 		HSSFWorkbook wb = new HSSFWorkbook();
@@ -114,6 +115,7 @@ public class DSID13_1RTask{
 			rs1 = ps1.executeQuery();
 			while(rs1.next() && rs.next()){
 				//不選擇時全部導出
+				System.out.println(rs1.getString("PG_TYPE"));
 				if("".equals(rs1.getString("PG_TYPE"))){
 					HSSFSheet sheet = wb.createSheet(rs1.getString("PG_NAME"));
 					SetColumnWidth(sheet);
@@ -266,7 +268,7 @@ public class DSID13_1RTask{
 		cell = row.createCell(0);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue(NIKE_SH_ARITCLE+PG_NAME);
+		cell.setCellValue(NIKE_SH_ARITCLE+" "+PG_NAME);
 		
 		//查詢DSID13表中的GROUP內容
 		String sql3="SELECT * FROM DSID10 WHERE NIKE_SH_ARITCLE='"+NIKE_SH_ARITCLE+"'";
@@ -282,7 +284,7 @@ public class DSID13_1RTask{
 			cell = row.createCell(0);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("接單日期");
+			cell.setCellValue(Labels.getLabel("DSID01M.ORDER_DATE"));
 			
 			row = sheet.createRow(2);
 			row.setHeightInPoints(30);
@@ -290,22 +292,22 @@ public class DSID13_1RTask{
 			cell = row.createCell(0);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("輪次號");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0250"));
 		
 			cell = row.createCell(1);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("訂單號");					
+			cell.setCellValue(Labels.getLabel("DSID.MSG0251"));					
 		
 			cell = row.createCell(2);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("形體");	
+			cell.setCellValue(Labels.getLabel("DSIDN06_01.MODEL_NA"));	
 		
 			cell = row.createCell(3);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("數量");
+			cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 		
 			cell = row.createCell(4);
 			cell.setCellType(1);
@@ -422,7 +424,7 @@ public class DSID13_1RTask{
 			cell = row.createCell(0);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("接單日期");
+			cell.setCellValue(Labels.getLabel("DSID01M.ORDER_DATE"));
 			
 			row = sheet2.createRow(2);
 			row.setHeightInPoints(30);
@@ -435,17 +437,17 @@ public class DSID13_1RTask{
 			cell = row.createCell(1);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("數量");					
+			cell.setCellValue(Labels.getLabel("DSID01M.QTY"));					
 		
 			cell = row.createCell(2);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("鞋子總雙數");	
+			cell.setCellValue(Labels.getLabel("DSID.MSG0252"));	
 			
 			cell = row.createCell(3);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue(num+"雙");
+			cell.setCellValue(num+Labels.getLabel("DSID.MSG0015"));
 			
 			row = sheet2.createRow(3);
 			row.setHeightInPoints(30);
@@ -565,7 +567,7 @@ public class DSID13_1RTask{
 			cell = row.createCell(5);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("實際交貨日期");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0253"));
 			
 			row = sheet.createRow(1);
 			row.setHeightInPoints(30);
@@ -573,7 +575,7 @@ public class DSID13_1RTask{
 			cell = row.createCell(5);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("預計交貨日期");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0254"));
 			
 			row = sheet.createRow(2);
 			row.setHeightInPoints(30);
@@ -581,7 +583,7 @@ public class DSID13_1RTask{
 			cell = row.createCell(5);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("噴漆預交貨日期");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0255"));
 			
 			row = sheet.createRow(3);
 			row.setHeightInPoints(30);
@@ -589,7 +591,7 @@ public class DSID13_1RTask{
 			cell = row.createCell(5);
 			cell.setCellType(1);
 			cell.setCellStyle(style1);
-			cell.setCellValue("大底交貨日期");
+			cell.setCellValue(Labels.getLabel("DSID.MSG0256"));
 			
 			//查詢DSID13表中的GROUP內容
 			String sql3="SELECT * FROM DSID10 WHERE NIKE_SH_ARITCLE='"+NIKE_SH_ARITCLE+"'";
@@ -605,7 +607,7 @@ public class DSID13_1RTask{
 				cell = row.createCell(0);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("接單日期");
+				cell.setCellValue(Labels.getLabel("DSID01M.ORDER_DATE"));
 				
 				row = sheet.createRow(5);
 				row.setHeightInPoints(30);
@@ -613,7 +615,7 @@ public class DSID13_1RTask{
 				cell = row.createCell(0);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("輪次號");
+				cell.setCellValue(Labels.getLabel("DSID.MSG0250"));
 			
 				cell = row.createCell(1);
 				cell.setCellType(1);
@@ -623,22 +625,22 @@ public class DSID13_1RTask{
 				cell = row.createCell(2);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("流水號");	
+				cell.setCellValue(Labels.getLabel("DSID.MSG0257"));	
 			
 				cell = row.createCell(3);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("模具碼");
+				cell.setCellValue(Labels.getLabel("DSID.MSG0258"));
 			
 				cell = row.createCell(4);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("形體");
+				cell.setCellValue(Labels.getLabel("DSIDN06_01.MODEL_NA"));
 				
 				cell = row.createCell(5);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("數量");
+				cell.setCellValue(Labels.getLabel("DSID01M.QTY"));
 				
 				for(int i=1;i<list.size()+1;i++){
 					cell = row.createCell(5+i);
@@ -761,7 +763,7 @@ public class DSID13_1RTask{
 				cell = row.createCell(0);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("接單日期");
+				cell.setCellValue(Labels.getLabel("DSID01M.ORDER_DATE"));
 				
 				row = sheet.createRow(2);
 				row.setHeightInPoints(30);
@@ -769,12 +771,12 @@ public class DSID13_1RTask{
 				cell = row.createCell(0);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("求和項：數量");
+				cell.setCellValue(Labels.getLabel("DSID.MSG0259"));
 			
 				cell = row.createCell(1);
 				cell.setCellType(1);
 				cell.setCellStyle(style1);
-				cell.setCellValue("模具碼");					
+				cell.setCellValue(Labels.getLabel("DSID.MSG0258"));					
 				
 				row = sheet.createRow(3+sby);
 				row.setHeightInPoints(30);
@@ -900,23 +902,23 @@ public class DSID13_1RTask{
 	}
 	
 	//连接数据库
-	public static Connection getDB01Conn(){
-		Connection  conn = null;
-		String driver = "oracle.jdbc.driver.OracleDriver";
-		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
-		String user = "DSOD";
-		String pwd = "ora@it2013";
-		try{
-	        Class.forName(driver);
-	     }catch(Exception e){
-	        e.printStackTrace();
-	     }
-	    try{
-	    	conn=DriverManager.getConnection(url,user,pwd);
-	    	System.err.println(">>>鏈接DB01數據庫");
-	    }catch(Exception e){
-	    	e.printStackTrace();
-	    }
-	    return conn;
-	}
+//	public static Connection getDB01Conn(){
+//		Connection  conn = null;
+//		String driver = "oracle.jdbc.driver.OracleDriver";
+//		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+//		String user = "DSOD";
+//		String pwd = "ora@it2013";
+//		try{
+//	        Class.forName(driver);
+//	     }catch(Exception e){
+//	        e.printStackTrace();
+//	     }
+//	    try{
+//	    	conn=DriverManager.getConnection(url,user,pwd);
+//	    	System.err.println(">>>鏈接DB01數據庫");
+//	    }catch(Exception e){
+//	    	e.printStackTrace();
+//	    }
+//	    return conn;
+//	}
 }

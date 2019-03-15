@@ -46,14 +46,14 @@
 		    <listbox id="ListBox"   multiple="true" autopaging="true" 
 		    			sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}" rows="10" >
         		<listhead>
-            		<listheader label="型體" />
-            		<listheader label="部位" />
-            		<listheader label="顏色" />  
-            		<listheader label="材料編號" />  
-            		<listheader label="單位用量" />  
-            		<listheader label="倉庫庫存" />   
-            		<listheader label="可斬雙數" />
-            		<listheader label="訂單雙數" />          		
+            		<listheader label="${labels.DSID01M.MODEL_NA}" />
+            		<listheader label="${labels.DSID.MSG0171}" />
+            		<listheader label="${labels.DSID.MSG0096}" />  
+            		<listheader label="${labels.DSID02.EL_NO}" />  
+            		<listheader label="${labels.DSID.MSG0221}" />  
+            		<listheader label="${labels.DSID.MSG0201}" />   
+            		<listheader label="${labels.DSID.MSG0246}" />
+            		<listheader label="${labels.DSID.MSG0247}" />          		
         		</listhead>
         		<template name="model">
         		<listitem >

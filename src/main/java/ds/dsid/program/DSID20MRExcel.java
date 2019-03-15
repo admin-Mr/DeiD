@@ -3055,6 +3055,8 @@ public class DSID20MRExcel extends OpenWinCRUD {
 								// System.out.println(" 數量 ----- : " + Toolsum +
 								// " 類型 ----- : " + Segm);
 							}
+							rs1.close();
+							ps1.close();
 
 						} catch (Exception e) {
 							// TODO: handle exception
@@ -3086,8 +3088,7 @@ public class DSID20MRExcel extends OpenWinCRUD {
 						}
 					}
 				}
-				rs1.close();
-				ps1.close();
+				
 				rs.close();
 				ps.close();
 

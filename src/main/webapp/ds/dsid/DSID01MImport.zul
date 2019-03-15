@@ -1,5 +1,5 @@
 <zk>
-	<window border="normal" id="windowMaster" title="Xml文件導入"
+	<window border="normal" id="windowMaster" title="Xml ${labels.COMM.IMPORT}"
 		apply="ds.dsid.program.DSID01MImport" closable="true" mode= "modal" width="500px" height="250px">
 
 			<div sclass="breadcrumbs" height="100%">

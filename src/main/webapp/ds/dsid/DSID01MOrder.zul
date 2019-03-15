@@ -10,7 +10,7 @@
 					<datebox id="txtorder_date"  mold="rounded" width="120px" readonly="true"  format="yyyy/MM/dd" />
 				</hlayout>
 				
-				<button  id="btnOrder" sclass="btn-default" iconSclass="mdi mdi-delete" label="整理" mold="trendy"/> 
+				<button  id="btnOrder" sclass="btn-default" iconSclass="mdi mdi-delete" label="${labels.COMM.ORDER}" mold="trendy"/> 
 				
 				<hlayout>
                     <label id="ShowResult"/>

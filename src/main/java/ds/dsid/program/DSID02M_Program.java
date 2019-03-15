@@ -1,5 +1,8 @@
 package ds.dsid.program;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +27,10 @@ import ds.common.services.CRUDService;
 import ds.common.services.UserCredential;
 import ds.dsid.domain.DSID02;
 import ds.dspb.domain.DSPB00_NEW;
+import util.BlackBox;
+import util.Common;
 import util.ComponentColumn;
+import util.DataMode;
 import util.Master;
 import util.OperationMode;
 
@@ -50,7 +56,7 @@ public class DSID02M_Program extends Master {
 	public void doAfterCompose(Component window) throws Exception{
 		super.doAfterCompose(window);
 		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService");
-		masterComponentColumns.add(new ComponentColumn<Integer>(txt_UNIQUEID, "UNIQUEID", null, null, null));
+		masterComponentColumns.add(new ComponentColumn<String>(null, "UNIQUEID", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txt_EL_NO, "EL_NO", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txt_EL_MODEL, "EL_MODEL", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txt_PART_NAME, "PART_NAME", null, null, null));
@@ -226,13 +232,51 @@ public class DSID02M_Program extends Master {
 	@Override
 	protected void doCreateDefault() {
 		// TODO Auto-generated method stub
-		
+		txt_UNIQUEID.setText("***");
 	}
 
 	@Override
 	protected Object doSaveDefault(String columnName) {
 		// TODO Auto-generated method stub
+		if(getData_Mode().equals(DataMode.CREATE_MODE)){
+			switch (columnName) {
+				case "UNIQUEID":
+					return getUNIQUEID();
+				default:
+					break;
+			}
+		}
 		return null;
+	}
+	
+	@Override
+	protected boolean beforeMasterSave(Object entityMaster) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	private String getUNIQUEID(){
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String UNIQUEID="1";
+		try {
+			conn = Common.getDbConnection();
+			String SQL = "SELECT NVL(MAX(UNIQUEID)+1,1) UNIQUEID FROM DSID02";
+			ps = conn.prepareStatement(SQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			rs = ps.executeQuery();	
+			if(rs.next()){
+				UNIQUEID = rs.getString("UNIQUEID");
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.getStackTrace();
+		}finally{
+			Common.closeConnection(conn);
+		}
+		return UNIQUEID;
 	}
 
 	@Override

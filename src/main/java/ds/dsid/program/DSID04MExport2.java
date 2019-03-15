@@ -2,6 +2,8 @@ package ds.dsid.program;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -51,6 +53,7 @@ import ds.common.services.CRUDService;
 import util.Common;
 import util.MSMode;
 import util.OpenWinCRUD;
+import util.function.ContextUtil;
 
 public class DSID04MExport2 extends OpenWinCRUD{
 
@@ -310,9 +313,9 @@ public class DSID04MExport2 extends OpenWinCRUD{
 				
 				byte[] content = stream.toByteArray();
 			    InputStream is = new ByteArrayInputStream(content);
-
+			    
 			    //儲存位置、名稱
-				Filedownload.save(is, "application/xls", format1.format(date));
+			    Filedownload.save(is, "application/xls", format1.format(date));
 				is.close();
 				stream.flush();
 				stream.close();
@@ -1991,7 +1994,7 @@ public class DSID04MExport2 extends OpenWinCRUD{
 						cell = row.createCell(21);
 						cell.setCellType(1);
 						cell.setCellStyle(style32);
-						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,conn));
+						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,Conn));
 						
 						for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
 							cell = row.createCell(47+2*k);
@@ -2015,7 +2018,7 @@ public class DSID04MExport2 extends OpenWinCRUD{
 						cell = row.createCell(21);
 						cell.setCellType(1);
 						cell.setCellStyle(style32);
-						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,conn));
+						cell.setCellValue(getbuy2(MODEL_NA,Conn)-getacc2(MODEL_NA,Conn));
 						
 						for(int k=0;k<(Integer.valueOf (His.get(1).toString())+1);k++){
 							cell = row.createCell(47+2*k);
@@ -2269,12 +2272,14 @@ public class DSID04MExport2 extends OpenWinCRUD{
 		}else{
 			AddSql=" TO_DATE('"+His.get(2)+"','YYYY/MM/DD' )+"+(1+(k-1)*7)+" AND TO_DATE('"+His.get(2)+"','YYYY/MM/DD' )+"+(k*7)+"";
 		}
-		
+		if(EL_NO_LIST.equals("")){
+			EL_NO_LIST="''";
+		}
 		String 	sql="SELECT NVL(SUM(PO_QTY),0) QTY FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n" +
 						"AND PO_QTY!=0 AND EL_NO IN ("+EL_NO_LIST+") AND STOCK_MARK='"+MODEL_NA+"'\n" + 
 						"AND A.PO_DATE BETWEEN"+AddSql;
 		int QTY=0;
-//		System.out.println(">>>>>"+sql);
+		System.out.println(">>>>>"+sql);
 		try {
 			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -2876,19 +2881,21 @@ public class DSID04MExport2 extends OpenWinCRUD{
 	}
 
 	
-	private static Double getacc2(String MODEL_NA, Connection conn) {
+	private static Double getacc2(String MODEL_NA, Connection Conn) {
 		// TODO Auto-generated method stub	
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
 		Double qty=0.0;
-
+		if(EL_NO_LIST.equals("")){
+			EL_NO_LIST="''";
+		}
 		//String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 A,DSPO06@ftldb01.deanshoes.com B WHERE A.PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND A.EL_NO IN ("+EL_NO_LIST+") AND A.PO_NO=B.PO_NO AND A.EL_NO=B.EL_NO AND B.PO_CLOSE!='T'";
 		String 	sql="SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 A,DSPO06 B WHERE A.PO_NO IN ('"+EL_PO.replace(",", "','")+"') AND A.EL_NO IN ("+EL_NO_LIST+") AND A.PO_NO=B.PO_NO AND A.EL_NO=B.EL_NO AND B.PO_CLOSE!='T'";
 	
 		System.out.println(">>>>>"+sql);
 		try {
-			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
 			while(rs.next()){
 				if(!"".equals(rs.getString("SPC_QTY"))&&rs.getString("SPC_QTY")!=null){
@@ -2946,7 +2953,9 @@ public class DSID04MExport2 extends OpenWinCRUD{
 		ResultSet rs = null;
 		
 		Double qty=0.0;
-
+		if(EL_NO_LIST.equals("")){
+			EL_NO_LIST="''";
+		}
 		String 	sql="SELECT A.PO_NO,A.STOCK_MARK,EL_NO,PO_QTY,PO_ACQTY FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n" +
 				"AND B.PO_CLOSE!='T' AND PO_QTY!=0 AND EL_NO IN ("+EL_NO_LIST+") AND STOCK_MARK='"+MODEL_NA+"'";
 	
