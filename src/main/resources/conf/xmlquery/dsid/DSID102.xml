@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--程式清單檔-->
+<QryWin>
+	<SQL>
+		<BaseCondition></BaseCondition> 
+		<OrderBy>EL_NO</OrderBy>
+		<SQLStatement>
+			SELECT EL_NO,EL_CNAME EL_NA FROM DSEL00
+ 		</SQLStatement>
+	</SQL> 
+	<Fields>
+		<Field Name="EL_NO" 	Caption="DSID102.EL_NO" Type="S" />
+		<Field Name="EL_NA" 	Caption="DSID102.EL_NA" Type="S" />
+	</Fields>
+</QryWin>

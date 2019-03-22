@@ -1,0 +1,238 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.DSID40}" />
+			<label value="${labels.MENU.DSID004_DSID102_01}(DSID004_DSID102_01)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID004_DSID102_01"><!--  -->
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+			</div>
+		</div>
+		<separator />
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<grid>
+				<columns>
+					<column width="75px" />
+					<column width="200px" />
+					<column width="75px" />
+				</columns>
+				<rows>
+					<row>
+						<label value="${labels.DSID102.EL_NO}" sclass="sectionTitleLabel" />
+						<textbox id="qry_EL_NO" width="180px" mold="rounded" />
+						<button id="onqryEL_NO" src="/resource/imgs/icons/btn_view_16x16.gif" 
+								forward="onClick=windowMaster.onOpenQueryField(onqryEL_NO)"/>
+					</row>
+					<row>
+						<label value="${labels.DSID102.EL_NA}" sclass="sectionTitleLabel" />
+						<textbox id="qry_EL_NA" width="180px" mold="rounded" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+		
+		<groupbox id="editMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption label="${labels.COMM.EDIT}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			<grid>
+				<columns>
+					<column width="5%" />
+					<column width="95%" />
+				</columns>
+				<rows>
+					<row>
+						<label value="${labels.DSID102.EL_NO}" sclass="sectionTitleLabel" />
+						<hlayout>
+							<textbox id="txt_EL_NO" mold="rounded" width="200px" />
+							<button id="ontxtEL_NO" src="/resource/imgs/icons/btn_view_16x16.gif" 
+									forward="onClick=windowMaster.onOpenQueryField(ontxtEL_NO)"/>
+						</hlayout>
+						
+					</row>
+					<row>
+						<label value="${labels.DSID102.EL_NA}" sclass="sectionTitleLabel" />
+						<textbox id="txt_EL_NA" mold="rounded" width="400px" />
+					</row>
+				</rows>
+			</grid>
+			<grid>
+				<columns>
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+					<column width="4.5%" />
+				</columns>
+				<rows>
+					<row>
+						<label value="${labels.DSID102.SIZE}" sclass="sectionTitleLabel" width="75px"/>
+						<label id="lb_SIZE1"  value="1"     />
+						<label id="lb_SIZE2"  value="1.5"   />
+						<label id="lb_SIZE3"  value="2"     />
+						<label id="lb_SIZE4"  value="2.5"   />
+						<label id="lb_SIZE5"  value="3"     />
+						<label id="lb_SIZE6"  value="3.5"   />
+						<label id="lb_SIZE7"  value="4"     />
+						<label id="lb_SIZE8"  value="4.5"   />
+						<label id="lb_SIZE9"  value="5"     />
+						<label id="lb_SIZE10" value="5.5"   />
+						<label id="lb_SIZE11" value="6"     />
+						<label id="lb_SIZE12" value="6.5"   />
+						<label id="lb_SIZE13" value="7"     />
+						<label id="lb_SIZE14" value="7.5"   />
+						<label id="lb_SIZE15" value="8"    />
+						<label id="lb_SIZE16" value="8.5"  />
+						<label id="lb_SIZE17" value="9"    />
+						<label id="lb_SIZE18" value="9.5"  />
+						<label id="lb_SIZE19" value="10"    />
+						<label id="lb_SIZE20" value="10.5"  />
+					</row>
+					<row>
+						<label value="${labels.DSID102.QTY}" sclass="sectionTitleLabel" width="75px"/>
+						<doublebox id="txt_QTY1" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY2" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY3" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY4" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY5" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY6" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY7" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY8" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY9" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY10" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY11" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY12" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY13" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY14" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY15" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY16" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY17" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY18" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY19" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY20" mold="rounded" width="70px" />
+					</row>					
+					<row>
+						<label value="${labels.DSID102.SIZE}" sclass="sectionTitleLabel" width="75px"/>
+						<label id="lb_SIZE21" value="11"  />
+						<label id="lb_SIZE22" value="11.5"  />
+						<label id="lb_SIZE23" value="12"  />
+						<label id="lb_SIZE24" value="12.5"  />
+						<label id="lb_SIZE25" value="13"  />
+						<label id="lb_SIZE26" value="13.5"  />
+						<label id="lb_SIZE27" value="14"  />
+						<label id="lb_SIZE28" value="14.5"  />
+						<label id="lb_SIZE29" value="15"  />
+						<label id="lb_SIZE30" value="15.5"  />
+						<label id="lb_SIZE31" value="16"  />
+						<label id="lb_SIZE32" value="16.5"  />
+						<label id="lb_SIZE33" value="17"  />
+						<label id="lb_SIZE34" value="17.5"  />
+						<label id="lb_SIZE35" value="18"  />
+						<label id="lb_SIZE36" value="18.5"  />
+						<label id="lb_SIZE37" value="19"  />
+						<label id="lb_SIZE38" value="19.5"  />
+						<label id="lb_SIZE39" value="20"  />
+						<label id="lb_SIZE40" value="20.5"  />
+					</row>
+					<row>
+						<label value="${labels.DSID102.QTY}" sclass="sectionTitleLabel" width="75px"/>
+						<doublebox id="txt_QTY21" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY22" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY23" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY24" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY25" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY26" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY27" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY28" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY29" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY30" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY31" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY32" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY33" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY34" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY35" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY36" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY37" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY38" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY39" mold="rounded" width="70px" />
+						<doublebox id="txt_QTY40" mold="rounded" width="70px" />
+					</row>
+				</rows>
+			</grid>
+		</groupbox>
+
+		<div style="border:1px solid #CFCFCF">
+			<listbox id="masterListbox" sclass="mylist"
+				autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+				multiple="false">
+				<listhead sizable="true">
+					<listheader width="75px" 	label="${labels.COMM.OPERATE}" />
+					<listheader width="125px" 	label="${labels.DSID102.EL_NO}" />
+					<listheader width="200px" 	label="${labels.DSID102.EL_NA}" />
+					<listheader width="100px" 	label="${labels.DSID102.UP_USER}" />
+					<listheader width="100px" 	label="${labels.DSID102.UP_DATE}" />
+				</listhead>
+
+				<template name="model">
+					<listitem>
+						<listcell>
+							<hbox spacing="10px">
+								<image visible="${sessionScope.UAuth}"
+									src="/resource/imgs/icons/btn_edit2_16x16.gif"
+									tooltiptext="${labels.COMM.EDIT}"
+									forward="onClick=masterListbox.onUpdate" sclass="fimage">
+								</image>
+								<image visible="${sessionScope.DAuth}"
+									src="/resource/imgs/icons/btn_delete2_16x16.gif"
+									tooltiptext="${labels.COMM.DELETE}"
+									forward="onClick=masterListbox.onDelete" sclass="fimage">
+								</image>
+							</hbox>
+						</listcell>
+						<listcell label="${each.EL_NO}" />
+						<listcell label="${each.EL_NA}" />
+						<listcell label="${each.UP_USER}" />
+						<listcell label="${each.UP_DATE}" />
+					</listitem>
+				</template>
+			</listbox>
+			<paging id="pagingCourse"></paging>
+		</div>
+	</window>
+
+</zk>

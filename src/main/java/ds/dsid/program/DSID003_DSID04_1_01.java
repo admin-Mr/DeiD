@@ -226,6 +226,7 @@ public class DSID003_DSID04_1_01 extends QueryBase {
 				cell.setCellStyle(contentStyle);
 				
 				/*男鞋SIZE與占比*/
+				String[] MAN_SIZE = new String[40];
 				i++;
 				SQL = 	"SELECT "+size+" FROM DSID04_SIZE WHERE MODEL_NA='"+qry_MODEL_NA.getText()+"' AND SH_LAST='M' AND EL_NO='"+EL_NO+"'";
 				ps1 = conn.prepareStatement(SQL,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
@@ -239,7 +240,7 @@ public class DSID003_DSID04_1_01 extends QueryBase {
 						cell = row.createCell(j);
 						cell.setCellValue(rs1.getString("S"+j));
 						cell.setCellStyle(contentStyle);
-						
+						MAN_SIZE[j-1]=rs1.getString("S"+j);
 					}
 					i++;
 					row = sheet.createRow(i);
@@ -341,26 +342,35 @@ public class DSID003_DSID04_1_01 extends QueryBase {
 				cell.setCellValue("實際庫存：");
 				cell.setCellStyle(contentStyle);
 				
-				SQL = 	"SELECT * FROM DSID77 WHERE EL_NO='"+EL_NO+"' AND MODEL_NA = '"+qry_MODEL_NA.getText()+"'";
+				Boolean[] Have_QTY = new Boolean[40];
+				for(int l=0;l<40;l++){
+					Have_QTY[l]=false;
+				}
+				SQL = 	"SELECT * FROM DSID102 WHERE EL_NO='"+EL_NO+"'";
 				ps1 = conn.prepareStatement(SQL,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 				rs1 = ps1.executeQuery();
 				if(rs1.next()){
-					for(int j=1;j<=40;j++){
-						if(j<26){
-							cell = row.createCell(j);
-							cell.setCellFormula("("+Character.toString((char)(65+j))+String.valueOf(i-2)+"*"+rs1.getDouble("MT_QTY")+")/100");
-							cell.setCellStyle(contentStyle);
-						}else{
-							cell = row.createCell(j);
-							cell.setCellFormula("(A"+Character.toString((char)(65+j-26))+String.valueOf(i-2)+"*"+rs1.getDouble("MT_QTY")+")/100");
+					for(int k=0;k<40;k++){
+						for(int j=1;j<=40;j++){
+							if(MAN_SIZE[k].equals(rs1.getString("S"+j))){
+								cell = row.createCell(j);
+								cell.setCellValue(rs1.getDouble("Q"+j));
+								cell.setCellStyle(contentStyle);
+								Have_QTY[j-1]=true;
+							}
+						}
+					}
+					for(int k=0;k<40;k++){
+						if(Have_QTY[k]==false){
+							cell = row.createCell(k);
+							cell.setCellValue(0);
 							cell.setCellStyle(contentStyle);
 						}
-						
 					}
 				}else{
 					for(int j=1;j<=40;j++){
 						cell = row.createCell(j);
-						cell.setCellValue("0");
+						cell.setCellValue(0);
 						cell.setCellStyle(contentStyle);
 					}
 				}
@@ -574,13 +584,20 @@ public class DSID003_DSID04_1_01 extends QueryBase {
 				cell.setCellValue("實際庫存：");
 				cell.setCellStyle(contentStyle);
 				
-				SQL = 	"SELECT * FROM DSID77 WHERE EL_NO='"+EL_NO+"' AND MODEL_NA = '"+qry_MODEL_NA.getText()+"'";
+				Double AC_QTY;
+				SQL = "SELECT * FROM DSID102 WHERE EL_NO='"+EL_NO+"'";
 				ps1 = conn.prepareStatement(SQL,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 				rs1 = ps1.executeQuery();
 				if(rs1.next()){
 					for(int l=1;l<=Count;l++){
+						AC_QTY=0.0;
+						for(int m=1;m<=40;m++){
+							if(Double.valueOf(SIZE[l-1].split("-")[0])<=rs1.getDouble("S"+m) && Double.valueOf(SIZE[l-1].split("-")[1])>=rs1.getDouble("S"+m)){
+								AC_QTY+=rs1.getDouble("Q"+m);
+							}
+						}
 							cell = row.createCell(l);
-							cell.setCellFormula("("+Character.toString((char)(65+l))+String.valueOf(i-2)+"*"+rs1.getDouble("MT_QTY")+")/100");
+							cell.setCellValue(AC_QTY);
 							cell.setCellStyle(contentStyle);
 					}
 				}else{
@@ -809,13 +826,19 @@ public class DSID003_DSID04_1_01 extends QueryBase {
 					}else{
 						row = sheet.getRow(i);
 					}
-					
-					SQL = 	"SELECT * FROM DSID77 WHERE EL_NO='"+rs1.getString("EL_NO")+"' AND MODEL_NA = '"+qry_MODEL_NA.getText()+"'";
+					Double AC_QTY;
+					SQL = 	"SELECT * FROM DSID102 WHERE EL_NO='"+rs1.getString("EL_NO")+"'";
 					ps2 = conn.prepareStatement(SQL,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 					rs2 = ps2.executeQuery();
 					if(rs2.next()){
+						AC_QTY=0.0;
+						for(int l=1;l<=40;l++){
+							if(Double.valueOf(rs1.getString("SIZES").split("-")[0])<=rs2.getDouble("S"+l) && Double.valueOf(rs1.getString("SIZES").split("-")[1])>=rs2.getDouble("S"+l)){
+								AC_QTY+=rs2.getDouble("Q"+l);
+							}
+						}
 						cell = row.createCell(m+1);
-						cell.setCellFormula("("+Character.toString((char)(65+m+1))+String.valueOf(i-2)+"*"+rs2.getDouble("MT_QTY")+")/100");
+						cell.setCellValue(AC_QTY);
 						cell.setCellStyle(contentStyle);
 					}else{
 						cell = row.createCell(m+1);
@@ -992,7 +1015,7 @@ public class DSID003_DSID04_1_01 extends QueryBase {
 	
 	private String getSQL() {
 		String sSql = 	"WITH cte1 AS ( "+
-						" SELECT DSID04_1.MODEL_NA,DSID04_1.EL_NO,DSID04_NFPSIZE.SEQ,DSID04_1.YIELD,DSID04_1.COLOR_PRE,DSID04_NFPSIZE.SIZES "+ 
+						" SELECT DSID04_1.MODEL_NA,DSID04_1.COLOR,DSID04_1.EL_NO,DSID04_1.YIELD,DSID04_1.COLOR_PRE,DSID04_NFPSIZE.SIZES "+ 
 						"   FROM DSID04_1 "+
 						"   JOIN DSID04_NFPSIZE ON (DSID04_1.MODEL_NA=DSID04_NFPSIZE.MODEL_NA AND DSID04_1.EL_NO=DSID04_NFPSIZE.EL_NO) "+
 						"  WHERE DSID04_1.MODEL_NA='"+qry_MODEL_NA.getText()+"' "+
@@ -1004,7 +1027,7 @@ public class DSID003_DSID04_1_01 extends QueryBase {
 
 	@Override
 	public String getOrderBy() {
-		return " ORDER BY MODEL_NA ,EL_NO, SEQ";
+		return " ORDER BY MODEL_NA ,EL_NO";
 	}
 
 	@Override
