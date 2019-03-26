@@ -56,7 +56,7 @@ public class DSID25RProgram extends Master{
 	@Wire
 	private Window windowMaster;
 	@Wire
-	private Button btnexport1,btnQuery,btnQuery1,btnImport,btnChangeRe;
+	private Button btnexport1,btnQuery,btnQuery1,btnImport,btnChangeRe,btnSetTime;
 	@Wire
 	private Datebox po_date1;
 	@Wire
@@ -103,6 +103,15 @@ public class DSID25RProgram extends Master{
 		
 	}
 	
+	  @Listen("onClick = #btnSetTime")
+	  public void onClickbbtnSetTime(Event event)
+	  {
+	    HashMap<String, Object> map = new HashMap();
+	    map.put("parentWindow", this.windowMaster);
+	    map.put("DSID25RProgram", this);
+	    Executions.createComponents("/ds/dsid/DSID25RSetTime.zul", null, map);
+	  }
+	  
 	@SuppressWarnings("resource")
 	public void importFromExcel(InputStream input) throws Exception {
 		System.out.println("进入excel 读取内容");

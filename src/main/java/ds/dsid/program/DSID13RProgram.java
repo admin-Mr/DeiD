@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -83,7 +82,7 @@ public class DSID13RProgram extends OpenWinCRUD{
 			}
 			List_MODEL_NA.setModel(new ListModelList<Object>(NA_list));
 		}else{
-			Messagebox.show(Labels.getLabel("DSID.MSG0204"));
+			Messagebox.show("日期不能為空！！！");
 		}
 	  }
 
@@ -151,7 +150,7 @@ public class DSID13RProgram extends OpenWinCRUD{
 			}
 			DSID13_1RTask.ExcelExport(MODEL_NA,START,SARTY,PG_NAME);
 		}else{
-			Messagebox.show(Labels.getLabel("DSID.MSG0204"));
+			Messagebox.show("日期不能為空!");
 		}
 		}
 		
@@ -221,23 +220,23 @@ public class DSID13RProgram extends OpenWinCRUD{
 		return null;
 	}
 	//连接数据库
-//	public static Connection getDB01Conn(){
-//		Connection  conn = null;
-//		String driver = "oracle.jdbc.driver.OracleDriver";
-//		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
-//		String user = "DSOD";
-//		String pwd = "ora@it2013";
-//		try{
-//	        Class.forName(driver);
-//	     }catch(Exception e){
-//	        e.printStackTrace();
-//	     }
-//	    try{
-//	    	conn=DriverManager.getConnection(url,user,pwd);
-//	    	System.err.println(">>>鏈接DB01數據庫");
-//	    }catch(Exception e){
-//	    	e.printStackTrace();
-//	    }
-//	    return conn;
-//	}
+	public static Connection getDB01Conn(){
+		Connection  conn = null;
+		String driver = "oracle.jdbc.driver.OracleDriver";
+		String url = "jdbc:oracle:thin:@10.8.1.32:1521:ftldb1";
+		String user = "DSOD";
+		String pwd = "ora@it2013";
+		try{
+	        Class.forName(driver);
+	     }catch(Exception e){
+	        e.printStackTrace();
+	     }
+	    try{
+	    	conn=DriverManager.getConnection(url,user,pwd);
+	    	System.err.println(">>>鏈接DB01數據庫");
+	    }catch(Exception e){
+	    	e.printStackTrace();
+	    }
+	    return conn;
+	}
 }

@@ -90,6 +90,7 @@
 							<listheader label="${labels.DSID07M.ADH_ELNO}" />
 							<listheader label="${labels.DSID07M.ADH_ELNA}" />
 							<listheader label="${labels.DSID07M.PRO_TYPE}" />
+							<listheader label="${labels.DSID07M.COLOR}" />
 							<listheader label="${labels.DSID07M.EL_UNIT}" />
 							<listheader label="${labels.DSID17M.ADH_QTY}" />
 							<listheader label="${labels.DSID07M.UP_USER}" />
@@ -100,6 +101,7 @@
 						<listcell label="${each.ADH_ELNO}" />
 						<listcell label="${each.ADH_ELNA}" />	
 						<listcell label="${each.PRO_TYPE}" />
+						<listcell label="${each.COLOR}" />
 						<listcell label="${each.EL_UNIT}" />
 						<listcell label="${each.ADH_QTY}" />
 						<listcell label="${each.UP_USER}" />

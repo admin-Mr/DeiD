@@ -1,6 +1,6 @@
 <zk>
 	<window border="normal" id="Arrangewindow" title="派工篩選"
-		apply="ds.dsid.program.DSID01MArrange" closable="true" mode= "modal" width="1200px" height="550px">
+		apply="ds.dsid.program.DSID01MArrange" closable="true" mode= "modal" width="1100px" height="550px">
 
 	<div sclass="breadcrumbs" height="100%">
 		<hlayout width="100%" height="40px" > 
@@ -19,8 +19,8 @@
 			<textbox id="query_sh_styleno"  mold="rounded" width="120px" />
 			<label value="max" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 			<textbox id="Max_num"  mold="rounded" width="60px" />			
-			<button id="btnEmpty" sclass="btn-warning" label="${labels.COMM.CLEAR}" mold="trendy" />
-			<button id="btnSwitch" sclass="btn-primary" label="${labels.DSID.MSG0002}" mold="trendy" />
+			<button id="btnEmpty" sclass="btn-warning" label="清空" mold="trendy" />
+			<button id="btnSwitch" sclass="btn-primary" label="切換至已確認" mold="trendy" />
 		</hlayout>
 		<hlayout width="100%" height="40px" >
 			 <button id="btnSearch" label="${labels.COMM.QRY}" mold="trendy"  iconSclass="mdi mdi-magnify" /> 
@@ -32,10 +32,10 @@
 				iconSclass="mdi mdi-flip-to-back" label="${labels.COMM.CANCEL}" mold="trendy" />
 								
 			<button id="btnConfirm_All" sclass="btn-warning" 
-				iconSclass="mdi mdi-account-check" label="${labels.DSID.MSG0004}" mold="trendy" />
+				iconSclass="mdi mdi-account-check" label="確認全部" mold="trendy" />
 									
 	         <button id="btnArrange" sclass="btn-primary" 
-				iconSclass="mdi mdi-vector-arrange-above" label="${labels.DSID01M.PG_ROUND}" mold="trendy" />
+				iconSclass="mdi mdi-vector-arrange-above" label="排輪次" mold="trendy" />
 				
 
 									

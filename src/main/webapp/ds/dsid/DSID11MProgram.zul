@@ -45,41 +45,41 @@
 						<vlayout width="100%" id="grid1">
 							<hlayout width="100%" height="28px">
 								<!-- 窗口 -->
-								<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel" style="display:inline-block;width:45px;" />
+								<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:45px;" />
 								<textbox id="txtMODEL_NA" mold="rounded" width="300px" />
 							</hlayout>
 							<hlayout width="100%" height="28px">								
-								<label value="${labels.DSID.MSG0116} Type1" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<label value="分段Type1" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
 								<textbox id="txtType_1" mold="rounded" width="75px" />
 								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 								
-								<label value="${labels.DSID.MSG0116} Type2" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<label value="分段Type2" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
 								<textbox id="txtType_2" mold="rounded" width="75px" />
 								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 								
-								<label value="${labels.DSID.MSG0116} Type3" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<label value="分段Type3" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
 								<textbox id="txtType_3" mold="rounded" width="75px" />
 								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 								
-								<label value="${labels.DSID.MSG0116} Type4" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<label value="分段Type4" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
 								<textbox id="txtType_4" mold="rounded" width="75px" />
 								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 								
 							</hlayout><hlayout>
 								
-								<label value="${labels.DSID.MSG0116} Type5" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<label value="分段Type5" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
 								<textbox id="txtType_5" mold="rounded" width="75px" />
 								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 								
-								<label value="${labels.DSID.MSG0116} Type6" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<label value="分段Type6" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
 								<textbox id="txtType_6" mold="rounded" width="75px" />
 								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 								
-								<label value="${labels.DSID.MSG0116} Type7" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<label value="分段Type7" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
 								<textbox id="txtType_7" mold="rounded" width="75px" />
 								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 								
-								<label value="${labels.DSID.MSG0116} Type8" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
+								<label value="分段Type8" sclass="sectionTitleLabel" style="display:inline-block;width:65px;" />
 								<textbox id="txtType_8" mold="rounded" width="75px" />
 								<label value="" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 							</hlayout>
@@ -91,7 +91,7 @@
 							autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
 							multiple="false" rows="10">
 							<listhead sizable="true">
-								<listheader width="25%" label="${labels.DSID01M.MODEL_NA}" />
+								<listheader width="25%" label="型體" />
 								<listheader label="Type1" />
 								<listheader label="Type2" />
 								<listheader label="Type3" />
@@ -100,8 +100,8 @@
 								<listheader label="Type6" />
 								<listheader label="Type7" />
 								<listheader label="Type8" />
-								<listheader label="${labels.COMM.UP_USER}" />
-								<listheader label="${labels.COMM.UP_DATE}" />
+								<listheader label="異動人員" />
+								<listheader label="異動日期" />
 							</listhead>
 
 							<template name="model">

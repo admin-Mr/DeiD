@@ -2,7 +2,6 @@ package ds.dsid.program;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,7 +27,6 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.event.Event;
-import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
@@ -53,14 +51,11 @@ import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Paging;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
-import org.zkoss.zul.event.PagingEvent;
-import org.zkoss.zul.event.ZulEvents;
 
 import ds.common.services.CRUDService;
 import ds.common.services.UserCredential;
 import ds.dsid.domain.DSIDN08;
 import ds.dsid.domain.DSIDN08_T;
-import util.BlackBox;
 import util.Common;
 import util.ComponentColumn;
 import util.DataMode;
@@ -612,7 +607,6 @@ public class DSIDN08M_Program extends COMM_Master {
 		//txt_PC_QTY.setValue(e.getPC_QTY()+"");
 	}/**/
 
-
 	@Override
 	protected boolean beforeMasterSave(Object entityMaster) {
 		
@@ -1080,11 +1074,6 @@ public class DSIDN08M_Program extends COMM_Master {
 		divedit.setVisible(false);
 		divshowdate.setVisible(true);
 		divcenter.setVisible(false);
-		if(masterModel == null){
-//			masterModel.add(0, new Object());
-			masterModel = new ListModelList();
-//			masterModel.add(null);
-		}
 		super.masterCreate(event);
 
 	}

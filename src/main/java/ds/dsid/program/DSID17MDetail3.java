@@ -336,8 +336,7 @@ public class DSID17MDetail3 extends Detail{
 	
 	
 	private ArrayList<String> GetMt_pono() {
-		Connection Conn=Common.getService1Conn();
-//		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
+		Connection conn=Common.getDbConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		ArrayList<String> Mt_list=new ArrayList<>();
@@ -349,7 +348,7 @@ public class DSID17MDetail3 extends Detail{
 		String sql = "SELECT A.MT_PONO,MAX(TO_NUMBER(B.MT_SEQ)) MT_SEQ FROM DSID75 A,DSID76 B WHERE A.MT_CODE=B.MT_CODE AND A.MT_PONO=B.MT_PONO AND  A.MT_CODE='1D' AND TO_CHAR(A.UP_DATE,'YYYY/MM/DD')='"+format.format(new Date())+"' AND  A.MT_PONO LIKE '%120000' GROUP BY A.MT_PONO";
 		System.err.println("--sql--："+sql);
 		try {
-			ps = Conn.prepareStatement(sql);
+			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			if(rs.next()){
 				MT_PONO=rs.getString("MT_PONO");
@@ -380,7 +379,7 @@ public class DSID17MDetail3 extends Detail{
 				}
 			}
 
-			Common.closeConnection(Conn);	
+			Common.closeConnection(conn);	
 		}	
 		for(int i=1;i<4;i++){
 				seq+=(Mseq+i)+",";
@@ -399,8 +398,6 @@ public class DSID17MDetail3 extends Detail{
 	private void OutRaw_elno() {
 		// TODO Auto-generated method stub
 		Connection conn=Common.getDbConnection();
-		Connection Conn=Common.getService1Conn();
-//		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
 		PreparedStatement ps = null,pstm=null;
 		ResultSet rs = null;
 		String seq="";
@@ -419,7 +416,7 @@ public class DSID17MDetail3 extends Detail{
 				if(rs.next()){
 					for(int i=1;i<4;i++){
 						if(!"".equals(rs.getString("RAW_ELNO"+i))&&rs.getString("RAW_ELNO"+i)!=null){
-							String Model_na=GetModel_na(rs.getString("RAW_ELNO"+i),rs.getString("MODEL_NA"),Conn);
+							String Model_na=GetModel_na(rs.getString("RAW_ELNO"+i),rs.getString("MODEL_NA"),conn);
 							InsertSql+=" INTO DSID76 (MT_CODE,MT_PONO,MT_SEQ,EL_NO,MT_AREANO,MT_QTY,CU_SALE,UP_USER,UP_DATE,MT_STOCKNO,MODEL_NA) VALUES ('1D','"+MT_PONO+"','"+(Mseq+i)+"','"+rs.getString("RAW_ELNO"+i)+"','A','"+(Double.valueOf(TOUT_QTY.getValue())*Double.valueOf(rs.getString("RAW_PRO"+i)))+"','"+_userInfo.getAccount()+"','"+_userInfo.getAccount()+"',TO_DATE(TO_CHAR(SYSDATE,'YYYY/MM/DD'),'FTL-0002','"+Model_na+"')";
 							seq+=(Mseq+i)+",";
 							Model_namap.put(rs.getString("RAW_ELNO"+i),Model_na);
@@ -441,20 +438,20 @@ public class DSID17MDetail3 extends Detail{
 
 			InsertSql="INSERT ALL "+InsertSql+" SELECT * FROM DUAL";
 			System.err.println(">>>>>>"+InsertSql);
-//			
-//			try {
-//				pstm = conn.prepareStatement(InsertSql);	
-//				pstm.executeUpdate();
-//				pstm.close();
-//			} catch (Exception e) {
-//				try {
-//					conn.rollback();
-//				} catch (SQLException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//				e.printStackTrace();						
-//			}
+			
+			try {
+				pstm = conn.prepareStatement(InsertSql);	
+				pstm.executeUpdate();
+				pstm.close();
+			} catch (Exception e) {
+				try {
+					conn.rollback();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				e.printStackTrace();						
+			}
 			
 			Set<Entry<String, Object>> Model_naentries = Model_namap.entrySet();
 			Set<Entry<String, Object>> Qtyentries = Qtymap.entrySet();
@@ -464,19 +461,19 @@ public class DSID17MDetail3 extends Detail{
 					if(Qentry.getKey().equals(Mentry.getKey())){
 						String UpSql="UPDATE DSID77 SET MT_QTY=MT_QTY-"+Qentry.getValue()+" WHERE MODEL_NA='"+Mentry.getValue()+"' AND EL_NO='"+Mentry.getKey()+"'";
 						System.err.println(">>>>>>"+UpSql);
-//					try {
-//						pstm = conn.prepareStatement(UpSql);	
-//						pstm.executeUpdate();
-//						pstm.close();
-//					} catch (Exception e) {
-//						try {
-//							conn.rollback();
-//						} catch (SQLException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
-//						e.printStackTrace();						
-//					}
+					try {
+						pstm = conn.prepareStatement(UpSql);	
+						pstm.executeUpdate();
+						pstm.close();
+					} catch (Exception e) {
+						try {
+							conn.rollback();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						e.printStackTrace();						
+					}
 					}
 				}
 			}
@@ -502,7 +499,6 @@ public class DSID17MDetail3 extends Detail{
 			
 			
 			Common.closeConnection(conn);	
-			Common.closeConnection(Conn);	
 		}
 	}
 
@@ -521,8 +517,7 @@ public class DSID17MDetail3 extends Detail{
 	private void Anti_Raw_elno() {
 		// TODO Auto-generated method stub
 		Connection conn=Common.getDbConnection();
-		Connection Conn=Common.getService1Conn();
-//		Connection Conn=Common.getOraDbConnection("10.8.1.32", "FTLDB1", "DSOD", "ORA@IT2013");
+
 		PreparedStatement ps = null,pstm=null;
 		ResultSet rs = null;
 		try {
@@ -538,7 +533,7 @@ public class DSID17MDetail3 extends Detail{
 				if(rs.next()){
 					for(int i=1;i<4;i++){
 						if(!"".equals(rs.getString("RAW_ELNO"+i))&&rs.getString("RAW_ELNO"+i)!=null){
-							String Model_na=GetModel_na(rs.getString("RAW_ELNO"+i),rs.getString("MODEL_NA"),Conn);
+							String Model_na=GetModel_na(rs.getString("RAW_ELNO"+i),rs.getString("MODEL_NA"),conn);
 							
 							Model_namap.put(rs.getString("RAW_ELNO"+i),Model_na);
 							Qtymap.put(rs.getString("RAW_ELNO"+i),(Double.valueOf(TOUT_QTY.getValue())*Double.valueOf(rs.getString("RAW_PRO"+i))));
@@ -561,19 +556,19 @@ public class DSID17MDetail3 extends Detail{
 					if(Qentry.getKey().equals(Mentry.getKey())){
 						String UpSql="UPDATE DSID77 SET MT_QTY=MT_QTY+"+Qentry.getValue()+" WHERE MODEL_NA='"+Mentry.getValue()+"' AND EL_NO='"+Mentry.getKey()+"'";
 						System.err.println(">>>>>>"+UpSql);
-//					try {
-//						pstm = conn.prepareStatement(UpSql);	
-//						pstm.executeUpdate();
-//						pstm.close();
-//					} catch (Exception e) {
-//						try {
-//							conn.rollback();
-//						} catch (SQLException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
-//						e.printStackTrace();						
-//					}
+					try {
+						pstm = conn.prepareStatement(UpSql);	
+						pstm.executeUpdate();
+						pstm.close();
+					} catch (Exception e) {
+						try {
+							conn.rollback();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						e.printStackTrace();						
+					}
 						
 					}
 				}
@@ -589,20 +584,20 @@ public class DSID17MDetail3 extends Detail{
 					//刪除其他出庫中的資料
 					String DeSql="DELETE DSID76 WHERE MT_PONO='"+rs.getString("MT_PONO")+"' AND MT_SEQ IN ('"+rs.getString("MT_SEQ").replace(",", "','")+"') ";
 					System.err.println(">>>>>>"+DeSql);
-//					
-//					try {
-//						pstm = Conn.prepareStatement(InsertSql);	
-//						pstm.executeUpdate();
-//						pstm.close();
-//					} catch (Exception e) {
-//						try {
-//							conn.rollback();
-//						} catch (SQLException e1) {
-//							// TODO Auto-generated catch block
-//							e1.printStackTrace();
-//						}
-//						e.printStackTrace();						
-//					}
+					
+					try {
+						pstm = conn.prepareStatement(DeSql);	
+						pstm.executeUpdate();
+						pstm.close();
+					} catch (Exception e) {
+						try {
+							conn.rollback();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						e.printStackTrace();						
+					}
 				}
 				
 				rs.close();
@@ -632,7 +627,6 @@ public class DSID17MDetail3 extends Detail{
 			
 			
 			Common.closeConnection(conn);	
-			Common.closeConnection(Conn);	
 		}
 	}
 

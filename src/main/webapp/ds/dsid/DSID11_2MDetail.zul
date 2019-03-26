@@ -31,15 +31,15 @@
 					<vlayout width="100%">
 						<hlayout width="100%" height="25px">
 							<!-- 窗口 -->
-							<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+							<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 							<textbox id="txtModel_na2" mold="rounded" width="300px" />
 						</hlayout>
 
 						<hlayout>
-							<label value="${labels.DSID02.UNIQUEID}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+							<label value="序號" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 							<textbox id="txtSeq2" mold="rounded" width="60px" />
 							<label   style="display:inline-block;width:105px;"/>
-							<label value="${labels.DSID.MSG0180}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
+							<label value="分段數量" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
 							<textbox id="txtPoints2" mold="rounded" width="60px" />
 							<label   style="display:inline-block;width:105px;"/>
 							<label value="男女鞋型Ms/Ws" sclass="sectionTitleLabel" style="display:inline-block;width:60px;" />
@@ -47,33 +47,33 @@
 						</hlayout>
 
 						<hlayout>
-							<label value="${labels.DSID.MSG0116}1" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段1" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_1" mold="rounded" width="250px" />
 							<label   style="display:inline-block;width:100px;"/>
-							<label value="${labels.DSID.MSG0116}2" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段2" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_2" mold="rounded" width="250px" />
 							<label   style="display:inline-block;width:100px;"/>
-							<label value="${labels.DSID.MSG0116}3" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段3" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_3" mold="rounded" width="250px" />
 						</hlayout>
 						<hlayout>
-							<label value="${labels.DSID.MSG0116}4" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段4" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_4" mold="rounded" width="250px" />
 							<label   style="display:inline-block;width:100px;"/>
-							<label value="${labels.DSID.MSG0116}5" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段5" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_5" mold="rounded" width="250px" />
 							<label   style="display:inline-block;width:100px;"/>
-							<label value="${labels.DSID.MSG0116}6" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段6" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_6" mold="rounded" width="250px" />
 						</hlayout>
 						<hlayout>
-							<label value="${labels.DSID.MSG0116}7" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段7" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_7" mold="rounded" width="250px" />
 							<label   style="display:inline-block;width:100px;"/>
-							<label value="${labels.DSID.MSG0116}8" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段8" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_8" mold="rounded" width="250px" />
 							<label   style="display:inline-block;width:100px;"/>
-							<label value="${labels.DSID.MSG0116}9" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
+							<label value="分段9" sclass="sectionTitleLabel" style="display:inline-block;width:40px;" />
 							<textbox id="txtPeriod2_9" mold="rounded" width="250px" />
 						</hlayout>
 
@@ -88,11 +88,11 @@
 						multiple="false" rows="5">
 						<listhead sizable="true">
 							<!-- <listheader width="7%"  label="${labels.COMM.OPERATE }" /> -->
-							<listheader width="25%" label="${labels.DSID01M.MODEL_NA}" />
-							<listheader width="18.75%" label="${labels.DSID02.UNIQUEID}" />
-							<listheader width="18.75%" label="${labels.DSID.MSG0180}" />
-							<listheader width="18.75%" label="${labels.COMM.UP_USER}" />
-							<listheader width="18.75%" label="${labels.COMM.UP_DATE}" />
+							<listheader width="25%" label="型體" />
+							<listheader width="18.75%" label="序號" />
+							<listheader width="18.75%" label="分段數" />
+							<listheader width="18.75%" label="異動人員" />
+							<listheader width="18.75%" label="異動日期" />
 							
 						</listhead>
 

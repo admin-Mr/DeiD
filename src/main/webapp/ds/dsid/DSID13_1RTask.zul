@@ -2,8 +2,8 @@
 	<div sclass="breadcrumbs">
 		<div sclass="breadcrumb">
 		 <span sclass="home-icon z-icon-home" />
-			<a label="${labels.DSID.DSID20}" />
-			<label value="${labels.DSID.DSID13EX} (DSID13EX)" />
+			<a label="${labels.DSID.DSID13EX}" />
+			<label value="派工單的匯出 (DSID13EX)" />
 		</div>
 	</div>
 	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID13RProgram">
@@ -17,7 +17,7 @@
 			</div>
 		</div>
 			<hlayout>
-				<label value="${labels.DSID01M.ORDER_DATE}" sclass="sectionTitlelabel"  style="display:inline-block;width:70px;"/>
+				<label value="接單日期" sclass="sectionTitlelabel"  style="display:inline-block;width:70px;"/>
 				<datebox id="po_date1" mold="rounded" width="110px" cols="12" format="yyyy/MM/dd"  />
 				<label value="~" />
 				<datebox id="po_date2" mold="rounded" width="110px" cols="12" format="yyyy/MM/dd"  />
@@ -27,14 +27,14 @@
 				<textbox id="txtMODEL_NA" mold="rounded" width="300px"/> -->
 			
 				<hlayout width="100%" height="35px" >
- 					<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel"  style="display:inline-block;width:70px;"/>
+ 					<label value="型    體" sclass="sectionTitleLabel"  style="display:inline-block;width:70px;"/>
 					<listbox id ="List_MODEL_NA" mold="select" rows="1" width="200px" />
-					<button id="btnQuery" sclass="btn-default" label="${labels.COMM.QUERY}" mold="trendy"/> 
+					<button id="btnQuery" sclass="btn-default" label="查詢" mold="trendy"/> 
 				</hlayout>
 				<hlayout width="100%" height="35px">
-					<label value="${labels.DSID.MSG0248}" sclass="sectionTitleLabel"  style="display:inline-block;width:70px;"/>
+					<label value="派工單名稱" sclass="sectionTitleLabel"  style="display:inline-block;width:70px;"/>
 					<listbox id="List_SENDWK_NAME" mold="select" width="200px"/> 
-					<button id="btnQuery1" sclass="btn-default" label="${labels.COMM.QUERY}" mold="trendy"/>
+					<button id="btnQuery1" sclass="btn-default" label="查詢" mold="trendy"/>
 				</hlayout>
 			</div>
 	</window>

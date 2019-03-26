@@ -94,7 +94,6 @@ public class DSID21MExport extends OpenWinCRUD{
 				Modelna = ltAll.getValue().toString();
 			}
 		}
-		//Messagebox.show(" 測試抓取文本資料 ↓ \n 部位名稱 : "+Grna+"\n 型體名稱 : "+Modelna);
 		
 		try { // 部位名稱與型體名稱不能為空
 			if( Modelna != null || "".equals(Modelna)){
@@ -113,6 +112,7 @@ public class DSID21MExport extends OpenWinCRUD{
 			Messagebox.show(Labels.getLabel("DSID.MSG0136"));
 		}
 		
+		windowMaster.detach();
 	}
 	
 	
@@ -167,7 +167,7 @@ public class DSID21MExport extends OpenWinCRUD{
 		    InputStream is = new ByteArrayInputStream(content);
 
 		    //儲存位置、名稱
-			Filedownload.save(is, "application/xls", format1.format(date));
+			Filedownload.save(is, "application/xls", Modelna);
 			is.close();
 			stream.flush();
 			stream.close();
@@ -201,8 +201,6 @@ public class DSID21MExport extends OpenWinCRUD{
 		
 		int irow = 1;
 
-		
-		
 		// 表頭設定, 大小表頭
 		Header1(sheet,style1,row,cell);			
 
@@ -214,9 +212,10 @@ public class DSID21MExport extends OpenWinCRUD{
 						"SELECT MODEL_NA,'LABEL' MT_USAGE,'' GROUP_NO,'' GR_NA,COLOR,EL_NO,EL_NA FROM DSID04_3\n" + 
 						"UNION ALL\n" + 
 						"SELECT MODEL_NA,'LACE' MT_USAGE,'' GROUP_NO,'' GR_NA,COLOR,EL_NO,EL_NA FROM DSID04_4\n" + 
+						"UNION ALL\n" +
+						"SELECT MODEL_NA,'HEEL CLIP' MT_USAGE,'' GROUP_NO,'' GR_NA,COLOR,EL_NO,EL_NA FROM DSID04_5"+
 						") WHERE EL_NO IS NOT NULL AND MODEL_NA='"+Modelna+"'";
 		System.out.println(" ----- 資料查詢 : "+sql);
-		//Messagebox.show("Sql And Data : \n Grna : "+AndGrno+" \n Model : "+AndModel+" \n Sql : "+sql);
 		
 		try {
 			ps = conn.prepareStatement(sql);
@@ -367,7 +366,7 @@ public class DSID21MExport extends OpenWinCRUD{
 		cell = row.createCell(9);
 		cell.setCellType(1);
 		cell.setCellStyle(style1);
-		cell.setCellValue(Labels.getLabel("DSID21.TYPE"));
+		cell.setCellValue("type");
 	}
 
 	@Override

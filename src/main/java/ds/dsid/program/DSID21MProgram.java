@@ -43,23 +43,27 @@ import util.OperationMode;
 
 public class DSID21MProgram extends Master {
 
-	@Wire private Window windowMaster;
-	@Wire private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDelete, btnExport, btnCustomExr,
-					btnBatdelete;	
-	@Wire private Textbox txtModel_na, txtItems, txtGr_no, txtGr_na, txtColor, txtEl_no, txtEl_na, txtSize_fd, txtNote,
-					txtType, txtUp_user;
-	@Wire private Datebox  txtUp_date;
+	@Wire
+	private Window windowMaster;
+	@Wire
+	private Button btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster, btnDelete, btnExport,
+			btnCustomExr, btnBatdelete;
+	@Wire
+	private Textbox txtModel_na, txtItems, txtGr_no, txtGr_na, txtColor, txtEl_no, txtEl_na, txtSize_fd, txtNote,
+			txtType, txtUp_user;
+	@Wire
+	private Datebox txtUp_date;
 	String Errmessage = "";
 	@Wire
-	private Fileupload btnImport;	
-	
+	private Fileupload btnImport;
+
 	@Override
-	public void doAfterCompose(Component window) throws Exception{
+	public void doAfterCompose(Component window) throws Exception {
 		super.doAfterCompose(window);
 		setWhereConditionals(getWhereConditionals());
-		
+
 		super.doFillListbox(0);
-		
+
 		masterComponentColumns.add(new ComponentColumn<String>(txtModel_na, "MODEL_NA", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtItems, "ITEMS", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtType, "TYPE", null, null, null));
@@ -70,10 +74,10 @@ public class DSID21MProgram extends Master {
 		masterComponentColumns.add(new ComponentColumn<String>(txtEl_no, "EL_NO", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtSize_fd, "SEZI_FD", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(txtNote, "NOTE", null, null, null));
-		masterComponentColumns.add(new ComponentColumn<String>(txtUp_user, "UP_USER", _userInfo.getAccount(), null, null));
-		masterComponentColumns.add(new ComponentColumn<Date>(txtUp_date, "UP_DATE", new Date(), null, null));	
-		
-		
+		masterComponentColumns
+				.add(new ComponentColumn<String>(txtUp_user, "UP_USER", _userInfo.getAccount(), null, null));
+		masterComponentColumns.add(new ComponentColumn<Date>(txtUp_date, "UP_DATE", new Date(), null, null));
+
 		btnImport = (Fileupload) window.getFellow("btnImport");
 		btnImport.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
 			@SuppressWarnings("unused")
@@ -81,7 +85,7 @@ public class DSID21MProgram extends Master {
 				String fileToRead = "";
 				org.zkoss.util.media.Media media = event.getMedia();
 				if (!media.getName().toLowerCase().endsWith(".xls")) {
-					//"格式有誤！"
+					// "格式有誤！"
 					Messagebox.show(Labels.getLabel("COMM.XLSFILE"));
 					return;
 				}
@@ -96,103 +100,107 @@ public class DSID21MProgram extends Master {
 			}
 		});
 	}
-	
+
 	public void importFromExcel(InputStream input) throws Exception {
 		System.out.println("进入excel 读取内容");
 		Connection conn = Common.getDbConnection();
 		HSSFWorkbook wb = new HSSFWorkbook(input);
-		//型體
-		//Model_na = txtMODEL_NA.getValue();
-		String MODEL_NA = "", MT_USAGE="", GR_NO = "", GR_NA = "", COLOR = "", EL_NO = "", EL_NA = "", SIZE_FD = "", NOTE = "";
-		String  TYPE = "";
-		int ITEMS=0;
+		// 型體
+		// Model_na = txtMODEL_NA.getValue();
+		String MODEL_NA = "", MT_USAGE = "", GR_NO = "", GR_NA = "", COLOR = "", EL_NO = "", EL_NA = "", SIZE_FD = "",
+				NOTE = "";
+		String TYPE = "";
+		int ITEMS = 0;
 
-		HSSFSheet sheet = wb.getSheetAt(0);	
+		HSSFSheet sheet = wb.getSheetAt(0);
 		HSSFRow row = null;
-		String Upsql="";
+		String Upsql = "";
 
 		try {
 			conn.setAutoCommit(false); // 數據庫事務控制, 批量提交數據庫操作.
-			
-			for(int x = 1;x < sheet.getPhysicalNumberOfRows();x++){
-				
+
+			for (int x = 1; x < sheet.getPhysicalNumberOfRows(); x++) {
+
 				row = sheet.getRow(x);
-				if(row.getCell(0) == null || "".equals(row.getCell(0))){
-					
+				// 型體
+				MODEL_NA = getCellValue(row.getCell(0)); 
+				if (MODEL_NA == null || "".equals(MODEL_NA)) {
 					break;
 				}
 				
-				MODEL_NA = getCellValue(row.getCell(0));	// 型體
-				ITEMS ++ ;
-				MT_USAGE = getCellValue(row.getCell(1));		// 使用部位
+				ITEMS++;
+				MT_USAGE = getCellValue(row.getCell(1)); // 使用部位
 
-				GR_NO = getCellValue(row.getCell(2));		// 部位
-				GR_NA = getCellValue(row.getCell(3));		// 部位名稱
-				COLOR = getCellValue(row.getCell(4));		// 顏色
-				EL_NO = getCellValue(row.getCell(5));		// 材料編號
-				EL_NA = getCellValue(row.getCell(6));		// 材料名稱
-				SIZE_FD = getCellValue(row.getCell(7));		// 分段
-				NOTE = getCellValue(row.getCell(8));		// 備註	
-				TYPE  = getCellValue(row.getCell(9));		// 類型
-		
-				Upsql+=" INTO DSID21 (MODEL_NA,ITEMS,MT_USAGE,TYPE,GR_NO,GR_NA,COLOR,EL_NO,EL_NA,SIZE_FD,NOTE,UP_USER,UP_DATE) VALUES('"+MODEL_NA+"','"+ITEMS+"','"+MT_USAGE+"','"+TYPE+"','"+GR_NO+"','"+GR_NA+"','"+COLOR+"','"+EL_NO+"','"+EL_NA+"','"+SIZE_FD+"','"+NOTE+"','"+_userInfo.getAccount()+"',SYSDATE)";
-			
+				GR_NO = getCellValue(row.getCell(2)); // 部位
+				GR_NA = getCellValue(row.getCell(3)); // 部位名稱
+				COLOR = getCellValue(row.getCell(4)); // 顏色
+				EL_NO = getCellValue(row.getCell(5)); // 材料編號
+				EL_NA = getCellValue(row.getCell(6)); // 材料名稱
+				SIZE_FD = getCellValue(row.getCell(7)); // 分段
+				NOTE = getCellValue(row.getCell(8)); // 備註
+				TYPE = getCellValue(row.getCell(9)); // 類型
+
+				Upsql += " INTO DSID21 (MODEL_NA,ITEMS,MT_USAGE,TYPE,GR_NO,GR_NA,COLOR,EL_NO,EL_NA,SIZE_FD,NOTE,UP_USER,UP_DATE) VALUES('"
+						+ MODEL_NA + "','" + ITEMS + "','" + MT_USAGE + "','" + TYPE + "','" + GR_NO + "','" + GR_NA
+						+ "','" + COLOR + "','" + EL_NO + "','" + EL_NA + "','" + SIZE_FD + "','" + NOTE + "','"
+						+ _userInfo.getAccount() + "',SYSDATE)";
+
 			}
-			
-				String Delsql = "DELETE DSID21 WHERE MODEL_NA='"+MODEL_NA+"'";
-				System.out.println(" ----- 刪除 : " + Delsql);
-				
-				try {
-					PreparedStatement pstm = conn.prepareStatement(Delsql);
-					pstm.executeUpdate();
-					pstm.close();
-					conn.commit();
-				} catch (Exception e) {
-					Errmessage="Delete false!";
-					e.printStackTrace();
-					conn.rollback();
-					return;
-				}
-				
-				
-				String InSql=" INSERT ALL "+Upsql+" SELECT * FROM DUAL";
-				System.out.println(" ----- 匯入 : " + InSql);
-				
-				try {
-					PreparedStatement pstm = conn.prepareStatement(InSql);
-					pstm.executeUpdate();
-					pstm.close();
-					conn.commit();
-				} catch (Exception e) {
-					Errmessage="Insert false!";
-					e.printStackTrace();
-					conn.rollback();
-					return;
-				}
-						
+
+			String Delsql = "DELETE DSID21 WHERE MODEL_NA='" + MODEL_NA + "'";
+			System.out.println(" ----- 刪除 : " + Delsql);
+
+			try {
+				PreparedStatement pstm = conn.prepareStatement(Delsql);
+				pstm.executeUpdate();
+				pstm.close();
+				conn.commit();
+			} catch (Exception e) {
+				Errmessage = "Delete false!"+e;
+				e.printStackTrace();
+				conn.rollback();
+				return;
+			}
+
+			String InSql = " INSERT ALL " + Upsql + " SELECT * FROM DUAL";
+			System.out.println(" ----- 匯入 : " + InSql);
+
+			try {
+				PreparedStatement pstm = conn.prepareStatement(InSql);
+				pstm.executeUpdate();
+				pstm.close();
+				conn.commit();
+			} catch (Exception e) {
+				Errmessage = "Insert false!"+e;
+				e.printStackTrace();
+				conn.rollback();
+				return;
+			}
+
 		} catch (Exception e) {
 			// TODO: handle exception
+			Errmessage="Input false!"+e;
 			conn.rollback();
 			e.printStackTrace();
 		} finally {
 			Common.closeConnection(conn);
 		}
 	}
-	
+
 	private static String getCellValue(HSSFCell cell) {
 		String cellValue = "";
 		if (cell != null) {
 			switch (cell.getCellType()) {
 			case Cell.CELL_TYPE_NUMERIC:
-				if(DateUtil.isCellDateFormatted(cell) && DateUtil.isValidExcelDate(cell.getNumericCellValue())){
+				if (DateUtil.isCellDateFormatted(cell) && DateUtil.isValidExcelDate(cell.getNumericCellValue())) {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-					Date dt= DateUtil.getJavaDate(cell.getNumericCellValue());
+					Date dt = DateUtil.getJavaDate(cell.getNumericCellValue());
 					cellValue = sdf.format(dt);
-				}else{
-					try{
+				} else {
+					try {
 						BigDecimal bd = new BigDecimal(cell.getNumericCellValue());
-						cellValue =String.valueOf(bd.setScale(2, BigDecimal.ROUND_HALF_UP));
-					}catch(Exception ex){
+						cellValue = String.valueOf(bd.setScale(2, BigDecimal.ROUND_HALF_UP));
+					} catch (Exception ex) {
 					}
 				}
 				break;
@@ -204,47 +212,47 @@ public class DSID21MProgram extends Master {
 				break;
 			}
 		}
-//		System.out.println(">>>"+cellValue);
+		// System.out.println(">>>"+cellValue);
 		return cellValue;
 	}
-	
+
 	private void ShowMessage() {
 		// TODO Auto-generated method stub
-		if(Errmessage.length() > 0){
-			Messagebox.show(Labels.getLabel("DSID.MSG0175")+Errmessage);
-		}else{
+		if (Errmessage.length() > 0) {
+			Messagebox.show(Labels.getLabel("DSID.MSG0175") + Errmessage);
+		} else {
 			Messagebox.show(Labels.getLabel("DSID.MSG0176"));
-		}	
-		Errmessage="";
+		}
+		Errmessage = "";
 	}
+
 	// 匯出
 	@Listen("onClick =#btnExport")
-	public void onClickbtnExport(Event event) throws Exception{
+	public void onClickbtnExport(Event event) throws Exception {
 		final HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("parentWindow", windowMaster);
 		map.put("DSID21MProgram", this);
 		Executions.createComponents("/ds/dsid/DSID21MExport.zul", null, map);
 	}
-	
+
 	// 批量刪除
 	@Listen("onClick =#btnBatdelete")
-	public void onClickbtnBatdelete(Event event) throws Exception{
+	public void onClickbtnBatdelete(Event event) throws Exception {
 		final HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("parentWindow", windowMaster);
 		map.put("DSID21MProgram", this);
 		Executions.createComponents("/ds/dsid/DSID21MBatDelete.zul", null, map);
 	}
-	
-	
+
 	//
 	@Listen("onClick =#btnCustomExr")
-	public void onClickbtnCustomExr(Event event) throws Exception{
+	public void onClickbtnCustomExr(Event event) throws Exception {
 		final HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("parentWindow", windowMaster);
 		map.put("DSID21MProgram", this);
 		Executions.createComponents("/ds/dsid/DSID21MCustomExr.zul", null, map);
 	}
-	
+
 	@Override
 	protected Window getRootWindow() {
 		// TODO Auto-generated method stub
@@ -284,7 +292,7 @@ public class DSID21MProgram extends Master {
 	@Override
 	protected void addDetailPrograms() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -316,7 +324,7 @@ public class DSID21MProgram extends Master {
 	@Override
 	protected String getWhereConditionals() {
 		// TODO Auto-generated method stub
-		String string =  "";
+		String string = "";
 		return string;
 	}
 
@@ -365,42 +373,43 @@ public class DSID21MProgram extends Master {
 		txtNote.setValue(entity == null ? "" : entity.getNOTE());
 		txtUp_user.setValue(entity == null ? "" : entity.getUP_USER());
 		txtUp_date.setValue(entity == null ? null : entity.getUP_DATE());
+		txtType.setValue(entity == null ? "" : entity.getTYPE());
 		
-		if(entity == null || "".equals(entity)){
-			txtType.setValue("");
-		}else{
-
-			//System.out.println(" ----- 類型判斷 ！" + entity.getTYPE());
-			switch (entity.getTYPE()) {
-			case "0":
-				txtType.setValue(Labels.getLabel("DSID.MSG0160")); 
-				break;
-			case "1":
-				txtType.setValue(Labels.getLabel("DSID.MSG0082")); 
-				break;
-			case "2":
-				txtType.setValue(Labels.getLabel("DSID.MSG0159"));
-				break;
-			case "3":
-				txtType.setValue(Labels.getLabel("DSID.MSG0177"));
-				break;
-			case "4":
-				txtType.setValue(Labels.getLabel("DSID.MSG0178"));
-				break;
-			case "5":
-				txtType.setValue(Labels.getLabel("DSID.MSG0102")); 
-				break;
-			case "6":
-				txtType.setValue(Labels.getLabel("DSID.MSG0103")); 
-				break;
-			case "7":
-				txtType.setValue(Labels.getLabel("DSID.MSG0159"));
-				break;
-			default:
-				txtType.setValue("/");
-				break;
-			}
-		}
+//		if (entity == null || "".equals(entity)) {
+//			txtType.setValue("");
+//		} else {
+//
+//			// System.out.println(" ----- 類型判斷 ！" + entity.getTYPE());
+//			switch (entity.getTYPE()) {
+//			case "0":
+//				txtType.setValue(Labels.getLabel("DSID.MSG0160"));
+//				break;
+//			case "1":
+//				txtType.setValue(Labels.getLabel("DSID.MSG0082"));
+//				break;
+//			case "2":
+//				txtType.setValue(Labels.getLabel("DSID.MSG0159"));
+//				break;
+//			case "3":
+//				txtType.setValue(Labels.getLabel("DSID.MSG0177"));
+//				break;
+//			case "4":
+//				txtType.setValue(Labels.getLabel("DSID.MSG0178"));
+//				break;
+//			case "5":
+//				txtType.setValue(Labels.getLabel("DSID.MSG0102"));
+//				break;
+//			case "6":
+//				txtType.setValue(Labels.getLabel("DSID.MSG0103"));
+//				break;
+//			case "7":
+//				txtType.setValue(Labels.getLabel("DSID.MSG0159"));
+//				break;
+//			default:
+//				txtType.setValue("/");
+//				break;
+//			}
+//		}
 	}
 
 	@Override
@@ -420,30 +429,31 @@ public class DSID21MProgram extends Master {
 		// TODO Auto-generated method stub
 		txtItems.setValue(AutoSeq());
 	}
-	
+
 	private String AutoSeq() {
 		// TODO Auto-generated method stub
 		DSID21 entity = new DSID21();
-		Connection conn=Common.getDbConnection();
+		Connection conn = Common.getDbConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String items = "";
-		
-		String sql = "SELECT LPAD(NVL(MAX(items),0)+1,4,'0')items FROM DSID21 where model_no = '"+entity.getMODEL_NA()+"'";
+
+		String sql = "SELECT LPAD(NVL(MAX(items),0)+1,4,'0')items FROM DSID21 where model_no = '" + entity.getMODEL_NA()
+				+ "'";
 		try {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
-			if(rs.next()){
+			if (rs.next()) {
 				items = rs.getString("items");
 			}
 			ps.close();
 			rs.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}finally{
-			Common.closeConnection(conn);	
+		} finally {
+			Common.closeConnection(conn);
 		}
-		
+
 		return items;
 	}
 
@@ -474,10 +484,10 @@ public class DSID21MProgram extends Master {
 	// btnSaveMaster, btnCancelMaster, btnCreateMaster, btnQuery, btnEditMaster,
 	// btnDelete, btnImport, btnExport, btnCustomExr
 	@Override
-	public void masterReadMode(HashMap<String, Object> mapButton){
+	public void masterReadMode(HashMap<String, Object> mapButton) {
 		mapButton = new HashMap<String, Object>();
 		mapButton.put("btncreatemaster", btnCreateMaster);
-		mapButton.put("btnquery", btnQuery);		
+		mapButton.put("btnquery", btnQuery);
 		super.masterReadMode(mapButton);
 		btnQuery.setDisabled(false);
 		btnEditMaster.setDisabled(false);
@@ -492,7 +502,7 @@ public class DSID21MProgram extends Master {
 		btnCancelMaster.setDisabled(true);
 		btnBatdelete.setDisabled(false);
 		btnCustomExr.setDisabled(false);
-		
+
 		txtModel_na.setReadonly(true);
 		txtItems.setReadonly(true);
 		txtGr_no.setReadonly(true);
@@ -507,9 +517,9 @@ public class DSID21MProgram extends Master {
 		txtUp_date.setReadonly(true);
 
 	}
-	
+
 	@Override
-	public void masterCreateMode(HashMap<String, Object> mapButton){
+	public void masterCreateMode(HashMap<String, Object> mapButton) {
 		mapButton = new HashMap<String, Object>();
 		mapButton.put("btncreatemaster", btnCreateMaster);
 		mapButton.put("btnquery", btnQuery);
@@ -527,7 +537,7 @@ public class DSID21MProgram extends Master {
 		btnCancelMaster.setDisabled(false);
 		btnBatdelete.setDisabled(true);
 		btnCustomExr.setDisabled(true);
-		
+
 		txtModel_na.setReadonly(false);
 		txtItems.setReadonly(false);
 		txtGr_no.setReadonly(false);
@@ -540,6 +550,6 @@ public class DSID21MProgram extends Master {
 		txtType.setReadonly(false);
 		txtUp_user.setReadonly(false);
 		txtUp_date.setReadonly(false);
-		
+
 	}
 }

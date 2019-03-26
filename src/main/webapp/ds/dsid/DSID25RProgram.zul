@@ -16,13 +16,18 @@
 				<button id="btnQuery" sclass="btn-warning"
 					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
 					mold="trendy" />
-									
+				
+				<button id="btnSetTime" sclass="btn-default"
+					iconSclass="mdi mdi-watch-export" label="SetTime"
+					mold="trendy" />
+										
 				<fileupload id="btnImport" sclass="btn-default" mold="trendy"
 					iconSclass="mdi mdi-briefcase-upload" label="${labels.COMM.IMPORT}" />
 					
 				<button id="btnexport1" sclass="btn-default"
 					iconSclass="mdi mdi-watch-export" label="${labels.COMM.EXPORT}"
-					mold="trendy" />	
+					mold="trendy" />
+						
 			</div>
 		</div>
 
@@ -65,7 +70,8 @@
             		<listheader label="${labels.DSID25R.PART_NA}" />
             		<listheader label="${labels.DSID25R.MULTIPLE}" align="center"/> 
             		<listheader label="${labels.DSID25R.EL_UNIT}" align="center"/> 
-            		<listheader label="${labels.DSID25R.RE_DATE}"/> 																			
+            		<listheader label="${labels.DSID25R.RE_DATE}"/> 
+            		<listheader label="${labels.DSID25R.START_DATE}"/> 																			
 				</listhead>
 
 				<template name="model">
@@ -105,7 +111,7 @@
   
         			<listcell label="${each.EL_UNIT}"/>
         			<listcell label="${each.RE_DATE}"/>
-												
+					<listcell label="${each.START_DATE}"/>						
 				</listitem>
 				</template>
 							
@@ -118,7 +124,7 @@
 		<separator spacing="5px" />
 		<tabbox id="tabDetail">
 			<tabs>
-				<tab id="tabDetail1" label="DSID25R.REMAIN" />
+				<tab id="tabDetail1" label="${labels.DSID25R.REMAIN}" />
 			</tabs>
 			<tabpanels>
 				<tabpanel id="Detail1"></tabpanel>

@@ -5,7 +5,7 @@
 	<borderlayout >
 	
 	<west>
-	<div sclass="breadcrumbs" height="100%">
+	<div sclass="breadcrumbs" height="100%" id="divv">
 	
 		<hlayout width="100%" height="35px" >
 			<label value="${labels.DSID01M.ORDER_DATE}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
@@ -13,6 +13,7 @@
 		 						
 			<label value="${labels.DSID01M2.UPLIMIT}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
 			<textbox id="txt_UpLimit"  mold="rounded" width="100px" />
+			
 		</hlayout>
 		<hlayout width="100%" height="35px" >
 			 <button id="btnSearch" label="${labels.COMM.SCREEN}" mold="trendy"  iconSclass="mdi mdi-magnify" /> 
@@ -20,20 +21,36 @@
 	         <button id="btnConfirm" sclass="btn-primary" 
 				iconSclass="mdi mdi-account-check" label="${labels.DSID01M2.CONVER}" mold="trendy" visible="false"/>
 				
-		</hlayout>	
+		</hlayout>
+		
+
+			
 		<hlayout width="100%" height="35px">
 			<label value="${labels.DSID01M2.PreRecep}" sclass="sectionTitleLabel" />
+			<button id="btnExport1" sclass="btn-default"	iconSclass="mdi mdi-watch-export"
+					label="${labels.COMM.EXPORT}" mold="trendy"  /> 
 		</hlayout>
 		<hlayout >
 			<textbox id="txt_rec_odno"  mold="rounded" width="620px"  height="80px" multiline="true" readonly="true"/>	
 		</hlayout>
+		
+		<hlayout width="100%" height="35px">
+			<textbox mold="rounded" width="300px" readonly="true"  value="型體" />	
+			<textbox mold="rounded" width="60px"  readonly="true"  value="數量/雙"/>	
+			<!-- <textbox mold="rounded" width="140px"  readonly="true"  value="尺碼"/>	 -->
+			<textbox mold="rounded" width="60px"  readonly="true"  value="承接雙數" />	
+					
+		</hlayout>
+		
 		</div>	
 		</west>
 		
-		<east  width="360px" >
+		<east  width="360px">
 			<div height="135px" >
 			<hlayout >
 				<label value="${labels.DSID01M2.SCHEDULE}" sclass="sectionTitleLabel" style="display:inline-block;width:100px;color:red;" />
+				<button id="btnExport2" sclass="btn-default"	iconSclass="mdi mdi-watch-export"
+					label="${labels.COMM.EXPORT}" mold="trendy"  /> 
 			</hlayout>
 			<hlayout  >
 				<textbox id="txt_Pro"  mold="rounded" width="360px"  height="166px" multiline="true" readonly="true"/>	
@@ -41,19 +58,20 @@
 			</div>
 		</east>
 		
-		<south  >
+
+		<!-- <south  >
 		<div sclass="breadcrumbs" height="100%">
 		    <listbox id="ListBox"   multiple="true" autopaging="true" 
 		    			sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}" rows="10" >
         		<listhead>
-            		<listheader label="${labels.DSID01M.MODEL_NA}" />
-            		<listheader label="${labels.DSID.MSG0171}" />
-            		<listheader label="${labels.DSID.MSG0096}" />  
-            		<listheader label="${labels.DSID02.EL_NO}" />  
-            		<listheader label="${labels.DSID.MSG0221}" />  
-            		<listheader label="${labels.DSID.MSG0201}" />   
-            		<listheader label="${labels.DSID.MSG0246}" />
-            		<listheader label="${labels.DSID.MSG0247}" />          		
+            		<listheader label="型體" />
+            		<listheader label="部位" />
+            		<listheader label="顏色" />  
+            		<listheader label="材料編號" />  
+            		<listheader label="單位用量" />  
+            		<listheader label="倉庫庫存" />   
+            		<listheader label="可斬雙數" />
+            		<listheader label="訂單雙數" />          		
         		</listhead>
         		<template name="model">
         		<listitem >
@@ -70,7 +88,7 @@
 			</listbox>
 		  <paging id="pagingSuppiler" ></paging>					
 		</div>
-	</south>
+	</south> -->
 	</borderlayout>
 	</window>
 </zk>
