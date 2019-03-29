@@ -3,6 +3,7 @@ package ds.dsid.program;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,6 +36,7 @@ import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.SpringUtil;
+import org.zkoss.zul.Checkbox;
 import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
@@ -61,7 +63,10 @@ public class DSID04MExport2 extends OpenWinCRUD {
 	static String EL_PO = "", EL_NO_LIST = "";
 	List<Object> His = new ArrayList<Object>();
 	String Aqty = "";
-
+	@Wire
+	private Checkbox Chbox;
+	Boolean Is_Deduct=false;
+	
 	@Override
 	public void doAfterCompose(Component window) throws Exception {
 		super.doAfterCompose(window);
@@ -105,6 +110,27 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		filterHeader();
 	}
 
+	@Listen("onClick =#btnexport2")
+	public void onClickbtnexport2(Event event) throws Exception {
+
+		String MODEL_NA = ""; // 型體名稱
+
+		if (List_Model_na.getSelectedItem() != null) {
+			for (Listitem ltAll : List_Model_na.getItems()) {
+				if (ltAll.isSelected()) {
+					if (!"".equals((Object) ltAll.getValue()) && (Object) ltAll.getValue() != null) {
+						MODEL_NA = (Object) ltAll.getValue() + "";
+					}
+				}
+			}
+		}
+		if (!"".equals(MODEL_NA)) {
+			DSID04_1Task.ExportExcel(MODEL_NA);
+		} else {
+			Messagebox.show(Labels.getLabel("DSID.MSG0053"));
+		}
+	}
+
 	@SuppressWarnings("resource")
 	private void filterHeader() throws SQLException {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -126,7 +152,13 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			Connection conn = Common.getDbConnection();
 
 			HSSFWorkbook wb = new HSSFWorkbook();
-
+	
+			if(Chbox.isChecked()){
+				Is_Deduct=true;
+			}else{
+				Is_Deduct=false;
+			}
+			
 			GetHistoryDate(MODEL_NA, conn);
 			// System.err.println(">>>"+His);
 
@@ -258,61 +290,53 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				sheet1 = wb.createSheet(MODEL_NA);
 				SetSheet1(wb, sheet1, style1, style2, style3, style4, style5, style6, conn, MODEL_NA);
 
-				 String sql1 = "SELECT * FROM DSID04_2 WHERE MODEL_NA='" +
-				 MODEL_NA + "'";
-				 try {
-				 ps1 = conn.prepareStatement(sql1);
-				 rs1 = ps1.executeQuery();
-				 if (rs1.next()) {
-				 sheet2 = wb.createSheet("VAMP");
-				 SetSheet2(wb, sheet2, style1, style2, style3, style4, style7,
-				 style6, conn, MODEL_NA);
-				 }
-				 } catch (Exception e) {
-				 e.printStackTrace();
-				 }
-				
-				 String sql5 = "SELECT * FROM DSID04_5 WHERE MODEL_NA='" +
-				 MODEL_NA + "' ORDER BY EL_SEQ";
-				 try {
-				 ps2 = conn.prepareStatement(sql5);
-				 rs2 = ps2.executeQuery();
-				 if (rs2.next()) {
-				 sheet5 = wb.createSheet("HEEL CLIP");
-				 SetSheet5(wb, sheet5, style9, style2, style3, style4, style7,
-				 style8, conn, MODEL_NA);
-				 }
-				 } catch (Exception e) {
-				 e.printStackTrace();
-				 }
-				
-				 String sql2 = "SELECT * FROM DSID04_3 WHERE MODEL_NA='" +
-				 MODEL_NA + "' ORDER BY EL_SEQ";
-				 try {
-				 ps2 = conn.prepareStatement(sql2);
-				 rs2 = ps2.executeQuery();
-				 if (rs2.next()) {
-				 sheet3 = wb.createSheet("label");
-				 SetSheet3(wb, sheet3, style1, style2, style3, style4, style5,
-				 style6, conn, MODEL_NA);
-				 }
-				 } catch (Exception e) {
-				 e.printStackTrace();
-				 }
-				
-				 String sql4 = "SELECT * FROM DSID04_4 WHERE MODEL_NA='" +
-				 MODEL_NA + "' ORDER BY EL_SEQ";
-				 try {
-				 ps2 = conn.prepareStatement(sql4);
-				 rs2 = ps2.executeQuery();
-				 if (rs2.next()) {
-				 sheet4 = wb.createSheet("lace");
-				 SetSheet4(wb, sheet4, style9, style2, style3, style4, style7,
-				 style8, conn, MODEL_NA);
-				 }
-				 } catch (Exception e) {
-				 e.printStackTrace();
-				 }
+				String sql1 = "SELECT * FROM DSID04_2 WHERE MODEL_NA='" + MODEL_NA + "'";
+				try {
+					ps1 = conn.prepareStatement(sql1);
+					rs1 = ps1.executeQuery();
+					if (rs1.next()) {
+						sheet2 = wb.createSheet("VAMP");
+						SetSheet2(wb, sheet2, style1, style2, style3, style4, style7, style6, conn, MODEL_NA);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				String sql5 = "SELECT * FROM DSID04_5 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
+				try {
+					ps2 = conn.prepareStatement(sql5);
+					rs2 = ps2.executeQuery();
+					if (rs2.next()) {
+						sheet5 = wb.createSheet("HEEL CLIP");
+						SetSheet5(wb, sheet5, style9, style2, style3, style4, style7, style8, conn, MODEL_NA);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				String sql2 = "SELECT * FROM DSID04_3 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
+				try {
+					ps2 = conn.prepareStatement(sql2);
+					rs2 = ps2.executeQuery();
+					if (rs2.next()) {
+						sheet3 = wb.createSheet("label");
+						SetSheet3(wb, sheet3, style1, style2, style3, style4, style5, style6, conn, MODEL_NA);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				String sql4 = "SELECT * FROM DSID04_4 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
+				try {
+					ps2 = conn.prepareStatement(sql4);
+					rs2 = ps2.executeQuery();
+					if (rs2.next()) {
+						sheet4 = wb.createSheet("lace");
+						SetSheet4(wb, sheet4, style9, style2, style3, style4, style7, style8, conn, MODEL_NA);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 				wb.setForceFormulaRecalculation(true);
 				wb.write(stream);
@@ -1050,10 +1074,10 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		row = sheet4.getRow(3);
 		row.setHeightInPoints(20);
-		
+
 		cell = row.createCell(2);
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
@@ -1063,9 +1087,10 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		cell.setCellType(1);
 		cell.setCellStyle(style2);
 		cell.setCellValue("M'S");
-		
-		int rowNum = 4 , cellNum = 2;
-		String sql = "SELECT DISTINCT EL_NA,SIZE_FD FROM DSID21 WHERE MT_USAGE='LACE' AND MODEL_NA='" + MODEL_NA + "' ORDER BY TO_NUMBER(REPLACE(EL_NA,'CM',''))";
+
+		int rowNum = 4, cellNum = 2;
+		String sql = "SELECT DISTINCT EL_NA,SIZE_FD FROM DSID21 WHERE MT_USAGE='LACE' AND MODEL_NA='" + MODEL_NA
+				+ "' ORDER BY TO_NUMBER(REPLACE(EL_NA,'CM',''))";
 
 		try {
 			ps1 = conn.prepareStatement(sql);
@@ -1084,7 +1109,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				cell.setCellType(1);
 				cell.setCellStyle(style2);
 				cell.setCellValue(rs1.getString("SIZE_FD"));
-				
+
 				rowNum++;
 			}
 			ps1.close();
@@ -1092,7 +1117,6 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 
 		rowNum = 14;
 		String Last_color = "", ET_US = "";
@@ -1319,7 +1343,8 @@ public class DSID04MExport2 extends OpenWinCRUD {
 						row = sheet4.getRow(rowNum + 15 + k);
 						boolean is_buy = Check_buy(MODEL_NA, "DSID04_4", conn, k);
 						if (!is_buy) {
-							row.setHeightInPoints(0);
+							// row.setHeightInPoints(0);
+							row.setHeight((short) 0);
 						} else {
 							cell = row.createCell(cellNum);
 							cell.setCellType(1);
@@ -2519,15 +2544,18 @@ public class DSID04MExport2 extends OpenWinCRUD {
 					Double kc_qty = Double.valueOf(getkc(rs2.getString("EL_NO"), MODEL_NA, conn));
 					Double zt_qty = getbuy(rs2.getString("EL_NO"), MODEL_NA, conn)
 							- getacc(rs2.getString("EL_NO"), MODEL_NA, conn);
-					// System.err.println("kc_qty>>>>"+kc_qty+"
-					// zt_qty>>>>"+zt_qty);
+					// System.err.println("kc_qty>>>>"+kc_qty+" zt_qty>>>>"+zt_qty);
 
 					// 庫存
 					cell = row.createCell(18);
 					cell.setCellType(1);
 					cell.setCellStyle(style32);
 					if (kc_qty > 0) {
-						cell.setCellValue(kc_qty * propo);
+						if(Is_Deduct&&rs2.getString("GROUP_NO").toUpperCase().contains("GROUP")&&!rs2.getString("COLOR").contains("/")){
+							cell.setCellValue(kc_qty * propo-GetInboxYield(MODEL_NA,rs2.getString("GROUP_NO"),rs2.getString("COLOR"),rs2.getString("YIELD"),conn));
+						}else{
+							cell.setCellValue(kc_qty * propo);
+						}
 					} else {
 						cell.setCellValue(0);
 					}
@@ -2539,14 +2567,14 @@ public class DSID04MExport2 extends OpenWinCRUD {
 							cell = row.createCell(47 + 2 * k);
 							cell.setCellType(1);
 							cell.setCellStyle(style32);
-							if (HisQty != 0&&propo!=0) {
+							if (HisQty != 0 && propo != 0) {
 								cell.setCellValue(HisQty * propo);
 							}
 
 							cell = row.createCell(48 + 2 * k);
 							cell.setCellType(1);
 							cell.setCellStyle(style4);
-							if (HisQty != 0&&propo!=0) {
+							if (HisQty != 0 && propo != 0) {
 								cell.setCellValue(Double.valueOf(rs2.getString("PO_PRICE")) * HisQty * propo);
 							}
 						}
@@ -2884,6 +2912,42 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 	}
 
+	private double GetInboxYield(String MODEL_NA, String GROUP, String COLOR, String YIELD, Connection conn) throws SQLException {
+		// TODO Auto-generated method stub
+		PreparedStatement ps = null;
+			ResultSet rs = null;
+			Double num=0.0;
+	
+			String 	sql="SELECT COUNT(*) COU FROM DSID01_TEMP WHERE MODEL_NA LIKE '%"+MODEL_NA+"' AND "+GROUP.replace("GROUP ", "GROUP")+"='"+COLOR+"'";
+//			System.out.println(">>>>>"+sql);
+			try {
+				ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				rs = ps.executeQuery();	
+				if(rs.next()){
+					num=Double.valueOf(rs.getString("COU"))*Double.valueOf(YIELD);
+				}else{
+					num=0.0;
+				}
+				rs.close();
+				ps.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally{
+				if(rs!=null){
+					rs.close();
+				}
+				if(ps!=null){
+					ps.close();
+				}
+			}
+
+			java.text.DecimalFormat df = new java.text.DecimalFormat("#.##");
+			num=Double.valueOf(df.format(num));
+			
+			return num;
+
+	}
+
 	private boolean Check_buy(String MODEL_NA, String table, Connection Conn, int k) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
@@ -2978,7 +3042,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				+ "AND PO_QTY!=0 AND EL_NO='" + EL_NO + "' AND STOCK_MARK='" + MODEL_NA + "'\n"
 				+ "AND A.PO_DATE BETWEEN" + AddSql;
 		int SQTY = 0, AQTY = 0;
-//		 System.err.println(EL_NO+">>>>>"+sql);
+		// System.err.println(EL_NO+">>>>>"+sql);
 		try {
 			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
@@ -3018,7 +3082,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				+ "AND PO_QTY!=0 AND EL_NO IN (" + EL_NO_LIST + ") AND STOCK_MARK='" + MODEL_NA + "'\n"
 				+ "AND A.PO_DATE BETWEEN" + AddSql;
 		int QTY = 0;
-//		 System.out.println("GetHisQty2>>>>>"+sql);
+		// System.out.println("GetHisQty2>>>>>"+sql);
 		try {
 			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
@@ -3628,7 +3692,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 					+ EL_PO.replace(",", "','") + "') AND A.EL_NO IN (" + EL_NO_LIST
 					+ ") AND A.PO_NO=B.PO_NO AND A.EL_NO=B.EL_NO AND B.PO_CLOSE!='T'";
 
-//			System.out.println("验收2>>>>>" + sql);
+			// System.out.println("验收2>>>>>" + sql);
 			try {
 				ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				rs = ps.executeQuery();
@@ -3692,7 +3756,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 					+ "AND B.PO_CLOSE!='T' AND PO_QTY!=0 AND EL_NO IN (" + EL_NO_LIST + ") AND STOCK_MARK='" + MODEL_NA
 					+ "'";
 
-//			System.out.println("订购2>>>>>" + sql);
+			// System.out.println("订购2>>>>>" + sql);
 			try {
 				ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				rs = ps.executeQuery();
@@ -3767,7 +3831,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 			sql = "SELECT SUM(MT_QTY) MT_QTY FROM DSID77 WHERE EL_NO IN (" + EL_NO_LIST + ") AND MODEL_NA = '"
 					+ MODEL_NA + "'";
-//			System.out.println("库存2>>>>>" + sql);
+			// System.out.println("库存2>>>>>" + sql);
 			try {
 				ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				rs = ps.executeQuery();

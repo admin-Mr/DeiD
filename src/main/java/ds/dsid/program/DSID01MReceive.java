@@ -54,7 +54,7 @@ public class DSID01MReceive extends OpenWinCRUD {
 	Datebox txtorder_date;
 	// List<String> WOI_List = new ArrayList<String>();
 	List<String> Model_naList = new ArrayList<String>();
-	String WOI_List = "", ErrMess2 = "";
+	String WOI_List = "", ErrMess2 = "",OD_NOList;
 	@Wire
 	Div divv;
 	Map<String, String> Model_Num = new HashMap<String, String>();
@@ -77,8 +77,8 @@ public class DSID01MReceive extends OpenWinCRUD {
 
 	@Listen("onClick =#btnExport2")
 	public void onClickbtnbtnExport2(Event event) throws SQLException {
-		if (!"".equals(ErrMess2)) {
-			DSID01MReTask.ExcelExport(ErrMess2);
+		if (!"".equals(OD_NOList)) {
+			DSID01MReTask.ExcelExport(OD_NOList);
 		}
 	}
 
@@ -208,6 +208,7 @@ public class DSID01MReceive extends OpenWinCRUD {
 				boolean Enough = false;
 				String Last_WOI_List = "", ErrMess1 = "";
 				ErrMess2 = "";
+				OD_NOList="";
 				String el_no = "";
 				int order_num = 0;
 
@@ -299,8 +300,11 @@ public class DSID01MReceive extends OpenWinCRUD {
 					ErrMess1 = ErrMess1.substring(0, ErrMess1.length() - 1);
 					ErrMess1 = "\n" + Labels.getLabel("DSID.MSG0036") + "\n" + ErrMess1;
 				}
+				
+			
 				if (ErrMess2.length() > 0) {
-					ErrMess2 = ErrMess2.substring(0, ErrMess2.length() - 1);
+					ErrMess2 = ErrMess2.substring(0, ErrMess2.length() - 1);		
+					OD_NOList = ErrMess2;
 					ErrMess2 = "\n" + Labels.getLabel("DSID.MSG0037") + "\n" + ErrMess2;
 				}
 
@@ -661,6 +665,9 @@ public class DSID01MReceive extends OpenWinCRUD {
 
 		if (Double.valueOf(Max_num) < Double.valueOf(Pre_num)) {
 			Enough = false;
+		}
+		if(MODEL_NA.contains("PEGASUS+35 ESS SU18 ID")&&"GROUP2".equals(GROUP_NO)){
+			Enough=true;
 		}
 
 		return Enough;

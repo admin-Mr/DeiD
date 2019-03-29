@@ -10,12 +10,22 @@
 					<label value="${labels.DSID01M.MODEL_NA}" sclass="sectionTitleLabel"  style="display:inline-block;width:60px;"/>
 					<!-- <textbox id="txtMODEL_NA" mold="rounded" width="300px" />	 -->	
 					<listbox id ="List_Model_na" mold="select" rows="1" width="300px" />
+					
+					<checkbox id="Chbox" label="扣減Inbox材料"/>
 				</hlayout>
 				
 				<hlayout>
 				<button id="btnexport" sclass="btn-default"
 					iconSclass="mdi mdi-watch-export"
 					label="${labels.COMM.EXPORT}" mold="trendy"  /> 
+				</hlayout>
+				<hlayout>
+				<label value="導出Inbox所需材料數" sclass="sectionTitleLabel" />
+				</hlayout>
+				<hlayout>
+				<button id="btnexport2" sclass="btn-default"
+					iconSclass="mdi mdi-watch-export"
+					label="${labels.COMM.EXPORT} 2" mold="trendy"  /> 
 					
 				</hlayout>
 				

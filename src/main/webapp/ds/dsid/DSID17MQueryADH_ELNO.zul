@@ -1,7 +1,7 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
 <zk>
 	<window title="${labels.COMM.QRY}" id="windowQuery" border="normal"
-		width="700px" height="520px" apply="ds.dsid.program.DSID17MQueryADH_ELNO"
+		width="900px" height="520px" apply="ds.dsid.program.DSID17MQueryADH_ELNO"
 		maximizable="false" closable="true" sclass="mymodal" mode="modal">
 		
 		<hlayout width="100%">
@@ -22,14 +22,13 @@
 		<panel width="100%">
 			<panelchildren style="overflow:auto;">
 				<separator />
-				<listbox id="queryListBox" checkmark="true"
-					multiple="false" sclass="mylist"
-					emptyMessage="${labels.PUBLIC.MSG0026}">
+				<listbox id="queryListBox" checkmark="true" rows="6"
+					multiple="false" sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}">
 					<listhead sizable="true">
 							<listheader label="${labels.DSID07M.ADH_ELNO}" />
 							<listheader label="${labels.DSID07M.PRO_TYPE}" />
-							<listheader label="${labels.DSID07M.EL_UNIT}" />
-							<listheader label="${labels.DSID07M.COLOR}" />
+							<listheader label="${labels.DSID07M.EL_UNIT}" width="5%"/>
+							<listheader label="${labels.DSID07M.COLOR}" width="5%"/>
 							<listheader label="${labels.DSID07M.ADH_ELNA}" />								
 					</listhead>
 					<template name="model">

@@ -1,0 +1,157 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.DSID40}" />
+			<!-- <label value="${labels.DSID.DSID06NM} (DSID06NM)" /> -->
+			<label value="材料平面位置輸入(DSID06NM)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowMaster"
+		apply="ds.dsid.program.DSID06NMProgram">
+
+		<div sclass="breadcrumbs">
+			<div sclass="breadcrumb">
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />
+				<button id="btnEditMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
+					mold="trendy" />
+				<button id="btnSaveMaster" sclass="btn-success"
+					iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+					mold="trendy" disabled="true" />
+				<button id="btnCancelMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+					mold="trendy" disabled="true" />
+
+				<button id="btnDeleteMaster" sclass="btn-danger"
+					iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+					mold="trendy" />
+
+				<fileupload id="btnImport" sclass="btn-default"
+					mold="trendy" iconSclass="mdi mdi-briefcase-upload"
+					label="${labels.COMM.IMPORT}" />
+
+
+			</div>
+		</div>
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+
+			<hlayout>
+				<hlayout>
+					<label value="${labels.DSIDN06_01.EL_NO}"
+						sclass="sectionTitleLabel" />
+					<textbox id="txt_EL_NO_SQL" width="120px"
+						mold="rounded" />
+					<label value="${labels.DSIDN06_01.EL_CNAME}"
+						sclass="sectionTitleLabel" />
+					<textbox id="txt_EL_CNAME_SQL" width="120px"
+						mold="rounded" />
+					<label value="${labels.DSIDN06_01.PLACE}"
+						sclass="sectionTitleLabel" />
+					<textbox id="txt_PLACE_SQL" width="120px"
+						mold="rounded" />
+					<label value="${labels.DSIDN06_01.MODEL_NA}"
+						sclass="sectionTitleLabel" />
+					<textbox id="txt_MODEL_NA_SQL" width="180px"
+						mold="rounded" />
+				</hlayout>
+			</hlayout>
+		</groupbox>
+
+		<borderlayout height="390px">
+			<north size="40%" >
+				<div width="100%" >
+					<separator spacing="10px" />
+					<vlayout width="100%">
+
+						<hlayout width="100%" height="32px">
+							<label value="${labels.DSIDN06_01.MODEL_NA}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="txt_MODEL_NA" mold="rounded" width="300px" />
+
+							<label value="ITEM" sclass="sectionTitleLabel" style="display:inline-block;width:40px;"/>
+							<textbox id="txt_ITEM" mold="rounded" width="50px" />
+							
+							<label value="${labels.DSIDN06_01.EL_NO}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="txt_EL_NO" mold="rounded" width="120px" />
+														
+						</hlayout>
+
+						<hlayout width="100%" height="32px">
+
+							<label value="${labels.DSIDN06_01.EL_CNAME}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="txt_EL_CNAME" mold="rounded" width="400px" />
+
+						<label value="庫存數" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="txt_QTY" mold="rounded" width="120px" />
+						</hlayout>
+
+						<hlayout width="100%" height="32px">
+
+							<label value="${labels.DSIDN06_01.PLACE}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="txt_PLACE" mold="rounded" width="150px" />
+
+							<label value="${labels.DSIDN06_01.CUPBOARD}" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="txt_CUPBOARD" mold="rounded" width="150px" />
+							
+							<button id="btnShowPlace" sclass="btn-primary" image="/resource/imgs/icons/btn_view_16x16.gif"
+							 label="定位" mold="trendy" />
+							
+						</hlayout>
+
+						<hlayout width="100%" height="32px">
+							<label value="備註" sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+							<textbox id="txt_NOTE" mold="rounded" width="590px" />
+						</hlayout>
+					</vlayout>
+				</div>
+			</north>
+
+			<south>
+				<div>
+					<listbox id="masterListbox" sclass="mylist"
+						autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+						multiple="false" rows="5">
+						<listhead sizable="true">
+							<listheader width="30%"
+								label="${labels.DSIDN06_01.MODEL_NA}" />
+							<listheader width="10%" label="ITEM" />
+							<listheader width="10%"
+								label="${labels.DSIDN06_01.EL_NO}" />
+							<listheader width="40%"
+								label="${labels.DSIDN06_01.EL_CNAME}" />
+							<listheader width="13%"
+								label="${labels.DSIDN06_01.PLACE}" />
+							<listheader width="10%"
+								label="${labels.DSIDN06_01.CUPBOARD}" />
+							<listheader width="10%" label="備註" />
+
+						</listhead>
+						<template name="model">
+							<listitem
+								forward="onDoubleClick=onDoubleClickedPersonItem">
+								<listcell label="${each.MODEL_NA}" />
+								<listcell label="${each.ITEM}" />
+								<listcell label="${each.EL_NO}" />
+								<listcell label="${each.EL_CNAME}" />
+								<listcell label="${each.PLACE}" />
+								<listcell label="${each.CUPBOARD}" />
+								<listcell label="${each.NOTE}" />
+							</listitem>
+						</template>
+					</listbox>
+					<paging id="pagingCourse"></paging>
+				</div>
+			</south>
+		</borderlayout>
+	</window>
+</zk>

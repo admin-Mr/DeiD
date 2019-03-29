@@ -121,7 +121,7 @@ public DSIDN08 getD08() {
 	    PLACE = (String) execution.getArg().get("PLACE");
 		MODEL_NA = (String) execution.getArg().get("MODEL_NA");
 		initValue02(d06,this.PLACE,this.MODEL_NA);
-		
+		System.err.println("進入。。。。。。。。。。。。。");
 		return super.doBeforeCompose(page, parent, compInfo);
 	}
 
@@ -144,6 +144,7 @@ public DSIDN08 getD08() {
 		super.doAfterCompose(window);
 		CRUDService = (CRUDService) SpringUtil.getBean("CRUDService");
 		divcenter.setVisible(false);
+		
 	}
 	
 	/**

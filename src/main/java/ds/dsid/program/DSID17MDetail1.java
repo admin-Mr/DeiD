@@ -182,7 +182,7 @@ public class DSID17MDetail1 extends Detail{
 			while(rs.next()){
 				for(int i=1;i<4;i++){
 					if(RAW_ELNO.equals(rs.getString("RAW_ELNO"+i))){
-						USE_QTY+=Double.valueOf(rs.getString("ADH_QTY"))*Double.valueOf(rs.getString("RAW+PRO"+i));
+						USE_QTY+=Double.valueOf(rs.getString("ADH_QTY"))*Double.valueOf(rs.getString("RAW_PRO"+i));
 						System.err.println("--USE_QTY--\n："+USE_QTY);
 					}
 				}
@@ -220,7 +220,7 @@ public class DSID17MDetail1 extends Detail{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Double MT_QTY=0.0;
-		String sql = "SELECT * FROM DSID77 WHERE EL_NO='"+EL_NO+"' AND ( MODEL_NA='"+MODEL_NA+"' OR MODEL_NA='0') ORDER BY MODEL_NA DESC";
+		String sql = "SELECT * FROM DSID77 WHERE EL_NO='"+EL_NO+"' AND ( MODEL_NA='"+MODEL_NA+"' OR MODEL_NA='0' OR MODEL_NA LIKE '%類') ORDER BY MODEL_NA DESC";
 		System.err.println("--Mt_qty--\n："+sql);
 		try {
 			ps = Conn.prepareStatement(sql);
