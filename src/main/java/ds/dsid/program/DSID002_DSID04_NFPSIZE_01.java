@@ -1,5 +1,13 @@
 package ds.dsid.program;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,15 +15,26 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.SpringUtil;
 import org.zkoss.zul.Button;
+import org.zkoss.zul.Fileupload;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
@@ -23,10 +42,12 @@ import ds.common.services.CRUDService;
 import ds.common.services.UserCredential;
 import ds.dsid.domain.DSID04_NFPSIZE;
 import util.BlackBox;
+import util.Common;
 import util.ComponentColumn;
 import util.DataMode;
 import util.Master;
 import util.OperationMode;
+import util.function.TableToExcel;
 import util.openwin.ReturnBox;
 
 public class DSID002_DSID04_NFPSIZE_01 extends Master {
@@ -41,7 +62,7 @@ public class DSID002_DSID04_NFPSIZE_01 extends Master {
 	@Wire
 	private Textbox txt_MODEL_NA,txt_EL_NO,txt_SIZES;
 	@Wire
-	private Button btnQuery, btnSaveMaster, btnCancelMaster, btnCreateMaster;
+	private Button btnQuery, btnSaveMaster, btnCancelMaster, btnCreateMaster,btnImportMaster;
 	@Wire
 	private Button onqryDSID04,ontxtDSID04,ontxtDSID04ELNO;
 	private UserCredential _userInfo = (UserCredential) Sessions.getCurrent().getAttribute("userCredential");
@@ -60,6 +81,160 @@ public class DSID002_DSID04_NFPSIZE_01 extends Master {
 		masterComponentColumns.add(new ComponentColumn<String>(null, "SEQ", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(null, "UP_USER", _userInfo.getAccount(), null, null));
 		masterComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));
+		
+		btnImportMaster = (Fileupload) window.getFellow("btnImportMaster");
+		btnImportMaster.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
+			@SuppressWarnings("unused")
+			public void onEvent(UploadEvent event) throws SQLException {
+				String fileToRead = "";
+				org.zkoss.util.media.Media media = event.getMedia();
+				if (!media.getName().toLowerCase().endsWith(".xls")) {
+					Messagebox.show(Labels.getLabel("PUBLIC.MSG0082")+Labels.getLabel("COMM.XLSFILE")); //Excel格式不對,請檢查!檔案(.xls)
+					return;
+				}
+				System.out.println("-------- fileToRead : " + fileToRead);
+				InputStream input = null;
+				media.isBinary();
+				String sss = media.getFormat();
+				input = media.getStreamData();// 獲得輸入流
+				importFromExcel(input);
+			}
+		});
+	}
+	
+	@SuppressWarnings("resource")
+	public void importFromExcel(InputStream input) throws SQLException {
+		try {
+			HSSFWorkbook wb = new HSSFWorkbook(input);
+			HSSFSheet sheet = wb.getSheetAt(0);
+			HSSFDataFormat dateFormat = wb.createDataFormat();
+			getValueFromXls(sheet,dateFormat);
+
+		} catch (FileNotFoundException e) {
+			//"文件不存在!"
+			Messagebox.show(Labels.getLabel("PUBLIC.MSG0083"));
+			e.printStackTrace();
+		} catch (Exception e) {
+			//"Excel格式不對,請檢查!"
+			Messagebox.show(Labels.getLabel("PUBLIC.MSG0082"));
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings({ "deprecation", "rawtypes" })
+	public void getValueFromXls(HSSFSheet sheet, HSSFDataFormat dateFormat) throws SQLException {
+		PreparedStatement ps = null;
+		Connection conn = null;
+		String	sql1="", sql2="";
+		String vMODEL_NA="",vEL_NO="",vSEQ="",vSIZES="";
+		/***** 取得匯入Excel的總筆數 *****/
+		int TotalRows=0;
+		for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {				
+	    	HSSFRow row = sheet.getRow(i);
+    		if (row==null){
+	    		break;
+    		}
+	    	HSSFCell cell = row.getCell((short)0);
+    		Object objvalue = TableToExcel.getCellValue(cell, dateFormat);
+	    	if(objvalue==null){
+			    TotalRows=i;
+    			break;
+	    	}else{
+		    	TotalRows=i;
+		    }
+		}	
+		/***** 取得匯入Excel的總筆數 *****/
+		HSSFRow row =null;
+		try {
+			conn = Common.getDbConnection();
+			conn.setAutoCommit(false);
+			for (int index = 1; index <= TotalRows; index++) {
+				int j=0;
+				row = sheet.getRow(index);
+				/***** 取得MODEL_NA資料 *****/
+				vMODEL_NA = getCellValues(row, j, dateFormat);//型體
+				if(vMODEL_NA.equals(""))throw new Exception("Row"+(index+1)+"：MODEL_NA Is Null.Please Check Data Again.");
+				/***** 取得MODEL_NA資料 *****/
+				/***** 取得EL_NO資料 *****/
+				j++;
+				vEL_NO = getCellValues(row, j, dateFormat);//材料編號
+				if(vEL_NO.equals(""))throw new Exception("Row"+(index+1)+"：EL_NO Is Null.Please Check Data Again.");
+				/***** 取得EL_NO資料 *****/
+				/***** 取得SEQ資料 *****/
+				j++;
+				vSEQ = getCellValues(row, j, dateFormat);//項次
+				if(vSEQ.equals(""))throw new Exception("Row"+(index+1)+"：SEQ Is Null.Please Check Data Again.");
+				/***** 取得SEQ資料 *****/
+				/***** 取得SIZE區段資料 *****/
+				j++;
+				vSIZES = getCellValues(row, j, dateFormat);//SIZE區段
+				if(vSIZES.equals(""))throw new Exception("Row"+(index+1)+"：SIZES Is Null.Please Check Data Again.");
+				/***** 刪除DSID04_NFPSIZE的MODEL_NA資料 *****/
+				if(index == 1){
+					sql1="DELETE DSID04_NFPSIZE WHERE MODEL_NA=?";
+					ps = conn.prepareStatement(sql1,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+					ps.setString(1, vMODEL_NA);
+			    	ps.execute();
+			    	ps.close();
+				}
+		    	/***** 刪除DSID04_NFPSIZE的MODEL_NA資料 *****/
+		    	/***** 新增DSID04_NFPSIZE的資料 *****/
+		    	sql2="INSERT INTO DSID04_NFPSIZE (MODEL_NA,EL_NO,SEQ,SIZES,UP_USER,UP_DATE) VALUES (?,?,LPAD(?,3,0),?,?,SYSDATE)";
+				ps = conn.prepareStatement(sql2,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+				ps.setString(1, vMODEL_NA);
+				ps.setString(2, vEL_NO);
+				ps.setString(3, vSEQ);
+				ps.setString(4, vSIZES);
+				ps.setString(5, _userInfo.getAccount());
+		    	ps.execute();
+		    	ps.close();
+		    	/***** 新增DSID04_NFPSIZE的資料 *****/
+			}
+			conn.commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.getStackTrace();
+			conn.rollback();
+		}finally{
+			Messagebox.show("Import Data Success!!");
+			executeQuery();
+			Common.closeConnection(conn);
+		}
+	}
+	
+	private String getCellValues(HSSFRow row,int Cellindex,HSSFDataFormat dateFormat){
+		String CellValues="";
+		HSSFCell cell = row.getCell((short)Cellindex);
+		Object obj = TableToExcel.getCellValue(cell, dateFormat);
+		CellValues = getCellValue(obj,cell);
+		return CellValues;
+	}
+
+	
+	private String getCellValue(Object objvalue,HSSFCell cell){
+		String value="";
+		if(objvalue!=null){
+			if(objvalue instanceof Date){
+        	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        	    value=sdf.format(objvalue);
+        	}else{
+        		switch (cell.getCellType()) {
+		    	case HSSFCell.CELL_TYPE_NUMERIC:
+					DecimalFormat decimalFormat = new DecimalFormat("####.####");
+					value =(decimalFormat.format(cell.getNumericCellValue()));
+					break;
+				case HSSFCell.CELL_TYPE_STRING:
+					value=cell.getStringCellValue();
+					break;
+				default:
+					value=cell.getStringCellValue();
+					break;
+				}
+        	}
+		}else{
+			value="";
+		}
+		return value;
 	}
 	
 	/**
