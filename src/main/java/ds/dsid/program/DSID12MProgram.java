@@ -98,6 +98,7 @@ public class DSID12MProgram  extends Master{
 	protected ArrayList<String> getMasterKeyName() {
 		ArrayList<String> masterKey = new ArrayList<String>();
 		masterKey.add("MODEL_NA");
+		masterKey.add("SH_STYLENO");
 		return masterKey;
 	}
 
@@ -106,6 +107,7 @@ public class DSID12MProgram  extends Master{
 		DSID12 entity = (DSID12) entityMaster;
 		ArrayList<String> masterKeyValue = new ArrayList<String>();
 		masterKeyValue.add(entity.getMODEL_NA());
+		masterKeyValue.add(entity.getSH_STYLENO());
 		return masterKeyValue;
 	}
 
