@@ -19,16 +19,16 @@ import javax.persistence.Column;
 @Table(name = "DSID12")
 @IdClass(DSID12_PK.class)
 public class DSID12 {
-	  private String MODEL_NA ;
-	  private String  SH_STYLENO ;
-	  private String  SH_LAST ;
-	  private String  SH_TYPE ;
-	  private String  SH_COLOR ;
-	  private String  SH_REMARK ;
-	  private String  UPPER_CLASS ;
-	  private String  SOLE_CLASS ;
-	  private String  UP_USER ;
-	  private Date  UP_DATE ;
+	  private String MODEL_NA;
+	  private String  SH_STYLENO;
+	  private String  SH_LAST;
+	  private String  SH_TYPE;
+	  private String  SH_COLOR;
+	  private String  SH_REMARK;
+	  private String  UPPER_CLASS;
+	  private String  SOLE_CLASS;
+	  private String  UP_USER;
+	  private Date  UP_DATE;
 	  
 	private boolean ISADD;
 	private boolean ISEDIT;

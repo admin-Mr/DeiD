@@ -84,8 +84,8 @@ public class DSID01MOrder extends OpenWinCRUD{
 			ps1 = conn.prepareStatement(sql1, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs1 = ps1.executeQuery();	
 			while(rs1.next()){
-				System.out.println(">>>>>"+rs1.getString("WORK_ORDER_ID"));					
-				
+				System.out.println(">>>>>"+rs1.getString("WORK_ORDER_ID"));
+				System.out.println(">>>>>"+rs1.getString("NIKE_SH_ARITCLE"));
 				//處理同NIKE型體派工問題
 				JudegNike_sh(conn,rs1.getString("SH_STYLENO"),rs1.getString("OD_NO"));				
 				
@@ -180,75 +180,104 @@ public class DSID01MOrder extends OpenWinCRUD{
 				try {
 					ps2 = conn.prepareStatement(sql2, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 					rs2 = ps2.executeQuery();	
-					while(rs2.next()){						
+					while(rs2.next()){
 						String Str1="",Str2="",Str3="",Str4="",Str5="";
 						String Group_Color="";
 						String pidsql="";
-						String pid1="",pid2="";
+						String pid1="",pid2="",pi1="",pi2="",pi3="",id1="",id2="",id3="";
+						String S="",S1="";
 						//
 						String 	sql3="SELECT * FROM DSID01_TEMP2 WHERE WORK_ORDER_ID='"+rs1.getString("WORK_ORDER_ID")+"' AND GROUP_NO='"+rs2.getString("GROUP_NO")+"'";	
 						System.out.println(">>>>>"+sql3);
 						try {
 							ps3 = conn.prepareStatement(sql3, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-							rs3 = ps3.executeQuery();	
+							rs3 = ps3.executeQuery();
 							while(rs3.next()){
-								System.out.println(">>>>>GROUP :"+rs3.getString("GROUP_NO"));
-								
+								S=rs3.getString("CODE");
+								S1=S.trim().replaceAll("\n", "");
 								//額外設定的pid_group部分判斷
-								if(!"".equals(PID_GROUP)&&PID_GROUP!=null&&PID_GROUP.equals(rs3.getString("GROUP_NO"))&&"PATTERN".equals(rs3.getString("TYPE"))){
-//									System.out.println(">>>含PID——GROUP");
-									pidsql=", PID01='"+rs3.getString("CODE")+"', PID02='"+rs3.getString("CODE")+"' ";						
+								if(!"".equals(PID_GROUP) && PID_GROUP!=null&&PID_GROUP.equals(rs3.getString("GROUP_NO"))&&"PATTERN".equals(rs3.getString("TYPE"))){
+									System.out.println(">>>含PID——GROUP");
+									pidsql=", PID01='"+S1+"', PID02='"+S1+"' ";
 								}else{
-									System.out.println(">>>"+rs3.getString("TYPE")+">>>"+rs3.getString("CODE"));
-									if("COLOR".equals(rs3.getString("TYPE"))&&Str1!=rs3.getString("CODE")){
-										Str1=rs3.getString("CODE")+"_";							
+									System.out.println(">>>這是"+rs3.getString("TYPE")+">>>"+S1);
+									if("COLOR".equals(rs3.getString("TYPE"))&& Str1!=rs3.getString("CODE")){
+										Str1=S1+"_";
 									}
 									if("PATTERN".equals(rs3.getString("TYPE"))&&Str2!=rs3.getString("CODE")){
-										Str2=rs3.getString("CODE")+"_";
+										Str2=S1+"_";
 									}
-									if("TEXT".equals(rs3.getString("TYPE"))&&Str3!=rs3.getString("CODE")){
-										Str3=rs3.getString("CODE")+"_";
+									if("TEXT".equals(rs3.getString("TYPE")) && Str3!=rs3.getString("CODE")){
+										Str3=S1+"_";
 									}
 									if("FORMULA".equals(rs3.getString("TYPE"))&&Str4!=rs3.getString("CODE")){
-										Str4=rs3.getString("CODE")+"_";
+										Str4=S1+"_";
 									}
 									
-									
 									if("PID".equals(rs3.getString("TYPE"))){
-										if(rs3.getString("PART_NA").contains("LEFT")){
-											pidsql+=", PID01='"+rs3.getString("CODE")+"' ";										
-										}else if(rs3.getString("PART_NA").contains("RIGHT")){
-											pidsql+=", PID02='"+rs3.getString("CODE")+"' ";
-										}else if(rs3.getString("PART_NA").contains("SIGNATUREFILEID")){
-											Str5=rs3.getString("CODE")+"_";
-										}else if(rs3.getString("PART_NA").startsWith("PID")){
-											pidsql="";
-											if("PID 3".equals(rs3.getString("PART_NA"))){
-												pid1="上：" +rs3.getString("CODE");
-											}else if("PID 3A".equals(rs3.getString("PART_NA"))){
-												pid2=" 下：" +rs3.getString("CODE");
-											}else{
-												pidsql+=", PID01='"+rs3.getString("CODE")+"' , PID02='"+rs3.getString("CODE")+"' ";	
+										if(rs3.getString("PART_NA").startsWith("RIGHT SOCK") || rs3.getString("PART_NA").startsWith("LEFT SOCK")){
+											System.out.println("進入時間=============");
+										if(rs3.getString("PART_NA").contains("RIGHT SOCK PID HOURS")){
+											pi1+=S1;//時
+										}else if(rs3.getString("PART_NA").contains("LEFT SOCK PID HOURS")){
+											id1+=S1;//時
+										}else if(rs3.getString("PART_NA").contains("RIGHT SOCK PID MINUTES")){
+											pi2+=S1;//分
+										}else if(rs3.getString("PART_NA").contains("LEFT SOCK PID MINUTES")){
+											id2+=S1;//分
+										}else if(rs3.getString("PART_NA").contains("RIGHT SOCK PID SECONDS")){
+											pi3+=S1;//秒
+										}else if(rs3.getString("PART_NA").contains("LEFT SOCK PID SECONDS")){
+											id3+=S1;//秒	
+										}
+											pidsql=", PID03='"+pi1+":"+pi2+":"+pi3+"' , PID04='"+id1+":"+id2+":"+id3+"'";
+										}else if(rs3.getString("PART_NA").startsWith("SHORT") || rs3.getString("PART_NA").startsWith("LONG")){
+											System.out.println("進入新形體PID。。。。。。。。。。。。。。");
+											if(rs3.getString("PART_NA").contains("SHORT PID LEFT")){
+											id1+="下字體："+S1;
+											}else if(rs3.getString("PART_NA").contains("LONG PID LEFT")){
+											id2+="上字體："+S1+"/";
+											}else if(rs3.getString("PART_NA").contains("SHORT PID RIGHT")){
+											pi1+="下字體："+S1;
+											}else if(rs3.getString("PART_NA").contains("LONG PID RIGHT")){
+											pi2+="上字體："+S1+"/";
 											}
-											if(!"".equals(pid1)){
-												pidsql+=", PID01='"+pid1+pid2+"' , PID02='"+pid1+pid2+"' ";	
+											pidsql=", PID01='"+id2+id1+"' , PID02='"+pi2+pi1+"' ";
+											}else{
+											
+											if(rs3.getString("PART_NA").contains("LEFT")&&!rs3.getString("PART_NA").startsWith("SHORT")){
+												pidsql+=", PID01='"+S1+"' ";
+											}else if(rs3.getString("PART_NA").contains("RIGHT")){
+												pidsql+=", PID02='"+S1+"'";
+											}else if(rs3.getString("PART_NA").contains("SIGNATUREFILEID")){
+												Str5=rs3.getString("CODE")+"_";
+											}else if(rs3.getString("PART_NA").startsWith("PID")){
+												pidsql=" ";
+												
+												if("PID 3".equals(rs3.getString("PART_NA"))){
+													pid1="上：" +S1;
+												}else if("PID 3A".equals(rs3.getString("PART_NA"))){
+													pid2=" 下："+S1;
+												}else{
+													pidsql+=", PID01='"+S1+"' , PID02='"+S1+"'";
+												}
+												if(!"".equals(pid1)){
+													pidsql+=", PID01='"+pid1+pid2+"' , PID02='"+pid1+pid2+"'";
+												}
 											}
 										}
 									}
-								}								
-							
-							
-							//
+								}
 							Group_Color=Str1+Str2+Str3+Str4+Str5;
 
 							if(Group_Color.length()>0){
+								Group_Color=Group_Color.substring(0, Group_Color.length());
 								Group_Color=Group_Color.substring(0, Group_Color.length()-1);
 							}
-							
 							System.out.println(">>>>>COLOR :"+Group_Color); 
 							
 		            		String 	Updatesql="UPDATE "+TABLE+" SET "+rs2.getString("GROUP_NO")+"='"+Group_Color+"'"+pidsql+" WHERE WORK_ORDER_ID='"+rs1.getString("WORK_ORDER_ID")+"'";	
-		            		System.err.println(">>>>>GROUP COLOR&PID UPDATESQL :"+Updatesql);		
+		            		System.err.println(">>>>>GROUP COLOR&PID UPDATESQL :"+Updatesql);
 		            		try {
 								PreparedStatement pstm = conn.prepareStatement(Updatesql);
 								pstm.executeUpdate();
@@ -258,7 +287,7 @@ public class DSID01MOrder extends OpenWinCRUD{
 								Errmess+=rs1.getString("WORK_ORDER_ID")+" "+rs2.getString("GROUP_NO")+" "+e;
 								return;
 							}
-						  }							
+						  }
 							rs3.close();
 							ps3.close();
 						} catch (Exception e) {
@@ -340,7 +369,6 @@ public class DSID01MOrder extends OpenWinCRUD{
 
 	private void ReplaceGroup5(String DATE, Connection conn) {
 		// TODO Auto-generated method stub
-		
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
@@ -405,7 +433,6 @@ public class DSID01MOrder extends OpenWinCRUD{
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			if(rs.next()){
-				
 				String sql2="SELECT NIKE_SH_ARITCLE FROM DSID10 WHERE MODEL_NAS LIKE '%"+rs.getString("MODEL_NA")+"%'";
 				try {
 					System.out.println("----model_na--sql--"+sql2);
@@ -455,24 +482,23 @@ public class DSID01MOrder extends OpenWinCRUD{
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
 			while(rs.next()){
-				
 				if("Y".equals(rs.getString("IS_SPL"))){
 					//拆分
 	        		String 	splsql="UPDATE "+TABLE+" SET "+rs.getString("GROUP_NO")+"='"+rs.getString("SPL_INFO1")+"' ,"+rs.getString("SPL_GROUP")+"='"+rs.getString("SPL_INFO2")+"' WHERE NIKE_SH_ARITCLE = '"+rs.getString("NIKE_SH_ARITCLE")+"' AND "+rs.getString("GROUP_NO")+" ='"+rs.getString("ORI_INFO")+"' AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"'";	
-	        		System.err.println(">>>>>拆分 :"+splsql);		
+	        		System.err.println(">>>>>拆分 :"+splsql);
 	        		try {
 						pstm = conn.prepareStatement(splsql);
 						pstm.executeUpdate();
 						pstm.close();
 					} catch (Exception e) {
 						e.printStackTrace();
-					}	
+					}
 				}else if("Y".equals(rs.getString("IS_REP"))){
 		       		//翻譯
-//	        		String 	repsql="UPDATE DSID01 SET "+rs.getString("GROUP_NO")+" ='"+rs.getString("REP_INFO")+"' WHERE NIKE_SH_ARITCLE='"+rs.getString("NIKE_SH_ARITCLE")+"' AND "+rs.getString("GROUP_NO")+" ='"+rs.getString("ORI_INFO")+"' AND ORDER_DATE > SYSDATE";	
-	        		String  repsql="UPDATE "+TABLE+" SET "+rs.getString("GROUP_NO")+"=REPLACE("+rs.getString("GROUP_NO")+",'"+rs.getString("ORI_INFO")+"','"+rs.getString("REP_INFO")+"') WHERE NIKE_SH_ARITCLE='"+rs.getString("NIKE_SH_ARITCLE")+"' AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"'";
+	        		String  repsql="UPDATE "+TABLE+" SET "+rs.getString("GROUP_NO")+"=REPLACE("+rs.getString("GROUP_NO")+",'"+rs.getString("ORI_INFO")+"','"+rs.getString("REP_INFO")+"'),PID01=REPLACE(PID01,'"+rs.getString("IS_LEFT1_PID")+"','"+rs.getString("IS_LEFT_PID")+"'),PID02=REPLACE(PID02,'"+rs.getString("IS_RIGHT1_PID")+"','"+rs.getString("IS_RIGHT_PID")+"') WHERE NIKE_SH_ARITCLE='"+rs.getString("NIKE_SH_ARITCLE")+"' AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"'";
+//	        		String  repsql="UPDATE "+TABLE+" SET "+rs.getString("GROUP_NO")+"=REPLACE("+rs.getString("GROUP_NO")+",'"+rs.getString("ORI_INFO")+"','"+rs.getString("REP_INFO")+"') AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"'";
 
-	        		System.err.println(">>>>>翻譯 :"+repsql);		
+	        		System.err.println(">>>>>翻譯 :"+repsql);
 	        		try {
 						pstm = conn.prepareStatement(repsql);
 						pstm.executeUpdate();
@@ -480,7 +506,7 @@ public class DSID01MOrder extends OpenWinCRUD{
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-				}	
+				}
 				
 			}
 			rs.close();

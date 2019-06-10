@@ -214,7 +214,7 @@ public class DSID21MExport extends OpenWinCRUD{
 						"SELECT MODEL_NA,'LACE' MT_USAGE,'' GROUP_NO,'' GR_NA,COLOR,EL_NO,EL_NA FROM DSID04_4\n" + 
 						"UNION ALL\n" +
 						"SELECT MODEL_NA,'HEEL CLIP' MT_USAGE,'' GROUP_NO,'' GR_NA,COLOR,EL_NO,EL_NA FROM DSID04_5"+
-						") WHERE EL_NO IS NOT NULL AND MODEL_NA='"+Modelna+"'";
+						") WHERE MODEL_NA='"+Modelna+"'";
 		System.out.println(" ----- 資料查詢 : "+sql);
 		
 		try {

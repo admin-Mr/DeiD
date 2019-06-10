@@ -39,15 +39,15 @@ public class DSID13MQryGROUP_NO extends QueryWindow {
 	private Combobox cboColumn, cboCondition;
 	@Wire
 	private Textbox txtQuery;
-	private String NIKE_SH_ARITCLE="";
+	private String MODEL_NAS="";
 
 	@Override
 	public void doAfterCompose(Component Window) throws Exception {
 		super.doAfterCompose(Window);
 		Execution exec = Executions.getCurrent();
-		NIKE_SH_ARITCLE=(String) exec.getArg().get("NIKE_SH_ARITCLE");
+		MODEL_NAS=(String) exec.getArg().get("NIKE_SH_ARITCLE");
 		doSearch();	
-		
+		System.out.println(MODEL_NAS);
 	}
 	
 	@Override
@@ -145,7 +145,7 @@ public class DSID13MQryGROUP_NO extends QueryWindow {
 		PreparedStatement  ps1 = null;
 		ResultSet  rs1 = null;	
 		
-		String sql = "SELECT * FROM DSID10 WHERE NIKE_SH_ARITCLE='"+NIKE_SH_ARITCLE+"'";
+		String sql = "SELECT * FROM DSID10 WHERE MODEL_NAS LIKE '%"+MODEL_NAS+"%'";
 
 		System.out.println(sql);
 	

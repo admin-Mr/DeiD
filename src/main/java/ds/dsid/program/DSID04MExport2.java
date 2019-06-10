@@ -150,9 +150,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 		if (!"".equals(MODEL_NA)) {
 			Connection conn = Common.getDbConnection();
-
 			HSSFWorkbook wb = new HSSFWorkbook();
-	
 			if(Chbox.isChecked()){
 				Is_Deduct=true;
 			}else{
@@ -376,23 +374,24 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 		windowMaster.detach();
 	}
-
+	//獲取歷史記錄日期
 	private void GetHistoryDate(String mODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		His.clear();
 
-		String sql = "SELECT LA_DATE,FLOOR((SYSDATE-NEXT_DAY(LA_DATE,2))/7) WEEK,NEXT_DAY(LA_DATE,2) DAY1 FROM DSID04 WHERE MODEL_NA='"
-				+ mODEL_NA + "'";
-		// System.out.println(">>>>>"+sql);
+//		String sql = "SELECT LA_DATE,FLOOR((SYSDATE-NEXT_DAY(LA_DATE,2))/7) WEEK,NEXT_DAY(LA_DATE,2) DAY1 FROM DSID04 WHERE MODEL_NA='"
+//				+ mODEL_NA + "'";
+		String sql="SELECT MIN(PO_DATE) PO_DATE, FLOOR((SYSDATE-NEXT_DAY(MIN(PO_DATE),2))/7) WEEK, NEXT_DAY(MIN(PO_DATE) ,2) DAY1 FROM dspo05 WHERE  STOCK_MARK='"+mODEL_NA+"' AND PO_no LIKE 'IGM%'";
+		 System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
 			if (rs.next()) {
 				// System.out.println(rs.getString("LA_DATE")+">>>>>"+rs.getString("WEEK")+">>>>>"+rs.getString("DAY1"));
 				if (rs.getInt("WEEK") > 0) {
-					His.add(rs.getDate("LA_DATE"));
+					His.add(rs.getDate("PO_DATE"));
 					His.add(rs.getInt("WEEK"));
 					His.add(rs.getDate("DAY1"));
 				} else {
@@ -407,7 +406,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			e.printStackTrace();
 		}
 	}
-
+	//設置表5
 	private void SetSheet5(HSSFWorkbook wb, HSSFSheet sheet5, HSSFCellStyle style9, HSSFCellStyle style2,
 			HSSFCellStyle style3, HSSFCellStyle style4, HSSFCellStyle style7, HSSFCellStyle style8, Connection conn,
 			String MODEL_NA) {
@@ -534,7 +533,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		String Last_color = "", ET_US = "";
 		int c_Num = cellNum;
 		String sql2 = "SELECT * FROM DSID04_5 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
-
+		System.out.println(">>>>>5555555<<<<<<<"+sql2);
 		try {
 			ps2 = conn.prepareStatement(sql2);
 			rs2 = ps2.executeQuery();
@@ -696,7 +695,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				cell.setCellStyle(style1C3);
 				cell.setCellValue(getbuy(rs2.getString("EL_NO"), MODEL_NA, conn)
 						- getacc(rs2.getString("EL_NO"), MODEL_NA, conn));
-
+				
 				row = sheet5.getRow(rowNum + 7);
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
@@ -798,7 +797,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 
 	}
-
+	//表標題5
 	private void Header5(HSSFSheet sheet5, HSSFCellStyle style9, HSSFRow row, HSSFCell cell, int rowNum, String ET_US) {
 		// TODO Auto-generated method stub
 
@@ -944,7 +943,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			}
 		}
 
-		row = sheet5.createRow(rowNum + 15 + (Integer.valueOf(His.get(1).toString()) + 1));
+		row = sheet5.createRow(rowNum + 15 + (Integer.valueOf(His.get(1).toString())+1));
 		cell = row.createCell(0);
 		cell.setCellType(1);
 
@@ -952,7 +951,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 	}
-
+	//設置表4
 	private void SetSheet4(HSSFWorkbook wb, HSSFSheet sheet4, HSSFCellStyle style9, HSSFCellStyle style2,
 			HSSFCellStyle style3, HSSFCellStyle style4, HSSFCellStyle style7, HSSFCellStyle style8, Connection conn,
 			String MODEL_NA) {
@@ -1122,7 +1121,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		String Last_color = "", ET_US = "";
 		int c_Num = cellNum;
 		String sql2 = "SELECT * FROM DSID04_4 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
-
+		System.out.println(">>>>>>sql2@@@@44444<<<<<<"+sql2);
 		try {
 			ps2 = conn.prepareStatement(sql2);
 			rs2 = ps2.executeQuery();
@@ -1274,7 +1273,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				cell = row.createCell(cellNum);
 				cell.setCellType(1);
 				cell.setCellStyle(style7);
-				cell.setCellValue(Double.valueOf(rs2.getString("COLOR_PRE")));
+				cell.setCellValue(Double.valueOf(rs2.getString("COLOR_PRE")));//有資料
 
 				// 在途
 				row = sheet4.getRow(rowNum + 6);
@@ -1365,7 +1364,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 
 	}
-
+	//表標題4
 	private void Header4(HSSFSheet sheet4, HSSFCellStyle style9, HSSFRow row, HSSFCell cell, int rowNum, String ET_US) {
 		// TODO Auto-generated method stub
 
@@ -1518,7 +1517,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		cell = row.createCell(0);
 		cell.setCellType(1);
 	}
-
+	//設置表3
 	private void SetSheet3(HSSFWorkbook wb, HSSFSheet sheet3, HSSFCellStyle style1, HSSFCellStyle style2,
 			HSSFCellStyle style3, HSSFCellStyle style4, HSSFCellStyle style5, HSSFCellStyle style6, Connection conn,
 			String MODEL_NA) {
@@ -1572,7 +1571,6 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		Header3(sheet3, style1, row, cell);
 
 		String sql1 = "SELECT * FROM DSID04 WHERE MODEL_NA='" + MODEL_NA + "'";
-
 		try {
 			ps1 = conn.prepareStatement(sql1);
 			rs1 = ps1.executeQuery();
@@ -1613,7 +1611,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		int num = rowNum;
 		String Last_color = "";
 		String sql2 = "SELECT * FROM DSID04_3 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
-
+		System.out.println(">>>>>>sql2@@@@33333<<<<<<"+sql2);
 		try {
 			ps2 = conn.prepareStatement(sql2);
 			rs2 = ps2.executeQuery();
@@ -1660,7 +1658,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				cell = row.createCell(4);
 				cell.setCellType(1);
 				cell.setCellStyle(style5);
-				cell.setCellValue(Double.valueOf(rs2.getString("COLOR_PRE")));
+				cell.setCellValue(Double.valueOf(rs2.getString("COLOR_PRE")));//有資料
 
 				cell = row.createCell(5);
 				cell.setCellType(1);
@@ -1732,7 +1730,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		// }
 
 	}
-
+	//表標題3
 	private void Header3(HSSFSheet sheet3, HSSFCellStyle style1, HSSFRow row, HSSFCell cell) {
 		// TODO Auto-generated method stub
 
@@ -1825,7 +1823,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			}
 		}
 	}
-
+	//設置表2
 	private void SetSheet2(HSSFWorkbook wb, HSSFSheet sheet2, HSSFCellStyle style1, HSSFCellStyle style2,
 			HSSFCellStyle style3, HSSFCellStyle style4, HSSFCellStyle style7, HSSFCellStyle style6, Connection conn,
 			String MODEL_NA) {
@@ -1948,7 +1946,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		int num = rowNum;
 		String Last_color = "";
 		String sql2 = "SELECT * FROM DSID04_2 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
-
+		System.out.println(">>>>>>sql2@@@@22222222<<<<<<"+sql2);
 		try {
 			ps2 = conn.prepareStatement(sql2);
 			rs2 = ps2.executeQuery();
@@ -1996,7 +1994,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				cell = row.createCell(4);
 				cell.setCellType(1);
 				cell.setCellStyle(style1C2);
-				cell.setCellValue(Double.valueOf(rs2.getString("COLOR_PRE")));
+				cell.setCellValue(Double.valueOf(rs2.getString("COLOR_PRE")));//有資料
 
 				cell = row.createCell(5);
 				cell.setCellType(1);
@@ -2062,7 +2060,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 
 	}
-
+	//表標題2
 	private void Header2(HSSFSheet sheet2, HSSFCellStyle style1, HSSFRow row, HSSFCell cell) {
 		// TODO Auto-generated method stub
 		sheet2.setColumnWidth(1, 12 * 256);
@@ -2160,7 +2158,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			}
 		}
 	}
-
+	//設置表1
 	private void SetSheet1(HSSFWorkbook wb, HSSFSheet sheet1, HSSFCellStyle style1, HSSFCellStyle style2,
 			HSSFCellStyle style3, HSSFCellStyle style4, HSSFCellStyle style5, HSSFCellStyle style6, Connection conn,
 			String MODEL_NA) {
@@ -2426,7 +2424,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 		rowNum = 13;// 正文從14行開始
 		String sql2 = "SELECT * FROM DSID04_1 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
-
+		System.out.println(">>>>>>sql2@@@@11111<<<<<<"+sql2);
 		try {
 			ps2 = conn.prepareStatement(sql2);
 			rs2 = ps2.executeQuery();
@@ -2527,7 +2525,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				cell.setCellStyle(style6);
 				cell.setCellValue(Double.valueOf(rs2.getString("YIELD")));
 
-				// 比例
+				//計算 比例
 				Double propo = 0.0;
 				if (!"".equals(rs2.getString("EL_FP")) && rs2.getString("EL_FP") != null) {
 					if (Double.valueOf(rs2.getString("EL_FP")) > 0) {
@@ -2544,7 +2542,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 					Double kc_qty = Double.valueOf(getkc(rs2.getString("EL_NO"), MODEL_NA, conn));
 					Double zt_qty = getbuy(rs2.getString("EL_NO"), MODEL_NA, conn)
 							- getacc(rs2.getString("EL_NO"), MODEL_NA, conn);
-					// System.err.println("kc_qty>>>>"+kc_qty+" zt_qty>>>>"+zt_qty);
+					 System.err.println("kc_qty>>>>"+kc_qty+" zt_qty>>>>"+zt_qty);
 
 					// 庫存
 					cell = row.createCell(18);
@@ -2911,7 +2909,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 
 	}
-
+	//獲取Inbox產量
 	private double GetInboxYield(String MODEL_NA, String GROUP, String COLOR, String YIELD, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
@@ -2919,7 +2917,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			Double num=0.0;
 	
 			String 	sql="SELECT COUNT(*) COU FROM DSID01_TEMP WHERE MODEL_NA LIKE '%"+MODEL_NA+"' AND "+GROUP.replace("GROUP ", "GROUP")+"='"+COLOR+"'";
-//			System.out.println(">>>>>"+sql);
+			System.out.println(">>>>>"+sql);
 			try {
 				ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				rs = ps.executeQuery();	
@@ -2947,7 +2945,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			return num;
 
 	}
-
+	//
 	private boolean Check_buy(String MODEL_NA, String table, Connection Conn, int k) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
@@ -2979,7 +2977,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 		return is_buy;
 	}
-
+	//獲取數量
 	private String GetHisQty(String MODEL_NA, String EL_NO, Connection Conn, int k) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
@@ -2996,7 +2994,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				+ "AND PO_QTY!=0 AND EL_NO='" + EL_NO + "' AND STOCK_MARK='" + MODEL_NA + "'\n"
 				+ "AND A.PO_DATE BETWEEN" + AddSql;
 		int SQTY = 0, L_QTY = 0;
-		// System.err.println("GetHisQty>>>>>"+sql);
+		 System.err.println("GetHisQty>>>>>"+sql);
 		try {
 			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
@@ -3024,7 +3022,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		return MMess;
 		// return SQTY;
 	}
-
+	//獲取數量0
 	private int GetHisQty0(String MODEL_NA, String EL_NO, Connection Conn, int k) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
@@ -3041,7 +3039,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		String sql = "SELECT PO_QTY,B.PO_CLOSE FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n"
 				+ "AND PO_QTY!=0 AND EL_NO='" + EL_NO + "' AND STOCK_MARK='" + MODEL_NA + "'\n"
 				+ "AND A.PO_DATE BETWEEN" + AddSql;
-		int SQTY = 0, AQTY = 0;
+		int SQTY =0, AQTY =0;
 		// System.err.println(EL_NO+">>>>>"+sql);
 		try {
 			ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -3064,7 +3062,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 		return SQTY;
 	}
-
+	//獲取數量2
 	private int GetHisQty2(String MODEL_NA, Connection Conn, int k) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
@@ -3097,7 +3095,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 		return QTY;
 	}
-
+	//表標題1
 	private void Header1(HSSFWorkbook wb, HSSFSheet sheet1, HSSFCellStyle style1, HSSFRow row, HSSFCell cell) {
 		// TODO Auto-generated method stub
 
@@ -3584,7 +3582,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			}
 		}
 	}
-
+	//統計百分比，更新百分比
 	private void SetEl_fp(String MODEL_NA, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null, pstm = null;
@@ -3595,7 +3593,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			String sql = "SELECT B.EL_NO,CAST(SUM(A.MODEL_UPD*B.YIELD*B.COLOR_PRE) AS DECIMAL(18,4)) PROPO\n"
 					+ "FROM DSID04 A,DSID04_1 B WHERE A.MODEL_NA='" + MODEL_NA + "' AND A.MODEL_NA=B.MODEL_NA\n"
 					+ "AND EL_NO IN(SELECT EL_NO FROM DSID04_1 WHERE MODEL_NA=A.MODEL_NA AND EL_NO IS NOT NULL GROUP BY EL_NO HAVING COUNT(*)>1)  GROUP BY EL_NO";
-			// System.out.println(">>>sql>>>"+sql);
+			 System.out.println(">>>sql@@@@@>>>"+sql);
 			try {
 				ps = conn.prepareStatement(sql);
 				rs = ps.executeQuery();
@@ -3650,18 +3648,17 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 
 	}
-
+	//在途數1
+	//查詢在途驗收數
 	private static Double getacc(String EL_NO, String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-
 		Double qty = 0.0;
-
-		String sql = "SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 WHERE PO_NO IN ('" + EL_PO.replace(",", "','")
-				+ "') AND EL_NO='" + EL_NO + "'";
-
-		// System.out.println("验收>>>>>" + sql);
+		String sql = "SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 WHERE PO_NO IN ('"+EL_PO.replace(",", "','") + "') AND EL_NO='" + EL_NO + "'";
+		//新形體查詢在途數沒有數據
+//		 System.out.println("在途验收>>>>>新啊啊啊" + sql);
+//		 System.out.println("@@@@@@@"+EL_PO.replace(",", "','"));
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
@@ -3679,7 +3676,8 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 		return qty;
 	}
-
+	//在途數2
+	//查詢在途驗收數2
 	private static Double getacc2(String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps = null;
@@ -3691,8 +3689,8 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			String sql = "SELECT SUM(PC_QTY) SPC_QTY FROM DSIDN08 A,DSPO06 B WHERE A.PO_NO IN ('"
 					+ EL_PO.replace(",", "','") + "') AND A.EL_NO IN (" + EL_NO_LIST
 					+ ") AND A.PO_NO=B.PO_NO AND A.EL_NO=B.EL_NO AND B.PO_CLOSE!='T'";
-
-			// System.out.println("验收2>>>>>" + sql);
+				//新形體在途2查詢沒有數據
+//			 System.out.println("在途验收2>>>>>" + sql);
 			try {
 				ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				rs = ps.executeQuery();
@@ -3711,7 +3709,8 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 		return qty;
 	}
-
+	//訂購材料1
+	//查詢訂購數
 	private static Double getbuy(String el_no, String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
 
@@ -3721,15 +3720,16 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		Double qty = 0.0;
 
 		String sql = "SELECT A.PO_NO,A.STOCK_MARK,EL_NO,PO_QTY,PO_ACQTY FROM DSPO05 A,DSPO06 B WHERE A.PO_NO=B.PO_NO AND A.PO_NO LIKE 'IGM%'\n"
-				+ "AND B.PO_CLOSE!='T' AND PO_QTY!=0 AND EL_NO='" + el_no + "' AND STOCK_MARK='" + MODEL_NA + "'";
+				+ "AND B.PO_CLOSE !='T' AND PO_QTY!=0 AND EL_NO='" + el_no + "' AND STOCK_MARK='" + MODEL_NA + "'";
 
-		// System.out.println("订购>>>>>" + sql);
+		 System.out.println("订购>>>>>" + sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				qty += Double.valueOf(rs.getString("PO_QTY"));
 				EL_PO += rs.getString("PO_NO") + ",";
+//				System.out.println("@@@@@我在這裡"+EL_PO);
 			}
 			rs.close();
 			ps.close();
@@ -3742,7 +3742,8 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 		return qty;
 	}
-
+	//訂購材料2
+	//查詢訂購數2
 	private static Double getbuy2(String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
 
@@ -3775,17 +3776,17 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 		return qty;
 	}
-
+	//庫存1
+	//查詢庫存數
 	private static Double getkc(String el_no, String MODEL_NA, Connection conn) {
 		// TODO Auto-generated method stub
-
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 
 		Double qty = 0.0;
 
 		String sql = "SELECT * FROM DSID77 WHERE EL_NO='" + el_no + "' AND MODEL_NA = '" + MODEL_NA + "'";
-		// System.out.println("库存>>>>>" + sql);
+		System.out.println("库存>>>>>啊啊啊" + sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
@@ -3800,7 +3801,8 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 		return qty;
 	}
-
+	//庫存2
+	//查詢庫存數2
 	private static Double getkc2(String TABLE, String MODEL_NA, String COLOR, Connection conn, Connection Conn) {
 		// TODO Auto-generated method stub
 
@@ -3812,7 +3814,6 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		if (!"DSID04_3".equals(TABLE)) {
 			sql += " AND COLOR='" + COLOR + "'";
 		}
-
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
@@ -3831,7 +3832,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 
 			sql = "SELECT SUM(MT_QTY) MT_QTY FROM DSID77 WHERE EL_NO IN (" + EL_NO_LIST + ") AND MODEL_NA = '"
 					+ MODEL_NA + "'";
-			// System.out.println("库存2>>>>>" + sql);
+			 System.out.println("库存2>>>>>" + sql);
 			try {
 				ps = Conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				rs = ps.executeQuery();

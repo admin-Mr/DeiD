@@ -19,10 +19,19 @@ public class DSID13 {
 
 	private String PG_NAME ;
 	private String PG_TYPE ;
-	private String NIKE_SH_ARITCLE ;
+	private String NIKE_SH_ARITCLE;
+	
 	private String GROUP_NOS ;
 	private String UP_USER ;
 	private Date UP_DATE ;
+	
+	@Column(name = "NIKE_SH_ARITCLE")
+	public String getNIKE_SH_ARITCLE() {
+		return NIKE_SH_ARITCLE;
+	}
+	public void setNIKE_SH_ARITCLE(String nIKE_SH_ARITCLE) {
+		NIKE_SH_ARITCLE = nIKE_SH_ARITCLE;
+	}
 	
 	@Id
 	@Column(name = "PG_NAME")
@@ -41,13 +50,13 @@ public class DSID13 {
 		PG_TYPE = pG_TYPE;
 	}
 
-	@Column(name = "NIKE_SH_ARITCLE")
-	public String getNIKE_SH_ARITCLE() {
-		return NIKE_SH_ARITCLE;
-	}
-	public void setNIKE_SH_ARITCLE(String nIKE_SH_ARITCLE) {
-		NIKE_SH_ARITCLE = nIKE_SH_ARITCLE;
-	}
+//	@Column(name = "MODEL_NA")
+//	public String getMODEL_NA() {
+//		return MODEL_NA;
+//	}
+//	public void setMODEL_NA(String MODEL_NA) {
+//		MODEL_NA = MODEL_NA;
+//	}
 
 	@Column(name = "GROUP_NOS")
 	public String getGROUP_NOS() {

@@ -124,13 +124,14 @@ public class DSID21MProgram extends Master {
 				row = sheet.getRow(x);
 				// 型體
 				MODEL_NA = getCellValue(row.getCell(0)); 
+//				System.out.println("型體"+MODEL_NA);
 				if (MODEL_NA == null || "".equals(MODEL_NA)) {
 					break;
 				}
 				
 				ITEMS++;
 				MT_USAGE = getCellValue(row.getCell(1)); // 使用部位
-
+//				System.out.println("使用部位"+MT_USAGE);
 				GR_NO = getCellValue(row.getCell(2)); // 部位
 				GR_NA = getCellValue(row.getCell(3)); // 部位名稱
 				COLOR = getCellValue(row.getCell(4)); // 顏色
@@ -146,7 +147,6 @@ public class DSID21MProgram extends Master {
 						+ _userInfo.getAccount() + "',SYSDATE)";
 
 			}
-
 			String Delsql = "DELETE DSID21 WHERE MODEL_NA='" + MODEL_NA + "'";
 			System.out.println(" ----- 刪除 : " + Delsql);
 

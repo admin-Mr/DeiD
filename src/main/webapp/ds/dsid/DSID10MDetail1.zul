@@ -1,5 +1,5 @@
 <zk>
-	<div id="detail1" apply="ds.dsid.program.DSID10MDetail1">
+	<div id="detail1" apply="ds.dsid.program.DSID10MDetail1"><!--ds.dsid.program.DSID10MDetail1 -->
 
 		<div sclass="breadcrumbs">
 			<div sclass="breadcrumb" >
@@ -25,7 +25,7 @@
 					mold="trendy" />
 			</div>
 		</div>
-
+	<!-- 过滤窗口的信息 -->
 		<groupbox id="filterDetail" width="100%"
 			sclass="main z-demo-config" open="false">
 			<caption label="${labels.COMM.FILTER}"
@@ -88,8 +88,25 @@
 
 							<label value="${labels.DSID10M.SPLIT_INFO2}" sclass="sectionTitleLabel" style="display:inline-block;width:75px;"/>								
 							<textbox id="txtspl_info2" mold="rounded" width="100px" />														
-						</hlayout>								
-																						
+						</hlayout>	
+													
+						<hlayout>
+						<checkbox id="rep1_check" />
+						<label value="${labels.DSID10M.TRAN}" sclass="sectionTitleLabel"  style="display:inline-block;width:30px;"/>
+						<label value="LEFT PID翻譯信息" sclass="sectionTitleLabel" style="display:inline-block;width:130px;"/>
+						<textbox id="txtleft" mold="rounded" width="200px"/>
+						<label value="LEFT PID原始信息" sclass="sectionTitleLabel" style="display:inline-block;width:130px;"/>
+						<textbox id="txtleft1" mold="rounded" width="200px"/>
+						</hlayout>	
+						
+						<hlayout>
+						<checkbox id="rep2_check" />
+						<label value="${labels.DSID10M.TRAN}" sclass="sectionTitleLabel"  style="display:inline-block;width:30px;"/>
+						<label value="RIGHT PID翻譯信息" sclass="sectionTitleLabel" style="display:inline-block;width:130px;"/>
+						<textbox id="txtRIGHT" mold="rounded" width="200px"/>
+						<label value="RIGHT PID原始信息" sclass="sectionTitleLabel" style="display:inline-block;width:130px;"/>
+						<textbox id="txtRIGHT1" mold="rounded" width="200px"/>
+						</hlayout>														
 					</vlayout>		
 				</div>
 			</north>

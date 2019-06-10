@@ -1,131 +1,110 @@
 package ds.dsid.domain;
 
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+@Table(name = "DSIDN06_01")
 public class DSIDN06_01 {
 	private String MODEL_NA;
 	private String EL_NO;
 	private String EL_CNAME;
 	private String PLACE;
 	private String UP_USER;
+	private Date UP_DATE;		//異動日期
 	private String CUPBOARD;
 	private String NOTE;
-	private boolean ISCHECKED;
+	  
+	private boolean ISADD;
+	private boolean ISEDIT;
 	
+
+	@Column(name = "MODEL_NA")
+	public String getMODEL_NA() {
+		return MODEL_NA;
+	}
+	public void setMODEL_NA(String mODEL_NA) {
+		MODEL_NA = mODEL_NA;
+	}
 	
+	@Column(name = "EL_NO")
+	public String getEL_NO() {
+		return EL_NO;
+	}
+	public void setEL_NO(String eL_NO) {
+		EL_NO = eL_NO;
+	}
+	
+	@Column(name = "EL_CNAME")
+	public String getEL_CNAME() {
+		return EL_CNAME;
+	}
+	public void setEL_CNAME(String eL_CNAME) {
+		EL_CNAME = eL_CNAME;
+	}
+	
+	@Column(name = "PLACE")
+	public String getPLACE() {
+		return PLACE;
+	}
+	public void setPLACE(String pLACE) {
+		PLACE = pLACE;
+	}
+	
+	@Column(name = "UP_USER")
+	public String getUP_USER() {
+		return UP_USER;
+	}
+	public void setUP_USER(String uP_USER) {
+		UP_USER = uP_USER;
+	}
+	
+	@Column(name = "UP_DATE")
+	public Date getUP_DATE() {
+		return UP_DATE;
+	}
+	public void setUP_DATE(Date uP_DATE) {
+		UP_DATE = uP_DATE;
+	}
+	
+	@Column(name = "CUPBOARD")
+	public String getCUPBOARD() {
+		return CUPBOARD;
+	}
+	public void setCUPBOARD(String cUPBOARD) {
+		CUPBOARD = cUPBOARD;
+	}
+	
+	@Column(name = "NOTE")
 	public String getNOTE() {
 		return NOTE;
 	}
-
 	public void setNOTE(String nOTE) {
 		NOTE = nOTE;
 	}
 
-	/**
-	 * @return the uP_USER
-	 */
-	public String getUP_USER() {
-		return UP_USER;
+	@Transient 
+	public boolean getISEDIT() {
+		return ISEDIT;
+	}
+	 
+	public void setISEDIT(boolean iSEDIT) {
+		ISEDIT = iSEDIT;
+	}
+	
+	@Transient
+	public boolean getISADD() {
+		return ISADD;
 	}
 
-	/**
-	 * @param uP_USER the uP_USER to set
-	 */
-	public void setUP_USER(String uP_USER) {
-		UP_USER = uP_USER;
+	public void setISADD(boolean iSADD) {
+		ISADD = iSADD;
 	}
 
-	/**
-	 * @return the mODEL_NA
-	 */
-	public String getMODEL_NA() {
-		return MODEL_NA;
-	}
-
-	/**
-	 * @param mODEL_NA the mODEL_NA to set
-	 */
-	public void setMODEL_NA(String mODEL_NA) {
-		MODEL_NA = mODEL_NA;
-	}
-
-	/**
-	 * @return the eL_NO
-	 */
-	public String getEL_NO() {
-		return EL_NO;
-	}
-
-	/**
-	 * @param eL_NO the eL_NO to set
-	 */
-	public void setEL_NO(String eL_NO) {
-		EL_NO = eL_NO;
-	}
-
-	/**
-	 * @return the eL_CNAME
-	 */
-	public String getEL_CNAME() {
-		return EL_CNAME;
-	}
-
-	/**
-	 * @param eL_CNAME the eL_CNAME to set
-	 */
-	public void setEL_CNAME(String eL_CNAME) {
-		EL_CNAME = eL_CNAME;
-	}
-
-	/**
-	 * @return the pLACE
-	 */
-	public String getPLACE() {
-		return PLACE;
-	}
-
-	/**
-	 * @param pLACE the pLACE to set
-	 */
-	public void setPLACE(String pLACE) {
-		PLACE = pLACE;
-	}
-
-	/**
-	 * @return the cUPBOARD
-	 */
-	public String getCUPBOARD() {
-		return CUPBOARD;
-	}
-
-	/**
-	 * @param cUPBOARD the cUPBOARD to set
-	 */
-	public void setCUPBOARD(String cUPBOARD) {
-		CUPBOARD = cUPBOARD;
-	}
-
-	public String toString(){
-		return "MODEL_NA="+MODEL_NA+"EL_NO="+EL_NO+"EL_CNAME="+EL_CNAME+"PLACE="+PLACE+"CUPBOARD="+CUPBOARD+"ISCHECKED="+ISCHECKED;
-	}
-
-	/**
-	 * @return the iSCHECKED
-	 */
-	public boolean isISCHECKED() {
-		return ISCHECKED;
-	}
-
-	/**
-	 * @param iSCHECKED the iSCHECKED to set
-	 */
-	public void setISCHECKED(boolean iSCHECKED) {
-		ISCHECKED = iSCHECKED;
-	}
 
 }

@@ -59,14 +59,19 @@
 							<textbox id="TPG_NAME" mold="rounded" width="200px" />
 						
 							<label value="派工單類型" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
-							<textbox id="TPG_TYPE" mold="rounded" width="100px" />
+							<zscript><![CDATA[   							                  
+							      String[] TPG_TYPE = {"製成","材料","底部","部位","轉印","非轉印","鞋帶","裁斷"};     
+							]]></zscript>
+							<combobox id="YPG_TYPE" width="100px" readonly="true">
+								<comboitem label="${each}" forEach="${TPG_TYPE}" value="${each}"/>
+							</combobox>
 						</hlayout>
 						
 						<hlayout width="100%" height="30px">
-							<label value="NIKE型體" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
-							<textbox id="TNIKE_SH_ARITCLE" mold="rounded" width="200px" />
+							<label value="型體" sclass="sectionTitleLabel" style="display:inline-block;width:90px;"/>
+							<textbox id="TMODEL_NA" mold="rounded" width="200px" />
 							
-							<button id="btnQryNIKE_SH_ARITCLE" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+							<button id="btnQryMODEL_NA" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
 						</hlayout>
 								
 						<hlayout width="100%" height="30px">

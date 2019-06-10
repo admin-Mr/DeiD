@@ -321,8 +321,10 @@ public class DSID04MExport extends OpenWinCRUD{
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
-		String 	sql="SELECT LA_DATE,FLOOR((SYSDATE-NEXT_DAY(LA_DATE,2))/7) WEEK,NEXT_DAY(LA_DATE,2) DAY1 FROM DSID04 WHERE MODEL_NA='"+mODEL_NA+"'";	
-//		System.out.println(">>>>>"+sql);
+//		String 	sql="SELECT LA_DATE,FLOOR((SYSDATE-NEXT_DAY(LA_DATE,2))/7) WEEK,NEXT_DAY(LA_DATE,2) DAY1 FROM DSID04 WHERE MODEL_NA='"+mODEL_NA+"'";	
+		String 	sql="SELECT MIN(PO_DATE) ,FLOOR((SYSDATE-NEXT_DAY(MIN(PO_DATE) ,2))/7) WEEK, NEXT_DAY(MIN(PO_DATE) ,2) DAY1 FROM dspo05 WHERE  STOCK_MARK='"+mODEL_NA+"' AND PO_no LIKE 'IGM%'";	
+		
+				System.out.println(">>>>>"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	

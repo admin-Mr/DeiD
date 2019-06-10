@@ -35,7 +35,7 @@ public class CRUDServiceImpl1 implements CRUDService {
 		SessionFactory sessionFactory = ((HibernateEntityManagerFactory) getEmf()).getSessionFactory();
 		return ((SessionFactoryImpl) sessionFactory).getCurrentSession();
 	}
-	
+		
 	@Transactional(readOnly = true)
 	public <T> List<T> getAll(Class<T> klass) {
 		return crudDao.getAll(klass);
@@ -138,7 +138,7 @@ public class CRUDServiceImpl1 implements CRUDService {
 	public <T> Query createSQL(String sql, Class<T> entityClass) {
 		return crudDao.createSQL(sql, entityClass);
 	}
-	
+	 
 	@Transactional
 	public <T> Query createSQLMap(String sql) {
 		return crudDao.createSQLMap(sql);

@@ -1,0 +1,14 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.MENU.DSPB000}" />
+			<label value="${labels.MENU.DSPB001M} (DSPB001M)" />
+		 	<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	 <windo width="100%" bo>
+	 
+	 </windo>
+</zk>

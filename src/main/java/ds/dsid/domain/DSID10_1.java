@@ -30,7 +30,40 @@ public class DSID10_1 {
 	private java.util.Date  UP_DATE;
 	private java.lang.String IS_REP;
 	private java.lang.String IS_SPL;
+	private java.lang.String IS_LEFT_PID;//原始左腳PID信息
+	private java.lang.String IS_LEFT1_PID;//翻譯左腳PID信息
+	private java.lang.String IS_RIGHT_PID;//原始右腳PID信息
+	private java.lang.String IS_RIGHT1_PID;//翻譯左腳PID信息
 	
+	@Column(name = "IS_LEFT_PID")
+	public java.lang.String getIS_LEFT_PID() {
+		return IS_LEFT_PID;
+	}
+	public void setIS_LEFT_PID(java.lang.String iS_LEFT_PID) {
+		IS_LEFT_PID = iS_LEFT_PID;
+	}
+	@Column(name = "IS_LEFT1_PID")
+	public java.lang.String getIS_LEFT1_PID() {
+		return IS_LEFT1_PID;
+	}
+	public void setIS_LEFT1_PID(java.lang.String iS_LEFT1_PID) {
+		IS_LEFT1_PID = iS_LEFT1_PID;
+	}
+	@Column(name = "IS_RIGHT_PID")
+	public java.lang.String getIS_RIGHT_PID() {
+		return IS_RIGHT_PID;
+	}
+	public void setIS_RIGHT_PID(java.lang.String iS_RIGHT_PID) {
+		IS_RIGHT_PID = iS_RIGHT_PID;
+	}
+	@Column(name = "IS_RIGHT1_PID")
+	public java.lang.String getIS_RIGHT1_PID() {
+		return IS_RIGHT1_PID;
+	}
+	public void setIS_RIGHT1_PID(java.lang.String iS_RIGHT1_PID) {
+		IS_RIGHT1_PID = iS_RIGHT1_PID;
+	}
+
 	private boolean ISADD;
 	private boolean ISEDIT;
 	

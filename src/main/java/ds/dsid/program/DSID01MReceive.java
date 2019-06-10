@@ -81,7 +81,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 			DSID01MReTask.ExcelExport(OD_NOList);
 		}
 	}
-
 	@Listen("onClick =#btnConfirm")
 	public void onClickbtnConfirm(Event event) throws SQLException {
 
@@ -155,18 +154,17 @@ public class DSID01MReceive extends OpenWinCRUD {
 	public void onClickbtnSearch(Event event) throws SQLException {
 		doSearch();
 	}
-
 	private void doSearch() throws SQLException {
 		// TODO Auto-generated method stub
-
 		Connection conn = Common.getDbConnection();
-		PreparedStatement ps1 = null, ps2 = null;
-		ResultSet rs1 = null, rs2 = null;
+		PreparedStatement ps1 = null, ps2 = null,ps3=null;
+		ResultSet rs1 = null, rs2 = null,rs3=null;
 		WOI_List = "";
 
 		try {
 			String UpLimit = txt_UpLimit.getValue();
 			if ("".equals(UpLimit)) {
+				System.out.println("进入设定接单上限");
 				UpLimit = GetLastOrder(conn); // 如果被設定接單上限，則獲取最新日期的接單數量
 			}
 			// Model_naList = new ArrayList<String>();
@@ -184,12 +182,10 @@ public class DSID01MReceive extends OpenWinCRUD {
 				ps1 = conn.prepareStatement(Sql);
 				rs1 = ps1.executeQuery();
 				while (rs1.next()) {
-
-					InsSql += "INTO DSID01_TEMP_LOG (MODEL_NA,GROUP_NO,COLOR,EL_NO,NUM) " + "VALUES('"
+					InsSql +="INTO DSID01_TEMP_LOG (MODEL_NA,GROUP_NO,COLOR,EL_NO,NUM) " + "VALUES('"
 							+ rs1.getString("MODEL_NA") + "','" + rs1.getString("GROUP_NO") + "','"
 							+ rs1.getString("COLOR") + "','" + rs1.getString("EL_NO") + "','" + rs1.getString("NUM")
 							+ "')";
-
 				}
 				ps1.close();
 				rs1.close();
@@ -215,11 +211,11 @@ public class DSID01MReceive extends OpenWinCRUD {
 				String MODEL_NA = "";
 				String sql2 = "SELECT * FROM DSID01_TEMP ORDER BY " + ExSql + " FACTRECDATE,REQUSHIPDATE";
 				System.err.println("OD_NO>>>>>" + sql2);
+				
 				try {
 					ps1 = conn.prepareStatement(sql2);
 					rs1 = ps1.executeQuery();
 					while (rs1.next()) {
-
 						if (order_num < Double.valueOf(UpLimit)) {
 							if (rs1.getString("MODEL_NA").startsWith("W ")) {
 								MODEL_NA = rs1.getString("MODEL_NA").substring(2);
@@ -228,50 +224,48 @@ public class DSID01MReceive extends OpenWinCRUD {
 							}
 
 							List<String> GroupList = new ArrayList<String>();
-
+						
 							String GrSql = "SELECT DISTINCT GROUP_NO FROM DSID01_TEMP_LOG WHERE MODEL_NA='" + MODEL_NA
 									+ "' ORDER BY GROUP_NO";
-							// System.err.println("GroupList>>>>>"+GrSql);
+							System.err.println("查询GROUP："+GrSql);
 							try {
 								ps2 = conn.prepareStatement(GrSql);
 								rs2 = ps2.executeQuery();
 								while (rs2.next()) {
 									GroupList.add(rs2.getString("GROUP_NO").replace("GROUP ", "GROUP"));
+									System.out.println("GroupList"+GroupList);
 								}
 								ps2.close();
 								rs2.close();
 							} catch (SQLException e) {
 								e.printStackTrace();
 							}
-							// System.err.println("GroupList>>>>>"+GroupList);
-
+							
 							Boolean ModelNum = CheckModel(rs1.getString("NIKE_SH_ARITCLE"), Last_WOI_List, conn);
 							if (ModelNum == true) {
-
 								WOI_List += rs1.getString("WORK_ORDER_ID") + ",";
-								// System.err.println(">>>"+WOI_List);
-
 								for (int j = 0; j < GroupList.size(); j++) {
 									Enough = CheckEnough(MODEL_NA, GroupList.get(j), rs1.getString(GroupList.get(j)),
 											WOI_List, conn);
 									if (Enough == false) {
-										System.err.println(MODEL_NA + "部位：" + GroupList.get(j) + "顏色："
+										System.err.println(MODEL_NA + " 部位：" + GroupList.get(j) + " 顏色："
 												+ rs1.getString(GroupList.get(j)) + " 材料不足!");
+										
 										el_no = GetEl_no(MODEL_NA, GroupList.get(j), rs1.getString(GroupList.get(j)),
 												conn);
-										if (!ErrMess1.contains(el_no)) {
-											ErrMess1 += el_no + ",";
+										if (!ErrMess1.contains(el_no)){
+											ErrMess1 += el_no +",";
+											System.out.println("材料不足的ELNO:"+ErrMess1);
 										}
-										if (!ErrMess2.contains(rs1.getString("WORK_ORDER_ID"))) {
-											ErrMess2 += rs1.getString("WORK_ORDER_ID") + ",";
+										if(!ErrMess2.contains(rs1.getString("WORK_ORDER_ID"))){
+											ErrMess2+= rs1.getString("WORK_ORDER_ID") + ",";
 										}
-
-										continue;
+										break;
 									}
+									
 								}
-
 								if (Enough == true) {
-									Last_WOI_List = WOI_List;
+									Last_WOI_List = WOI_List ;
 									order_num++;
 								} else {
 									WOI_List = Last_WOI_List;
@@ -280,8 +274,8 @@ public class DSID01MReceive extends OpenWinCRUD {
 						} else {
 							break;
 						}
-
-						// System.err.println("Last_WOI_List>>>>"+Last_WOI_List);
+						System.err.println("可接的雙數："+Last_WOI_List);
+						
 					}
 					ps1.close();
 					rs1.close();
@@ -289,26 +283,26 @@ public class DSID01MReceive extends OpenWinCRUD {
 					e.printStackTrace();
 				}
 
-				// }
 				txt_rec_odno.setValue(Last_WOI_List);
 				String Detial = "";
 				if (Last_WOI_List.length() > 0) {
 					Detial = GetDetial(Last_WOI_List, conn);
 				}
-
+				System.out.println("Detial22:"+Detial);
 				if (ErrMess1.length() > 0) {
 					ErrMess1 = ErrMess1.substring(0, ErrMess1.length() - 1);
 					ErrMess1 = "\n" + Labels.getLabel("DSID.MSG0036") + "\n" + ErrMess1;
 				}
 				
-			
+				//DSID.MSG0036以下材料不足
+				
 				if (ErrMess2.length() > 0) {
 					ErrMess2 = ErrMess2.substring(0, ErrMess2.length() - 1);		
 					OD_NOList = ErrMess2;
 					ErrMess2 = "\n" + Labels.getLabel("DSID.MSG0037") + "\n" + ErrMess2;
 				}
-
-				// Messagebox.show("可接篩選結果：\n"+Detial);
+				//DSID.MSG0037以下訂單不可接
+				 Messagebox.show("可接篩選結果：\n"+Detial);
 				txt_Pro.setValue(Detial + ErrMess1 + ErrMess2);
 
 				btnConfirm.setVisible(true);
@@ -336,7 +330,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 		}
 
 	}
-
 	private Boolean CheckModel(String NIKE_SH, String WOI_List, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		String exSql = "";
@@ -351,13 +344,12 @@ public class DSID01MReceive extends OpenWinCRUD {
 			if (!"".equals(Model_Num.get(NIKE_SH)) && Model_Num.get(NIKE_SH) != null) {
 
 				String Sql = "SELECT COUNT(*) COU FROM DSID01_TEMP WHERE NIKE_SH_ARITCLE='" + NIKE_SH + "'" + exSql;
-				// System.err.println("--型體雙數判斷>>>>>\n"+Sql);
+				 System.err.println("--型體雙數判斷>>>>>\n"+Sql);
 				try {
 					ps1 = conn.prepareStatement(Sql);
 					rs1 = ps1.executeQuery();
 					if (rs1.next()) {
 						if (Double.valueOf(rs1.getString("COU")) < Double.valueOf(Model_Num.get(NIKE_SH))) {
-							// System.err.println(Double.valueOf(rs1.getString("COU")));
 							CHECK = true;
 						}
 					}
@@ -410,7 +402,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 		}
 		return Sql;
 	}
-
 	private void ShowModel_na() throws SQLException {
 		// TODO Auto-generated method stub
 
@@ -482,7 +473,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 		// ListBox.setModel(new ListModelList<Object>(list));
 
 	}
-
 	private String GetEl_no(String MODEL_NA, String GROUP_NO, String COLOR, Connection conn) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps1 = null;
@@ -504,7 +494,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 		}
 		return EL_NO;
 	}
-
 	private String GetDetial(String last_WOI_List, Connection conn) {
 		// TODO Auto-generated method stub
 		PreparedStatement ps1 = null;
@@ -514,7 +503,13 @@ public class DSID01MReceive extends OpenWinCRUD {
 		String Sql = "SELECT NIKE_SH_ARITCLE,COUNT(*) COU FROM DSID01_TEMP WHERE WORK_ORDER_ID IN ('"
 				+ last_WOI_List.substring(0, last_WOI_List.length() - 1).replace(",", "','")
 				+ "') GROUP BY NIKE_SH_ARITCLE ORDER BY NIKE_SH_ARITCLE";
-		// System.err.println("GetOd_noNum>>>>>"+Sql);
+		System.err.println("預接："+Sql);
+//		
+//		String Sql = "SELECT A.NIKE_SH_ARITCLE,A.COU-NVL(B.COU,0) COU FROM (SELECT NIKE_SH_ARITCLE,COUNT(*) COU FROM DSID01_TEMP WHERE WORK_ORDER_ID IN ('"
+//				+ last_WOI_List.substring(0, last_WOI_List.length() - 1).replace(",", "','")
+//				+ "')GROUP BY NIKE_SH_ARITCLE ORDER BY NIKE_SH_ARITCLE) A,(SELECT NIKE_SH_ARITCLE,COUNT(*) COU FROM DSID01_TEMP WHERE WORK_ORDER_ID IN ('"
+//				+ ErrMess2.substring(0, ErrMess2.length() - 1).replace(",", "','")
+//				+ "') GROUP BY NIKE_SH_ARITCLE ORDER BY NIKE_SH_ARITCLE)B WHERE A.NIKE_SH_ARITCLE=B.NIKE_SH_ARITCLE(+)";
 		try {
 			ps1 = conn.prepareStatement(Sql);
 			rs1 = ps1.executeQuery();
@@ -533,14 +528,13 @@ public class DSID01MReceive extends OpenWinCRUD {
 				+ Labels.getLabel("DSID.MSG0041") + " WORK_ORDER_ID " + Labels.getLabel("DSID.MSG0042") + "！！！\n";
 		return Detial;
 	}
-
-	private String GetLastOrder(Connection conn) {
+	private String GetLastOrder(Connection conn){
 		// TODO Auto-generated method stub
 		PreparedStatement ps1 = null;
 		ResultSet rs1 = null;
 		String Maxnum = "";
 		String Sql = "SELECT COUNT(*) COU FROM DSID01 WHERE ORDER_DATE = (SELECT MAX(ORDER_DATE) FROM DSID01)";
-		// System.err.println("GetOd_noNum>>>>>"+Sql);
+		 System.err.println("获取订单GetOd_noNum>>>>>"+Sql);
 		try {
 			ps1 = conn.prepareStatement(Sql);
 			rs1 = ps1.executeQuery();
@@ -554,7 +548,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 		}
 		return Maxnum;
 	}
-
 	private void Insert(String insSql, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		PreparedStatement pstm1 = null;
@@ -584,7 +577,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 		}
 
 	}
-
 	private String GetOd_noNum(String MODEL_NA, String GROUP_NO, String COLOR, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
 		PreparedStatement ps1 = null;
@@ -614,7 +606,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 
 		return od_nonum;
 	}
-
 	private boolean CheckEnough(String MODEL_NA, String GROUP_NO, String COLOR, String WOI_List, Connection conn)
 			throws SQLException {
 		// TODO Auto-generated method stub
@@ -628,7 +619,7 @@ public class DSID01MReceive extends OpenWinCRUD {
 		}
 		String Sql = "SELECT * FROM DSID01_TEMP_LOG WHERE MODEL_NA='" + MODEL_NA + "' AND GROUP_NO='" + GROUP_NO
 				+ "' AND COLOR LIKE '" + COLOR + "%' ORDER BY NUM";
-		System.err.println("--可做>>>>>\n" + Sql);
+		System.err.println("--可做>>>>>" + Sql);
 		try {
 			ps1 = conn.prepareStatement(Sql);
 			rs1 = ps1.executeQuery();
@@ -643,7 +634,7 @@ public class DSID01MReceive extends OpenWinCRUD {
 
 		String Sql2 = "SELECT COUNT(*) COU FROM DSID01_TEMP WHERE WORK_ORDER_ID IN ('" + WOI_List + "') AND " + GROUP_NO
 				+ " LIKE '" + COLOR + "%' AND MODEL_NA LIKE '%" + MODEL_NA + "'";
-		System.err.println("--目前訂單顏色>>>>>\n" + Sql2);
+		System.err.println("--目前訂單顏色>>>>>" + Sql2);
 		try {
 			ps1 = conn.prepareStatement(Sql2);
 			rs1 = ps1.executeQuery();
@@ -672,7 +663,6 @@ public class DSID01MReceive extends OpenWinCRUD {
 
 		return Enough;
 	}
-
 	@Override
 	protected Class getEntityClass() {
 		// TODO Auto-generated method stub

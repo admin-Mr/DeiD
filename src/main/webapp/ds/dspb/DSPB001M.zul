@@ -5,7 +5,7 @@
 			<span sclass="home-icon z-icon-home" />
 			<a label="${labels.MENU.DSPB000}" />
 			<label value="${labels.MENU.DSPB001M} (DSPB001M)" />
-			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		 	<!-- 此處放置該程式多國系名稱及程式代號 -->
 		</div>
 	</div>
 	<window width="100%" border="none" id="windowMaster"

@@ -34,7 +34,7 @@ public class DSID13RProgram extends OpenWinCRUD{
 	@Wire
 	private Button btnExport;
 	@Wire
-	private Datebox po_date1,po_date2;
+	private Datebox po_date1;
 	@Wire
 //	private Textbox txtMODEL_NA,txtSENDWK_NAME;
 	private Listbox List_MODEL_NA,List_SENDWK_NAME;
@@ -49,23 +49,22 @@ public class DSID13RProgram extends OpenWinCRUD{
 	//查詢按鈕，根據所選日期查詢該天的所有形體
 	@Listen("onClick =#btnQuery")
 	public void onClickbtnQuery(Event event) throws SQLException{
+		Date date=po_date1.getValue();
+		if(!"".equals(date) && date!=null){
 		String START=po_date1.getValue().toString();
-		String SARTY=po_date2.getValue().toString();
-		if(!"".equals(START)&&START!=null && !"".equals(SARTY) && SARTY!=null){
 			START=sdf.format(po_date1.getValue());
-			SARTY=sdf.format(po_date2.getValue());
 			Connection conn = Common.getDbConnection();
 			PreparedStatement  ps1 = null;
 			ResultSet  rs1 = null;
 			List<String> NA_list = new ArrayList<String>();
 			NA_list.add("");
-			String Sql="SELECT DISTINCT NIKE_SH_ARITCLE FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')BETWEEN'"+START+"'AND '"+SARTY+"' ORDER BY NIKE_SH_ARITCLE";
+			String Sql="SELECT DISTINCT MODEL_NA FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+START+"'AND MODEL_NA NOT LIKE 'W%' ORDER BY MODEL_NA";
 			System.err.println(">>>"+Sql);
 			try {
 				ps1 = conn.prepareStatement(Sql);
 				rs1 = ps1.executeQuery();	
 				while(rs1.next()){
-					NA_list.add(rs1.getString("NIKE_SH_ARITCLE"));
+					NA_list.add(rs1.getString("MODEL_NA"));
 				}
 				ps1.close();
 				rs1.close();
@@ -81,20 +80,32 @@ public class DSID13RProgram extends OpenWinCRUD{
 				Common.closeConnection(conn);
 			}
 			List_MODEL_NA.setModel(new ListModelList<Object>(NA_list));
-		}else{
-			Messagebox.show("日期不能為空！！！");
-		}
-	  }
+			}else{
+				Messagebox.show("日期不能為空!");
+			}
+			}
 
 		//查詢按鈕，根據所選日期查詢該天的所有形體
 		@Listen("onClick =#btnQuery1")
 		public void onClickbtnQuery1(Event event) throws SQLException{
+			Date date=po_date1.getValue();
+			String  MODEL_NA =""; 
+			if(List_MODEL_NA.getSelectedItem()!=null){
+				for(Listitem ltAll : List_MODEL_NA.getItems()){
+					if (ltAll.isSelected()){
+						if(!"".equals((Object)ltAll.getValue())&&(Object)ltAll.getValue()!=null){
+							MODEL_NA=(Object)ltAll.getValue()+"";					
+						}
+					}
+				}
+			}
+			if(!"".equals(date) && date!=null){
 				Connection conn = Common.getDbConnection();
 				PreparedStatement  ps1 = null;
 				ResultSet  rs1 = null;
 				List<String> NA_list = new ArrayList<String>();
 				NA_list.add("");
-				String Sql="SELECT PG_NAME FROM DSID13";
+				String Sql="SELECT PG_NAME FROM DSID13 WHERE NIKE_SH_ARITCLE LIKE '"+MODEL_NA+"%'";
 				System.err.println(">>>"+Sql);
 				try {
 					ps1 = conn.prepareStatement(Sql);
@@ -116,17 +127,19 @@ public class DSID13RProgram extends OpenWinCRUD{
 					Common.closeConnection(conn);
 				}
 				List_SENDWK_NAME.setModel(new ListModelList<Object>(NA_list));
-		  }
+			}else{
+				Messagebox.show("日期不能為空!");
+			}
+				
+			}
 	
 	//導出按鈕，根據日期來判斷形體獲取值
 	@Listen("onClick =#btnExport")
 	public void onClickbtnexport(Event event) throws Exception{
 		Date date=po_date1.getValue();
-		Date date1=po_date2.getValue();
 		
-		if(!"".equals(date) && date!=null && !"".equals(date1)&& date1!=null){
+		if(!"".equals(date) && date!=null){
 			String START=sdf.format(po_date1.getValue());
-			String SARTY=sdf.format(po_date2.getValue());
 			
 			String MODEL_NA="";
 			if(List_MODEL_NA.getSelectedItems()!=null){
@@ -148,7 +161,9 @@ public class DSID13RProgram extends OpenWinCRUD{
 					}
 				}
 			}
-			DSID13_1RTask.ExcelExport(MODEL_NA,START,SARTY,PG_NAME);
+//			MODEL_NA="HO18 PEGASUS 35 SHIELD LOW ID";
+//			PG_NAME="鞋帶派工單";
+			DSID13_1RTask.ExcelExport(MODEL_NA,START,PG_NAME);
 		}else{
 			Messagebox.show("日期不能為空!");
 		}
@@ -202,11 +217,6 @@ public class DSID13RProgram extends OpenWinCRUD{
 		return false;
 	}
 
-	@Override
-	protected boolean doCustomSave(Connection Conn) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	protected void addDetailPrograms() {

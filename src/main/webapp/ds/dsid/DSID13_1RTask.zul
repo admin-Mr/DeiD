@@ -19,8 +19,6 @@
 			<hlayout>
 				<label value="接單日期" sclass="sectionTitlelabel"  style="display:inline-block;width:70px;"/>
 				<datebox id="po_date1" mold="rounded" width="110px" cols="12" format="yyyy/MM/dd"  />
-				<label value="~" />
-				<datebox id="po_date2" mold="rounded" width="110px" cols="12" format="yyyy/MM/dd"  />
 				
 			</hlayout>
 				<!--  <label value="型體" sclass="sectionTitleLabel"  style="display:inline-block;width:70px;"/>

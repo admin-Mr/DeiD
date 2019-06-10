@@ -90,7 +90,7 @@ public class DSID01MTransfer extends OpenWinCRUD{
 					String seq="0000"+num;
 					String WOI=format.format(txtorder_date.getValue())+seq.substring(seq.length()-4, seq.length())+"-"+rs.getString("WORK_ORDER_ID");
 					String SHIP_GROUP_ID="",ORDER_ID="",SH_STYLENO="",ORDER_NUM="",COUNTRY="",ITEMNUMBER="";
-					String PID01="",PID02="",GROUP1="",GROUP2="",GROUP3="",GROUP4="",GROUP5="",GROUP6="",GROUP7="",GROUP8="",GROUP9="",GROUP10="",GROUP11="",GROUP12="",GROUP13="",GROUP14="";
+					String PID01="",PID02="",PID03 = "",PID04="",GROUP1="",GROUP2="",GROUP3="",GROUP4="",GROUP5="",GROUP6="",GROUP7="",GROUP8="",GROUP9="",GROUP10="",GROUP11="",GROUP12="",GROUP13="",GROUP14="";
 					String PRIORITY="",EXOTIC="",REMAKE="",SHIPPER="",BILLTOREGION="",SHIPTOSTUDIO="",REGION="",ON_ORDER="",POSTALCODE="";
 					String URL1="",URL2="",URL3="",URL4="",URL5="",URL6="",URL7="",URL8="",URL9="",URL10="";
 					Date FACTACCPDATE=null;
@@ -113,7 +113,13 @@ public class DSID01MTransfer extends OpenWinCRUD{
 					}
 					if(!"".equals(rs.getString("PID02"))&&rs.getString("PID02")!=null){
 						PID02=rs.getString("PID02");
-					}					
+					}
+					if(!"".equals(rs.getString("PID03"))&&rs.getString("PID03")!=null){
+						PID03=rs.getString("PID03");
+					}
+					if(!"".equals(rs.getString("PID04"))&&rs.getString("PID04")!=null){
+						PID04=rs.getString("PID04");
+					}
 					if(!"".equals(rs.getString("GROUP1"))&&rs.getString("GROUP1")!=null){
 						GROUP1=rs.getString("GROUP1");
 					}					
@@ -226,11 +232,11 @@ public class DSID01MTransfer extends OpenWinCRUD{
 					}	
 					
 					String UpSql="INSERT INTO DSID30 (OD_NO,ORDER_DATE,SHIP_GROUP_ID,WORK_ORDER_ID,ORDER_ID,SH_STYLENO,ORDER_NUM,LEFT_SIZE_RUN,RIGHT_SIZE_RUN,PID01,"+
-							"PID02,GROUP1,GROUP2,GROUP3,GROUP4,GROUP5,GROUP6,GROUP7,GROUP8,GROUP9,GROUP10,GROUP11,GROUP12,GROUP13,GROUP14,COUNTRY,ITEMNUMBER,"+
+							"PID02,PID03,PID04,GROUP1,GROUP2,GROUP3,GROUP4,GROUP5,GROUP6,GROUP7,GROUP8,GROUP9,GROUP10,GROUP11,GROUP12,GROUP13,GROUP14,COUNTRY,ITEMNUMBER,"+
 							"PRIORITY,FACTACCPDATE,REQUSHIPDATE,EXOTIC,REMAKE,SHIPPER,BILLTOREGION,SHIPTOSTUDIO,NIKE_SH_ARITCLE,REGION,POSTALCODE,URL1,URL2,URL3,URL4,"+
 							"URL5,URL6,URL7,URL8,URL9,URL10,MODEL_NA,IS_PG,PG_DATE,TOOLING_SIZE,MODEL_ROUND_NUM,ALL_ROUND_NUM,ROUND,UP_USER,UP_DATE) "
 							+ "VALUES ('"+rs.getString("OD_NO")+"',TO_DATE('"+rs.getDate("ORDER_DATE")+"','YYYY/MM/DD'),'"+SHIP_GROUP_ID+"','"+WOI+"','"+ORDER_ID+"','"+SH_STYLENO+"','"+ORDER_NUM+"','"+rs.getString("LEFT_SIZE_RUN")+"','"+rs.getString("RIGHT_SIZE_RUN")+"','"+PID01+"',"+
-							"'"+PID02+"','"+GROUP1+"','"+GROUP2+"','"+GROUP3+"','"+GROUP4+"','"+GROUP5+"','"+GROUP6+"','"+GROUP7+"','"+GROUP8+"','"+GROUP9+"','"+GROUP10+"','"+GROUP11+"','"+GROUP12+"','"+GROUP13+"','"+GROUP14+"','"+COUNTRY+"','"+ITEMNUMBER+"',"+
+							"'"+PID02+"','"+PID03+"','"+PID04+"','"+GROUP1+"','"+GROUP2+"','"+GROUP3+"','"+GROUP4+"','"+GROUP5+"','"+GROUP6+"','"+GROUP7+"','"+GROUP8+"','"+GROUP9+"','"+GROUP10+"','"+GROUP11+"','"+GROUP12+"','"+GROUP13+"','"+GROUP14+"','"+COUNTRY+"','"+ITEMNUMBER+"',"+
 							"'"+PRIORITY+"',TO_DATE('"+FACTACCPDATE+"','YYYY/MM/DD'),TO_DATE('"+REQUSHIPDATE+"','YYYY/MM/DD'),'"+EXOTIC+"','"+REMAKE+"','"+SHIPPER+"','"+BILLTOREGION+"','"+SHIPTOSTUDIO+"',"
 									+ "'"+rs.getString("NIKE_SH_ARITCLE")+"','"+REGION+"','"+POSTALCODE+"','"+ON_ORDER+"','"+URL2+"','"+URL3+"','"+URL4+"',"+
 							"'"+URL5+"','"+URL6+"','"+URL7+"','"+URL8+"','"+URL9+"','"+URL10+"','"+rs.getString("MODEL_NA")+"','N',TO_DATE('"+rs.getDate("PG_DATE")+"','YYYY/MM/DD'),"
@@ -262,20 +268,19 @@ public class DSID01MTransfer extends OpenWinCRUD{
 			
 			//明細檔轉移
 			String sql2="SELECT A.OD_NO,B.* FROM DSID01 A,DSID01_TEMP2 B WHERE A.WORK_ORDER_ID=B.WORK_ORDER_ID AND TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(txtorder_date.getValue())+"' AND A.STATUS='7' AND A.IS_PG='Y'ORDER BY OD_NO,SEQ";
-			System.out.println(">>>："+sql2);	
+			System.out.println(">>>AAAAAAA@@@@@："+sql2);	
 			try {
 				ps2 = conn.prepareStatement(sql2, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				rs2 = ps2.executeQuery();	
 				while(rs2.next()){
-
+					System.out.println("PART="+rs2.getString("PART_NA"));
 					String GROUP_NO2="",PART_NA="",CODE="",NAME="",REMARKS="",TYPE="",UP_USER="",PART_NO="";
-
 					if(!"".equals(rs2.getString("GROUP_NO"))&&rs2.getString("GROUP_NO")!=null){
 						GROUP_NO2=rs2.getString("GROUP_NO").replace("GROUP", "GROUP ");
 					}
 					if(!"".equals(rs2.getString("PART_NA"))&&rs2.getString("PART_NA")!=null){
-						PART_NA=rs2.getString("PART_NA");
-						PART_NO=Getpart_no(rs2.getString("PART_NA"),Conn);
+						PART_NA=rs2.getString("PART_NA").trim().replaceAll("\n", "");
+						PART_NO=Getpart_no(rs2.getString("PART_NA").trim().replaceAll("\n", ""),Conn);
 					}
 					if(!"".equals(rs2.getString("CODE"))&&rs2.getString("CODE")!=null){
 						CODE=rs2.getString("CODE");

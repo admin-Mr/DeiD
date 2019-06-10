@@ -35,9 +35,10 @@ public class DSID10MDetail1 extends Detail{
 	@Wire
 	protected Div detail1;
 	@Wire
-	private Textbox txtnike_sh_aritcle1,txtseq,txtori_info,txtrep_info,txtspl_info1,txtspl_info2,query_group,query_info;
+	private Textbox txtnike_sh_aritcle1,txtseq,txtori_info,txtrep_info,txtspl_info1,
+					txtspl_info2,query_group,query_info,txtleft,txtleft1,txtRIGHT,txtRIGHT1;
 	@Wire
-	Checkbox rep_check,spl_check;
+	Checkbox rep_check,spl_check,rep1_check,rep2_check;
 	@Wire
 	Combobox Com_pid1,Com_Spid;
 	@Wire
@@ -59,7 +60,12 @@ public class DSID10MDetail1 extends Detail{
 		detailComponentColumns.add(new ComponentColumn<String>(spl_check, "IS_SPL", null, null, null));
 		detailComponentColumns.add(new ComponentColumn<String>(txtspl_info1, "SPL_INFO1", null, null, null));
 		detailComponentColumns.add(new ComponentColumn<String>(Com_Spid, "SPL_GROUP", null, null, null));
-		detailComponentColumns.add(new ComponentColumn<String>(txtspl_info2, "SPL_INFO2", null, null, null));		
+		detailComponentColumns.add(new ComponentColumn<String>(txtspl_info2, "SPL_INFO2", null, null, null));
+		detailComponentColumns.add(new ComponentColumn<String>(txtleft, "IS_LEFT_PID", null, null, null));
+		detailComponentColumns.add(new ComponentColumn<String>(txtleft1, "IS_LEFT1_PID", null, null, null));
+		detailComponentColumns.add(new ComponentColumn<String>(txtRIGHT, "IS_RIGHT_PID", null, null, null));
+		detailComponentColumns.add(new ComponentColumn<String>(txtRIGHT1, "IS_RIGHT1_PID", null, null, null));
+		
 		detailComponentColumns.add(new ComponentColumn<String>(null, "UP_USER", _userInfo.getAccount(), null, null));
 		detailComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));
 	
@@ -185,7 +191,6 @@ public class DSID10MDetail1 extends Detail{
 	@Override
 	protected void resetEditAreaDetail(Object entityDetail) {
 		// TODO Auto-generated method stub
-		
 		DSID10_1 entity = (DSID10_1) entityDetail;
 		txtnike_sh_aritcle1.setValue(entity == null ? "" : entity.getNIKE_SH_ARITCLE());
 		txtseq.setValue(entity == null ? "" : entity.getSEQ());
@@ -204,12 +209,25 @@ public class DSID10MDetail1 extends Detail{
 		}else{
 			spl_check.setChecked(true);
 		}
-		
 		txtspl_info1.setValue(entity == null ? "" : entity.getSPL_INFO1());
+		
+		if(entity==null || "N".equals(entity.getIS_LEFT_PID())){
+			rep1_check.setChecked(false);
+		}else{
+			rep1_check.setChecked(true);
+		}
+			txtleft.setValue(entity==null ? "" : entity.getIS_LEFT_PID());
+		if(entity==null || "N".equals(entity.getIS_RIGHT_PID())){
+			rep2_check.setChecked(false);
+		}else{
+			rep2_check.setChecked(true);
+		}
+		txtRIGHT.setValue(entity==null ? "" : entity.getIS_RIGHT_PID());
+		
 		Com_Spid.setValue(entity == null ? "" : entity.getSPL_GROUP());
 		txtspl_info2.setValue(entity == null ? "" : entity.getSPL_INFO2());
-		
-		
+		txtleft1.setValue(entity==null ? "" : entity.getIS_LEFT1_PID());
+		txtRIGHT1.setValue(entity==null ? "" : entity.getIS_RIGHT1_PID());
 	}
 
 
@@ -247,7 +265,7 @@ public class DSID10MDetail1 extends Detail{
 				seq = rs.getString("SEQ");
 			}
 			rs.close();
-			ps.close();		
+			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -305,7 +323,12 @@ public class DSID10MDetail1 extends Detail{
 		Com_Spid.setReadonly(true);
 		txtspl_info2.setReadonly(true);
 		
-				
+		rep1_check.setDisabled(true);
+		rep2_check.setDisabled(true);
+		txtleft.setReadonly(true);
+		txtleft1.setReadonly(true);
+		txtRIGHT.setReadonly(true);
+		txtRIGHT1.setReadonly(true);
 	}
 
 	@Override
@@ -330,7 +353,12 @@ public class DSID10MDetail1 extends Detail{
 		txtspl_info1.setReadonly(false);	
 		Com_Spid.setReadonly(false);	
 		txtspl_info2.setReadonly(false);	
-		
+		rep1_check.setDisabled(false);
+		rep2_check.setDisabled(false);
+		txtleft.setReadonly(false);
+		txtleft1.setReadonly(false);
+		txtRIGHT.setReadonly(false);
+		txtRIGHT1.setReadonly(false);
 	}
 	
 	@Listen("onClick=#rep_check")
@@ -340,11 +368,11 @@ public class DSID10MDetail1 extends Detail{
 		txtspl_info1.setReadonly(true);
 		Com_pid1.setReadonly(true);	
 		txtspl_info2.setReadonly(true);
+		
 		txtspl_info1.setText("");
 		Com_Spid.setText("");
 		txtspl_info2.setText("");
 	}
-	
 	@Listen("onClick=#spl_check")
 	public void ononclickspl_check(Event event) {
 		rep_check.setChecked(false);
@@ -354,7 +382,23 @@ public class DSID10MDetail1 extends Detail{
 		txtspl_info2.setReadonly(false);
 		txtrep_info.setText("");
 	}
-
+	
+//	@Listen("onClick=#rep1_check")
+//	public void ononclickrep1_check(Event event) {
+//		rep2_check.setChecked(false);
+//		txtleft.setReadonly(true);
+//		txtleft1.setReadonly(false);
+//		txtRIGHT.setReadonly(true);	
+//		txtRIGHT1.setReadonly(false);
+//	}
+//	@Listen("onClick=#rep2_check")
+//	public void ononclickrep2_check(Event event) {
+//		rep1_check.setChecked(false);
+//		txtleft.setReadonly(true);
+//		txtleft1.setReadonly(false);
+//		txtRIGHT.setReadonly(true);	
+//		txtRIGHT1.setReadonly(false);
+//	}
 	@Override
 	protected Window getRootWindow() {
 		// TODO Auto-generated method stub

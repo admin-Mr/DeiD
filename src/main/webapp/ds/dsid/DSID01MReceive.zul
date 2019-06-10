@@ -28,7 +28,7 @@
 		<hlayout width="100%" height="35px">
 			<label value="${labels.DSID01M2.PreRecep}" sclass="sectionTitleLabel" />
 			<button id="btnExport1" sclass="btn-default"	iconSclass="mdi mdi-watch-export"
-					label="${labels.COMM.EXPORT}" mold="trendy"  /> 
+					label="${labels.COMM.EXPORTL}" mold="trendy"  /> 
 		</hlayout>
 		<hlayout >
 			<textbox id="txt_rec_odno"  mold="rounded" width="620px"  height="80px" multiline="true" readonly="true"/>	
@@ -50,7 +50,7 @@
 			<hlayout >
 				<label value="${labels.DSID01M2.SCHEDULE}" sclass="sectionTitleLabel" style="display:inline-block;width:100px;color:red;" />
 				<button id="btnExport2" sclass="btn-default"	iconSclass="mdi mdi-watch-export"
-					label="${labels.COMM.EXPORT}" mold="trendy"  /> 
+					label="${labels.COMM.EXPORTS}" mold="trendy"  /> 
 			</hlayout>
 			<hlayout  >
 				<textbox id="txt_Pro"  mold="rounded" width="360px"  height="166px" multiline="true" readonly="true"/>	

@@ -30,14 +30,14 @@
 										<div
 											class="input-group input-group-sm">
 											<span class="input-group-addon"> ${labels.COMM.USER_ID} </span>
-											<textbox class="form-control input-sm" placeholder="Username" id="account" />
+											<textbox class="form-control input-sm" placeholder="Username" id="account" value="dsgpi" />
 										</div>
 									</row>
 									<row>
 										<div
 											class="input-group input-group-sm">
 											<span class="input-group-addon"> ${labels.COMM.PASSWORD} </span>
-											<textbox class="form-control input-sm" placeholder="Password" id="password" type="password" />
+											<textbox class="form-control input-sm" placeholder="Password" id="password" type="password" value="8888" />
 										</div>
 									</row>
 									<row>
