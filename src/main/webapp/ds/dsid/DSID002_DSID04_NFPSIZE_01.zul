@@ -23,6 +23,11 @@
 				<button id="btnCancelMaster" sclass="btn-danger"
 					iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
 					mold="trendy" disabled="true" />
+				<!-- 2019/04/23 Remory 先隱藏匯入按鈕 -->
+				<fileupload id="btnImportMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="${labels.COMM.IMPORT}"
+					mold="trendy" visible="false"/>
+				
 			</div>
 		</div>
 		<separator />

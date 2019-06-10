@@ -1,30 +1,53 @@
 package ds.dsid.program;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.Query;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.ForwardEvent;
+import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zk.ui.select.annotation.Listen;
 import org.zkoss.zk.ui.select.annotation.Wire;
 import org.zkoss.zkplus.spring.SpringUtil;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Doublebox;
+import org.zkoss.zul.Fileupload;
 import org.zkoss.zul.Label;
 import org.zkoss.zul.Listbox;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
 
 import ds.common.services.CRUDService;
 import ds.common.services.UserCredential;
 import ds.dsid.domain.DSID102;
+import util.Common;
 import util.ComponentColumn;
 import util.Master;
 import util.OperationMode;
+import util.function.TableToExcel;
 import util.openwin.ReturnBox;
 
 public class DSID004_DSID102_01 extends Master {
@@ -35,7 +58,7 @@ public class DSID004_DSID102_01 extends Master {
 	@Wire
 	private Listbox queryListbox;
 	@Wire
-	private Button btnQuery, btnCreateMaster, btnSaveMaster, btnCancelMaster;
+	private Button btnQuery, btnCreateMaster, btnSaveMaster, btnCancelMaster, btnImportMaster;
 	@Wire
 	private Button onqryEL_NO, ontxtEL_NO;
 	@Wire
@@ -144,6 +167,25 @@ public class DSID004_DSID102_01 extends Master {
 		masterComponentColumns.add(new ComponentColumn<Double>(txt_QTY40, "Q40", null, null, null));
 		masterComponentColumns.add(new ComponentColumn<String>(null, "UP_USER", _userInfo.getAccount(), null, null));
 		masterComponentColumns.add(new ComponentColumn<Date>(null, "UP_DATE", new Date(), null, null));
+		
+		btnImportMaster = (Fileupload) window.getFellow("btnImportMaster");
+		btnImportMaster.addEventListener(Events.ON_UPLOAD, new EventListener<UploadEvent>() {
+			@SuppressWarnings("unused")
+			public void onEvent(UploadEvent event) throws SQLException {
+				String fileToRead = "";
+				org.zkoss.util.media.Media media = event.getMedia();
+				if (!media.getName().toLowerCase().endsWith(".xls")) {
+					Messagebox.show(Labels.getLabel("PUBLIC.MSG0082")+Labels.getLabel("COMM.XLSFILE")); //Excel格式不對,請檢查!檔案(.xls)
+					return;
+				}
+				System.out.println("-------- fileToRead : " + fileToRead);
+				InputStream input = null;
+				media.isBinary();
+				String sss = media.getFormat();
+				input = media.getStreamData();// 獲得輸入流
+				importFromExcel(input);
+			}
+		});
 	}
 	
 	@Override
@@ -425,6 +467,191 @@ public class DSID004_DSID102_01 extends Master {
          }
          
          Executions.createComponents("/util/openwin/QueryField.zul", null, map);
+	}
+	
+	@SuppressWarnings("resource")
+	public void importFromExcel(InputStream input) throws SQLException {
+		try {
+			HSSFWorkbook wb = new HSSFWorkbook(input);
+			HSSFSheet sheet = wb.getSheetAt(0);
+			HSSFDataFormat dateFormat = wb.createDataFormat();
+			getValueFromXls(sheet,dateFormat);
+
+		} catch (FileNotFoundException e) {
+			//"文件不存在!"
+			Messagebox.show(Labels.getLabel("PUBLIC.MSG0083"));
+			e.printStackTrace();
+		} catch (Exception e) {
+			//"Excel格式不對,請檢查!"
+			Messagebox.show(Labels.getLabel("PUBLIC.MSG0082"));
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * @param sheet
+	 * @param dateFormat
+	 * @throws SQLException
+	 */
+	@SuppressWarnings({ "deprecation", "rawtypes" })
+	public void getValueFromXls(HSSFSheet sheet, HSSFDataFormat dateFormat) throws SQLException {
+		PreparedStatement ps = null;
+		Connection conn = null;
+		String vEL_NO="",vEL_NA="";
+		String vSIZE[] = new String[40],vQTY[] = new String[40];
+		for(int i=0;i<40;i++){
+			vSIZE[i]="";
+			vQTY[i]="";
+		}
+		/***** 取得匯入Excel的總筆數 *****/
+		int TotalRows=0;
+		for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {				
+	    	HSSFRow row = sheet.getRow(i);
+    		if (row==null)break;
+	    	HSSFCell cell = row.getCell((short)0);
+    		Object objvalue = TableToExcel.getCellValue(cell, dateFormat);
+	    	if(objvalue==null){
+			    TotalRows=i;
+    			break;
+	    	}else{
+		    	TotalRows=i;
+		    }
+		}	
+		/***** 取得匯入Excel的總筆數 *****/
+		HSSFRow row =null;
+		try {
+			conn = Common.getDbConnection();
+			conn.setAutoCommit(false);//取消自動Commit，待全部成功後在進行Commit
+			for (int RowIndex = 1; RowIndex <= TotalRows; RowIndex++) {
+				int CellIndex=0;
+				row = sheet.getRow(RowIndex);
+				/***** 取得EL_NO資料 Start *****/
+				vEL_NO = String.valueOf(getCellValues(row, CellIndex, dateFormat));//材料編號
+				if(vEL_NO.equals(""))throw new Exception("Row"+(RowIndex+1)+"：EL_NO Is Null.Please Check Data Again.");
+				/***** 取得EL_NO資料 End *****/
+				/***** 取得EL_CNAME資料 Start *****/
+				final Query qEL_NA=CRUDService.createSQL("SELECT EL_CNAME FROM DSEL00 WHERE EL_NO='" + vEL_NO + "'");
+		    	List lEL_NA = qEL_NA.getResultList();
+		    	if(lEL_NA.size()>0){
+		    		vEL_NA=lEL_NA.get(0).toString();//材料名稱
+		    	}
+				/***** 取得EL_CNAME資料 End *****/
+				/***** 取得SIZE資料 Start *****/
+				for(int i=0;i<40;i++){
+					CellIndex++;
+					vSIZE[i] = getCellValues(row, CellIndex, dateFormat).toString();//SIZE
+				}
+				/***** 取得SIZE資料 End *****/
+				/***** 取得QTY資料 Start *****/
+				RowIndex++;
+				CellIndex=0;
+				row = sheet.getRow(RowIndex);
+				for(int i=0;i<40;i++){
+					CellIndex++;
+					vQTY[i] = getCellValues(row, CellIndex, dateFormat).toString();//QTY
+				}
+				/***** 取得QTY資料 End *****/
+				/***** 判斷是否已有資料 Start *****/
+				/***** 若有資料則「UPDATE」,若沒有資料則「INSERT」*****/
+				final Query q=CRUDService.createSQL("SELECT * FROM DSID102 WHERE EL_NO='" + vEL_NO + "'");
+		    	List list = q.getResultList(); 
+		    	/***** 有資料則「UPDATE」 Start *****/
+		    	if(list.size()>0){
+		    		String UPDATE_SQL=	"UPDATE DSID102 SET EL_NA=?,S1=?,S2=?,S3=?,S4=?,S5=?,S6=?,S7=?,S8=?,S9=?,S10=?," +
+		    							"							   S11=?,S12=?,S13=?,S14=?,S15=?,S16=?,S17=?,S18=?,S19=?,S20=?," +
+		    							"							   S21=?,S22=?,S23=?,S24=?,S25=?,S26=?,S27=?,S28=?,S29=?,S30=?," +
+		    							"							   S31=?,S32=?,S33=?,S34=?,S35=?,S36=?,S37=?,S38=?,S39=?,S40=?," +
+		    							"							   Q1=?,Q2=?,Q3=?,Q4=?,Q5=?,Q6=?,Q7=?,Q8=?,Q9=?,Q10=?," +
+		    							"							   Q11=?,Q12=?,Q13=?,Q14=?,Q15=?,Q16=?,Q17=?,Q18=?,Q19=?,Q20=?," +
+		    							"							   Q21=?,Q22=?,Q23=?,Q24=?,Q25=?,Q26=?,Q27=?,Q28=?,Q29=?,Q30=?," +
+		    							"							   Q31=?,Q32=?,Q33=?,Q34=?,Q35=?,Q36=?,Q37=?,Q38=?,Q39=?,Q40=?," +
+		    							"					UP_USER=?,UP_DATE=SYSDATE WHERE EL_NO=?";
+		    		ps = conn.prepareStatement(UPDATE_SQL,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+					ps.setString(1, vEL_NA);
+					for(int index=0;index<40;index++){
+						ps.setString(2+index , vSIZE[index]);
+						ps.setString(42+index, vQTY[index]);
+					}
+					ps.setString(82, _userInfo.getAccount());
+					ps.setString(83, vEL_NO);
+			    	ps.execute();
+			    	ps.close();
+		    	/***** 有資料則「UPDATE」 End *****/
+		    	/***** 沒資料則「INSERT」 Start *****/
+		    	}else{
+		    		String INSERT_SQL="INSERT INTO DSID102 SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,SYSDATE,? FROM DUAL";
+		    		ps = conn.prepareStatement(INSERT_SQL,ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+		    		ps.setString(1, vEL_NO);
+		    		for(int index=0;index<40;index++){
+						ps.setString(2+index , vSIZE[index]);
+						ps.setString(42+index, vQTY[index]);
+					}
+		    		ps.setString(82, _userInfo.getAccount());
+		    		ps.setString(83, vEL_NA);
+		    		ps.execute();
+			    	ps.close();
+		    	}
+		    	/***** 沒資料則「INSERT」 End *****/
+		    	/***** 判斷是否已有資料 End *****/
+			}
+			/***** 匯入成功將進行Commit，並顯示「Import Data Success!!」 *****/
+			conn.commit();
+			Messagebox.show("Import Data Success!!");
+		} catch (Exception e) {
+			// TODO: handle exception
+			/***** 匯入不成功將進行Rollback *****/
+			e.getStackTrace();
+			conn.rollback();
+		}finally{
+			/***** 不管匯入成不成功都需要重新查詢，並將「Connection」關閉 *****/
+			executeQuery();
+			Common.closeConnection(conn);
+		}
+	}
+	/***** 取得欄位資料 *****/
+	/**
+	 * @param row 行數
+	 * @param CellIndex 欄位Index
+	 * @param dateFormat 日期格式
+	 * @return 欄位值(Object格式)
+	 */
+	private Object getCellValues(HSSFRow row,int CellIndex,HSSFDataFormat dateFormat){
+		Object CellValues="";
+		HSSFCell cell = row.getCell((short)CellIndex);
+		Object obj = TableToExcel.getCellValue(cell, dateFormat);
+		CellValues = (Object) getCellValue(obj,cell);
+		return CellValues;
+	}
+	/***** 轉換欄位資料格式 *****/
+	/**
+	 * @param objvalue 欄位值
+	 * @param cell	欄位格式
+	 * @return 欄位值
+	 */
+	private String getCellValue(Object objvalue,HSSFCell cell){
+		String value="";
+		if(objvalue!=null){
+			if(objvalue instanceof Date){//格式：日期
+        	    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        	    value=sdf.format(objvalue);
+        	}else{
+        		switch (cell.getCellType()) {//取得Cell欄位格式
+		    	case HSSFCell.CELL_TYPE_NUMERIC://格式：數字(Double)
+					DecimalFormat decimalFormat = new DecimalFormat("####.####");
+					value =(decimalFormat.format(cell.getNumericCellValue()));
+					break;
+				case HSSFCell.CELL_TYPE_STRING://格式：文字
+					value=cell.getStringCellValue();
+					break;
+				default://格式定義：文字
+					value=cell.getStringCellValue();
+					break;
+				}
+        	}
+		}else{//若為Null，則改為空值
+			value="";
+		}
+		return value;
 	}
 
 }
