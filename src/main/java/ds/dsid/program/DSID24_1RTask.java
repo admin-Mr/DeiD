@@ -91,7 +91,7 @@ public class DSID24_1RTask {
 		
 		HSSFFont font4 = wb.createFont();
 		font4.setFontName("新細明體");    				//设置字體  
-		font4.setFontHeightInPoints((short) 10.5);    		//设置字体高度  
+		font4.setFontHeightInPoints((short) 8.5);    		//设置字体高度  
 		font4.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 	
 		
 		HSSFCellStyle style4 = wb.createCellStyle();
@@ -192,13 +192,11 @@ public class DSID24_1RTask {
 
 	private static void SetColumnWidth(HSSFSheet sheet1) {
 		// TODO Auto-generated method stub
-		
-		
 		sheet1.setColumnWidth(0, 31*256);
-		sheet1.setColumnWidth(1, 20*256);
-		sheet1.setColumnWidth(2, 4*256);
+		sheet1.setColumnWidth(1, 22*256);
+		sheet1.setColumnWidth(2, 2*256);
 		sheet1.setColumnWidth(3, 31*256);
-		sheet1.setColumnWidth(4, 20*256);
+		sheet1.setColumnWidth(4, 22*256);
 		
 		HSSFPrintSetup print = sheet1.getPrintSetup();//得到打印对象
 //		print.setLandscape(false);//true，则表示页面方向为横向；否则为纵向
@@ -219,7 +217,7 @@ public class DSID24_1RTask {
 		
 		HSSFRow row = null;
 		HSSFCell cell = null;
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");	
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 		
 		PreparedStatement ps1 = null,ps2 = null;
 		ResultSet rs1 = null,rs2 = null;
@@ -239,11 +237,10 @@ public class DSID24_1RTask {
 		try {
 			ps1 = conn.prepareStatement(sql1);
 			rs1 = ps1.executeQuery();			
-			while(rs1.next()){				
+			while(rs1.next()){
 				cou++;
 				//調整行數
 				rowNum=(int) (24*(Math.floor((cou-1)/2)));			
-				
 				if(cou%2==1){
 					cellNum=0;
 				}else{
@@ -371,6 +368,7 @@ public class DSID24_1RTask {
 							}
 							
 							cell = row.createCell(cellNum);
+							sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, cellNum, cellNum+1));
 							cell.setCellType(1);
 							cell.setCellStyle(style4);
 							String Pid01="",Pid02="";
@@ -384,9 +382,7 @@ public class DSID24_1RTask {
 							
 							cell = row.createCell(cellNum+1);
 							cell.setCellType(1);
-							cell.setCellStyle(style4);
-							String PidColor=GetPidColor(rs2.getString("WORK_ORDER_ID"),conn);
-							cell.setCellValue(PidColor);
+							cell.setCellStyle(style6);
 									
 							rowNum++;
 							if(cou%2==1){
@@ -408,6 +404,7 @@ public class DSID24_1RTask {
 							
 							//Group 信息
 							String LACE_GROUP="",GROUP_NAME="",LACE_COLOR="";
+							String Pid03="",Pid04="";
 							for(int gr=1;gr<14 ;gr++){
 								rowNum++;
 								
@@ -430,6 +427,7 @@ public class DSID24_1RTask {
 									cell.setCellStyle(style3);
 								}							
 								GROUP_NAME=GetGroupName(rs2.getString("NIKE_SH_ARITCLE"),"GROUP"+gr,conn);
+//								System.out.println("GROUP_NAME"+GROUP_NAME);
 								cell.setCellValue(GROUP_NAME);
 								
 								cell = row.createCell(cellNum+1);
@@ -439,7 +437,22 @@ public class DSID24_1RTask {
 								}else{
 									cell.setCellStyle(style2);
 								}	
-								cell.setCellValue(rs2.getString("GROUP"+gr));
+								
+								if("鞋墊PID".equals(GROUP_NAME)&&GROUP_NAME!=null){
+//									System.out.println("进入鞋垫PID.........");
+									if(!"".equals(rs2.getString("PID03"))&&rs2.getString("PID03")!=null){
+										Pid03=rs2.getString("PID03").replace("null", "");
+									}
+									if(!"".equals(rs2.getString("PID04"))&&rs2.getString("PID04")!=null){
+										Pid04=rs2.getString("PID04").replace("null", "");
+									}
+
+								}
+								if("鞋墊PID".equals(GROUP_NAME)&&rs2.getString("GROUP"+gr)==null){
+									cell.setCellValue(Labels.getLabel("DSID.MSG0209")+":"+Pid03+"  "+Labels.getLabel("DSID.MSG0210")+":"+Pid04);
+								}else{
+									cell.setCellValue(rs2.getString("GROUP"+gr));
+								}
 								
 								if(!"".equals(GROUP_NAME)&&GROUP_NAME!=null){
 									if("鞋帶".equals(GROUP_NAME)){
@@ -451,7 +464,6 @@ public class DSID24_1RTask {
 							}	
 							
 							rowNum++;
-							
 							if(cou%2==1){
 								row = sheet.createRow(rowNum);
 								row.setHeightInPoints(14);
@@ -545,7 +557,7 @@ public class DSID24_1RTask {
 
 		
 	}
-
+	
 
 	private static String GetPidColor(String WORK_ORDER_ID, Connection conn) throws SQLException {
 		// TODO Auto-generated method stub
