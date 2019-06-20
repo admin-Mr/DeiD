@@ -421,7 +421,7 @@ public class ReadIDPicProgram extends QueryWindow {
 					+ "from dsid30 left join dsid23 "
 					+ "on dsid23.SH_STYLENO = dsid30.SH_STYLENO and dsid23.MODEL_NA = dsid30.MODEL_NA "
 					+ "where  dsid30.WORK_ORDER_ID like '%" + bcda + "%' and url1= '" + Bcs + "'";
-			//System.out.println(" ----- User Xeid9 : " + sql);
+			System.out.println(" ----- User Xeid9 : " + sql);
 		} else {
 
 			sql = "SELECT od_no, order_date, ship_group_id, work_order_id, sh_styleno, left_size_run FROM dsid30 "
@@ -510,7 +510,7 @@ public class ReadIDPicProgram extends QueryWindow {
 				+ "dsid65.bottom_ok_date, dsid65.repair_type, dsid65.is_del, dsid65.is_re, dsid65.is_repair, dsid30.postalcode "
 				+ "from dsid65, dsid30 " + "where dsid65.work_order_id like '%" + Bc
 				+ "' and dsid65.od_no = dsid30.od_no";
-		// System.out.println(" ----- State Sql : " + sql);
+		 System.out.println(" ----- State Sql : " + sql);
 
 		try {
 			ps = Conn.prepareStatement(sql);
@@ -635,7 +635,7 @@ public class ReadIDPicProgram extends QueryWindow {
 				+ "COUNT(CASE  WHEN t.SEWING_DATE =trunc(sysdate) THEN 'SEWING_DATE' END) SEWING_DATE, "
 				+ "COUNT(CASE  WHEN t.FORMING_DATE =trunc(sysdate) THEN  'FORMING_DATE' END) FORMING_DATE "
 				+ "FROM DSID65 t WHERE IS_DEL ='N'";
-		// System.out.println(" ----- Data3 : " + sql);
+		 System.out.println(" ----- Data3 : " + sql);
 
 		try {
 			ps = Conn.prepareStatement(sql);
@@ -697,93 +697,174 @@ public class ReadIDPicProgram extends QueryWindow {
 		}
 		return list;
 	}
-
 	// 獲取掃描圖片鏈接
 	public String[] getUrl(Object Bcstr) throws SQLException {
 
-		ResultSet rs = null, rs1 = null;
-		PreparedStatement ps = null, ps1 = null;
+		ResultSet rs = null, rs1 = null,rs2=null,rs3=null,rs4=null;
+		PreparedStatement ps = null, ps1 = null,ps2=null,ps3=null,ps4=null;
 		Connection Conn = Common.getService1Conn();
 		String[] url = new String[5];
 		String sqlurl1 = null, sqlurl2 = null, sqlurl3 = null, sqlurl4 = null;
 		// String Bcstr = Bc.toString();
-
-		System.out.println(" Bc 測試輸出 : " + Bcstr);
-
-		String sql = "select url1, url2, url3, url4 from dsid30_pic where work_order_id like '%" + Bcstr + "'";
-		System.out.println(" ----- Dsid30 Pic: \n " + sql);
-
-		try {
-			ps = Conn.prepareStatement(sql);
-			rs = ps.executeQuery();
-
-			if (!rs.next()) {
-
-				sqlurl1 = "url2";
-				sqlurl2 = "url3";
-				sqlurl3 = "url4";
-				sqlurl4 = "url5";
-				System.err.println(" Url 為空!");
-			} else {
-
-				sqlurl1 = rs.getString("url1");
-				sqlurl2 = rs.getString("url2");
-				sqlurl3 = rs.getString("url3");
-				sqlurl4 = rs.getString("url4");
-				System.err.println(" Url 非空!");
-			}
-
-			String sql1 = "select " + sqlurl1 + " url1, " + sqlurl2 + " url2, " + sqlurl3 + " url3, " + sqlurl4
-					+ " url4 " + "from dsid30 where work_order_id like '%" + Bcstr + "' ";
-			System.out.println(" ----- Dsid30 Url: " + sql1);
-
+		
+		if (user == "XEID9" || "XEID9".equals(user)) {
+			System.out.println("XEID9账号进入");
+			String Bc="";
+			BcDate = format.format(BarcodeDate.getValue());
+			String BcDemo = Barcode.getValue();
+			Bc = SetBarDate(Bc, BcDemo, BcDate);
+			
+			String NK_MODEL_NA="";
+			String sql7="SELECT NIKE_SH_ARITCLE,WORK_ORDER_ID FROM DSID30 WHERE WORK_ORDER_ID like '%"+Bc+"' AND URL1='"+Bcstr+"' ";
+			System.out.println("型体查询:"+sql7);
 			try {
-				ps1 = Conn.prepareStatement(sql1);
-				rs1 = ps1.executeQuery();
-
-				if (rs1.next()) {
-
-					url[0] = rs1.getString("url1");
-					url[1] = rs1.getString("url2");
-					url[2] = rs1.getString("url3");
-					url[3] = rs1.getString("url4");
-					url[4] = url[0] + "," + url[1] + "," + url[2] + "," + url[3];
-
+				ps2 = Conn.prepareStatement(sql7);
+				rs2 = ps2.executeQuery();
+				if (rs2.next()) {
+					NK_MODEL_NA=rs2.getString("NIKE_SH_ARITCLE");
 				}
-				rs1.close();
-				ps1.close();
+				rs2.close();
+				ps2.close();
 			} catch (Exception e) {
 				// TODO: handle exception
-				Messagebox.show("Dsid30 "+Labels.getLabel("DSID.MSG0243")+"!");
 				e.printStackTrace();
 			}
+			if(NK_MODEL_NA.contains("SU19")){
+				System.out.println("36和55型体进入此处判断：：："+NK_MODEL_NA);
+				String sql8="SELECT URL2,URL3,URL4,URL5,URL6,URL7 FROM DSID30 WHERE WORK_ORDER_ID like'%"+Bc+"' AND URL1='"+Bcstr+"' ";
+				System.err.println(sql8);
+				try {
+					ps3 = Conn.prepareStatement(sql8);
+					rs3 = ps3.executeQuery();
+					if (rs3.next()) {
+						url[0] = rs3.getString("url6");
+						url[1] = rs3.getString("url3");
+						url[2] = rs3.getString("url4");
+						url[3] = rs3.getString("url5");
+						url[4] = url[0] + "," + url[1] + "," + url[2] + "," + url[3];
+					}
+					rs3.close();
+					ps3.close();
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				for (int i = 0; i < url.length; i++) {
+					System.out.println(" ----- Url Data: " + url[i]);
+				}
+			}else{
+				System.out.println("其他型体进入此处判断：：："+NK_MODEL_NA);
+				String sql8="SELECT URL2,URL3,URL4,URL5,URL6,URL7 FROM DSID30 WHERE WORK_ORDER_ID like '%"+Bc+"' AND URL1='"+Bcstr+"' ";
+				try {
+					ps4 = Conn.prepareStatement(sql8);
+					rs4 = ps4.executeQuery();
+					if (rs4.next()) {
+						url[0] = rs4.getString("url2");
+						url[1] = rs4.getString("url3");
+						url[2] = rs4.getString("url5");
+						url[3] = rs4.getString("url6");
+						url[4] = url[0] + "," + url[1] + "," + url[2] + "," + url[3];
+					}
+					rs4.close();
+					ps4.close();
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				for (int i = 0; i < url.length; i++) {
+					System.out.println(" ----- Url Data: " + url[i]);
+				}
+				
+			}
+		}else{
+				System.out.println("其他账号进入");
+				System.out.println(" Bc 測試輸出 : " + Bcstr);
+				String sql = "select url1, url2, url3, url4 from dsid30_pic where work_order_id like '%" + Bcstr + "'";
+				System.out.println(" ----- Dsid30 Pic: \n " + sql);
+				try {
+					ps = Conn.prepareStatement(sql);
+					rs = ps.executeQuery();
+					if (!rs.next()) {
+						sqlurl1 = "url2";//2
+						sqlurl2 = "url3";
+						sqlurl3 = "url4";
+						sqlurl4 = "url5";
+						System.err.println(" Url 為空!");
+					} else {
 
-			for (int i = 0; i < url.length; i++) {
-				System.out.println(" ----- Url Data: " + url[i]);
-			}
+						sqlurl1 = rs.getString("url1");
+						sqlurl2 = rs.getString("url2");
+						sqlurl3 = rs.getString("url3");
+						sqlurl4 = rs.getString("url4");
+						System.err.println(" Url 非空!");
+					}
+		
+					String sql1 = "select " + sqlurl1 + " url1, " + sqlurl2 + " url2, " + sqlurl3 + " url3, " + sqlurl4
+							+ " url4  "+"from dsid30 where work_order_id like '%" + Bcstr + "' ";
+					System.out.println(" ----- Dsid30 Url: " + sql1);
 
-			rs.close();
-			ps.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			Messagebox.show("Dsid Pic "+Labels.getLabel("DSID.MSG0244")+"!");
-			e.printStackTrace();
-		} finally {
-			if(ps != null){
-				ps.close();
-			}
-			if(rs != null){
-				rs.close();
-			}
-			if(ps1 != null){
-				ps1.close();
-			}
-			if(rs1 != null){
-				rs1.close();
-			}
-			Common.closeConnection(Conn);
+					try {
+						ps1 = Conn.prepareStatement(sql1);
+						rs1 = ps1.executeQuery();
+						if (rs1.next()) {
+							url[0] = rs1.getString("url1");
+							url[1] = rs1.getString("url2");
+							url[2] = rs1.getString("url3");
+							url[3] = rs1.getString("url4");
+							url[4] = url[0] + "," + url[1] + "," + url[2] + "," + url[3];
+						}
+						rs1.close();
+						ps1.close();
+					} catch (Exception e) {
+						// TODO: handle exception
+						Messagebox.show("Dsid30 "+Labels.getLabel("DSID.MSG0243")+"!");
+						e.printStackTrace();
+					}
+
+					for (int i = 0; i < url.length; i++) {
+						System.out.println(" ----- Url Data: " + url[i]);
+					}
+
+					rs.close();
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					Messagebox.show("Dsid Pic "+Labels.getLabel("DSID.MSG0244")+"!");
+					e.printStackTrace();
+				} finally {
+					if(ps != null){
+						ps.close();
+					}
+					if(rs != null){
+						rs.close();
+					}
+					if(ps1 != null){
+						ps1.close();
+					}
+					if(rs1 != null){
+						rs1.close();
+					}
+					if(ps2 != null){
+						ps2.close();
+					}
+					if(rs2 != null){
+						rs2.close();
+					}
+					if(ps3 != null){
+						ps3.close();
+					}
+					if(rs3 != null){
+						rs3.close();
+					}
+					if(ps4 != null){
+						ps4.close();
+					}
+					if(rs4 != null){
+						rs4.close();
+					}
+					Common.closeConnection(Conn);
+				}
 		}
-
 		return url;
 	}
 

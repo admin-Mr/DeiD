@@ -91,7 +91,7 @@ public class DSID24_1RTask {
 		
 		HSSFFont font4 = wb.createFont();
 		font4.setFontName("新細明體");    				//设置字體  
-		font4.setFontHeightInPoints((short) 8.5);    		//设置字体高度  
+		font4.setFontHeightInPoints((short) 8.0);    		//设置字体高度  
 		font4.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);		//设置字體樣式 	
 		
 		HSSFCellStyle style4 = wb.createCellStyle();
@@ -202,9 +202,9 @@ public class DSID24_1RTask {
 //		print.setLandscape(false);//true，则表示页面方向为横向；否则为纵向
 		print.setPaperSize(HSSFPrintSetup.A4_PAPERSIZE);//纸张设置
 		print.setScale((short)95);//缩放比例80%(设置为0-100之间的值)
-		sheet1.setMargin(HSSFSheet.TopMargin, (double)0.39); //页边距（上）
+		sheet1.setMargin(HSSFSheet.TopMargin, (double)0.39); //页边距（上）0.39
 		sheet1.setMargin(HSSFSheet.BottomMargin, (double)0); //页边距（下）
-		sheet1.setMargin(HSSFSheet.LeftMargin, (double)0.21); //页边距（左）
+		sheet1.setMargin(HSSFSheet.LeftMargin, (double)0.21); //页边距（左）0.21
 		sheet1.setMargin(HSSFSheet.RightMargin, (double)0); //页边距（右）
 
 
@@ -271,7 +271,7 @@ public class DSID24_1RTask {
 							}
 							
 							cell.setCellValue(Labels.getLabel("DSID.MSG0206")+":"+rs2.getString("ROUND")+"     "+type);
-							
+							System.out.println("轮次：：："+Labels.getLabel("DSID.MSG0206")+":"+rs2.getString("ROUND")+"     "+type);
 							cell = row.createCell(cellNum+1);
 							cell.setCellType(1);
 							cell.setCellStyle(style1);
@@ -362,7 +362,7 @@ public class DSID24_1RTask {
 							rowNum++;
 							if(cou%2==1){
 								row = sheet.createRow(rowNum);
-								row.setHeightInPoints(24);
+								row.setHeightInPoints(20);
 							}else{
 								row = sheet.getRow(rowNum);
 							}
@@ -378,7 +378,7 @@ public class DSID24_1RTask {
 							if(!"".equals(rs2.getString("PID02"))&&rs2.getString("PID02")!=null){
 								Pid02=rs2.getString("PID02").replace("null", "");
 							}
-							cell.setCellValue("PID("+Labels.getLabel("DSID.MSG0209")+":"+Pid01+"  "+Labels.getLabel("DSID.MSG0210")+":"+Pid02+")");
+							cell.setCellValue("PID ("+Labels.getLabel("DSID.MSG0209")+":"+Pid01+"  "+Labels.getLabel("DSID.MSG0210")+":"+Pid02+")");
 							
 							cell = row.createCell(cellNum+1);
 							cell.setCellType(1);
@@ -417,7 +417,7 @@ public class DSID24_1RTask {
 									row.setHeightInPoints(24);
 								}else{
 									row.setHeightInPoints(16);
-								}								
+								}
 								
 								cell = row.createCell(cellNum);
 								cell.setCellType(1);
@@ -440,16 +440,17 @@ public class DSID24_1RTask {
 								
 								if("鞋墊PID".equals(GROUP_NAME)&&GROUP_NAME!=null){
 //									System.out.println("进入鞋垫PID.........");
-									if(!"".equals(rs2.getString("PID03"))&&rs2.getString("PID03")!=null){
-										Pid03=rs2.getString("PID03").replace("null", "");
-									}
-									if(!"".equals(rs2.getString("PID04"))&&rs2.getString("PID04")!=null){
+									row.setHeightInPoints(20);
+									if(!"".equals(rs2.getString("PID04"))&&rs2.getString("PID03")!=null){
 										Pid04=rs2.getString("PID04").replace("null", "");
+									}
+									if(!"".equals(rs2.getString("PID03"))&&rs2.getString("PID04")!=null){
+										Pid03=rs2.getString("PID03").replace("null", "");
 									}
 
 								}
 								if("鞋墊PID".equals(GROUP_NAME)&&rs2.getString("GROUP"+gr)==null){
-									cell.setCellValue(Labels.getLabel("DSID.MSG0209")+":"+Pid03+"  "+Labels.getLabel("DSID.MSG0210")+":"+Pid04);
+									cell.setCellValue(Labels.getLabel("DSID.MSG0209")+":"+Pid04+"  "+Labels.getLabel("DSID.MSG0210")+":"+Pid03);
 								}else{
 									cell.setCellValue(rs2.getString("GROUP"+gr));
 								}
@@ -460,7 +461,6 @@ public class DSID24_1RTask {
 										LACE_COLOR=rs2.getString("GROUP"+gr);
 									}
 								}
-
 							}	
 							
 							rowNum++;
@@ -476,6 +476,7 @@ public class DSID24_1RTask {
 							cell.setCellStyle(style3);
 							cell.setCellValue(Labels.getLabel("DSID.MSG0214")+"                "+get_lace_length(rs2.getString("MODEL_NA"),Sh_list,rs2.getString("LEFT_SIZE_RUN"),LACE_GROUP,LACE_COLOR,Conn)+"    "+LACE_COLOR);
 							
+							System.out.println("码数：：：："+rs2.getString("LEFT_SIZE_RUN"));
 							cell = row.createCell(cellNum+1);
 							cell.setCellType(1);
 							cell.setCellStyle(style2);
@@ -623,7 +624,7 @@ public class DSID24_1RTask {
 
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-//		System.out.println(">>>sql"+sql);
+		System.out.println(">>>sql"+sql);
 		
 		try {
 			pstm = Conn.prepareStatement(sql);
@@ -631,7 +632,7 @@ public class DSID24_1RTask {
 			while(rs.next())
 			{
 				lace_len=rs.getString("EL_CNAME").substring(rs.getString("EL_CNAME").length()-5);
-			  
+			  System.out.println("鞋带长度：："+lace_len);
 			}
 			rs.close();
 		} 
@@ -660,7 +661,7 @@ public class DSID24_1RTask {
 		ResultSet  rs1 = null;
 		List<String> list = new ArrayList<String>();
 		String Sql="SELECT * FROM DSID12 WHERE SH_STYLENO='"+SH_STYLENO+"'";
-//		System.err.println(">>>"+Sql);
+		System.err.println("这个是++++++>>>"+Sql);
 		try {
 			ps1 = conn.prepareStatement(Sql);
 			rs1 = ps1.executeQuery();			

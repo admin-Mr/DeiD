@@ -186,7 +186,9 @@ public class DSID01MReceive extends OpenWinCRUD {
 							+ rs1.getString("MODEL_NA") + "','" + rs1.getString("GROUP_NO") + "','"
 							+ rs1.getString("COLOR") + "','" + rs1.getString("EL_NO") + "','" + rs1.getString("NUM")
 							+ "')";
+					
 				}
+				System.out.println("插入至DSID01_log"+InsSql);
 				ps1.close();
 				rs1.close();
 			} catch (SQLException e) {
@@ -244,6 +246,7 @@ public class DSID01MReceive extends OpenWinCRUD {
 							Boolean ModelNum = CheckModel(rs1.getString("NIKE_SH_ARITCLE"), Last_WOI_List, conn);
 							if (ModelNum == true) {
 								WOI_List += rs1.getString("WORK_ORDER_ID") + ",";
+								System.out.println("单号：："+WOI_List);
 								for (int j = 0; j < GroupList.size(); j++) {
 									Enough = CheckEnough(MODEL_NA, GroupList.get(j), rs1.getString(GroupList.get(j)),
 											WOI_List, conn);
@@ -478,9 +481,10 @@ public class DSID01MReceive extends OpenWinCRUD {
 		PreparedStatement ps1 = null;
 		ResultSet rs1 = null;
 		String EL_NO = "";
+		System.out.println("这个到底是什么啊："+COLOR);
 		String Sql = "SELECT * FROM DSID01_TEMP_LOG WHERE MODEL_NA='" + MODEL_NA + "' AND GROUP_NO='" + GROUP_NO
 				+ "' AND COLOR='" + COLOR + "' ORDER BY NUM";
-		// System.err.println("--可做>>>>>\n"+Sql);
+//		 System.err.println("aaaaaaAaaa>>>>>\n"+Sql);
 		try {
 			ps1 = conn.prepareStatement(Sql);
 			rs1 = ps1.executeQuery();
@@ -611,11 +615,18 @@ public class DSID01MReceive extends OpenWinCRUD {
 		// TODO Auto-generated method stub
 		Boolean Enough = true;
 		WOI_List = WOI_List.substring(0, WOI_List.length() - 1).replace(",", "','");
+		System.out.println("進入判斷：："+COLOR);
+		System.out.println("WOI_List:"+WOI_List);
 		PreparedStatement ps1 = null;
 		ResultSet rs1 = null;
 		String Max_num = "0.0", Pre_num = "0.0";
+		if(COLOR==null){
+			WOI_List = WOI_List.substring(0, WOI_List.length()).replace(",", "','");
+			Messagebox.show("缺少GROUP颜色资料请检查"+WOI_List+"单号");
+		}
 		if (COLOR.length() > 3) {
 			COLOR = COLOR.substring(0, 3);
+			System.out.println("COLOR："+COLOR);
 		}
 		String Sql = "SELECT * FROM DSID01_TEMP_LOG WHERE MODEL_NA='" + MODEL_NA + "' AND GROUP_NO='" + GROUP_NO
 				+ "' AND COLOR LIKE '" + COLOR + "%' ORDER BY NUM";
@@ -653,10 +664,10 @@ public class DSID01MReceive extends OpenWinCRUD {
 				ps1.close();
 			}
 		}
-
 		if (Double.valueOf(Max_num) < Double.valueOf(Pre_num)) {
 			Enough = false;
 		}
+		
 		if(MODEL_NA.contains("PEGASUS+35 ESS SU18 ID")&&"GROUP2".equals(GROUP_NO)){
 			Enough=true;
 		}
