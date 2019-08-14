@@ -105,6 +105,8 @@ public class DSID21MProgram extends Master {
 		System.out.println("进入excel 读取内容");
 		Connection conn = Common.getDbConnection();
 		HSSFWorkbook wb = new HSSFWorkbook(input);
+		PreparedStatement ps=null;
+		ResultSet rs=null;
 		// 型體
 		// Model_na = txtMODEL_NA.getValue();
 		String MODEL_NA = "", MT_USAGE = "", GR_NO = "", GR_NA = "", COLOR = "", EL_NO = "", EL_NA = "", SIZE_FD = "",
@@ -140,28 +142,29 @@ public class DSID21MProgram extends Master {
 				SIZE_FD = getCellValue(row.getCell(7)); // 分段
 				NOTE = getCellValue(row.getCell(8)); // 備註
 				TYPE = getCellValue(row.getCell(9)); // 類型
-
+			
 				Upsql += " INTO DSID21 (MODEL_NA,ITEMS,MT_USAGE,TYPE,GR_NO,GR_NA,COLOR,EL_NO,EL_NA,SIZE_FD,NOTE,UP_USER,UP_DATE) VALUES('"
 						+ MODEL_NA + "','" + ITEMS + "','" + MT_USAGE + "','" + TYPE + "','" + GR_NO + "','" + GR_NA
 						+ "','" + COLOR + "','" + EL_NO + "','" + EL_NA + "','" + SIZE_FD + "','" + NOTE + "','"
 						+ _userInfo.getAccount() + "',SYSDATE)";
-
 			}
-			String Delsql = "DELETE DSID21 WHERE MODEL_NA='" + MODEL_NA + "'";
-			System.out.println(" ----- 刪除 : " + Delsql);
+			
+			if(SIZE_FD!=null || TYPE!=null || COLOR!=null){
+				String Delsql = "DELETE DSID21 WHERE MODEL_NA='" + MODEL_NA + "'";
+				System.out.println(" ----- 刪除 : " + Delsql);
 
-			try {
-				PreparedStatement pstm = conn.prepareStatement(Delsql);
-				pstm.executeUpdate();
-				pstm.close();
-				conn.commit();
-			} catch (Exception e) {
-				Errmessage = "Delete false!"+e;
-				e.printStackTrace();
-				conn.rollback();
-				return;
+				try {
+					PreparedStatement pstm = conn.prepareStatement(Delsql);
+					pstm.executeUpdate();
+					pstm.close();
+					conn.commit();
+				} catch (Exception e) {
+					Errmessage = "Delete false!"+e;
+					e.printStackTrace();
+					conn.rollback();
+					return;
 			}
-
+			
 			String InSql = " INSERT ALL " + Upsql + " SELECT * FROM DUAL";
 			System.out.println(" ----- 匯入 : " + InSql);
 
@@ -176,7 +179,9 @@ public class DSID21MProgram extends Master {
 				conn.rollback();
 				return;
 			}
-
+			}else{
+				Messagebox.show("size分段、状态码、颜色,不能为空,请检查！！！！");
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			Errmessage="Input false!"+e;

@@ -268,7 +268,7 @@ public class DSID01MArrange extends QueryWindow{
 					rs2 = ps2.executeQuery();	
 					while(rs2.next()){
 						String Extrasql="";
-						if(rs2.getString("NIKE_SH_ARITCLE").contains("PEGASUS")){
+						if(rs2.getString("NIKE_SH_ARITCLE").contains("PEGASUS 36 ESS")){
 							Extrasql=" GROUP2,";
 						}
 						String 	sql3="SELECT A.OD_NO,ROWNUM MODEL_NUM,MOD(ROWNUM,8) ALL_NUM ,TOOLING_SIZE FROM ( SELECT * FROM DSID01 A WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD')='"+Format.format(query_order_date.getValue())+"' AND TYPE='"+Typelist.get(i)+"' AND NIKE_SH_ARITCLE='"+rs2.getString("NIKE_SH_ARITCLE")+"' AND STATUS='7' ORDER BY "+Extrasql+" TO_NUMBER(TOOLING_SIZE) DESC) A";	
@@ -280,7 +280,7 @@ public class DSID01MArrange extends QueryWindow{
 								String MODEL_NUM=rs3.getString("MODEL_NUM");
 								String ALL_NUM=rs3.getString("ALL_NUM");
 								
-								if("1".equals(ALL_NUM)||ALL_NUM=="1"){
+								if("1".equals(ALL_NUM) || ALL_NUM=="1"){
 									Tolal_num+=1;
 								}
 								

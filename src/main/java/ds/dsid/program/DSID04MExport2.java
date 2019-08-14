@@ -389,7 +389,6 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				// System.out.println(rs.getString("LA_DATE")+">>>>>"+rs.getString("WEEK")+">>>>>"+rs.getString("DAY1"));
 				if (rs.getInt("WEEK") > 0) {
 					His.add(rs.getDate("PO_DATE"));
 					His.add(rs.getInt("WEEK"));
@@ -411,7 +410,6 @@ public class DSID04MExport2 extends OpenWinCRUD {
 			HSSFCellStyle style3, HSSFCellStyle style4, HSSFCellStyle style7, HSSFCellStyle style8, Connection conn,
 			String MODEL_NA) {
 		// TODO Auto-generated method stub
-
 		sheet5.setColumnWidth(0, 35 * 256);
 		for (int i = 2; i < 32; i++) {
 			sheet5.setColumnWidth(i, 14 * 256);
@@ -530,7 +528,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 		}
 
 		int rowNum = 14, cellNum = 2;
-		String Last_color = "", ET_US = "";
+		String Last_color = "", ET_US ="";
 		int c_Num = cellNum;
 		String sql2 = "SELECT * FROM DSID04_5 WHERE MODEL_NA='" + MODEL_NA + "' ORDER BY EL_SEQ";
 		System.out.println(">>>>>5555555<<<<<<<"+sql2);
@@ -3506,7 +3504,7 @@ public class DSID04MExport2 extends OpenWinCRUD {
 				" Order Quantity\n(USD)", "Factory Buy\n(UOM)", "Factory buy\n(days)", "Factory Buy\n(USD)",
 				"Inventory Days After Buy", "EOH(UOM)", "EOH(USD)");
 
-		// System.err.println(">>>"+heartname.size());
+		 System.err.println(">>>在这里......"+heartname.size());
 		for (int i = 0; i < heartname.size(); i++) {
 
 			cell = row.createCell(cellnum);

@@ -620,11 +620,11 @@ public class DSID24_1RTask {
 			"ID35.SH_LASTNO,ID35.PART_NO1,ID35.PART_NO2,ID35.GROUP_NO FROM DSID35 ID35, DSID36 ID36 WHERE ID35.MODEL_NA = '"
 			+MODEL_NA+"' AND ID35.VERSION = '"+sh_list.get(0)+"-"+sh_list.get(2)+"' AND ID35.SH_LASTNO = '"+sh_list.get(1)+"' AND ID35.PART_NO2 IN (SELECT "+
 			"PART_NO FROM DSEL10 WHERE PART_CNA LIKE '鞋帶%') AND ID35.MODEL_NA = ID36.MODEL_NA AND ID35.VERSION = ID36.VERSION "
-           +"AND ID35.SH_LASTNO = ID36.SH_LASTNO AND ID35.PART_NO1 = ID36.PART_NO1 AND ID35.PART_NO2 = ID36.PART_NO2 AND ID36.Q"+size+" > 0) AND GROUP_NO='"+LACE_GROUP.replace("GROUP", "GROUP ")+"' AND COLOR='"+LACE_COLOR+"'";
+           +"AND ID35.SH_LASTNO = ID36.SH_LASTNO AND ID35.PART_NO1 = ID36.PART_NO1 AND ID35.PART_NO2 = ID36.PART_NO2 AND ID36.Q"+size+" > 0) AND GROUP_NO='"+LACE_GROUP.replace("GROUP", "GROUP ")+"' AND COLOR='"+LACE_COLOR.replace(" ","")+"'";
 
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		System.out.println(">>>sql"+sql);
+		System.out.println(">>>sql++++++++"+sql);
 		
 		try {
 			pstm = Conn.prepareStatement(sql);

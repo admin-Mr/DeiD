@@ -91,7 +91,7 @@ public class DSID21MBatDelete extends OpenWinCRUD{
 		PreparedStatement  selectPs = null, deletePs;
 		
 		String AndModel = "";
-		String AndDate = "and to_char(import_date,'YYYY/MM/DD') between '"+batdate1+"' and '"+batdate2+"'";
+		String AndDate = "and to_char(UP_DATE,'YYYY/MM/DD') between '"+batdate1+"' and '"+batdate2+"'";
 		
 		if(modelna != "All"){
 			AndModel = " and model_na = '"+modelna+"'";

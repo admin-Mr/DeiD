@@ -224,21 +224,21 @@ public class DSID21_1RTask {
 				if(up_date==true &&!"".equals(rs.getString("TYPE"))&&rs.getString("TYPE")!=null){
 					if("UPPER".equals(rs.getString("MT_USAGE"))){
 						if(rs.getString("EL_NO")==null){
+							System.err.println("进入汇总..................");//型体,GROUP,颜色
 							InSql="UPDATE DSID04_1 SET COLOR_PRE='"+COLOR_PRE+"' WHERE MODEL_NA='"+rs.getString("MODEL_NA")+"' "
 									+ "AND GROUP_NO='"+rs.getString("GR_NO")+"' AND COLOR='"+rs.getString("COLOR")+"' AND GR_NA='"+rs.getString("GR_NA")+"'";
-						
 						}else{
-							
+							System.out.println("进入普通...................");//型体,GROUP,材料编号,颜色
 						InSql="UPDATE DSID04_1 SET COLOR_PRE='"+COLOR_PRE+"' WHERE MODEL_NA='"+rs.getString("MODEL_NA")+"' "
 								+ "AND GROUP_NO='"+rs.getString("GR_NO")+"' AND EL_NO='"+rs.getString("EL_NO")+"' AND COLOR='"+rs.getString("COLOR")+"' AND GR_NA='"+rs.getString("GR_NA")+"'";
-						}	
-					}else if("VAMP".equals(rs.getString("MT_USAGE"))){
+						}
+					}else if("VAMP".equals(rs.getString("MT_USAGE"))){//型体,材料编号,颜色
 						InSql="UPDATE DSID04_2 SET COLOR_PRE='"+COLOR_PRE+"' WHERE MODEL_NA='"+rs.getString("MODEL_NA")+"' AND EL_NO='"+rs.getString("EL_NO")+"' AND COLOR='"+rs.getString("COLOR")+"'";
-					}else if("LABEL".equals(rs.getString("MT_USAGE"))){
+					}else if("LABEL".equals(rs.getString("MT_USAGE"))){//型体,材料编号,颜色
 						InSql="UPDATE DSID04_3 SET COLOR_PRE='"+COLOR_PRE+"' WHERE MODEL_NA='"+rs.getString("MODEL_NA")+"' AND EL_NO='"+rs.getString("EL_NO")+"' AND COLOR='"+rs.getString("COLOR")+"'";
-					}else if("LACE".equals(rs.getString("MT_USAGE"))){
+					}else if("LACE".equals(rs.getString("MT_USAGE"))){//型体,材料编号,颜色
 						InSql="UPDATE DSID04_4 SET COLOR_PRE='"+COLOR_PRE+"' WHERE MODEL_NA='"+rs.getString("MODEL_NA")+"' AND EL_NO='"+rs.getString("EL_NO")+"' AND COLOR='"+rs.getString("COLOR")+"'";
-					}else if("HEEL CLIP".equals(rs.getString("MT_USAGE"))){
+					}else if("HEEL CLIP".equals(rs.getString("MT_USAGE"))){//型体,材料编号,颜色
 						InSql="UPDATE DSID04_5 SET COLOR_PRE='"+COLOR_PRE+"' WHERE MODEL_NA='"+rs.getString("MODEL_NA")+"' AND EL_NO='"+rs.getString("EL_NO")+"' AND COLOR='"+rs.getString("COLOR")+"'";
 					}
 					System.out.println(" ----- 匯入 : " + InSql);
@@ -343,13 +343,18 @@ public class DSID21_1RTask {
 			max_size=SIZE_FD.substring(SIZE_FD.indexOf("-")+1,SIZE_FD.length()-1);
 			System.err.println("size "+min_size+" - "+max_size);
 		}
+		if(COLOR.contains("/")){
+			COLOR=COLOR.substring(0,3);
+			System.out.println("进入此处：："+COLOR);
+		}
 		
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Double Size_Total=0.0;
 		
-		String 	sql="SELECT COUNT(*) COU FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD') BETWEEN '"+sTART+"' AND '"+eND+"' AND MODEL_NA LIKE '%"+mODEL_NA+"' AND "+GROUP_NO+" LIKE '"+COLOR+"' AND TO_NUMBER(TOOLING_SIZE) BETWEEN "+min_size+" AND "+max_size+" ";	
-		System.out.println(">>>>>"+sql);
+		String 	sql="SELECT COUNT(*) COU FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD') BETWEEN '"+sTART+"' AND '"+eND+"' AND MODEL_NA LIKE '%"+mODEL_NA+"' AND "+GROUP_NO+" LIKE '"+COLOR+"%' AND TO_NUMBER(TOOLING_SIZE) BETWEEN "+min_size+" AND "+max_size+" ";	
+		System.out.println("型體："+mODEL_NA+"   COLOR:"+COLOR+"   最小碼："+min_size+"   最大嗎："+max_size+"    GROUP_NO:"+GROUP_NO);
+		System.out.println(">>>>>薩達"+sql);
 		try {
 			ps = conn.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			rs = ps.executeQuery();	
@@ -378,12 +383,15 @@ public class DSID21_1RTask {
 		if(!"".equals(SIZE_FD)){
 			min_size=SIZE_FD.substring(0,SIZE_FD.indexOf("-"));
 			max_size=SIZE_FD.substring(SIZE_FD.indexOf("-")+1,SIZE_FD.length()-1);
-//			System.err.println("size "+min_size+" - "+max_size);
+			System.err.println("size "+min_size+" - "+max_size);
 		}
 		
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Double Size_Total=0.0;
+		if(COLOR.contains("/")){
+			COLOR=COLOR.substring(0, 3);
+		}
 		
 		String 	sql=" SELECT COUNT(*) COU FROM ( SELECT CASE INSTR(MODEL_NA,'W ') WHEN 1 THEN TO_NUMBER(LEFT_SIZE_RUN)-1.5 ELSE TO_NUMBER(LEFT_SIZE_RUN) END LEFT_SIZE  FROM DSID01 WHERE TO_CHAR(ORDER_DATE,'YYYY/MM/DD') BETWEEN '"+sTART+"' AND '"+eND+"' AND MODEL_NA LIKE '%"+mODEL_NA+"' AND "+GROUP_NO+" LIKE '"+COLOR+"' ) WHERE TO_NUMBER(LEFT_SIZE) BETWEEN "+min_size+" AND "+max_size+"";	
 
@@ -417,7 +425,7 @@ public class DSID21_1RTask {
 		if(!"".equals(SIZE_FD)){
 			min_size=SIZE_FD.substring(0,SIZE_FD.indexOf("-"));
 			max_size=SIZE_FD.substring(SIZE_FD.indexOf("-")+1,SIZE_FD.length()-1);
-//			System.err.println("size "+min_size+" - "+max_size);
+			System.err.println("size "+min_size+" - "+max_size);
 		}
 		
 		PreparedStatement ps = null;

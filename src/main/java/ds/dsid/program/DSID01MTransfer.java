@@ -151,7 +151,7 @@ public class DSID01MTransfer extends OpenWinCRUD{
 						GROUP10=rs.getString("GROUP10");
 					}
 					if(!"".equals(rs.getString("GROUP11"))&&rs.getString("GROUP11")!=null){
-						GROUP11=rs.getString("GROUP11");
+						GROUP11=rs.getString("GROUP11").replaceAll("'",",");
 					}
 					
 					if(!"".equals(rs.getString("GROUP12"))&&rs.getString("GROUP12")!=null){					

@@ -53,9 +53,9 @@ public class DSID01MOrder extends OpenWinCRUD{
 	String TABLE="";
 	@Override
 	public void doAfterCompose(Component window) throws Exception {
-		super.doAfterCompose(window);	
+		super.doAfterCompose(window);
 		Execution execution = Executions.getCurrent();
-		TABLE =  (String) execution.getArg().get("TABLE"); 
+		TABLE =  (String) execution.getArg().get("TABLE");
 		System.err.println(">>>>>"+TABLE);
 	}
 	
@@ -215,9 +215,22 @@ public class DSID01MOrder extends OpenWinCRUD{
 									}
 									
 									if("PID".equals(rs3.getString("TYPE"))){
-										if(rs3.getString("PART_NA").startsWith("RIGHT SOCK") || rs3.getString("PART_NA").startsWith("LEFT SOCK")){
-											System.out.println("進入時間=============");
-										if(rs3.getString("PART_NA").contains("RIGHT SOCK PID HOURS")){
+										if(rs3.getString("PART_NA").startsWith("PID HOURS")||rs3.getString("PART_NA").startsWith("PID MINUTES")||rs3.getString("PART_NA").startsWith("PID SECONDS")){
+											System.out.println("进入单个时间PID==============");
+											
+											if(rs3.getString("PART_NA").startsWith("PID HOURS")){
+												pi1+=S1;
+											}else if(rs3.getString("PART_NA").startsWith("PID MINUTES")){
+												pi2+=S1;
+											}else if(rs3.getString("PART_NA").startsWith("PID SECONDS")){
+												pi3+=S1;
+											}
+											pidsql="'"+pi1+":"+pi2+":"+pi3+"'";
+											
+										}else if(rs3.getString("PART_NA").startsWith("RIGHT SOCK") || rs3.getString("PART_NA").startsWith("LEFT SOCK")){
+											System.out.println("進入双時間PID=============");
+										
+											if(rs3.getString("PART_NA").contains("RIGHT SOCK PID HOURS")){
 											pi1+=S1;//時
 										}else if(rs3.getString("PART_NA").contains("LEFT SOCK PID HOURS")){
 											id1+=S1;//時
@@ -232,17 +245,23 @@ public class DSID01MOrder extends OpenWinCRUD{
 										}
 											pidsql=", PID03='"+pi1+":"+pi2+":"+pi3+"' , PID04='"+id1+":"+id2+":"+id3+"'";
 										}else if(rs3.getString("PART_NA").startsWith("SHORT") || rs3.getString("PART_NA").startsWith("LONG")){
-											System.out.println("進入新形體PID。。。。。。。。。。。。。。");
-											if(rs3.getString("PART_NA").contains("SHORT PID LEFT")){
-											id1+="下字體："+S1;
-											}else if(rs3.getString("PART_NA").contains("LONG PID LEFT")){
-											id2+="上字體："+S1+"/";
-											}else if(rs3.getString("PART_NA").contains("SHORT PID RIGHT")){
-											pi1+="下字體："+S1;
-											}else if(rs3.getString("PART_NA").contains("LONG PID RIGHT")){
-											pi2+="上字體："+S1+"/";
-											}
-											pidsql=", PID01='"+id2+id1+"' , PID02='"+pi2+pi1+"' ";
+												System.out.println("進入36形體PID-------------");
+												if(rs3.getString("PART_NA").contains("SHORT PID LEFT")){
+													id1+="下字體："+S1;
+												}else if(rs3.getString("PART_NA").contains("LONG PID LEFT")){
+													id2+="上字體："+S1+"/";
+												}else if(rs3.getString("PART_NA").contains("SHORT PID RIGHT")){
+													pi1+="下字體："+S1;
+												}else if(rs3.getString("PART_NA").contains("LONG PID RIGHT")){
+													pi2+="上字體："+S1+"/";
+												}else if(rs3.getString("PART_NA").contains("SHORT TONGUE PID")){
+													id1+="下字體:"+S1;
+													pi1+="下字體:"+S1;
+												}else if(rs3.getString("PART_NA").contains("LONG TONGUE PID")){
+													id2+="上字體:"+S1+"/";
+													pi2+="上字體:"+S1+"/";
+												}
+												pidsql=", PID01='"+id2+id1+"' , PID02='"+pi2+pi1+"' ";
 											}else{
 											
 											if(rs3.getString("PART_NA").contains("LEFT")&&!rs3.getString("PART_NA").startsWith("SHORT")){
@@ -466,8 +485,6 @@ public class DSID01MOrder extends OpenWinCRUD{
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
 
 	private void Replace(Connection conn) throws SQLException {

@@ -92,7 +92,6 @@ public class DSID21MImport extends OpenWinCRUD{
 		//Model_na = txtMODEL_NA.getValue();
 		String MODEL_NA = "", GR_NO = "", GR_NA = "", COLOR = "", EL_NO = "", EL_NA = "", SIZE_FD = "", NOTE = "";
 		String ITEMS = "", TYPE = "";
-		
         DateFormat Format = new SimpleDateFormat("yyyy/MM/dd");
 		HSSFFormulaEvaluator Formul = new HSSFFormulaEvaluator(wb);		
 		HSSFSheet sheet = wb.getSheetAt(0);	
@@ -130,7 +129,6 @@ public class DSID21MImport extends OpenWinCRUD{
 				" --- 部位名稱: " + GR_NA + " --- 顏色: " + COLOR + " --- 材料編號: " + EL_NO + 
 				" --- 材料名稱: " + EL_NA + " --- Size分段: " + SIZE_FD + " --- 備註: " + NOTE);*/
 				
-		
 				// 原有資料查詢
 				String selectsql = "select * from dsid21 where model_na = '"+MODEL_NA+"' and el_no = '"+EL_NO+"' and gr_no = '"+GR_NO+"' and color = '"+COLOR+"'";
 				System.out.println(" ----- 原有資料查詢 : " + selectsql);
