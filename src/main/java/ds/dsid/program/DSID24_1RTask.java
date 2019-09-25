@@ -219,8 +219,8 @@ public class DSID24_1RTask {
 		HSSFCell cell = null;
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 		
-		PreparedStatement ps1 = null,ps2 = null;
-		ResultSet rs1 = null,rs2 = null;
+		PreparedStatement ps1 = null,ps2 = null,ps3=null;
+		ResultSet rs1 = null,rs2 = null,rs3=null;
 		
 		String ExSql="";		
 		if(!"".equals(NIKE_SH_ARITCLE)){
@@ -292,11 +292,36 @@ public class DSID24_1RTask {
 							cell.setCellStyle(style2);
 							cell.setCellValue(Labels.getLabel("DSID01M.MODEL_NA")+":"+rs2.getString("MODEL_NA")+"       "+Sh_list.get(0));
 							
+							List<String> listsize = new ArrayList<String>();
+							List<String> listsizerun = new ArrayList<String>();
+							
+							int c=0;
+							for (double j = 1; j <=20.5 ; j+=0.5) {
+								c++;
+								listsize.add(String.valueOf(j).replace(".0", ".0"));
+								listsizerun.add(String.valueOf(c));
+							}
+							String SIZE = null;
+							for(int i=0;i<listsize.size();i++){
+								if(rs2.getString("TOOLING_SIZE").equals(listsize.get(i))){
+									String sql="SELECT BOX_NA"+listsizerun.get(i)+" as A from DSID215 WHERE MODEL_NA='"+rs2.getString("MODEL_NA")+"'";
+									ps3 = conn.prepareStatement(sql);
+									rs3 = ps3.executeQuery();			
+									if(rs3.next()){
+										SIZE=rs2.getString("TOOLING_SIZE")+" & "+rs3.getString("A");
+									}else {	
+										SIZE=rs2.getString("TOOLING_SIZE");	
+									}
+									ps3.close();
+									rs3.close();
+								}
+							}
+							
 							cell = row.createCell(cellNum+1);
 							sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum+1, cellNum+1, cellNum+1));	
 							cell.setCellType(1);
 							cell.setCellStyle(style5);
-							cell.setCellValue(rs2.getString("TOOLING_SIZE"));
+							cell.setCellValue(SIZE);
 							
 							rowNum++;
 							if(cou%2==1){
@@ -615,6 +640,7 @@ public class DSID24_1RTask {
 		String lace_len = "";
 		
 		int size=Integer.valueOf((int) (Double.valueOf(LEFT_SIZE_RUN)*2))-1;
+		
 		String sql = "SELECT GROUP_NO,COLOR,(SELECT EL_CNAME FROM DSEL00 WHERE EL_NO=ID26.EL_NO)EL_CNAME FROM DSID26 ID26 "+
 			"WHERE (MODEL_NA, VERSION, SH_LAST, PART_NO1, PART_NO, GROUP_NO) IN (SELECT ID35.MODEL_NA,ID35.VERSION,"+
 			"ID35.SH_LASTNO,ID35.PART_NO1,ID35.PART_NO2,ID35.GROUP_NO FROM DSID35 ID35, DSID36 ID36 WHERE ID35.MODEL_NA = '"
@@ -625,14 +651,14 @@ public class DSID24_1RTask {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		System.out.println(">>>sql++++++++"+sql);
-		
+		System.out.println("size大小"+size);
 		try {
 			pstm = Conn.prepareStatement(sql);
 			rs = pstm.executeQuery();
 			while(rs.next())
 			{
 				lace_len=rs.getString("EL_CNAME").substring(rs.getString("EL_CNAME").length()-5);
-			  System.out.println("鞋带长度：："+lace_len);
+				System.out.println("鞋带长度：：：："+lace_len);
 			}
 			rs.close();
 		} 
