@@ -304,12 +304,22 @@ public class DSID24_1RTask {
 							String SIZE = null;
 							for(int i=0;i<listsize.size();i++){
 								if(rs2.getString("TOOLING_SIZE").equals(listsize.get(i))){
-									String sql="SELECT BOX_NA"+listsizerun.get(i)+" as A from DSID215 WHERE MODEL_NA='"+rs2.getString("MODEL_NA")+"'";
+									String string = null;
+									boolean start= rs2.getString("MODEL_NA").startsWith("W ");
+									if(start==true){
+										string=	rs2.getString("MODEL_NA").substring(2, rs2.getString("MODEL_NA").length());
+									}else {
+										string=rs2.getString("MODEL_NA");
+									}
+									
+									String sql="SELECT BOX_NA"+listsizerun.get(i)+" as A from DSID215 WHERE MODEL_NA='"+string+"'";
+									System.out.println("sql::"+sql);
 									ps3 = conn.prepareStatement(sql);
 									rs3 = ps3.executeQuery();			
 									if(rs3.next()){
 										SIZE=rs2.getString("TOOLING_SIZE")+" & "+rs3.getString("A");
 									}else {	
+										System.out.println("哈哈哈哈哈哈哈");
 										SIZE=rs2.getString("TOOLING_SIZE");	
 									}
 									ps3.close();
