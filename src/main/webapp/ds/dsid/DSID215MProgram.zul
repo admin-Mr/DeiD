@@ -1,0 +1,239 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="${labels.DSID.DSID10}" />
+			<label value="ID型體盒號關聯維護 (DSID215M)" />
+			<!-- 此處放置該程式多國系名稱及程式代號 -->
+		</div>
+	</div>
+	<window width="100%" border="none" id="windowQuery" apply="ds.dsid.program.DSID215MProgram">
+	<div sclass="breadcrumbs">
+			<div sclass="breadcrumb" >
+				<button id="btnQuery" sclass="btn-warning"
+					iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+					mold="trendy" />
+				<button id="btnClear" sclass="btn-danger"
+					iconSclass="mdi mdi-broom"  label="清除"
+					mold="trendy" />		
+ 				<button id="btnCreateMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+					mold="trendy" />				
+ 				<button id="btnEditMaster" sclass="btn-primary"
+					iconSclass="mdi mdi-table-edit" label="修改"
+					mold="trendy" />
+			</div>
+		</div>
+		
+		<groupbox id="filterMaster" width="100%"
+			sclass="main z-demo-config" open="true">
+			<caption id="filter" label="${labels.COMM.FILTER}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+			
+			<grid>
+					<columns>
+						<column width="75px"/>
+						<column width="250px"/>
+					</columns>
+					
+					<rows>
+						<row>
+							<label value="${labels.DSID04_NFPSIZE.MODEL_NA}" sclass="sectionTitleLabel" />
+							<div>
+								<textbox id="qry_MODEL_NA" width="180px" mold="rounded" />
+								<button id="onqryDSID04" src="/resource/imgs/icons/btn_view_16x16.gif" 
+										forward="onClick=windowQuery.onOpenQueryField(onqryDSID04)"/>
+							</div>								
+						</row>										
+					</rows>
+				</grid>
+			
+			<groupbox id="editMaster" width="60%" 
+			sclass="main z-demo-config" open="true">
+			<caption label="${labels.COMM.EDIT}"
+				sclass="mdi mdi-filter" style="font-size:10pt" />
+ 			 	<grid>
+				<columns>
+					<column width="75px" />
+					<column width="200px" />
+					<column width="75px" />
+				</columns>
+				<rows>
+					<row>
+						<label value="形體" sclass="sectionTitleLabel" />
+						<textbox id="MODEL_NA1" width="180px" mold="rounded" />
+						<button id="onqryEL_NO1" src="/resource/imgs/icons/btn_view_16x16.gif" 
+								forward="onClick=windowMaster.onOpenQueryField(onqryEL_NO1)"/>
+					</row>
+				</rows>
+			</grid>
+			
+		
+			<separator spacing="15px" />
+ 			 <hlayout width="550px" height="30px">
+ 			 	<separator spacing="5px" />
+ 			 		<label value="SIZE"
+ 			 			style="display:inline-block;width:70px;"
+ 			 			sclass="sectionTitleLabel" />
+ 			 		<combobox id="cboREP_CNAMEQ1" width="100px" mold="rounded">
+						<comboitem label="1" value="1" />
+						<comboitem label="1.5" value="1.5" />
+						<comboitem label="2" value="2" />
+						<comboitem label="2.5" value="2.5" />
+						<comboitem label="3" value="3" />
+						<comboitem label="3.5" value="3.5" />
+						<comboitem label="4" value="4" />
+						<comboitem label="4.5" value="4.5" />
+						<comboitem label="5" value="5" />
+						<comboitem label="5.5" value="5.5" />
+						<comboitem label="6" value="6" />
+						<comboitem label="6.5" value="6.5" />
+						<comboitem label="7" value="7" />
+						<comboitem label="7.5" value="7.5" />
+						<comboitem label="8" value="8" />
+						<comboitem label="8.5" value="8.5" />
+						<comboitem label="9" value="9" />
+						<comboitem label="9.5" value="9.5" />
+						<comboitem label="10" value="10" />
+						<comboitem label="10.5" value="10.5" />
+						<comboitem label="11" value="11" />
+						<comboitem label="11.5" value="11.5" />
+						<comboitem label="12" value="12" />
+						<comboitem label="12.5" value="12.5" />
+						<comboitem label="13" value="13" />
+						<comboitem label="13.5" value="13.5" />
+						<comboitem label="14" value="14" />
+						<comboitem label="14.5" value="14.5" />
+						<comboitem label="15" value="15" />
+						<comboitem label="15.5" value="15.5" />
+						<comboitem label="16" value="16" />
+						<comboitem label="16.5" value="16.5" />
+						<comboitem label="17" value="17" />
+						<comboitem label="17.5" value="17.5" />
+						<comboitem label="18" value="18" />
+						<comboitem label="18.5" value="18.5" />
+						<comboitem label="19" value="19" />
+						<comboitem label="19.5" value="19.5" />
+						<comboitem label="20" value="20" />
+						<comboitem label="20.5" value="20.5" />
+						
+						
+					</combobox>	
+ 			 	
+ 			 	<separator spacing="5px" />
+ 			 	
+ 			 	<label value="盒號" style="display:inline-block;width:70px;"
+					sclass="sectionTitleLabel"/>
+				<combobox id="cboREP_CNAMEQ" autodrop="true" 
+					mold="rounded" width="100px"> 
+					 <template name="model">
+						<comboitem label="${each.VALUE}"
+							value="${each.KEY}" />
+					</template>
+				</combobox> 
+ 			 </hlayout>		
+		</groupbox>
+		<separator spacing="10px" />
+			
+			
+		</groupbox>
+		<div >
+		    <listbox id="masterListboxX"  checkmark="false"
+					multiple="false" sclass="mylist"
+					emptyMessage="${labels.PUBLIC.MSG0026}"  rows="10">
+        		<listhead>
+        			<listheader width="10%" label="形體"/>
+        			<listheader label="1" />
+            		<listheader label="1.5" />
+            		<listheader label="2" />
+            		<listheader label="2.5" />
+            		<listheader label="3" />   
+            		<listheader label="3.5" />  
+            		<listheader label="4" />    
+            		<listheader label="4.5" />   
+            		<listheader label="5" />
+            		<listheader label="5.5" /> 
+            		<listheader label="6" />  
+            		<listheader label="6.5" />  
+            		<listheader label="7" />    
+            		<listheader label="7.5" />  
+            		<listheader label="8" />  
+            		<listheader label="8.5" />
+            		<listheader label="9" />
+            		<listheader label="9.5" /> 
+            		<listheader label="10" />
+            		<listheader label="10.5" />  
+            		<listheader label="10" />
+            		<listheader label="11.5" />  
+            		<listheader label="12" /> 
+            		<listheader label="12.5" />  
+            		<listheader label="13" />  
+            		<listheader label="13.5" />      
+            		<listheader label="14" />  
+            		<listheader label="14.5" />	
+            		<listheader label="15" />
+            		<listheader label="15.5" />	
+            		<listheader label="16" />
+            		<listheader label="16.5" />
+            		<listheader label="17" />
+            		<listheader label="17.5" />
+            		<listheader label="18" />
+            		<listheader label="18.5" />
+            		<listheader label="19" />
+            		<listheader label="19.5" />
+            		<listheader label="20" />
+            		<listheader label="20.5" />
+        		</listhead>
+        		<template name="model">
+        		<listitem >
+        			<listcell label="${each.MODEL_NA}"/>
+        			<listcell label="${each.s1}"/>
+        			<listcell label="${each.s2}"/>
+        			<listcell label="${each.s3}"/>
+        			<listcell label="${each.s4}"/>
+        			<listcell label="${each.s5}"/>
+        			<listcell label="${each.s6}"/>
+        			<listcell label="${each.s7}"/>
+        			<listcell label="${each.s8}"/>
+        			<listcell label="${each.s9}"/>
+        			<listcell label="${each.s10}"/>
+        			<listcell label="${each.s11}"/>
+        			<listcell label="${each.s12}"/>
+        			<listcell label="${each.s13}"/>
+        			<listcell label="${each.s14}"/>
+        			<listcell label="${each.s15}"/>
+        			<listcell label="${each.s16}"/>
+        			<listcell label="${each.s17}"/>
+        			<listcell label="${each.s18}"/>
+        			<listcell label="${each.s19}"/>
+        			<listcell label="${each.s20}"/>
+        			<listcell label="${each.s21}"/>
+        			<listcell label="${each.s22}"/>
+        			<listcell label="${each.s23}"/>
+        			<listcell label="${each.s24}"/>
+        			<listcell label="${each.s25}"/>
+        			<listcell label="${each.s26}"/>
+        			<listcell label="${each.s27}"/>
+        			<listcell label="${each.s28}"/>
+        			<listcell label="${each.s29}"/>
+        			<listcell label="${each.s30}"/>
+        			<listcell label="${each.s31}"/>
+        			<listcell label="${each.s32}"/>
+        			<listcell label="${each.s33}"/>
+        			<listcell label="${each.s34}"/>
+        			<listcell label="${each.s35}"/>
+        			<listcell label="${each.s36}"/>
+        			<listcell label="${each.s37}"/>
+        			<listcell label="${each.s38}"/>
+        			<listcell label="${each.s39}"/>
+        			<listcell label="${each.s40}"/>
+				</listitem>
+			  </template>		
+			</listbox>
+		  <paging id="pagingSuppiler" ></paging>					
+		</div>
+		
+	</window>
+</zk>

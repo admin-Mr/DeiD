@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--程式清單檔-->
+<QryWin>
+	<SQL>
+		<BaseCondition></BaseCondition> 
+		<OrderBy>box_name</OrderBy>
+		<SQLStatement>
+			Select  box_name,'' TEST  FROM dsid214 order by  up_date  desc
+ 		</SQLStatement>
+	</SQL> 
+	<Fields>
+		<Field Name="box_name" 	Caption="DSID214M.BOX_NAME" 	Type="S" />
+		<Field Name="TEST" 	Caption="" 	Type="S" Width="0px" />
+	</Fields>
+</QryWin>
