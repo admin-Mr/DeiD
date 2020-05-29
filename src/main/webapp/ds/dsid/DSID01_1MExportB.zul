@@ -1,0 +1,68 @@
+<zk>
+	<window border="normal" id="windowMaster" title="${labels.COMM.EXPORT}"
+			apply="ds.dsid.program.DSID01_1MExportB" closable="true" mode= "modal" width="400px" height="330px">
+
+			<div sclass="breadcrumbs" height="100%">
+
+
+				<hlayout>
+					<label value="派工日期" sclass="sectionTitlelabel"  style="display:inline-block;width:80px;"/>
+					<datebox id="po_date1" mold="rounded" width="110px" cols="12" format="yyyy/MM/dd"  />
+				</hlayout>
+
+				<hlayout width="100%" height="35px" >
+					<label value="形 體" style="display:inline-block;width:80px;"
+						   sclass="sectionTitleLabel"/>
+					<combobox id="cboREP_CNAMEQ"
+							  mold="rounded" autodrop="true" width="200px">
+						<template name="model">
+							<comboitem label="${each.KEY}"
+									   value="${each.KEY}" />
+						</template>
+					</combobox>
+				</hlayout>
+
+				<hlayout width="100%" height="35px" >
+					<label value="選擇GROUP" sclass="sectionTitleLabel" style="display:inline-block;width:80px;"/>
+					<zscript><![CDATA[
+							      String[] TPG_TYPE = {"","GROUP1","GROUP2","GROUP3","GROUP4","GROUP5","GROUP6","GROUP7",
+							      "GROUP8","GROUP9","GROUP10","GROUP11","GROUP12","GROUP13","GROUP14","GROUP15",
+							      "GROUP16","GROUP17","GROUP18","GROUP19","GROUP20"};
+							]]></zscript>
+					<combobox id="YPG_TYPE" width="110px" readonly="true">
+						<comboitem label="${each}" forEach="${TPG_TYPE}" value="${each}"/>
+					</combobox>
+				</hlayout>
+
+				<hlayout width="100%" height="35px" >
+					<label value="選擇關鍵字" sclass="sectionTitleLabel"  style="display:inline-block;width:80px;"/>
+					<textbox id="txtMODEL_NA" mold="rounded" width="110px" />
+				</hlayout>
+
+				<hlayout width="100%" height="35px" >
+					<label value="選擇GROUP" sclass="sectionTitleLabel" style="display:inline-block;width:80px;"/>
+					<zscript><![CDATA[
+							      String[] TPG_TYPE = {"","GROUP1","GROUP2","GROUP3","GROUP4","GROUP5","GROUP6","GROUP7",
+							      "GROUP8","GROUP9","GROUP10","GROUP11","GROUP12","GROUP13","GROUP14","GROUP15",
+							      "GROUP16","GROUP17","GROUP18","GROUP19","GROUP20"};
+							]]></zscript>
+					<combobox id="YPG_TYPE1" width="110px" readonly="true">
+						<comboitem label="${each}" forEach="${TPG_TYPE}" value="${each}"/>
+					</combobox>
+				</hlayout>
+
+				<hlayout width="100%" height="35px" >
+					<label value="選擇關鍵字" sclass="sectionTitleLabel"  style="display:inline-block;width:80px;"/>
+					<textbox id="txtMODEL_NA1" mold="rounded" width="110px" />
+				</hlayout>
+
+				<hlayout>
+					<button id="btnexport" sclass="btn-default"
+							iconSclass="mdi mdi-watch-export"
+							label="匯出" mold="trendy"  />
+
+				</hlayout>
+				
+			</div>
+	</window>
+</zk>

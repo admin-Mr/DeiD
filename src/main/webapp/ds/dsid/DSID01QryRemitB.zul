@@ -1,0 +1,40 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+	<window title="${labels.COMM.QRY}" id="windowQuery" border="normal"
+		width="700px" height="520px" apply="ds.dsid.program.DSID01QryRemitB"
+		maximizable="false" closable="true" sclass="mymodal" mode="modal">
+
+		<div style="clear: both;" />
+		<div sclass="sectinSeperator" />
+	
+	 <panel width="100%">
+			<panelchildren style="overflow:auto;"> 
+				<separator />
+		    <listbox id="queryListBox" checkmark="true"  multiple="true" autopaging="true" rows="10"
+		    			sclass="mylist" emptyMessage="${labels.PUBLIC.MSG0026}" >
+		    		<listhead>
+							<listheader label="部位" />
+							<listheader label="部位名稱" />						
+					</listhead>
+					<template name="model">
+						<listitem>
+							<listcell label="${each.AA}" />
+							<listcell label="${each.BB}" />						
+						</listitem>
+					</template>
+				</listbox>
+				<paging id="pagingOperation"></paging>
+			 </panelchildren> 
+		</panel>
+		<separator />
+		<separator />
+		<div align="center">
+			<button id="btnConfirmN" label="${labels.COMM.CFM}"
+				mold="trendy" iconSclass="mdi mdi-checkbox-marked-circle"
+				sclass="btn-success" />
+			<button id="btnCancel" label="${labels.COMM.CANCEL}"
+				mold="trendy" iconSclass="mdi mdi-close-circle" sclass="btn-danger" />
+		</div>
+		<separator />
+	</window>
+</zk>

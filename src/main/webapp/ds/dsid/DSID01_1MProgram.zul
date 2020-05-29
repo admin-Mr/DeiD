@@ -1,0 +1,272 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c" ?>
+<zk>
+    <div sclass="breadcrumbs">
+        <div sclass="breadcrumb">
+            <span sclass="home-icon z-icon-home"/>
+            <a label="鞋帶分段維護作業"/>
+            <label value="鞋帶分段維護作業(DSID01_1)"/>
+            <!-- 此處放置該程式多國系名稱及程式代號 -->
+        </div>
+    </div>
+    <window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID01_1MProgram">
+        <div sclass="breadcrumbs">
+            <div sclass="breadcrumb">
+                <button id="btnQuery" sclass="btn-warning"
+                        iconSclass="mdi mdi-magnify" label="${labels.COMM.QUERY}"
+                        mold="trendy"/>
+                <button id="btnCreateMaster" sclass="btn-primary"
+                        iconSclass="mdi mdi-library-plus" label="${labels.COMM.NEW}"
+                        mold="trendy"/>
+                <!-- 編輯Edit 按鈕 -->
+                <button id="btnEditMaster" sclass="btn-primary"
+                        iconSclass="mdi mdi-table-edit" label="${labels.COMM.EDIT}"
+                        mold="trendy"/>
+                <button id="btnSaveMaster" sclass="btn-success"
+                        iconSclass="mdi mdi-floppy" label="${labels.COMM.SAVE}"
+                        mold="trendy" disabled="true"/>
+                <button id="btnCancelMaster" sclass="btn-danger"
+                        iconSclass="mdi mdi-close-circle" label="${labels.COMM.CANCEL}"
+                        mold="trendy" disabled="true"/>
+                <!-- 刪除 -->
+                <button id="btnDeleteMaster" sclass="btn-danger"
+                        iconSclass="mdi mdi-delete-circle" label="${labels.COMM.DELETE}"
+                        mold="trendy"/>
+
+                <button id="btnExport" sclass="btn-default"
+                        iconSclass="mdi mdi-watch-export"
+                        label="${labels.COMM.EXPORT}" mold="trendy" />
+
+                <button id="btnExport1" sclass="btn-default"
+                        iconSclass="mdi mdi-watch-export"
+                        label="大勾勾" mold="trendy" />
+
+            </div>
+        </div>
+        <groupbox id="filterMaster" width="100%"
+                  sclass="main z-demo-config" open="true">
+            <caption id="filter" label="${labels.COMM.FILTER}"
+                     sclass="mdi mdi-filter" style="font-size:10pt"/>
+            <hlayout>
+                <vlayout width="70px">
+                    <label value="${labels.DSID12.MODEL_NA}" sclass="sectionTitleLabel"/>
+                </vlayout>
+                <vlayout width="140px">
+                    <textbox id="TMODEL_NONA" width="140px" mold="rounded"/>
+                </vlayout>
+            </hlayout>
+        </groupbox>
+        <borderlayout height="500px">
+            <north size="40%" open="true" splittable="true"
+                   collapsible="true">
+                <div width="100%">
+                    <separator spacing="10px"/>
+                    <vlayout width="100%">
+
+                        <hlayout width="100%" height="32px">
+                            <label
+                                    value="形體"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TMODEL_NA" mold="rounded"
+                                     width="140px"/>
+                        </hlayout>
+
+                        <hlayout width="100%" height="32px">
+                            <label
+                                    value="分段1"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION1" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="分段2"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION2"
+                                     mold="rounded" width="70px"/>
+                            <label
+                                    value="分段3"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION3"
+                                     mold="rounded" width="70px"/>
+                            <label
+                                    value="分段4"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION4"
+                                     mold="rounded" width="70px"/>
+                            <label
+                                    value="分段5"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION5"
+                                     mold="rounded" width="70px"/>
+                        </hlayout>
+
+                        <hlayout width="100%" height="32px">
+                            <label
+                                    value="碼數1"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION1_NA" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="碼數2"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION2_NA" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="碼數3"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION3_NA" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="碼數4"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION4_NA" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="碼數5"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION5_NA" mold="rounded"
+                                     width="70px"/>
+
+                        </hlayout>
+
+                        <hlayout width="100%" height="32px">
+                            <label
+                                    value="分段6"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION6" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="分段7"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION7"
+                                     mold="rounded" width="70px"/>
+                            <label
+                                    value="分段8"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION8"
+                                     mold="rounded" width="70px"/>
+                            <label
+                                    value="分段9"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION9"
+                                     mold="rounded" width="70px"/>
+                            <label
+                                    value="分段10"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION10"
+                                     mold="rounded" width="70px"/>
+                        </hlayout>
+
+
+                        <hlayout width="100%" height="32px">
+                            <label
+                                    value="碼數6"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION6_NA" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="碼數7"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION7_NA" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="碼數8"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION8_NA" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="碼數9"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION9_NA" mold="rounded"
+                                     width="70px"/>
+                            <label
+                                    value="碼數10"
+                                    sclass="sectionTitleLabel" style="display:inline-block;width:60px;"/>
+                            <textbox id="TSECTION10_NA" mold="rounded"
+                                     width="70px"/>
+
+                        </hlayout>
+                    </vlayout>
+                    <separator spacing="10px"/>
+                </div>
+            </north>
+            <center>
+                <div>
+                    <listbox id="masterListbox" sclass="mylist"
+                             autopaging="true" emptyMessage="${labels.PUBLIC.MSG0026}"
+                             multiple="false">
+                        <listhead sizable="true">
+                            <listheader width="10%"
+									label="形體"/>
+                            <listheader
+                                    label="分段1"/>
+                            <listheader
+                                    label="碼數1"/>
+                            <listheader
+                                    label="分段2"/>
+                            <listheader
+                                    label="碼數2"/>
+                            <listheader
+                                    label="分段3"/>
+                            <listheader
+                                    label="碼數3"/>
+                            <listheader
+                                    label="分段4"/>
+                            <listheader
+                                    label="碼數4"/>
+                            <listheader
+                                    label="分段5"/>
+                            <listheader
+                                    label="碼數5"/>
+                            <listheader
+                                    label="分段6"/>
+                            <listheader
+                                    label="碼數6"/>
+                            <listheader
+                                    label="分段7"/>
+                            <listheader
+                                    label="碼數7"/>
+                            <listheader
+                                    label="分段8"/>
+                            <listheader
+                                    label="碼數8"/>
+                            <listheader
+                                    label="分段9"/>
+                            <listheader
+                                    label="碼數9"/>
+                            <listheader
+                                    label="分段10"/>
+                            <listheader
+                                    label="碼數10"/>
+                        </listhead>
+                        <template name="model">
+                            <listitem forward="onDoubleClick=onDoubleClickedPersonItem">
+                                <listcell label="${each.MODEL_NA}" tooltiptext="${each.MODEL_NA}"/>
+                                <listcell label="${each.SECTION1}" tooltiptext="${each.SECTION1}"/>
+                                <listcell label="${each.SECTION1_NA}" tooltiptext="${each.SECTION1_NA}"/>
+                                <listcell label="${each.SECTION2}" tooltiptext="${each.SECTION2}"/>
+                                <listcell label="${each.SECTION2_NA}" tooltiptext="${each.SECTION2_NA}"/>
+                                <listcell label="${each.SECTION3}" tooltiptext="${each.SECTION3}"/>
+                                <listcell label="${each.SECTION3_NA}" tooltiptext="${each.SECTION3_NA}"/>
+                                <listcell label="${each.SECTION4}" tooltiptext="${each.SECTION4}"/>
+                                <listcell label="${each.SECTION4_NA}" tooltiptext="${each.SECTION4_NA}"/>
+                                <listcell label="${each.SECTION5}" tooltiptext="${each.SECTION5}"/>
+                                <listcell label="${each.SECTION5_NA}" tooltiptext="${each.SECTION5_NA}"/>
+                                <listcell label="${each.SECTION6}" tooltiptext="${each.SECTION6}"/>
+                                <listcell label="${each.SECTION6_NA}" tooltiptext="${each.SECTION6_NA}"/>
+								<listcell label="${each.SECTION7}" tooltiptext="${each.SECTION7}"/>
+								<listcell label="${each.SECTION7_NA}" tooltiptext="${each.SECTION7_NA}"/>
+								<listcell label="${each.SECTION8}" tooltiptext="${each.SECTION8}"/>
+								<listcell label="${each.SECTION8_NA}" tooltiptext="${each.SECTION8_NA}"/>
+								<listcell label="${each.SECTION9}" tooltiptext="${each.SECTION9}"/>
+								<listcell label="${each.SECTION9_NA}" tooltiptext="${each.SECTION9_NA}"/>
+								<listcell label="${each.SECTION10}" tooltiptext="${each.SECTION10}"/>
+								<listcell label="${each.SECTION10_NA}" tooltiptext="${each.SECTION10_NA}"/>
+                            </listitem>
+                        </template>
+                    </listbox>
+                    <paging id="pagingCourseqq"></paging>
+                </div>
+            </center>
+        </borderlayout>
+    </window>
+</zk>

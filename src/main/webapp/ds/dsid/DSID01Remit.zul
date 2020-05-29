@@ -1,0 +1,56 @@
+<zk>
+	<div sclass="breadcrumbs">
+		<div sclass="breadcrumb">
+			<span sclass="home-icon z-icon-home" />
+			<a label="訂單報表匯出" />
+			<label value="訂單報表匯出" />
+		</div>
+	</div>
+
+	<window width="100%" border="none" id="windowMaster" apply="ds.dsid.program.DSID01Remit">
+		<div sclass="breadcrumbs" height="280px">
+			<div sclass="breadcrumbs">
+				<div sclass="breadcrumb">
+					<button id="btnExport" sclass="btn-default"
+							iconSclass="mdi mdi-watch-export" label="${labels.COMM.EXPORT}"
+							mold="trendy" />
+				</div>
+			</div>
+
+			<hlayout>
+				<label value="接單日期" sclass="sectionTitlelabel"  style="display:inline-block;width:120px;"/>
+				<datebox id="po_date1" mold="rounded" width="110px" cols="12" format="yyyy/MM/dd"  />
+
+			</hlayout>
+
+			<hlayout width="100%" height="35px" >
+				<label value="形 體" style="display:inline-block;width:120px;"
+					   sclass="sectionTitleLabel"/>
+				<combobox id="cboREP_CNAMEQ"
+						  mold="rounded" autodrop="true" width="200px">
+					<template name="model">
+						<comboitem label="${each.KEY}"
+								   value="${each.KEY}" />
+					</template>
+				</combobox>
+			</hlayout>
+
+			<hlayout width="100%" height="35px">
+				<label value="選擇GROUP_NO" sclass="sectionTitleLabel" style="display:inline-block;width:120px;"/>
+				<textbox id="TGROUP_NO" mold="rounded" width="200px" />
+				<button id="btnQryTGROUP_NO" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+			</hlayout>
+
+			<hlayout width="100%" height="35px">
+				<label value="拆分GROUP_NO" sclass="sectionTitleLabel" style="display:inline-block;width:120px;"/>
+				<textbox id="TGROUP_NO1" mold="rounded" width="200px" />
+				<button id="btnQryTGROUP_NO1" iconSclass="mdi mdi-magnify" sclass="btn-warning" />
+			</hlayout>
+
+			<hlayout width="100%" height="35px" >
+				<label value="填寫拆分條件" sclass="sectionTitleLabel"  style="display:inline-block;width:120px;"/>
+				<textbox id="txtMODEL_NA" mold="rounded" width="200px" /> #英文鍵盤輸入
+			</hlayout>
+		</div>
+	</window>
+</zk>
